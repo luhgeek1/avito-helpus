@@ -20,3 +20,7 @@
 - Все 15 вариаций `orbi-*` получили детальную отрисовку 64×64: `orbi-base.ts` задаёт форму на 32×32, `orbi-sprites.ts`, `orbi-details.ts` и `orbi-detail-painter.ts` добавляют детали. Оригинальный `orbit` по-прежнему рисуется в `mascot-sprites.ts` на 32×32 и не проходит через этот рендерер. При дальнейших изменениях защищай его 4 кадра первой версии.
 
 - В корне проекта оставляй только Markdown-документы и папки `frontend/`, `backend/` (служебную `.git/` сохраняй). Все исходники, зависимости и материалы петов, изображения, записи и отчёты размещай в `frontend/`. Общий каталог визуальных материалов — `frontend/design/`, отчёты и скриншоты — `frontend/design/captures/`.
+
+- Write code comments and Git commit titles/bodies in English. Keep user-facing interface text and project documentation in Russian unless requested otherwise.
+
+- Keep application-code changes in each commit within 150 added/deleted lines. Configuration, dependency lockfiles, documentation, and verification reports are exempt; commit them as complete logical changes instead of splitting them to meet this limit.
