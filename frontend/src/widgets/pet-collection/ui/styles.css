@@ -1,0 +1,57 @@
+.collection-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  min-height: 34px;
+}
+.filters {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.filters button {
+  font-size: 10px;
+  background: transparent;
+  color: #8e8a97;
+  padding: 9px 12px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+.filters button.selected {
+  background: #fff;
+  color: #51485e;
+  box-shadow: 0 1px 4px #3320470b;
+  border: 1px solid #e7e4ec;
+  padding: 8px 11px;
+}
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+.collection-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 9px;
+  color: #a49eac;
+  margin-top: 22px;
+}
+.collection-footer > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.collection-footer .tiny-pixel {
+  width: 4px;
+  height: 4px;
+  background: #c8bfd6;
+}
+@media (min-width: 1600px) {
+  .pet-grid {
+    gap: 20px;
+  }
+  .collection-toolbar {
