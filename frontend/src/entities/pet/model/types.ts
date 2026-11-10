@@ -40,3 +40,5 @@ type PetBase = {
 export type Pet = PetBase &
   (
     | { category: "animals" | "unusual" | "mascots"; orbiDesign?: never }
+    | { category: "orbi"; orbiDesign: OrbiDesign }
+  );

@@ -1,0 +1,19 @@
+.pet-card {
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e8e6ed;
+  border-radius: 13px;
+  overflow: hidden;
+  padding: 6px;
+  position: relative;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s,
+    transform 0.18s;
+  min-width: 0;
+}
+.pet-card:hover {
+  border-color: #b7a2d9;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px #4839560b;
+}
