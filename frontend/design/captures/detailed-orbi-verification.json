@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "detailedVariants": 15,
+  "detailGrid": 64,
+  "originalGrid": 32,
+  "protectedCharacters": 24,
+  "protectedFrames": 96,
+  "variantFramesChecked": 60,
+  "pixelRunRoundtrip": true,
+  "checks": [
+    "16 cards including original first",
+    "all variant previews",
+    "64x64 and 32x32 SVG exports",
+    "favorites and saved selection",
+    "companion on both pages",
+    "four idle frames without overlap",
+    "pause and reduced motion"
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 1366,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "inspectorClipped": false
+    }
+  ],
+  "browserErrors": [],
+  "originalRestoredToFirstVersionAfterUserCorrection": true,
+  "firstVersionReferenceFramesMatched": 4
+}

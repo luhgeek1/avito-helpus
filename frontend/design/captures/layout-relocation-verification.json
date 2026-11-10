@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "layout": "root Markdown + frontend/backend",
+  "sourceFilesUnchanged": 65,
+  "originalOrbiPreserved": true,
+  "originalGrid": 32,
+  "variantGrid": 64,
+  "totalPets": 40,
+  "checks": [
+    "standalone npm ci",
+    "unchanged dependency lock entries",
+    "build",
+    "FSD architecture",
+    "all original image hashes preserved",
+    "all original source hashes preserved",
+    "gallery 16/25/40",
+    "favorite persistence",
+    "home navigation",
+    "mobile overflow"
+  ],
+  "browserErrors": []
+}

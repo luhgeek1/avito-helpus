@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "newOrbiVariants": 15,
+  "totalPets": 40,
+  "previousPets": 25,
+  "uniqueSilhouettes": 15,
+  "uniquePalettes": 15,
+  "distinctFramesPerVariant": 4,
+  "transparentCanvasBorders": true,
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 1366,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "inspectorClipped": false
+    }
+  ],
+  "checks": [
+    "filters 15/25/40",
+    "original Orbi and cat retained",
+    "all new previews",
+    "greeting",
+    "SVG download",
+    "persistent selection",
+    "companion on both pages",
+    "hide/restore",
+    "four visible idle frames without overlay",
+    "pause/resume",
+    "reduced motion"
+  ],
+  "browserErrors": []
+}

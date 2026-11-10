@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "petCount": 10,
+  "framesPerPet": 4,
+  "viewportWidths": [
+    1440,
+    1366,
+    390,
+    320
+  ],
+  "horizontalOverflow": false,
+  "inspectorClipped": false,
+  "checks": [
+    "all 10 selections",
+    "7/3 category filters",
+    "preview scale",
+    "greeting",
+    "SVG download",
+    "persistent pet and preview",
+    "companion hide/restore",
+    "global pause",
+    "four discrete visible frames",
+    "routes and browser history",
+    "mobile inspector fully visible and return to gallery",
+    "reduced motion",
+    "keyboard focus"
+  ],
+  "browserErrors": []
+}

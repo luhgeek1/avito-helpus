@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "totalPets": 25,
+  "newMascots": 15,
+  "originalPets": 10,
+  "uniqueSilhouettes": 15,
+  "uniqueFramesPerMascot": 4,
+  "transparentCanvasBorders": true,
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 1366,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "inspectorClipped": false
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "inspectorClipped": false
+    }
+  ],
+  "checks": [
+    "all filters and counts",
+    "original pet preview",
+    "all 15 mascot previews",
+    "greeting",
+    "SVG download",
+    "persistent mascot selection",
+    "companion on home page",
+    "hide and restore companion",
+    "no browser runtime errors"
+  ],
+  "browserErrors": []
+}

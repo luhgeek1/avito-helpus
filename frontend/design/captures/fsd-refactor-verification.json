@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "build": "npm run build",
+  "architecture": {
+    "command": "npm run check:architecture",
+    "errors": 0,
+    "warnings": 6,
+    "warningRule": "fsd/insignificant-slice"
+  },
+  "visualComparison": {
+    "mode": "prefers-reduced-motion: reduce",
+    "viewportWidths": [
+      1440,
+      390
+    ],
+    "changedPixels": {
+      "1440": 0,
+      "390": 0
+    }
+  },
+  "browserChecks": [
+    "10 pets, 4 frames each",
+    "category filters 7/3",
+    "preview selection and scale",
+    "greeting",
+    "SVG download",
+    "adopt and re-adopt",
+    "pause and resume",
+    "companion hide and restore",
+    "routes and browser history",
+    "localStorage persistence",
+    "mobile inspector navigation",
+    "no horizontal overflow"
+  ],
+  "browserErrors": [],
+  "devUrl": "http://localhost:5173/",
+  "galleryUrl": "http://localhost:5173/pets"
+}

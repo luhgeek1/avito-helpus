@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "favoritesChecks": [
+    "add from card without changing preview",
+    "add from inspector and sync heart",
+    "all categories supported",
+    "counter updates",
+    "remove immediately in favorites",
+    "reload persistence",
+    "route persistence",
+    "keyboard Enter/Space",
+    "empty state and return button",
+    "corrupt storage recovery",
+    "deduplicate and validate stored IDs",
+    "no nested buttons",
+    "storage blocked: graceful in-memory operation"
+  ],
+  "floatingRobots": 16,
+  "framesChecked": 64,
+  "centralBottomClear": true,
+  "noAttachedSideLimbs": true,
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "allFiltersVisible": true,
+      "inspectorClipped": false
+    },
+    {
+      "width": 1366,
+      "overflow": false,
+      "allFiltersVisible": true,
+      "inspectorClipped": false
+    },
+    {
+      "width": 800,
+      "overflow": false,
+      "allFiltersVisible": true,
+      "inspectorClipped": false
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "allFiltersVisible": true,
+      "inspectorClipped": false
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "allFiltersVisible": true,
+      "inspectorClipped": false
+    }
+  ],
+  "browserErrors": []
+}
