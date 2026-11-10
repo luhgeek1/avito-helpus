@@ -205,3 +205,16 @@
   .collection-toolbar > .animation-toggle {
     margin-top: 0;
     flex-shrink: 0;
+  }
+}
+@media (max-width: 650px) {
+  .filters button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 850px) {
+  .filters button {
+    font-size: 11px;
+  }
+}
