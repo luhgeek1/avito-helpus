@@ -207,3 +207,153 @@ export function mascotSpriteGrid(pet: Pet, frame: number): Grid {
       pill(19, 26, 6, 4, purple);
       pill(2, 8, 5, 5, green);
       pill(25, 3 + wave, 5, 5, purple);
+      pill(25, 24, 5, 5, pink);
+      pill(2, 24, 4, 4, blue);
+      break;
+    }
+    case "link": {
+      pill(12, 4, 17, 18, purple);
+      round(16, 8, 9, 10, "#e9ddfb");
+      pill(3, 10, 18, 17, blue);
+      round(7, 14, 10, 9, "#c4eafa");
+      r(14, 12, 6, 7, o);
+      r(15, 13, 5, 5, purple);
+      r(14, 18, 5, 2, blue);
+      // Offset eyes live inside their own loop instead of on the crossing.
+      [
+        [10, 16],
+        [21, 10],
+      ].forEach(([x, y]) => {
+        r(x, y, 2, blink ? 1 : 3, o);
+        if (!blink) d(x, y, white);
+      });
+      r(14, 22, 5, 1, o);
+      d(13, 21, o);
+      d(19, 21, o);
+      pill(5, 26, 8, 4, pink);
+      r(23, 20, 3, 5, o);
+      r(24, 21, 1, 4, purple);
+      pill(21, 23, 7, 7, green);
+      r(16, 5, 7, 1, "#d6c4f2");
+      r(4, 14, 1, 6, "#a1ddf7");
+      if (frame === 3) r(25, 23, 3, 2, green);
+      break;
+    }
+    case "find": {
+      p(
+        [
+          [19, 21],
+          [23, 19],
+          [29, 27],
+          [26, 30],
+          [23, 29],
+        ],
+        o,
+      );
+      p(
+        [
+          [21, 22],
+          [23, 21],
+          [27, 27],
+          [26, 28],
+          [24, 27],
+        ],
+        pink,
+      );
+      r(25, 26, 2, 1, "#ffd1e0");
+      const disc = (radius: number, color: string) => {
+        for (let y = 3; y < 26; y++)
+          for (let x = 3; x < 26; x++) {
+            if ((x + 0.5 - 14.5) ** 2 + (y + 0.5 - 14.5) ** 2 <= radius ** 2)
+              d(x, y, color);
+          }
+      };
+      disc(11.5, o);
+      disc(10.5, purple);
+      disc(8.5, o);
+      disc(7.5, b);
+      r(9, 8, 8, 1, l);
+      r(8, 10, 1, 6, l);
+      round(11, 10, 8, 9, white);
+      r(14, 11, 4, blink ? 1 : 6, o);
+      if (!blink) {
+        r(14, 11, 2, 2, l);
+        d(17, 15, b);
+      }
+      smile(12, 19);
+      r(5, 9, 2, 2, pink);
+      r(13, 4, 2, 2, green);
+      r(23, 12, 2, 2, blue);
+      r(13, 23, 2, 2, pink);
+      pill(2, 22 + wave, 5, 5, green);
+      break;
+    }
+    case "pack": {
+      p(
+        [
+          [5, 15],
+          [2, 10],
+          [12, 8],
+          [16, 13],
+          [22, 7],
+          [30, 11],
+          [26, 17],
+        ],
+        o,
+      );
+      p(
+        [
+          [5, 13],
+          [4, 11],
+          [11, 10],
+          [14, 13],
+        ],
+        pink,
+      );
+      p(
+        [
+          [19, 13],
+          [23, 9],
+          [28, 11],
+          [25, 15],
+        ],
+        green,
+      );
+      pill(9, 4, 15, 18, blue);
+      r(12, 5, 7, 1, "#a1ddf7");
+      eyes(pen, 12, 9, 7, blink, o);
+      smile(13, 14);
+      p(
+        [
+          [5, 16],
+          [17, 13],
+          [27, 17],
+          [26, 27],
+          [16, 30],
+          [5, 26],
+        ],
+        o,
+      );
+      p(
+        [
+          [6, 17],
+          [16, 15],
+          [16, 28],
+          [6, 25],
+        ],
+        b,
+      );
+      p(
+        [
+          [17, 15],
+          [26, 18],
+          [25, 26],
+          [17, 28],
+        ],
+        l,
+      );
+      r(10, 18, 2, 8, "#d6c4f2");
+      r(20, 18, 2, 7, pink);
+      r(18, 22, 5, 3, white);
+      r(19, 23, 3, 1, blue);
+      pill(3, 20 + wave, 4, 5, pink);
