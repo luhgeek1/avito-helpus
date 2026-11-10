@@ -94,3 +94,29 @@
     right: 10px;
     bottom: 12px;
     width: 144px;
+  }
+  .widget-pet .pixel-pet {
+    width: 96px;
+    height: 96px;
+  }
+  .widget-bubble {
+    width: 205px;
+    font-size: 10px;
+  }
+  .widget-bubble strong {
+    font-size: 11px;
+  }
+  .widget-close {
+    right: -1px;
+    top: 1px;
+  }
+  .restore-buddy {
+    font-size: 9px;
+  }
+}
+@media (max-width: 650px) {
+  .widget-close {
+    width: 28px;
+    height: 28px;
+  }
+}
