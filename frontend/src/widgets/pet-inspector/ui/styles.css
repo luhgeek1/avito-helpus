@@ -333,3 +333,153 @@
   .palette-row > span {
     font-size: 8px;
   }
+  .palette-row > div {
+    gap: 4px;
+  }
+  .palette-row > div > span {
+    width: 12px;
+    height: 12px;
+  }
+  .detail-actions {
+    gap: 5px;
+    margin-top: 6px;
+  }
+  .detail-actions button {
+    font-size: 8px;
+    min-height: 34px;
+    gap: 4px;
+  }
+  .detail-actions button svg {
+    width: 13px;
+  }
+  .detail-actions button:last-child {
+    width: 30px;
+  }
+  .detail-footnote {
+    grid-column: 1/-1;
+    margin-top: 12px;
+    font-size: 8px;
+  }
+  .detail-stage .speech-bubble {
+    left: 7px;
+    right: 7px;
+    top: 10px;
+    font-size: 9px;
+    padding: 7px;
+  }
+}
+.detail-mobile-back {
+  display: none;
+}
+@media (max-width: 650px) {
+  .detail-mobile-back {
+    display: block;
+    background: transparent;
+    color: #9480ab;
+    font-size: 9px;
+    padding: 6px;
+  }
+}
+.detail-copy > p {
+  color: #756b7e;
+  font-size: 12px;
+}
+.detail-name > span {
+  color: #8b7e96;
+}
+.detail-heading > span:first-child {
+  color: #807488;
+}
+.detail-stage-label {
+  opacity: 1;
+  filter: brightness(0.8);
+}
+.personality {
+  color: #796784;
+}
+.palette-row > span {
+  color: #83718e;
+}
+.scale-toolbar > span {
+  color: #8a7c94;
+}
+.detail-actions button {
+  color: #7f6b8f;
+}
+.detail-footnote {
+  color: #8a7898;
+}
+@media (max-width: 650px) {
+  .detail-copy > p {
+    font-size: 10px;
+  }
+  .detail-stage-label {
+    font-size: 7px;
+  }
+  .detail-actions button,
+  .adopt-button {
+    min-height: 44px;
+  }
+  .detail-actions button:last-child {
+    width: 35px;
+  }
+  .scale-toolbar {
+    padding: 5px 0;
+  }
+  .scale-toolbar > span {
+    font-size: 0;
+    gap: 0;
+  }
+  .scale-toolbar button {
+    height: 44px;
+    width: 40px;
+  }
+  .detail-stage {
+    height: 230px;
+  }
+  .detail-pet-space .pixel-pet {
+    max-width: 160px;
+  }
+  .detail-mobile-back {
+    min-height: 44px;
+  }
+  .detail-actions button:first-child {
+    font-size: 8px;
+  }
+}
+@media (max-width: 360px) {
+  .pet-detail {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail-heading {
+    width: 100%;
+  }
+  .detail-stage {
+    margin: 0 10px;
+    width: calc(100% - 20px);
+    height: 244px;
+  }
+  .detail-pet-space .pixel-pet {
+    max-width: 192px;
+    max-height: 192px;
+  }
+  .scale-toolbar {
+    margin: 0 17px;
+    padding: 8px 0;
+  }
+  .scale-toolbar > span {
+    font-size: 9px;
+    gap: 6px;
+  }
+  .detail-copy {
+    width: 100%;
+    padding: 15px 18px;
+  }
+  .detail-name {
+    display: flex;
+    gap: 9px;
+    align-items: baseline;
+  }
+  .detail-copy > p {
+    font-size: 12px;
