@@ -483,3 +483,25 @@
   }
   .detail-copy > p {
     font-size: 12px;
+  }
+  .personality {
+    font-size: 9px;
+  }
+  .palette-row > span {
+    font-size: 10px;
+  }
+  .palette-row > div > span {
+    width: 15px;
+    height: 15px;
+  }
+  .detail-actions button:first-child {
+    font-size: 10px;
+  }
+  .detail-footnote {
+    width: 100%;
+    margin: 0;
+  }
+  .detail-stage-label {
+    font-size: 8px;
+  }
+}
