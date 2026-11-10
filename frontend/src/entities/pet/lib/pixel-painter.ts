@@ -37,3 +37,6 @@ export function eyes(
 ) {
   [x, x + gap].forEach((xx) => {
     p.rect(xx, y, 2, blink ? 1 : 3, ink);
+    if (!blink) p.dot(xx, y, light);
+  });
+}
