@@ -34,3 +34,9 @@
   border-color: #efd7e2;
   color: #b75f86;
 }
+@media (max-width: 650px) {
+  .favorite-button.with-label {
+    height: 44px;
+    font-size: 9px;
+  }
+}
