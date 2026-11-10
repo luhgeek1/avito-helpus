@@ -215,3 +215,43 @@ export function createOrbiBaseGrid(pet: OrbiPet, frame: number): Grid {
   } else {
     const eyeRx = shell === "capsule" ? 4.5 : 5.5;
     ellipse(16.5, 15.5, eyeRx, 6, "#fffaf3");
+    const eyeX = 15 + look + (frame === 3 ? -1 : 0);
+    if (pupil === "bar") {
+      r(eyeX, 12, 4, 7, ink);
+      r(eyeX, 12, 2, 2, light);
+      d(eyeX + 3, 17, accent);
+    } else if (pupil === "round") {
+      rounded(eyeX - 1, 12, 6, 7, ink, 2);
+      r(eyeX, 12, 2, 2, light);
+      d(eyeX + 3, 17, accent);
+    } else {
+      p(
+        [
+          [eyeX + 1, 11],
+          [eyeX + 4, 14],
+          [eyeX + 4, 17],
+          [eyeX + 1, 20],
+          [eyeX - 2, 17],
+          [eyeX - 2, 14],
+        ],
+        ink,
+      );
+      r(eyeX, 13, 2, 2, light);
+      d(eyeX + 2, 17, accent);
+    }
+  }
+  // Keep particles detached from every chassis and antenna, including square bodies.
+  const nodes: [number, number, string][] = [
+    [1, 9, spot],
+    [27, 27, secondary],
+  ];
+  if (satellites >= 3) nodes.push([27, 2, accent]);
+  if (satellites === 4) nodes.push([1, 27, body]);
+  nodes.forEach(([x, y, color], index) => {
+    const offsetY = frame === 3 && index % 2 === 0 ? -1 : 0;
+    const offsetX = frame === 3 && index % 2 === 1 ? (x > 16 ? -1 : 1) : 0;
+    rounded(x + offsetX, y + offsetY, 4, 4, ink);
+    r(x + offsetX + 1, y + offsetY + 1, 2, 2, color);
+  });
+  return grid;
+}
