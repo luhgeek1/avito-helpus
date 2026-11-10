@@ -137,3 +137,153 @@ export function paintOrbiFinish(
       break;
     case "circuit":
       l(17, 19, 23, 19, ink);
+      l(23, 19, 23, 24, ink);
+      l(17, 20, 22, 20, accent);
+      l(22, 20, 22, 25, accent);
+      l(46, 22, 49, 22, secondary);
+      l(49, 22, 49, 41, secondary);
+      l(49, 41, 44, 41, secondary);
+      l(22, 45, 28, 45, accent);
+      l(28, 45, 28, 49, accent);
+      l(28, 49, 41, 49, accent);
+      [
+        [18, 18],
+        [47, 20],
+        [43, 40],
+        [26, 47],
+      ].forEach(([x, y]) => rivet(x, y, glow, ink));
+      r(35, 13, 7, 2, muted);
+      d(frame === 3 ? 40 : 36, 13, light);
+      break;
+    case "ceramic":
+      a(33, 31, 12, 22, 175, 285, light);
+      a(33, 32, 12, 20, 350, 70, mixColor(body, ink, 0.2));
+      r(24, 44, 18, 2, ink);
+      r(25, 44, 16, 1, accent);
+      r(28, 47, 10, 2, secondary);
+      e(22, 37, 3, 2, secondary);
+      e(43, 37, 3, 2, secondary);
+      r(29, 13, 8, 1, light);
+      l(23, 21, 23, 24, light);
+      break;
+    case "cosmos":
+      a(33, 32, 20, 18, 170, 320, accent);
+      a(33, 32, 19, 17, 170, 320, glow);
+      [
+        [22, 22],
+        [21, 37],
+        [42, 40],
+        [38, 15],
+      ].forEach(([x, y]) => {
+        d(x, y, light);
+        d(x + 2, y + 1, secondary);
+      });
+      poly(
+        [
+          [44, 20],
+          [47, 24],
+          [46, 29],
+          [44, 26],
+        ],
+        secondary,
+      );
+      r(25, 46, 17, 2, secondary);
+      r(29, 49, 8, 1, accent);
+      break;
+    case "cloud":
+      a(33, 31, 13, 22, 190, 285, light);
+      a(33, 32, 12, 21, 10, 85, accent);
+      [
+        [24, 19, 7],
+        [24, 23, 5],
+        [38, 40, 5],
+        [26, 45, 12],
+      ].forEach(([x, y, w]) => {
+        r(x, y, w, 1, mixColor(body, "#ffffff", 0.5));
+        d(x + w, y - 1, light);
+      });
+      r(25, 48, 17, 1, muted);
+      r(30, 49, 7, 1, secondary);
+      r(40, 17, 2, 2, light);
+      break;
+    case "clay":
+      l(24, 13, 43, 13, accent);
+      l(17, 24, 17, 40, muted);
+      l(48, 25, 48, 39, muted);
+      [
+        [23, 16],
+        [43, 19],
+        [22, 41],
+        [43, 42],
+      ].forEach(([x, y]) => rivet(x, y, mixColor(body, "#fff1d0", 0.65), ink));
+      r(23, 46, 21, 3, ink);
+      r(24, 46, 19, 1, secondary);
+      r(30, 47, 6, 1, accent);
+      l(18, 30, 21, 32, accent);
+      break;
+    case "ribbon":
+      a(33, 32, 18, 19, 186, 290, secondary);
+      a(33, 32, 17, 18, 190, 280, light);
+      poly(
+        [
+          [19, 41],
+          [23, 43],
+          [31, 45],
+          [44, 42],
+          [46, 44],
+          [33, 48],
+          [24, 47],
+          [20, 45],
+        ],
+        accent,
+      );
+      l(23, 43, 31, 46, light);
+      r(31, 45, 4, 3, secondary);
+      r(32, 45, 2, 1, light);
+      poly(
+        [
+          [26, 16],
+          [30, 12],
+          [38, 15],
+          [34, 18],
+        ],
+        mixColor(secondary, "#ffffff", 0.5),
+      );
+      break;
+    case "alloy":
+      l(24, 12, 41, 12, light);
+      l(16, 24, 16, 38, muted);
+      l(49, 24, 49, 38, ink);
+      [
+        [22, 16],
+        [43, 17],
+        [20, 40],
+        [45, 39],
+      ].forEach(([x, y]) => rivet(x, y, light, ink));
+      [22, 26, 30].forEach((y) => {
+        r(45, y, 3, 1, ink);
+        d(45, y, secondary);
+      });
+      r(23, 46, 21, 3, ink);
+      r(24, 46, 19, 1, accent);
+      r(30, 48, 8, 1, secondary);
+      break;
+    case "botanical":
+      a(33, 32, 19, 18, 130, 300, accent);
+      a(33, 32, 17, 17, 135, 290, mixColor(accent, "#ffffff", 0.5));
+      l(21, 38, 25, 45, accent);
+      poly(
+        [
+          [20, 33],
+          [24, 36],
+          [23, 40],
+          [20, 37],
+        ],
+        accent,
+      );
+      poly(
+        [
+          [23, 42],
+          [26, 38],
+          [28, 40],
+          [26, 44],
