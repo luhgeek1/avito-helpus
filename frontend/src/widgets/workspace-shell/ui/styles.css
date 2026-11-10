@@ -189,3 +189,153 @@
   border-top: 1px solid var(--line);
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 22px 7px;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: #e9f0e4;
+  color: #6a8355;
+  font-size: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.profile > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.profile strong {
+  font-size: 10px;
+  font-weight: 500;
+}
+.profile > div > span {
+  font-size: 9px;
+  color: #9b99a2;
+}
+.online-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #95bc82;
+  margin-left: auto;
+}
+.main-shell {
+  margin-left: 224px;
+}
+.topbar {
+  height: 77px;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.breadcrumb {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  color: #9998a2;
+  font-size: 11px;
+}
+.breadcrumb > span {
+  color: #56535e;
+}
+.breadcrumb > svg {
+  color: #c0bdc8;
+}
+.prototype {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 10px;
+  color: #908d99;
+}
+.prototype i {
+  width: 5px;
+  height: 5px;
+  background: #a899c2;
+  border-radius: 50%;
+}
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: -70px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 2px solid #7760c4;
+  z-index: 100;
+  border-radius: 8px;
+}
+.skip-link:focus {
+  top: 12px;
+}
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 195px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .brand {
+    font-size: 24px;
+  }
+  .brand-buddy {
+    font-size: 21px;
+  }
+  .main-shell {
+    margin-left: 195px;
+  }
+  .topbar {
+    padding: 0 28px;
+  }
+}
+@media (max-width: 850px) {
+  .sidebar {
+    width: 75px;
+    align-items: center;
+    padding: 27px 10px 0;
+  }
+  .brand {
+    padding: 0;
+  }
+  .brand > span:last-child,
+  .workspace,
+  .nav-label,
+  .sidebar-bottom,
+  .nav-item:not(.active) .nav-count {
+    display: none;
+  }
+  .sidebar nav {
+    margin-top: 48px;
+    width: 100%;
+  }
+  .nav-item {
+    font-size: 0;
+    padding: 15px 0;
+    justify-content: center;
+    gap: 0;
+  }
+  .nav-count {
+    display: none;
+  }
+  .main-shell {
+    margin-left: 75px;
+  }
+  .topbar {
+    height: 65px;
+    padding: 0 24px;
+  }
+}
+@media (max-width: 650px) {
+  .sidebar {
+    width: 100%;
+    height: 62px;
+    bottom: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-right: 0;
