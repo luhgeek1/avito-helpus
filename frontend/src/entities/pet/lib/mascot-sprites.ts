@@ -507,3 +507,86 @@ export function mascotSpriteGrid(pet: Pet, frame: number): Grid {
           [25, 17],
           [18, 19],
           [23, 27],
+          [20, 28],
+          [15, 19],
+          [9, 23],
+        ],
+        b,
+      );
+      r(9, 8, 1, 11, l);
+      p(
+        [
+          [10, 7],
+          [16, 11],
+          [11, 11],
+        ],
+        l,
+      );
+      eyes(pen, 12, 13, 6, blink, o);
+      r(14, 18, 4, 1, o);
+      pill(4, 17 + wave, 5, 6, purple);
+      pill(7, 25, 7, 4, green);
+      pill(19, 27, 7, 3, pink);
+      break;
+    }
+    case "chat": {
+      pill(16, 2, 8, 8, purple);
+      r(18, 3, 3, 1, "#d6c4f2");
+      pill(2, 15 + wave, 6, 7, green);
+      pill(25, 14, 6, 8, pink);
+      round(5, 6, 23, 18, o);
+      round(6, 7, 21, 16, b);
+      p(
+        [
+          [10, 22],
+          [10, 30],
+          [19, 23],
+        ],
+        o,
+      );
+      p(
+        [
+          [12, 22],
+          [12, 27],
+          [16, 23],
+        ],
+        b,
+      );
+      r(9, 7, 11, 1, l);
+      r(6, 10, 2, 8, l);
+      eyes(pen, 11, 12, 9, blink, o);
+      round(15, 18, 7, 4, o);
+      r(17, 18, 2, 2, white);
+      r(8, 18, 2, 2, pink);
+      r(24, 18, 2, 2, pink);
+      pill(20, 24, 6, 5, purple);
+      break;
+    }
+    case "magnet": {
+      round(6, 4, 21, 25, o);
+      round(7, 5, 19, 23, b);
+      r(12, 3, 9, 15, "");
+      r(13, 17, 7, 3, "");
+      r(7, 5, 5, 8, blue);
+      r(21, 5, 5, 8, pink);
+      r(7, 11, 5, 2, white);
+      r(21, 11, 5, 2, white);
+      r(8, 6, 1, 4, "#a1ddf7");
+      r(22, 6, 3, 1, "#ffd1e0");
+      eyes(pen, 11, 21, 9, blink, o);
+      smile(14, 25);
+      pill(7, 27, 7, 3, green);
+      pill(21, 27, 7, 3, green);
+      pill(3, 19 + wave, 5, 5, blue);
+      pill(26, 18, 4, 6, pink);
+      if (frame === 3) {
+        r(14, 6, 4, 1, purple);
+        r(15, 5, 2, 3, purple);
+      }
+      break;
+    }
+    default:
+      throw new Error(`Unknown mascot sprite: ${pet.id}`);
+  }
+  return grid;
+}
