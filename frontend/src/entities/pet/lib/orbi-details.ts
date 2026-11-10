@@ -287,3 +287,121 @@ export function paintOrbiFinish(
           [26, 38],
           [28, 40],
           [26, 44],
+        ],
+        accent,
+      );
+      l(43, 37, 40, 45, accent);
+      poly(
+        [
+          [43, 39],
+          [47, 35],
+          [48, 38],
+          [45, 42],
+        ],
+        secondary,
+      );
+      e(23, 38, 2, 1, secondary);
+      r(30, 48, 6, 1, light);
+      break;
+  }
+}
+
+export function paintOrbiParticle(
+  p: DetailPainter,
+  finish: OrbiFinish,
+  x: number,
+  y: number,
+  color: string,
+  ink: string,
+  flash: boolean,
+) {
+  const { rect: r, ellipse: e, poly, line: l, dot: d, arc: a } = p;
+  const light = mixColor(color, "#ffffff", flash ? 0.8 : 0.55),
+    shade = mixColor(color, ink, 0.3);
+  if (["prism", "tide", "ribbon", "clay"].includes(finish)) {
+    poly(
+      [
+        [x, y - 4],
+        [x + 4, y],
+        [x, y + 4],
+        [x - 4, y],
+      ],
+      ink,
+    );
+    poly(
+      [
+        [x, y - 3],
+        [x + 3, y],
+        [x, y + 3],
+        [x - 3, y],
+      ],
+      color,
+    );
+    poly(
+      [
+        [x, y - 3],
+        [x, y + 2],
+        [x - 3, y],
+      ],
+      light,
+    );
+    l(x + 1, y, x, y + 2, shade);
+  } else if (["sun", "night", "cosmos"].includes(finish)) {
+    if (finish === "cosmos") {
+      e(x, y, 3, 3, ink);
+      e(x, y, 2, 2, color);
+      l(x - 4, y + 1, x + 4, y - 1, ink);
+      l(x - 3, y + 1, x + 3, y - 1, light);
+    } else {
+      poly(
+        [
+          [x, y - 4],
+          [x + 1, y - 1],
+          [x + 4, y],
+          [x + 1, y + 1],
+          [x, y + 4],
+          [x - 1, y + 1],
+          [x - 4, y],
+          [x - 1, y - 1],
+        ],
+        ink,
+      );
+      r(x - 1, y - 1, 2, 2, light);
+      d(x, y - 3, color);
+      d(x + 2, y, color);
+    }
+  } else if (finish === "botanical") {
+    poly(
+      [
+        [x - 4, y],
+        [x, y - 4],
+        [x + 4, y],
+        [x, y + 4],
+      ],
+      ink,
+    );
+    poly(
+      [
+        [x - 3, y],
+        [x, y - 3],
+        [x + 3, y],
+        [x, y + 3],
+      ],
+      color,
+    );
+    l(x - 2, y + 2, x + 2, y - 2, light);
+  } else if (["circuit", "alloy"].includes(finish)) {
+    r(x - 4, y - 3, 8, 6, ink);
+    r(x - 3, y - 2, 6, 4, color);
+    r(x - 2, y - 1, 4, 2, shade);
+    l(x - 3, y - 2, x + 2, y - 2, light);
+    d(x - 4, y - 1, color);
+    d(x + 3, y + 1, color);
+  } else {
+    e(x, y, 4, 4, ink);
+    e(x, y, 3, 3, color);
+    a(x, y, 3, 3, 180, 300, light);
+    e(x + 1, y + 1, 1, 1, shade);
+    d(x - 1, y - 1, "#fffaf3");
+  }
+}
