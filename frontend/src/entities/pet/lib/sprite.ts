@@ -595,3 +595,45 @@ export function spriteGrid(pet: Pet, frame: number): Grid {
     p(
       [
         [11, 10],
+        [14, 10],
+        [21, 10],
+        [23, 9],
+        [24, 13],
+        [23, 18],
+        [20, 20],
+        [12, 19],
+        [10, 16],
+      ],
+      b,
+    );
+    r(9, 5, 2, 4, "#edce8c");
+    r(23, 5, 2, 4, "#edce8c");
+    r(13, 15, 12, 5, l);
+    eyes(pen, 12, 12, 9, blink, o);
+    r(21, 16, 1, 1, o);
+    r(17, 19, 5, 1, o);
+    r(9, 28, 7, 2, o);
+    r(19, 28, 6, 2, o);
+    r(10, 27, 5, 2, b);
+    r(20, 27, 4, 2, b);
+    r(24, 25, 4, 3, o);
+    r(27, 23, 3, 3, b);
+    r(29, 21, 2, 3, w);
+  }
+  return grid;
+}
+
+export function pixelRuns(grid: Grid) {
+  const runs: { x: number; y: number; w: number; color: string }[] = [];
+  grid.forEach((row, y) => {
+    let x = 0;
+    while (x < row.length) {
+      const color = row[x];
+      let end = x + 1;
+      while (end < row.length && row[end] === color) end++;
+      if (color) runs.push({ x, y, w: end - x, color });
+      x = end;
+    }
+  });
+  return runs;
+}
