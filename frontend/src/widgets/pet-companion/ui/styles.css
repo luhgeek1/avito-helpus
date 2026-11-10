@@ -1,0 +1,96 @@
+.companion {
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+  z-index: 35;
+  width: 160px;
+  animation: appear 0.25s ease-out;
+}
+.widget-pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  width: 100%;
+  padding: 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.companion.is-dragging .widget-pet {
+  cursor: grabbing;
+}
+.widget-close {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid #eee8f3;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #a093ac;
+  z-index: 3;
+}
+.widget-bubble {
+  position: absolute;
+  right: 9px;
+  bottom: calc(100% + 12px);
+  width: 230px;
+  background: #fff;
+  border: 1px solid #ded5e8;
+  box-shadow: 0 6px 30px #45325c12;
+  padding: 16px 24px 16px 16px;
+  border-radius: 11px;
+  font-size: 11px;
+  color: #82738d;
+  line-height: 1.7;
+}
+.widget-bubble strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 550;
+  color: #62516f;
+  margin-bottom: 5px;
+}
+.widget-bubble > button {
+  position: absolute;
+  top: 9px;
+  right: 7px;
+  background: transparent;
+  color: #9f91ac;
+  padding: 3px;
+}
+.restore-buddy {
+  position: fixed;
+  bottom: 18px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e4d9ee;
+  background: #fff;
+  padding: 10px 13px;
+  border-radius: 7px;
+  font-size: 10px;
+  color: #8a769a;
+  z-index: 40;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 650px) {
+  .companion {
+    right: 10px;
+    bottom: 12px;
+    width: 144px;

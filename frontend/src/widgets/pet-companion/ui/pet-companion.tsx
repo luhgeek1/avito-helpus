@@ -23,3 +23,57 @@ export function PetCompanion() {
     <>
       {chosenPet && widgetVisible && (
         <div
+          ref={movement.ref}
+          className={`companion${movement.dragging ? " is-dragging" : ""}`}
+          style={
+            {
+              ...movement.style,
+              "--pet-bg": chosenPet.bg,
+              "--pet-color": chosenPet.color,
+            } as CSSProperties
+          }
+        >
+          {widgetSpeaking && (
+            <div className="widget-bubble" style={movement.bubbleStyle} role="status">
+              <strong>{chosenPet.name} теперь рядом!</strong>
+              <span>{chosenPet.greeting}</span>
+              <button
+                onClick={() => setWidgetSpeaking(false)}
+                aria-label="Закрыть приветствие"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          )}
+          <button
+            className="widget-close"
+            onClick={() => setWidgetVisible(false)}
+            aria-label="Скрыть спутника"
+          >
+            <X size={12} />
+          </button>
+          <button
+            className="widget-pet"
+            onClick={() => {
+              if (!movement.consumeDragClick()) setWidgetSpeaking(!widgetSpeaking);
+            }}
+            {...movement.handlers}
+            title="Перетащите спутника или перемещайте стрелками клавиатуры"
+            aria-label={`Поговорить с ${chosenPet.name}`}
+          >
+            <PixelPet pet={chosenPet} size={128} paused={paused} />
+          </button>
+        </div>
+      )}
+      {chosenPet && !widgetVisible && (
+        <button
+          className="restore-buddy"
+          onClick={() => setWidgetVisible(true)}
+        >
+          <Volume2 size={15} />
+          {chosenPet.name} рядом
+        </button>
+      )}
+    </>
+  );
+}
