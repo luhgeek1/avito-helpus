@@ -17,3 +17,153 @@
   transform: translateY(-3px);
   box-shadow: 0 5px 15px #4839560b;
 }
+.pet-card.is-active {
+  border: 1.5px solid #9f87cd;
+  padding: 5.5px;
+  box-shadow: 0 0 0 2px #b2a0d310;
+}
+.card-stage {
+  height: 167px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pet-bg);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pixel-pet {
+  display: block;
+  position: relative;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  z-index: 2;
+}
+.card-stage .pixel-pet {
+  margin-top: 8px;
+}
+.pet-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 9px;
+  color: var(--pet-color);
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+.card-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--pet-color);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+}
+.adopted-label {
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 8px;
+  color: var(--pet-color);
+  background: #ffffffb0;
+  padding: 3px 5px;
+  border-radius: 4px;
+  z-index: 4;
+}
+.ground-shadow {
+  position: absolute;
+  bottom: 18px;
+  width: 70px;
+  height: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--pet-color);
+  opacity: 0.13;
+  clip-path: polygon(
+    10% 0,
+    90% 0,
+    90% 25%,
+    100% 25%,
+    100% 75%,
+    90% 75%,
+    90% 100%,
+    10% 100%,
+    10% 75%,
+    0 75%,
+    0 25%,
+    10% 25%
+  );
+}
+.stage-ground {
+  position: absolute;
+  bottom: 14px;
+  height: 1px;
+  background: var(--pet-color);
+  opacity: 0.08;
+  width: 77%;
+}
+.pixel-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--pet-color);
+  opacity: 0.16;
+}
+.spark-one {
+  top: 38%;
+  left: 18%;
+  box-shadow: 4px -4px var(--pet-color);
+}
+.spark-two {
+  top: 61%;
+  right: 17%;
+  width: 3px;
+  height: 3px;
+}
+.card-info {
+  padding: 13px 10px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-info h2 {
+  font-size: 13px;
+  font-weight: 550;
+  margin-bottom: 5px;
+  letter-spacing: -0.1px;
+}
+.card-info > div > span {
+  font-size: 10px;
+  color: #9b96a2;
+}
+.card-arrow {
+  color: #c1bacb;
+}
+.pet-card.is-active .card-arrow,
+.pet-card:hover .card-arrow {
+  color: #9e86c8;
+}
+.sprite-frame {
+  opacity: 0;
+  animation: sprite-frame 3.2s steps(1, end) infinite;
+}
+.is-paused .sprite-frame {
+  animation: none;
+  opacity: 0;
+}
+.is-paused .frame-0 {
+  opacity: 1;
+}
+@keyframes sprite-frame {
+  0%,
+  24.999% {
+    opacity: 1;
+  }
+  25%,
