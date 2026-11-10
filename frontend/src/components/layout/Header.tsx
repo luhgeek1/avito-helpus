@@ -115,7 +115,7 @@ export function Header() {
   return (
     <header className={s.header}>
       <div className={`container ${s.topBar}`}>
-        <nav aria-label="Разделы портала">
+        <nav className={s.topNav} aria-label="Разделы портала">
           <ul className={s.topLinks}>
             {TOP_LINKS.map((link) => (
               <li key={link.to}>
@@ -129,13 +129,13 @@ export function Header() {
         <div className={s.topActions}>
           <Link to="/services/$serviceId" params={{ serviceId: 'it' }} className={s.action}>
             <Plus size={18} aria-hidden />
-            <span className={s.topActionText}>Заявка в IT</span>
+            <span>Заявка в IT</span>
           </Link>
           <Link to="/services/$serviceId" params={{ serviceId: 'edo' }} className={s.action}>
             <FileText size={18} aria-hidden />
-            <span className={s.topActionText}>Мои документы</span>
+            <span>Мои документы</span>
           </Link>
-          <Link to="/feed" className={s.iconAction} aria-label="Подписки" title="Подписки">
+          <Link to="/feed" className={cx(s.iconAction, s.favorites)} aria-label="Подписки" title="Подписки">
             <Heart size={28} fill="currentColor" />
           </Link>
           <Notifications />

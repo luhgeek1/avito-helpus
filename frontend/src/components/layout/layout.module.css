@@ -4,9 +4,10 @@
   flex-direction: column;
 }
 
+/* Отступ до разделителя футера равен отступу после него */
 .main {
   flex: 1;
-  padding: 24px 0 64px;
+  padding: 24px 0 32px;
 }
 
 /* ---------- Шапка: две строки, как на avito.ru ---------- */
@@ -422,9 +423,11 @@
   background: color-mix(in srgb, var(--c-green-soft), #000 5%);
 }
 
+/* На узких экранах «Заявка в IT» и «Мои документы» без подписей превращаются в непонятные иконки — убираем их,
+   оба действия есть в каталоге сервисов */
 @media (max-width: 1000px) {
   .location,
-  .topActionText {
+  .action {
     display: none;
   }
 }
@@ -438,35 +441,100 @@
   }
 }
 
+/*
+ * Мобильная шапка: строки верхней панели и поиска раскладываются в одну сетку.
+ * 1 — логотип со словом «Хаб», справа уведомления и профиль;
+ * 2 — поиск на всю ширину;
+ * 3 — разделы портала чипами с горизонтальной прокруткой.
+ * Отдельная кнопка «Все сервисы» не нужна: раздел «Сервисы» есть в чипах.
+ */
 @media (max-width: 720px) {
-  .topLinks {
-    display: none;
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'logo actions'
+      'search search'
+      'nav nav';
+    align-items: center;
+    padding: 6px var(--gutter) 0;
   }
-  .topBar {
-    justify-content: flex-end;
-  }
+  .topBar,
   .mainBar {
-    gap: 8px;
-    padding-top: 0;
+    display: contents;
   }
   .logo {
+    grid-area: logo;
     min-width: 0;
     margin-right: 0;
+    font-size: 26px;
   }
-  .search {
-    margin-left: 0;
+  .logoMark {
+    width: 28px;
+    height: 28px;
   }
-  .logoText,
-  .allServicesText,
+  .topActions {
+    grid-area: actions;
+  }
+  .favorites,
+  .allServices,
   .searchSubmit {
     display: none;
   }
-  .allServices {
-    width: 52px;
-    padding: 0;
+  .search {
+    grid-area: search;
+    height: 44px;
+    margin: 8px 0 0;
+    border-radius: 14px;
+  }
+  .searchField {
+    height: 40px;
+    border-radius: 12px;
+  }
+  .topNav {
+    grid-area: nav;
+    min-width: 0;
+    margin: 0 calc(-1 * var(--gutter));
+  }
+  .topLinks {
+    gap: 8px;
+    margin: 0;
+    padding: 12px var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .topLinks::-webkit-scrollbar {
+    display: none;
+  }
+  .topLink {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 12px;
+    background: var(--c-control);
+    color: var(--c-text);
+    white-space: nowrap;
+  }
+  .topLink:hover {
+    color: var(--c-text);
+  }
+  .topLinkActive,
+  .topLinkActive:hover {
+    background: var(--c-black);
+    color: #fff;
+  }
+  /* Футер: две колонки ссылок в один ряд, без лишних отступов; до и после разделителя по 24 px */
+  .main {
+    padding-bottom: 24px;
+  }
+  .footer {
+    padding-top: 24px;
   }
   .footerGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+    gap: 24px 32px;
+  }
+  .footerColumn ul {
+    margin-bottom: 0;
   }
   .feedback {
     left: 16px;

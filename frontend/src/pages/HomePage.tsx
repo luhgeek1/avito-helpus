@@ -136,9 +136,15 @@ function QuickActions() {
     <section className={s.panel} aria-label="Быстрые действия">
       <div className={s.panelHead}>
         <h3>Когда нужно быстрое решение</h3>
-        <button type="button" className={s.settings} onClick={() => setEditing(true)} disabled={!data}>
-          <Settings2 size={16} />
-          Настроить подборку
+        <button
+          type="button"
+          className={s.settings}
+          onClick={() => setEditing(true)}
+          disabled={!data}
+          aria-label="Настроить подборку"
+        >
+          <Settings2 size={16} aria-hidden />
+          Настроить<span className={s.settingsExtra}> подборку</span>
         </button>
       </div>
       {isPending && <Skeleton height={88} />}
