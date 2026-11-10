@@ -180,3 +180,69 @@ export function orbiSpriteGrid(pet: OrbiPet, frame: number): Grid {
     a(33, 31, rx + 2, 14, 20, 80, secondary);
   }
   if (finish === "botanical") {
+    [
+      [24, 22],
+      [21, 32],
+      [24, 40],
+      [42, 22],
+      [45, 32],
+      [42, 40],
+    ].forEach(([x, y], i) => {
+      surface.poly(
+        [
+          [x - 1, y],
+          [x + 1, y - 2],
+          [x + 3, y],
+          [x + 1, y + 2],
+        ],
+        i % 2 ? accent : glow,
+      );
+      d(x + 1, y, secondary);
+    });
+  }
+  if (finish === "tide") {
+    a(33, 31, rx + 2, 14, 20, 145, secondary);
+    a(33, 31, rx + 1, 13, 190, 280, glow);
+  }
+  // The small status light pulses in discrete frames, without blur or interpolation.
+  r(30, 49, 7, 2, ink);
+  r(31, 49, 5, 1, frame === 3 ? glow : secondary);
+  if (gear === "antenna" || gear === "flower") {
+    d(32, 5, white);
+    d(33, 6, glow);
+  }
+  if (gear === "horns") {
+    r(19, 5, 3, 1, light);
+    r(45, 5, 3, 1, light);
+  }
+
+  // All external marks are isolated from the chassis, so they cannot read as hands.
+  const detached = (x: number, y: number) => {
+    for (let dy = -2; dy <= 2; dy++)
+      for (let dx = -2; dx <= 2; dx++)
+        if (hasBody(x + dx, y + dy)) return false;
+    return true;
+  };
+  const air = detailPainter(grid, lift, detached);
+  if (["cosmos", "night", "prism"].includes(finish)) {
+    air.arc(33, 31, 26, 18, 195, 275, mixColor(accent, pet.bg, 0.38));
+    air.arc(33, 31, 26, 18, 15, 72, mixColor(secondary, pet.bg, 0.35));
+  }
+  if (["tide", "cloud", "glass"].includes(finish)) {
+    air.rect(5, 34, 2, 1, mixColor(accent, pet.bg, 0.25));
+    air.rect(7, 33, 2, 1, mixColor(accent, pet.bg, 0.45));
+    air.rect(56, 30, 2, 2, mixColor(secondary, pet.bg, 0.35));
+  }
+  const particles: [number, number, string][] = [
+    [6, 23, extra],
+    [58, 58, secondary],
+  ];
+  if (satellites >= 3) particles.push([58, 7, accent]);
+  if (satellites === 4) particles.push([6, 58, body]);
+  particles.forEach(([x, y, color], i) => {
+    const dx = frame === 3 ? (x > 32 ? -1 : 1) : 0,
+      dy = frame === 3 && i % 2 === 0 ? -1 : 0;
+    paintOrbiParticle(air, finish, x + dx, y + dy, color, ink, frame === 3);
+  });
+  return grid;
+}
