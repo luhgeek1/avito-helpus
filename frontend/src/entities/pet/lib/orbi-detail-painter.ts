@@ -108,3 +108,14 @@ export function detailPainter(
           )
             inside = !inside;
         }
+        if (inside) dot(x, y, c);
+      }
+  };
+  const rivet = (x: number, y: number, c: string, ink: string) => {
+    rect(x, y, 3, 3, ink);
+    rect(x, y, 2, 1, c);
+    dot(x + 1, y + 1, c);
+  };
+  return { dot, rect, line, ellipse, arc, poly, rivet };
+}
+export type DetailPainter = ReturnType<typeof detailPainter>;
