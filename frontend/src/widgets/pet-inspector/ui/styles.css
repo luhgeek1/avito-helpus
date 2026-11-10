@@ -1,0 +1,35 @@
+.pet-detail {
+  background: #fff;
+  border: 1px solid #e6e3ec;
+  border-radius: 13px;
+  overflow: hidden;
+  position: sticky;
+  top: 24px;
+  box-shadow: 0 4px 12px #2b213903;
+}
+.detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 16px;
+}
+.detail-heading > span:first-child {
+  font-size: 8px;
+  letter-spacing: 1.1px;
+  color: #a29ba9;
+}
+.detail-online {
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #7d8b7a;
+}
+.detail-online i {
+  width: 5px;
+  height: 5px;
+  background: #9bbc89;
+  border-radius: 50%;
+}
+.detail-stage {
+  height: 244px;
