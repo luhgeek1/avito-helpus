@@ -1,0 +1,245 @@
+/*
+ * Дизайн-токены по дизайн-системе avito.ru. Значения сняты 2026-11-11 с переменных
+ * `--theme-semantics-*` и вычисленных стилей главной и карточки объявления.
+ *
+ * Шрифт. На avito.ru под именем Manrope подключён их собственный Avito Sans
+ * (файлы avito-sans/regular.woff2 и bold.woff2), у него только два начертания: 400 и 700.
+ * Avito Sans не публичный: файлы нужно получить у дизайн-команды Авито и подключить
+ * через @font-face с именем 'Avito Sans'. Пока их нет, работает Inter с Google Fonts:
+ * из публичных шрифтов с кириллицей он ближе всех к Avito Sans по форме букв, высоте
+ * строчных и прописных и ширине (сравнение 2026-11-11: совпадение глифов 0.84, у Manrope 0.77).
+ * Используем только 400 и 700, как у Авито.
+ *
+ * Семантика кнопок как у Авито: основная — чёрная, синяя (акцент) — только для
+ * ключевого действия экрана. Ссылки синие, при наведении — красные.
+ */
+:root {
+  /* Акцент: ключевые действия */
+  --c-blue: #00aaff;
+  --c-blue-hover: #0099f7;
+  --c-blue-pressed: #008aed;
+  /* Основная кнопка и выбранные контролы */
+  --c-black: #141414;
+  --c-black-hover: #1f1f1f;
+  --c-green: #02d15c;
+  --c-green-hover: #00c257;
+  --c-green-pressed: #00b253;
+  --c-red: #ff4053;
+  --c-purple: #965eeb;
+  --c-purple-hover: #8c4fe8;
+  --c-purple-pressed: #8144db;
+  --c-orange: #f79900;
+
+  /* Ссылки */
+  --c-link: #0099f7;
+  --c-link-hover: #ff4053;
+
+  /* Мягкие фоны и текст на них */
+  --c-blue-soft: #cfedff;
+  --c-blue-soft-hover: #a1dfff;
+  --c-green-soft: #d2fcc4;
+  --c-red-soft: #ffe0e0;
+  --c-purple-soft: #e9ddfd;
+  --c-orange-soft: #ffecc9;
+  --c-blue-text: #008aed;
+  --c-green-text: #00b253;
+  --c-red-text: #ff4053;
+  --c-purple-text: #8c4fe8;
+  --c-orange-text: #f79900;
+
+  --c-text: #000000;
+  --c-text-secondary: #757575;
+  --c-text-tertiary: #a3a3a3;
+  --c-bg: #ffffff;
+  /* Нейтральная подложка — плитки и блоки, как рубрикатор на главной avito.ru */
+  --c-fill: rgba(0, 0, 0, 0.04);
+  --c-fill-hover: rgba(0, 0, 0, 0.08);
+  --c-fill-strong: rgba(0, 0, 0, 0.1);
+  /* Тёплый серый — кнопки, чипы, вкладки, поля и плашки */
+  --c-control: #f2f1f0;
+  --c-control-hover: #ebeae8;
+  --c-control-pressed: #e3e2e1;
+  --c-white-pressed: #f7f7f5;
+  --c-border: #ebeae8;
+  --c-border-hover: #dbdbd9;
+  --c-focus: #45c1ff;
+
+  --radius-xs: 8px;
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+
+  --shadow-float: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 30px rgba(0, 0, 0, 0.1);
+  --shadow-pop: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  /* Анимации */
+  --ease-button: cubic-bezier(0.5, 0, 0.25, 1);
+  --t-button: background-color 0.15s var(--ease-button), color 0.15s var(--ease-button);
+  --t-link: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  /* Контролы темнеют за 0.2 с, а возвращаются за 0.15 с */
+  --t-control: background-color 0.15s ease-out;
+  --t-control-hover: background-color 0.2s ease-out;
+
+  /* Ширина контента как у avito.ru: 1316 px и не растёт на широких экранах */
+  --container: 1316px;
+  --gutter: 24px;
+
+  font-family: 'Avito Sans', Inter, Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--c-text);
+  background: var(--c-bg);
+  /* Сглаживание по умолчанию, как на avito.ru: antialiased на macOS делает текст тоньше */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--c-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+/* Шкала заголовков avito.ru: 32/36, 26/30, 18/22; только 700, без трекинга */
+h1 {
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--t-link);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Кольцо фокуса как у Авито: 3px #45C1FF вплотную к элементу */
+:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin: 0 auto;
+  /* Только боковые поля: вертикальные отступы задают сами блоки */
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Палитры: яркий фон для промо-блоков и мягкий — для обложек и плиток */
+.palette-blue {
+  --p-bg: var(--c-blue);
+  --p-fg: #ffffff;
+  --p-soft: var(--c-blue-soft);
+  --p-text: var(--c-blue-text);
+}
+.palette-green {
+  --p-bg: var(--c-green);
+  --p-fg: #ffffff;
+  --p-soft: var(--c-green-soft);
+  --p-text: var(--c-green-text);
+}
+.palette-red {
+  --p-bg: var(--c-red);
+  --p-fg: #ffffff;
+  --p-soft: var(--c-red-soft);
+  --p-text: var(--c-red-text);
+}
+.palette-purple {
+  --p-bg: var(--c-purple);
+  --p-fg: #ffffff;
+  --p-soft: var(--c-purple-soft);
+  --p-text: var(--c-purple-text);
+}
+.palette-dark {
+  --p-bg: var(--c-black);
+  --p-fg: #ffffff;
+  --p-soft: var(--c-control);
+  --p-text: var(--c-text);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --gutter: 16px;
+  }
+  h1 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  h2 {
+    font-size: 22px;
+    line-height: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

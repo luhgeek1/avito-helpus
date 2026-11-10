@@ -1,0 +1,278 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.city {
+  height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--c-control);
+}
+
+.banner {
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+  padding: 36px 40px;
+  border-radius: var(--radius-l);
+  background: var(--c-purple);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.banner h2 {
+  font-size: 32px;
+  line-height: 36px;
+  max-width: 460px;
+}
+
+.banner p {
+  margin-top: 10px;
+  max-width: 380px;
+  font-size: 16px;
+  line-height: 24px;
+  opacity: 0.92;
+}
+
+.bannerArt {
+  margin-right: 32px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.category {
+  position: relative;
+  overflow: hidden;
+  height: 88px;
+  padding: 14px 20px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-l);
+  background: var(--c-fill);
+  text-align: left;
+}
+
+.category:hover {
+  background: var(--c-fill-hover);
+}
+
+/* Выбранная плитка — чёрная обводка, как border-selected у Авито */
+.categoryActive {
+  border-color: var(--c-black);
+}
+
+.categoryTitle {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.categoryArt {
+  position: absolute;
+  right: 8px;
+  bottom: -4px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-text-secondary);
+  pointer-events: none;
+}
+
+.search {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px 0 42px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--c-control);
+  outline: none;
+  transition: var(--t-control);
+}
+
+.search:hover {
+  background: var(--c-control-hover);
+  transition: var(--t-control-hover);
+}
+
+.search::placeholder {
+  color: var(--c-text-secondary);
+}
+
+.search:focus {
+  border-color: var(--c-focus);
+  background: #fff;
+}
+
+.select {
+  height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--c-control);
+}
+
+/* Та же сетка, что у карточек постов: около 250 px, отступы 16/24 */
+.featured {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px 16px;
+}
+
+.eventCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eventDate {
+  margin-top: 4px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.eventMeta {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+  margin-bottom: 6px;
+}
+
+.upcoming {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.rowDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 72px;
+  border-radius: 16px;
+  background: var(--p-soft);
+}
+
+.rowDay {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.rowMonth {
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--c-text-secondary);
+}
+
+.rowTitle {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+}
+
+.rowText {
+  margin-top: 2px;
+  color: var(--c-text-secondary);
+}
+
+.rowMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--c-control);
+  color: var(--c-text);
+}
+
+.registered {
+  background: var(--c-green-soft);
+  color: var(--c-green-text);
+}
+
+@media (max-width: 900px) {
+  .categories {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .banner {
+    padding: 24px;
+  }
+  .banner h2 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .bannerArt {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    opacity: 0.35;
+  }
+  .categories {
+    grid-template-columns: 1fr 1fr;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .searchWrap {
+    flex-basis: 100%;
+  }
+  .select {
+    flex: 1;
+  }
+  .featured {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 12px;
+  }
+  .row {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+  .row > :last-child {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,308 @@
+/* ---------- Кнопки: размеры, цвета и анимация как в дизайн-системе avito.ru ---------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  font-weight: 400;
+  white-space: nowrap;
+  transition: var(--t-button);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.size-s {
+  height: 36px;
+  padding: 0 15px 0 14px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+.size-m {
+  height: 44px;
+  padding: 0 17px 0 16px;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.size-l {
+  height: 52px;
+  padding: 0 19px 0 18px;
+  font-size: 15px;
+  border-radius: 16px;
+}
+
+/* Акцент — синяя кнопка для ключевого действия экрана */
+.accent {
+  background: var(--c-blue);
+  color: #fff;
+}
+.accent:hover:not(:disabled) {
+  background: var(--c-blue-hover);
+}
+.accent:active:not(:disabled) {
+  background: var(--c-blue-pressed);
+}
+
+/* Основная — чёрная */
+.primary {
+  background: var(--c-black);
+  color: #fff;
+}
+.primary:hover:not(:disabled) {
+  background: var(--c-black-hover);
+}
+.primary:active:not(:disabled) {
+  background: var(--c-black);
+}
+
+.success {
+  background: var(--c-green);
+  color: #fff;
+}
+.success:hover:not(:disabled) {
+  background: var(--c-green-hover);
+}
+.success:active:not(:disabled) {
+  background: var(--c-green-pressed);
+}
+
+.secondary {
+  background: var(--c-control);
+  color: var(--c-text);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--c-control-hover);
+}
+.secondary:active:not(:disabled) {
+  background: var(--c-control-pressed);
+}
+
+.white {
+  background: #fff;
+  color: var(--c-text);
+  box-shadow: var(--shadow-float);
+}
+.white:hover:not(:disabled) {
+  background: #fff;
+}
+.white:active:not(:disabled) {
+  background: var(--c-white-pressed);
+}
+
+/* Кнопка-ссылка: синий текст, при наведении красный */
+.ghost {
+  background: transparent;
+  color: var(--c-link);
+  padding: 0 4px;
+}
+.ghost:hover:not(:disabled) {
+  color: var(--c-link-hover);
+}
+
+/* ---------- Аватар ---------- */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--p-soft);
+  color: var(--p-text);
+  font-weight: 700;
+}
+
+/* ---------- Иконка сервиса: объёмный эмодзи на светлой плашке ---------- */
+.serviceIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--c-fill);
+  line-height: 1;
+}
+
+.emoji {
+  display: inline-block;
+  line-height: 1;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.14));
+  user-select: none;
+}
+
+/* ---------- Обложка ---------- */
+.cover {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-m);
+  background: var(--p-soft);
+}
+
+.coverBadge {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.44);
+  color: #fff;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+/* ---------- Заголовок секции ---------- */
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--c-link);
+  white-space: nowrap;
+}
+.sectionLink:hover {
+  color: var(--c-link-hover);
+}
+
+/* ---------- Состояния загрузки ---------- */
+.skeleton {
+  background: linear-gradient(90deg, #f2f2f2 0%, #f9f9f9 50%, #f2f2f2 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--radius-m);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-m);
+  background: var(--c-red-soft);
+}
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--c-text-secondary);
+  background: var(--c-fill);
+  border-radius: var(--radius-l);
+}
+
+/* ---------- Чип: тёплый серый, выбранный — чёрный, как контролы avito.ru ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--c-control);
+  font-size: 15px;
+  transition: var(--t-control);
+}
+.chip:hover {
+  background: var(--c-control-hover);
+  transition: var(--t-control-hover);
+}
+.chip:active {
+  background: var(--c-control-pressed);
+}
+.chipActive,
+.chipActive:hover,
+.chipActive:active {
+  background: var(--c-black);
+  color: #fff;
+}
+
+/* ---------- Модалка ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  animation: fade 0.15s ease-out;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: var(--radius-l);
+  background: #fff;
+  box-shadow: var(--shadow-pop);
+  animation: rise 0.18s ease-out;
+}
+
+.modalHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--c-text-secondary);
+  flex-shrink: 0;
+  transition: var(--t-control);
+}
+.iconButton:hover {
+  background: var(--c-fill-hover);
+  color: var(--c-text);
+  transition: var(--t-control-hover);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}

@@ -1,0 +1,475 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 24px 0 64px;
+}
+
+/* ---------- Шапка: две строки, как на avito.ru ---------- */
+.header {
+  background: #fff;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  /* Как на avito.ru: строка 54 px, содержимое смещено вниз (центр на 32 px) */
+  height: 54px;
+  padding-top: 10px;
+}
+
+.topLinks {
+  display: flex;
+  align-items: center;
+  margin: 0 -8px;
+  padding: 0;
+  list-style: none;
+}
+
+.topLink {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 8px;
+  color: var(--c-text-secondary);
+  border-radius: 8px;
+}
+
+.topLink:hover {
+  color: var(--c-link-hover);
+}
+
+.topLinkActive {
+  color: var(--c-text);
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 8px;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+
+.action:hover {
+  color: var(--c-link-hover);
+}
+
+.iconAction {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #ccc;
+}
+
+.iconAction:hover {
+  color: var(--c-text-secondary);
+}
+
+/* Счётчик: кружок 20×20 с белой обводкой; двузначное число растягивает его в овал */
+.badge {
+  position: absolute;
+  top: 2px;
+  left: 27px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: var(--c-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.avatarLink {
+  margin-left: 8px;
+  border-radius: 50%;
+}
+
+/* Отступы как на avito.ru: логотип — 48 — кнопка — 6 — поиск — 48 — город в слоте 200 px */
+.mainBar {
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+  padding-bottom: 8px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 103px;
+  margin-right: 48px;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.logoMark {
+  width: 32px;
+  height: 32px;
+}
+
+.allServices {
+  flex-shrink: 0;
+}
+
+.search {
+  flex: 1;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 52px;
+  padding: 2px;
+  border-radius: 16px;
+  background: var(--c-blue);
+}
+
+.searchField {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  min-width: 0;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--c-text-secondary);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--c-text);
+}
+
+.searchInput::placeholder {
+  color: var(--c-text-secondary);
+}
+
+.searchInput::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.searchSubmit {
+  height: 48px;
+  padding: 0 19px 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #fff;
+  transition: var(--t-button);
+}
+
+.searchSubmit:hover {
+  background: var(--c-blue-hover);
+}
+
+.searchSubmit:active {
+  background: var(--c-blue-pressed);
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  width: 200px;
+  margin-left: 48px;
+  white-space: nowrap;
+}
+
+/* ---------- Уведомления ---------- */
+.popover {
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  padding: 8px;
+  border-radius: var(--radius-l);
+  background: #fff;
+  box-shadow: var(--shadow-pop);
+  animation: drop 0.15s ease-out;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+}
+
+.notification {
+  display: block;
+  padding: 12px;
+  border-radius: 16px;
+  transition: var(--t-control);
+}
+
+.notification:hover {
+  background: var(--c-fill);
+  transition: var(--t-control-hover);
+}
+
+.notificationTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-blue);
+  flex-shrink: 0;
+}
+
+.notificationText {
+  margin: 2px 0;
+  color: var(--c-text-secondary);
+}
+
+.notificationTime {
+  color: var(--c-text-tertiary);
+  font-size: 13px;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* ---------- Футер ---------- */
+.footer {
+  padding: 32px 0 40px;
+  border-top: 1px solid var(--c-border);
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 32px;
+}
+
+.footerColumn h4 {
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.footerColumn ul {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerColumn a {
+  color: var(--c-text-secondary);
+}
+
+.footerColumn a:hover {
+  color: var(--c-link-hover);
+}
+
+.footerCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footerCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-l);
+  background: var(--c-fill);
+}
+
+.footerCard h3 {
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 2px;
+}
+
+.footerCard p {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+}
+
+.qr {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  padding: 6px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.footerNote {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+}
+
+/* ---------- Опрос о портале ---------- */
+.feedback {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 40;
+  width: 264px;
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: #fff;
+  box-shadow: var(--shadow-pop);
+  text-align: center;
+  animation: drop 0.2s ease-out;
+}
+
+.feedback p {
+  font-weight: 700;
+  margin: 0 20px 14px;
+}
+
+.feedbackClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.feedbackButtons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.thumb {
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--t-button);
+}
+
+.thumbDown {
+  background: var(--c-red-soft);
+  color: var(--c-red-text);
+}
+
+.thumbDown:hover {
+  background: color-mix(in srgb, var(--c-red-soft), #000 5%);
+}
+
+.thumbUp {
+  background: var(--c-green-soft);
+  color: var(--c-green-text);
+}
+
+.thumbUp:hover {
+  background: color-mix(in srgb, var(--c-green-soft), #000 5%);
+}
+
+@media (max-width: 1000px) {
+  .location,
+  .topActionText {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footerCards {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .topLinks {
+    display: none;
+  }
+  .topBar {
+    justify-content: flex-end;
+  }
+  .mainBar {
+    gap: 8px;
+    padding-top: 0;
+  }
+  .logo {
+    min-width: 0;
+    margin-right: 0;
+  }
+  .search {
+    margin-left: 0;
+  }
+  .logoText,
+  .allServicesText,
+  .searchSubmit {
+    display: none;
+  }
+  .allServices {
+    width: 52px;
+    padding: 0;
+  }
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+  .feedback {
+    left: 16px;
+    bottom: 16px;
+  }
+}

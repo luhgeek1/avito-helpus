@@ -1,0 +1,143 @@
+/* Страница статьи по образцу карточки объявления на avito.ru */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 48px;
+  align-items: start;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 20px;
+  color: var(--c-text-secondary);
+}
+
+.cover {
+  border-radius: var(--radius-l);
+  margin-bottom: 24px;
+}
+
+.summary {
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border-radius: var(--radius-m);
+  background: var(--c-purple-soft);
+}
+
+.summaryHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.toggle {
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-link);
+  transition: var(--t-link);
+}
+
+.toggle:hover {
+  color: var(--c-link-hover);
+}
+
+.bodyTitle {
+  margin-bottom: 12px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* ---------- Правая колонка: как блок цены и продавца ---------- */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stats {
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+.statsHint {
+  margin-top: 4px;
+  color: var(--c-text-secondary);
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.seller {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sellerName {
+  font-size: 21px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.sellerName:hover {
+  color: var(--c-link-hover);
+}
+
+.sellerMeta {
+  margin-top: 4px;
+}
+
+.sellerKind {
+  color: var(--c-text-secondary);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: var(--c-control);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

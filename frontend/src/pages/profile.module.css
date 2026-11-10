@@ -1,0 +1,474 @@
+.layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.box {
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: var(--c-fill);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.name {
+  margin-top: 12px;
+  font-size: 21px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.position {
+  color: var(--c-text-secondary);
+}
+
+.position a {
+  color: var(--c-link);
+}
+
+.position a:hover {
+  color: var(--c-link-hover);
+}
+
+.ids {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  transition: var(--t-button);
+}
+
+.copy:hover {
+  color: var(--c-link-hover);
+}
+
+.copy:active {
+  background: var(--c-white-pressed);
+}
+
+.contacts {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.contact {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text);
+  transition: var(--t-button);
+}
+
+.contact:hover {
+  color: var(--c-link-hover);
+}
+
+.contact:active {
+  background: var(--c-white-pressed);
+}
+
+.office {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: #fff;
+  font-weight: 700;
+}
+
+.office a {
+  font-weight: 400;
+  color: var(--c-link);
+}
+
+.office a:hover {
+  color: var(--c-link-hover);
+}
+
+/* ---------- Календарь ---------- */
+.calendarHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.modes {
+  display: flex;
+  padding: 2px;
+  border-radius: 10px;
+  background: var(--c-control);
+}
+
+.mode {
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+
+.modeActive {
+  background: #fff;
+  color: var(--c-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.calendarNav {
+  display: flex;
+  gap: 4px;
+}
+
+.navButton {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendarBody {
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.calendarDate {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.slot {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.slotTime {
+  color: var(--c-text-secondary);
+}
+
+.slotEvent {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--p-soft);
+  border-left: 3px solid var(--p-bg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.weekDay {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--c-text-secondary);
+  transition: var(--t-control);
+}
+
+.weekDay:hover {
+  background: var(--c-control-hover);
+  transition: var(--t-control-hover);
+}
+
+/* Выбранный день — чёрный, как выбранные контролы Авито */
+.weekDayActive,
+.weekDayActive:hover {
+  background: var(--c-black);
+  color: #fff;
+}
+
+.weekNumber {
+  font-size: 15px;
+  font-weight: 700;
+  color: inherit;
+}
+
+.weekDay:not(.weekDayActive) .weekNumber {
+  color: var(--c-text);
+}
+
+.calendarLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--c-link);
+}
+
+.calendarLink:hover {
+  color: var(--c-link-hover);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statsRow {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  color: var(--c-text-secondary);
+}
+
+.statsRow b {
+  color: var(--c-text);
+}
+
+/* ---------- Вкладки ---------- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.tab {
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--c-control);
+  transition: var(--t-control);
+}
+
+.tab:hover {
+  background: var(--c-control-hover);
+  transition: var(--t-control-hover);
+}
+
+.tab:active {
+  background: var(--c-control-pressed);
+}
+
+.tabActive,
+.tabActive:hover,
+.tabActive:active {
+  background: var(--c-black);
+  color: #fff;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section + .section {
+  margin-top: 40px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-height: 56px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.fieldLabel {
+  color: var(--c-text-secondary);
+}
+
+.personLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.personLink:hover {
+  color: var(--c-link-hover);
+}
+
+.personRole {
+  display: block;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+}
+
+.link {
+  color: var(--c-link);
+}
+
+.link:hover {
+  color: var(--c-link-hover);
+}
+
+.achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.achievement {
+  width: 132px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.medal {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-l);
+  background: var(--p-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievementText {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--c-text-secondary);
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--c-fill);
+}
+
+.rowTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muted {
+  color: var(--c-text-secondary);
+  font-size: 13px;
+}
+
+.progress {
+  width: 160px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--c-fill-strong);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--c-green);
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.signed {
+  background: var(--c-green-soft);
+  color: var(--c-green-text);
+}
+
+.pending {
+  background: var(--c-red-soft);
+  color: var(--c-red-text);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .progress {
+    width: 80px;
+  }
+}
