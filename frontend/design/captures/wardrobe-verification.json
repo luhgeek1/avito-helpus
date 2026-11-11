@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "visible": 5,
+      "total": 40,
+      "wrapBothDirections": true,
+      "wheel": true,
+      "keyboard": true,
+      "swipe": false,
+      "clickSelection": true,
+      "persistence": true,
+      "favoritesPreserved": true,
+      "edgeBounds": true
+    },
+    {
+      "width": 390,
+      "visible": 5,
+      "total": 40,
+      "wrapBothDirections": true,
+      "wheel": true,
+      "keyboard": true,
+      "swipe": true,
+      "clickSelection": true,
+      "persistence": true,
+      "favoritesPreserved": true,
+      "edgeBounds": true
+    },
+    {
+      "width": 320,
+      "visible": 5,
+      "total": 40,
+      "wrapBothDirections": true,
+      "wheel": true,
+      "keyboard": true,
+      "swipe": true,
+      "clickSelection": true,
+      "persistence": true,
+      "favoritesPreserved": true,
+      "edgeBounds": true
+    }
+  ],
+  "errors": []
+}

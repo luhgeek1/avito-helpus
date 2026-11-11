@@ -30,7 +30,7 @@ try {
   await page.waitForTimeout(400);await pet.dblclick();await page.locator('.pixel-dialogue').waitFor();assert.equal(await pet.getAttribute('aria-expanded'),'false');
   await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();await pet.focus();
   await page.keyboard.press('Enter');assert.equal(await pet.getAttribute('aria-expanded'),'true');await page.keyboard.press('Enter');await page.locator('.pixel-dialogue').waitFor();
-  await page.keyboard.press('Escape');await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await page.waitForURL('**/pets');
+  await page.keyboard.press('Escape');await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await page.getByRole('button',{name:'Следующий персонаж',exact:true}).waitFor();await page.keyboard.press('Escape');
   await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Чат',exact:true}).click();await page.locator('.pixel-dialogue').waitFor();await page.keyboard.press('Escape');
   let b=await pet.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(15,80,{steps:10});await page.mouse.up();assert.equal(await pet.getAttribute('aria-expanded'),'false');
   await page.waitForTimeout(400);await pet.click();await page.waitForTimeout(400);

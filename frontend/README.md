@@ -62,6 +62,8 @@ Dev и production-сервер по умолчанию доступны на htt
 
 Избранное хранится в `buddy-favorites`, выбранный спутник — в `buddy-pet`, положение — в `buddy-position`. Спутника можно перетаскивать мышью/пальцем или двигать стрелками. Одиночный клик/тап раскрывает три пиксельных кружка по дуге: чат, гардероб и настройки. Двойной клик/тап или два Enter открывают пиксельную реплику с печатью по буквам; у краёв окно меняет сторону. Кнопка «Показать сразу» завершает печать. При reduced motion или паузе весь текст виден сразу.
 
-UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`, `verify-orbit-menu.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
+UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`, `verify-orbit-menu.mjs`, `verify-wardrobe-carousel.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
 
 Общие требования — `../AGENTS.md`, дизайн — `../DESIGN.md`, история — `../CONTEXT.md`.
+
+Гардероб спутника — локальная круговая карусель всех 40 персонажей с пятью видимыми миниатюрами и бесконечным зацикливанием. Колёсико, свайп, стрелки и клавиатура листают без изменения выбора. Клик выбирает пета через общий choosePet и сохраняет buddy-pet; избранное не меняется. Логика и UI находятся внутри widgets/pet-companion, каталог берётся из публичного entities/pet API.
