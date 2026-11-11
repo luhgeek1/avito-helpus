@@ -10,11 +10,11 @@ app/
   globals.css                    Только подключение Tailwind и его конфига
 src/
   _app/                          Клиентские провайдеры и композиция оболочки
-  _pages/                        Главная и галерея
-  widgets/                       Оболочка, коллекция, инспектор, спутник
+  _pages/                        Страницы портала и галерея
+  widgets/                       Оболочки портала и галереи, лента, коллекция, инспектор, спутник
   features/pet/                  Выбор, лайки, SVG, приветствие, пауза
   entities/pet/                  Данные, предпочтения, спрайты и UI петов
-  shared/                        Общая конфигурация и фирменный знак
+  shared/                        API портала, UI, навигация, конфигурация и фирменный знак
 public/fonts/                    Локальные шрифты и OFL-лицензии
 tailwind.config.ts               Тема, брейкпоинты и keyframes
 postcss.config.mjs               Плагин Tailwind
@@ -49,6 +49,7 @@ Steiger проверяет границы слоёв; только подска�
 npm ci
 npm run dev
 npm run typecheck
+npm test
 npm run check:architecture
 npm run build
 npm run start
@@ -75,3 +76,15 @@ UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-
 Чат спутника: `ui/companion-chat.tsx`, `model/use-companion-chat.ts`, `model/chat-messages.ts`, `model/use-chat-placement.ts` внутри widgets/pet-companion. История и подготовленные ответы сохраняются в отдельном buddy-chat после загрузки сохранённых данных; при недоступном хранилище работает состояние в памяти. UI-проверка: `design/captures/verify-companion-chat.mjs`.
 
 Круговые меню: `use-radial-transition.ts` включает интерактивность по завершению CSS-перехода. Гардероб разделяет движение по дуге (внешний translate3d) и раскрытие (внутренний translate3d), фиксирует кадры миниатюр во время вылета CSS-правилом на контейнере и использует статические SVG-тени. Проверка раскрытия/перезапуска/листания во время появления: `frontend/design/captures/verify-radial-reveal.mjs` из корня; CDP-профилирование — `profile-radial-menus.mjs`.
+
+## Портал «Хаб»
+
+Страницы `landing` перенесены в `src/_pages/portal`, оболочка — в `widgets/portal-shell`, блоки ленты — в `widgets/portal-feed`. Маршруты App Router: `/`, `/profile`, `/people/[personId]`, `/events`, `/feed`, `/feed/[postId]`, `/benefits/[categoryId]`, `/services`, `/services/[serviceId]`, `/search`, `/ai`. `/pets` сохраняет прежнюю галерею. Существующий спутник находится вне CSS-области портала и сохраняет состояние при клиентской навигации.
+
+`shared/api` публикует клиент, Zod-схемы и TanStack Query hooks. Моки MSW используют `getResponse` для fetch-запросов с префиксом API; Service Worker не нужен. `NEXT_PUBLIC_API_BASE_URL` по умолчанию `/api`; `NEXT_PUBLIC_API_MOCKS=false` отключает моки для отдельного backend. Пока backend не реализован. Настройки портала Zustand хранятся в `hub-preferences` отдельно от `buddy-*`.
+
+`shared/lib/portal-navigation` адаптирует ссылки, параметры и фильтры к Next navigation. `shared/ui/portal` содержит общий UI и изолированные дизайн-токены. `*.styles.tsx` — статические Tailwind-классы, преобразованные из CSS Modules источника; стили не генерируются во время выполнения. Inter 400/700 хранится с OFL-лицензией в `public/portal/fonts` и не заменяет шрифты пета.
+
+`npm test` запускает 55 перенесённых тестов портала на Vitest/jsdom с mock Next navigation и MSW. Проверка интеграции в браузере: `node frontend/design/merge/verify-landing-merge.mjs` из корня, пока доступен `.git/codex-landing-merge/pet-manifest.json`. Проверка охватывает маршруты, фильтры, поиск, сохранение спутника при переходах, Spotlight, гардероб и галерею на 1440/390/320 px. Отчёт — `design/captures/landing-main-merge-verification.json`.
+
+`design/merge/port-landing.mjs` сохранён как одноразовый инструмент переноса, а не команда обновления: он читает исходный checkout и перезаписывает файлы до ручных адаптаций Next.js. Повторно запускать его поверх приложения не следует.

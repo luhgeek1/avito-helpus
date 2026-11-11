@@ -1,0 +1,12 @@
+"use client";
+export { HomePage } from './ui/HomePage';
+export { ServicesPage } from './ui/ServicesPage';
+export { ServicePage } from './ui/ServicePage';
+export { BenefitsPage } from './ui/BenefitsPage';
+export { EventsPage } from './ui/EventsPage';
+export { FeedPage } from './ui/FeedPage';
+export { ArticlePage } from './ui/ArticlePage';
+export { ProfilePage } from './ui/ProfilePage';
+export { SearchPage } from './ui/SearchPage';
+export { AiPage } from './ui/AiPage';
+export { NotFoundPage } from './ui/NotFoundPage';

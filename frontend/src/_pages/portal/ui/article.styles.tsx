@@ -1,0 +1,23 @@
+const styles: Record<string, string> = {
+  "layout": "hub-article-layout [&.hub-article-layout]:[display:grid] [&.hub-article-layout]:[grid-template-columns:minmax(0,_1fr)_380px] [&.hub-article-layout]:[gap:48px] [&.hub-article-layout]:[align-items:start] hub-max-900:[&&.hub-article-layout]:[grid-template-columns:1fr] hub-max-900:[&&.hub-article-layout]:[gap:32px]",
+  "title": "hub-article-title [&.hub-article-title]:[margin-bottom:20px]",
+  "meta": "hub-article-meta [&.hub-article-meta]:[display:flex] [&.hub-article-meta]:[flex-wrap:wrap] [&.hub-article-meta]:[gap:4px_12px] [&.hub-article-meta]:[margin-bottom:20px] [&.hub-article-meta]:[color:var(--c-text-secondary)]",
+  "cover": "hub-article-cover [&.hub-article-cover]:[border-radius:var(--radius-l)] [&.hub-article-cover]:[margin-bottom:24px]",
+  "summary": "hub-article-summary [&.hub-article-summary]:[margin-bottom:24px] [&.hub-article-summary]:[padding:16px_20px] [&.hub-article-summary]:[border-radius:var(--radius-m)] [&.hub-article-summary]:[background:var(--c-purple-soft)]",
+  "summaryHead": "hub-article-summaryHead [&.hub-article-summaryHead]:[display:flex] [&.hub-article-summaryHead]:[align-items:center] [&.hub-article-summaryHead]:[gap:8px] [&.hub-article-summaryHead]:[margin-bottom:6px] [&.hub-article-summaryHead]:[font-weight:700]",
+  "clamped": "hub-article-clamped [&.hub-article-clamped]:[display:-webkit-box] [&.hub-article-clamped]:[-webkit-line-clamp:2] [&.hub-article-clamped]:[-webkit-box-orient:vertical] [&.hub-article-clamped]:[overflow:hidden]",
+  "toggle": "hub-article-toggle [&.hub-article-toggle]:[margin-top:4px] [&.hub-article-toggle]:[padding:0] [&.hub-article-toggle]:[border:0] [&.hub-article-toggle]:[background:none] [&.hub-article-toggle]:[color:var(--c-link)] [&.hub-article-toggle]:[transition:var(--t-link)] [&.hub-article-toggle:hover]:[color:var(--c-link-hover)]",
+  "bodyTitle": "hub-article-bodyTitle [&.hub-article-bodyTitle]:[margin-bottom:12px]",
+  "body": "hub-article-body [&.hub-article-body]:[display:flex] [&.hub-article-body]:[flex-direction:column] [&.hub-article-body]:[gap:14px] [&.hub-article-body]:[font-size:16px] [&.hub-article-body]:[line-height:24px]",
+  "aside": "hub-article-aside [&.hub-article-aside]:[display:flex] [&.hub-article-aside]:[flex-direction:column] [&.hub-article-aside]:[gap:20px]",
+  "stats": "hub-article-stats [&.hub-article-stats]:[font-size:32px] [&.hub-article-stats]:[line-height:36px] [&.hub-article-stats]:[font-weight:700]",
+  "statsHint": "hub-article-statsHint [&.hub-article-statsHint]:[margin-top:4px] [&.hub-article-statsHint]:[color:var(--c-text-secondary)]",
+  "buttons": "hub-article-buttons [&.hub-article-buttons]:[display:grid] [&.hub-article-buttons]:[grid-template-columns:1fr_1fr] [&.hub-article-buttons]:[gap:8px]",
+  "seller": "hub-article-seller [&.hub-article-seller]:[display:flex] [&.hub-article-seller]:[justify-content:space-between] [&.hub-article-seller]:[gap:16px]",
+  "sellerName": "hub-article-sellerName [&.hub-article-sellerName]:[font-size:21px] [&.hub-article-sellerName]:[line-height:26px] [&.hub-article-sellerName]:[font-weight:700] [&.hub-article-sellerName:hover]:[color:var(--c-link-hover)]",
+  "sellerMeta": "hub-article-sellerMeta [&.hub-article-sellerMeta]:[margin-top:4px]",
+  "sellerKind": "hub-article-sellerKind [&.hub-article-sellerKind]:[color:var(--c-text-secondary)]",
+  "badges": "hub-article-badges [&.hub-article-badges]:[display:flex] [&.hub-article-badges]:[flex-wrap:wrap] [&.hub-article-badges]:[gap:8px]",
+  "badge": "hub-article-badge [&.hub-article-badge]:[display:inline-flex] [&.hub-article-badge]:[align-items:center] [&.hub-article-badge]:[gap:6px] [&.hub-article-badge]:[height:28px] [&.hub-article-badge]:[padding:0_10px] [&.hub-article-badge]:[border-radius:8px] [&.hub-article-badge]:[background:var(--c-control)] [&.hub-article-badge]:[font-size:13px]",
+};
+export default styles;
