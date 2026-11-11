@@ -7,7 +7,7 @@
 - Для интерфейса придерживайся `DESIGN.md`. Новые маскоты рисуются в `frontend/src/entities/pet/lib/mascot-sprites.ts`, исходная серия и диспетчер — в `frontend/src/entities/pet/lib/sprite.ts`; данные и палитры находятся в `frontend/src/entities/pet/config/mascots.ts` и `frontend/src/entities/pet/config/pets.ts` на целочисленной пиксельной сетке; исходные персонажи — 32×32, детальные вариации Орби — 64×64. Проверяй все кадры и поддержку reduced motion.
 - Перед завершением изменений приложения выполни `npm run build` и проверь изменённые экраны на десктопе и телефоне.
 
-- Фронтенд находится в `frontend/` и следует FSD: `app → pages → widgets → features → entities → shared`. Используй публичные API слайсов (`index.ts`), не допускай импортов вверх и между слайсами одного слоя. Подробности — в `frontend/README.md`.
+- Фронтенд находится в `frontend/` и следует FSD: `_app → _pages → widgets → features → entities → shared`. Используй публичные API слайсов (`index.ts`), не допускай импортов вверх и между слайсами одного слоя. Подробности — в `frontend/README.md`.
 - Серверный код размещай в `backend/`. Пока там только описание; реализация API требует отдельной задачи.
 - Фронтенд — самостоятельное приложение. Выполняй `npm ci`, `npm run dev`, `npm run build`, `npm run check:architecture` внутри `frontend/`; его package.json, package-lock.json и node_modules находятся там же. Для вызова из корня можно использовать `npm --prefix frontend run build`. Корневого npm workspace нет. Проверяй архитектуру после изменений структуры или импортов.
 
@@ -24,3 +24,6 @@
 - Write code comments and Git commit titles/bodies in English. Keep user-facing interface text and project documentation in Russian unless requested otherwise.
 
 - Keep application-code changes in each commit within 150 added/deleted lines. Configuration, dependency lockfiles, documentation, and verification reports are exempt; commit them as complete logical changes instead of splitting them to meet this limit.
+
+- Frontend stack: Next.js App Router, React, TypeScript, and Tailwind CSS. Keep Next route files in frontend/app and FSD composition/pages in frontend/src/_app and frontend/src/_pages to avoid Next route discovery conflicts.
+- Style components with Tailwind utilities in TSX. Do not add component CSS files, CSS Modules, or CSS-in-JS. frontend/app/globals.css is only the Tailwind entry; theme and keyframes live in frontend/tailwind.config.ts. Inline styles are reserved for runtime values such as pet palettes, positions, and sprite delays.

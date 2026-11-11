@@ -1,0 +1,122 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1366,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    },
+    {
+      "width": 850,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    },
+    {
+      "width": 650,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    },
+    {
+      "width": 320,
+      "directRoutes": true,
+      "filters": [
+        16,
+        25,
+        40
+      ],
+      "favoritesPersist": true,
+      "selectionPersist": true,
+      "svg": true,
+      "sprites": [
+        32,
+        64
+      ],
+      "navigation": true,
+      "noOverflow": true
+    }
+  ],
+  "errors": [],
+  "production": {
+    "nextStart": true,
+    "routes": [
+      "/",
+      "/pets?pet=orbit"
+    ],
+    "dialogue": true,
+    "errors": []
+  }
+}
