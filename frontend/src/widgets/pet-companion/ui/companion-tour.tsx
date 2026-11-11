@@ -42,7 +42,7 @@ export function CompanionTourShell({ tour, hideCopy, children }: { tour: Compani
     document.body.style.overflow = "hidden";
     return () => {
       dialog.close(); document.body.style.overflow = overflow;
-      requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".widget-pet")?.focus({ preventScroll: true }));
+      document.querySelector<HTMLButtonElement>(".widget-pet")?.blur();
     };
   }, [tour.active]);
   return <dialog ref={ref} role={tour.active ? "dialog" : "presentation"} aria-label={tour.active ? "Знакомство с петом" : undefined}
