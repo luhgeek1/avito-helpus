@@ -35,35 +35,6 @@
   color: #a093ac;
   z-index: 3;
 }
-.widget-bubble {
-  position: absolute;
-  right: 9px;
-  bottom: calc(100% + 12px);
-  width: 230px;
-  background: #fff;
-  border: 1px solid #ded5e8;
-  box-shadow: 0 6px 30px #45325c12;
-  padding: 16px 24px 16px 16px;
-  border-radius: 11px;
-  font-size: 11px;
-  color: #82738d;
-  line-height: 1.7;
-}
-.widget-bubble strong {
-  display: block;
-  font-size: 12px;
-  font-weight: 550;
-  color: #62516f;
-  margin-bottom: 5px;
-}
-.widget-bubble > button {
-  position: absolute;
-  top: 9px;
-  right: 7px;
-  background: transparent;
-  color: #9f91ac;
-  padding: 3px;
-}
 .restore-buddy {
   position: fixed;
   bottom: 18px;
@@ -82,11 +53,9 @@
 @keyframes appear {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 @media (max-width: 650px) {
@@ -98,13 +67,6 @@
   .widget-pet .pixel-pet {
     width: 96px;
     height: 96px;
-  }
-  .widget-bubble {
-    width: 205px;
-    font-size: 10px;
-  }
-  .widget-bubble strong {
-    font-size: 11px;
   }
   .widget-close {
     right: -1px;
