@@ -1,0 +1,36 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "largePet": true,
+      "clickAndSpace": true,
+      "noAutomaticAdvance": true,
+      "inputSpacePreserved": true,
+      "circularWardrobe": true,
+      "normalSizeRestored": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "largePet": true,
+      "clickAndSpace": true,
+      "noAutomaticAdvance": true,
+      "inputSpacePreserved": true,
+      "circularWardrobe": true,
+      "normalSizeRestored": true
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "largePet": true,
+      "clickAndSpace": true,
+      "noAutomaticAdvance": true,
+      "inputSpacePreserved": true,
+      "circularWardrobe": true,
+      "normalSizeRestored": true
+    }
+  ],
+  "reducedMotion": true,
+  "errors": []
+}

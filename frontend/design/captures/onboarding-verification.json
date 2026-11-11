@@ -1,0 +1,48 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "actualPetAndMenus": true,
+      "originalPixelUIUnchanged": true,
+      "petTravels": true,
+      "circularWardrobe": true,
+      "chat": true,
+      "spotlight": true,
+      "touchOrMouseDrag": true,
+      "onceAndReplay": true,
+      "choiceAndFavorites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "actualPetAndMenus": true,
+      "originalPixelUIUnchanged": true,
+      "petTravels": true,
+      "circularWardrobe": true,
+      "chat": true,
+      "spotlight": true,
+      "touchOrMouseDrag": true,
+      "onceAndReplay": true,
+      "choiceAndFavorites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "actualPetAndMenus": true,
+      "originalPixelUIUnchanged": true,
+      "petTravels": true,
+      "circularWardrobe": true,
+      "chat": true,
+      "spotlight": true,
+      "touchOrMouseDrag": true,
+      "onceAndReplay": true,
+      "choiceAndFavorites": true,
+      "noOverflow": true
+    }
+  ],
+  "reducedMotion": true,
+  "errors": []
+}
