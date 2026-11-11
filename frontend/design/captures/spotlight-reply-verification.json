@@ -1,0 +1,47 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "samePixelDialogue": true,
+      "progressiveText": true,
+      "skip": true,
+      "repeatedReplyRestarts": true,
+      "noSpotlightResults": true,
+      "reducedMotion": true,
+      "paused": true,
+      "greetingPreserved": true,
+      "hiddenPetRestored": true,
+      "petDrag": true,
+      "independentClosing": true
+    },
+    {
+      "width": 390,
+      "samePixelDialogue": true,
+      "progressiveText": true,
+      "skip": true,
+      "repeatedReplyRestarts": true,
+      "noSpotlightResults": true,
+      "reducedMotion": true,
+      "paused": true,
+      "greetingPreserved": true,
+      "hiddenPetRestored": true,
+      "petDrag": true,
+      "independentClosing": true
+    },
+    {
+      "width": 320,
+      "samePixelDialogue": true,
+      "progressiveText": true,
+      "skip": true,
+      "repeatedReplyRestarts": true,
+      "noSpotlightResults": true,
+      "reducedMotion": true,
+      "paused": true,
+      "greetingPreserved": true,
+      "hiddenPetRestored": true,
+      "petDrag": true,
+      "independentClosing": true
+    }
+  ],
+  "errors": []
+}

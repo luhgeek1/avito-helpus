@@ -1,0 +1,10 @@
+{
+  "pets": 40,
+  "frames": 160,
+  "pixelIdentical": true,
+  "transparentBorders": true,
+  "cacheReused": true,
+  "beforeNodes": 53844,
+  "afterNodes": 2442,
+  "reductionPercent": 95.5
+}

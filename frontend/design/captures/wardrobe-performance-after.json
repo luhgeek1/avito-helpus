@@ -1,0 +1,157 @@
+{
+  "url": "http://127.0.0.1:5185/",
+  "results": [
+    {
+      "width": 1440,
+      "cpuSlowdown": 4,
+      "longTasks": [],
+      "addedNodes": 2455,
+      "domNodes": 866,
+      "rects": 0,
+      "opening": {
+        "frames": 46,
+        "p95GapMs": 16.8,
+        "maxGapMs": 150,
+        "gapsOver25ms": 1
+      },
+      "scrolling": {
+        "frames": 157,
+        "p95GapMs": 16.7,
+        "maxGapMs": 16.8,
+        "gapsOver25ms": 0
+      },
+      "delta": {
+        "ScriptDuration": 0.3392,
+        "TaskDuration": 0.9681,
+        "LayoutDuration": 0.0175,
+        "RecalcStyleDuration": 0.1547
+      },
+      "topFunctions": [
+        [
+          "(idle) :-1",
+          2554.319
+        ],
+        [
+          "(program) :-1",
+          605.6300000000002
+        ],
+        [
+          "(anonymous) 29c2-8omdm2ni.js:0",
+          85.92399999999999
+        ],
+        [
+          "arc 29c2-8omdm2ni.js:0",
+          27.244999999999997
+        ],
+        [
+          "(anonymous) 39_j1bdzreq0m.js:0",
+          17.761
+        ],
+        [
+          "setAttribute :-1",
+          17.162
+        ],
+        [
+          "poly 29c2-8omdm2ni.js:0",
+          15.761999999999999
+        ],
+        [
+          "l 29c2-8omdm2ni.js:0",
+          14.506
+        ],
+        [
+          "_ 29c2-8omdm2ni.js:0",
+          13.889
+        ],
+        [
+          "(garbage collector) :-1",
+          11.384
+        ],
+        [
+          "y 29c2-8omdm2ni.js:0",
+          9.178
+        ],
+        [
+          "r 29c2-8omdm2ni.js:0",
+          8.456
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "cpuSlowdown": 4,
+      "longTasks": [],
+      "addedNodes": 2455,
+      "domNodes": 866,
+      "rects": 0,
+      "opening": {
+        "frames": 43,
+        "p95GapMs": 16.8,
+        "maxGapMs": 133.3,
+        "gapsOver25ms": 2
+      },
+      "scrolling": {
+        "frames": 156,
+        "p95GapMs": 16.7,
+        "maxGapMs": 16.8,
+        "gapsOver25ms": 0
+      },
+      "delta": {
+        "ScriptDuration": 0.3264,
+        "TaskDuration": 0.9227,
+        "LayoutDuration": 0.0168,
+        "RecalcStyleDuration": 0.1476
+      },
+      "topFunctions": [
+        [
+          "(idle) :-1",
+          2542.8019999999983
+        ],
+        [
+          "(program) :-1",
+          568.4269999999998
+        ],
+        [
+          "(anonymous) 29c2-8omdm2ni.js:0",
+          80.47499999999998
+        ],
+        [
+          "arc 29c2-8omdm2ni.js:0",
+          24.279000000000003
+        ],
+        [
+          "_ 29c2-8omdm2ni.js:0",
+          20.5
+        ],
+        [
+          "setAttribute :-1",
+          18.77
+        ],
+        [
+          "poly 29c2-8omdm2ni.js:0",
+          15.823
+        ],
+        [
+          "l 29c2-8omdm2ni.js:0",
+          15.689000000000002
+        ],
+        [
+          "(garbage collector) :-1",
+          13.866
+        ],
+        [
+          "r 29c2-8omdm2ni.js:0",
+          10.617999999999999
+        ],
+        [
+          "tP 39_j1bdzreq0m.js:0",
+          9.161999999999999
+        ],
+        [
+          "tc 39_j1bdzreq0m.js:0",
+          7.429
+        ]
+      ]
+    }
+  ]
+}

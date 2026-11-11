@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "initialMessages": 5,
+      "savedMessages": 13,
+      "enter": true,
+      "shiftEnter": true,
+      "ime": true,
+      "sendButton": true,
+      "scrollHistory": true,
+      "persistence": true,
+      "draft": true,
+      "edgePlacement": true,
+      "shortViewport": true,
+      "favoritesPreserved": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 1366,
+      "initialMessages": 5,
+      "savedMessages": 13,
+      "enter": true,
+      "shiftEnter": true,
+      "ime": true,
+      "sendButton": true,
+      "scrollHistory": true,
+      "persistence": true,
+      "draft": true,
+      "edgePlacement": true,
+      "shortViewport": true,
+      "favoritesPreserved": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 390,
+      "initialMessages": 5,
+      "savedMessages": 13,
+      "enter": true,
+      "shiftEnter": true,
+      "ime": true,
+      "sendButton": true,
+      "scrollHistory": true,
+      "persistence": true,
+      "draft": true,
+      "edgePlacement": true,
+      "shortViewport": true,
+      "favoritesPreserved": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 320,
+      "initialMessages": 5,
+      "savedMessages": 13,
+      "enter": true,
+      "shiftEnter": true,
+      "ime": true,
+      "sendButton": true,
+      "scrollHistory": true,
+      "persistence": true,
+      "draft": true,
+      "edgePlacement": true,
+      "shortViewport": true,
+      "favoritesPreserved": true,
+      "reducedMotion": true
+    }
+  ],
+  "storageFallbacks": true,
+  "errors": []
+}

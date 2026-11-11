@@ -1,0 +1,124 @@
+{
+  "reports": [
+    {
+      "mode": "production",
+      "width": 1440,
+      "attempt": 0,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.8,
+      "maxGapMs": 16.8,
+      "longTasks": []
+    },
+    {
+      "mode": "production",
+      "width": 1440,
+      "attempt": 1,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.8,
+      "longTasks": []
+    },
+    {
+      "mode": "production",
+      "width": 1440,
+      "attempt": 2,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.7,
+      "longTasks": []
+    },
+    {
+      "mode": "production",
+      "width": 390,
+      "attempt": 0,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.7,
+      "longTasks": []
+    },
+    {
+      "mode": "production",
+      "width": 390,
+      "attempt": 1,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.8,
+      "maxGapMs": 16.8,
+      "longTasks": []
+    },
+    {
+      "mode": "production",
+      "width": 390,
+      "attempt": 2,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.7,
+      "longTasks": []
+    },
+    {
+      "mode": "development",
+      "width": 1440,
+      "attempt": 0,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.7,
+      "longTasks": [
+        65
+      ]
+    },
+    {
+      "mode": "development",
+      "width": 1440,
+      "attempt": 1,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.8,
+      "longTasks": [
+        65
+      ]
+    },
+    {
+      "mode": "development",
+      "width": 1440,
+      "attempt": 2,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.8,
+      "maxGapMs": 16.8,
+      "longTasks": [
+        61
+      ]
+    },
+    {
+      "mode": "development",
+      "width": 390,
+      "attempt": 0,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.8,
+      "maxGapMs": 33.27,
+      "longTasks": [
+        65
+      ]
+    },
+    {
+      "mode": "development",
+      "width": 390,
+      "attempt": 1,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.8,
+      "maxGapMs": 16.8,
+      "longTasks": [
+        63
+      ]
+    },
+    {
+      "mode": "development",
+      "width": 390,
+      "attempt": 2,
+      "cpuSlowdown": 4,
+      "p95GapMs": 16.7,
+      "maxGapMs": 16.7,
+      "longTasks": [
+        61
+      ]
+    }
+  ]
+}

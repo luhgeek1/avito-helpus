@@ -15,9 +15,9 @@ try {
   await page.goto('http://localhost:5173/',{waitUntil:'networkidle'});
   const trigger=page.locator('.widget-pet'), wardrobe=page.locator('#companion-wardrobe');
   const center=()=>page.locator('.wardrobe-pet[data-center=true]').getAttribute('data-pet-id');
-  const next=page.getByRole('button',{name:'Следующий персонаж',exact:true});
-  const previous=page.getByRole('button',{name:'Предыдущий персонаж',exact:true});
-  async function open(){await trigger.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await next.waitFor();}
+  const next={click:()=>wardrobe.press('ArrowRight'),focus:()=>wardrobe.focus()};
+  const previous={click:()=>wardrobe.press('ArrowLeft')};
+  async function open(){await trigger.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#companion-wardrobe')?.matches(':not([inert])'));assert.equal(await page.locator('.wardrobe-arrow').count(),0);}
   async function waitChanged(before){await page.waitForFunction(id=>document.querySelector('.wardrobe-pet[data-center=true]')?.getAttribute('data-pet-id')!==id,before);}
   async function checkBounds(){
    const boxes=await page.locator('.wardrobe-pet[aria-hidden=false]').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};}));

@@ -1,0 +1,65 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "actions": {
+        "finished": 3,
+        "visibleCancellations": 0
+      },
+      "firstWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "selectedWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "idleAfterReveal": true,
+      "rapidReversal": true,
+      "wheelDuringReveal": true,
+      "reducedMotion": true,
+      "favoritesPreserved": true
+    },
+    {
+      "width": 390,
+      "actions": {
+        "finished": 3,
+        "visibleCancellations": 0
+      },
+      "firstWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "selectedWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "idleAfterReveal": true,
+      "rapidReversal": true,
+      "wheelDuringReveal": true,
+      "reducedMotion": true,
+      "favoritesPreserved": true
+    },
+    {
+      "width": 320,
+      "actions": {
+        "finished": 3,
+        "visibleCancellations": 0
+      },
+      "firstWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "selectedWardrobe": {
+        "finished": 5,
+        "visibleCancellations": 0
+      },
+      "idleAfterReveal": true,
+      "rapidReversal": true,
+      "wheelDuringReveal": true,
+      "reducedMotion": true,
+      "favoritesPreserved": true
+    }
+  ],
+  "errors": []
+}

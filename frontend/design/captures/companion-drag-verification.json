@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "pointer": "mouse",
+      "chat": true,
+      "draft": true,
+      "wardrobe": true,
+      "carouselPosition": true,
+      "settings": true,
+      "menu": true,
+      "dialogue": true,
+      "edgeBounds": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 390,
+      "pointer": "touch",
+      "chat": true,
+      "draft": true,
+      "wardrobe": true,
+      "carouselPosition": true,
+      "settings": true,
+      "menu": true,
+      "dialogue": true,
+      "edgeBounds": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 320,
+      "pointer": "touch",
+      "chat": true,
+      "draft": true,
+      "wardrobe": true,
+      "carouselPosition": true,
+      "settings": true,
+      "menu": true,
+      "dialogue": true,
+      "edgeBounds": true,
+      "reducedMotion": true
+    }
+  ],
+  "errors": []
+}

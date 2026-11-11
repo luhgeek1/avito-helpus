@@ -1,0 +1,359 @@
+{
+  "url": "http://127.0.0.1:5184/",
+  "results": [
+    {
+      "width": 1440,
+      "cpuSlowdown": 4,
+      "longTasks": [
+        {
+          "start": 2329.699999988079,
+          "duration": 60
+        },
+        {
+          "start": 2864.600000023842,
+          "duration": 65
+        },
+        {
+          "start": 2933.800000011921,
+          "duration": 50
+        },
+        {
+          "start": 3007.400000035763,
+          "duration": 54
+        },
+        {
+          "start": 3061.900000035763,
+          "duration": 89
+        },
+        {
+          "start": 3250.900000035763,
+          "duration": 87
+        },
+        {
+          "start": 3411.5,
+          "duration": 97
+        },
+        {
+          "start": 3613.900000035763,
+          "duration": 91
+        },
+        {
+          "start": 3782,
+          "duration": 92
+        },
+        {
+          "start": 3978.300000011921,
+          "duration": 91
+        },
+        {
+          "start": 4140.300000011921,
+          "duration": 96
+        },
+        {
+          "start": 4337.699999988079,
+          "duration": 91
+        },
+        {
+          "start": 4533.100000023842,
+          "duration": 89
+        },
+        {
+          "start": 4720.699999988079,
+          "duration": 91
+        },
+        {
+          "start": 4913.300000011921,
+          "duration": 93
+        },
+        {
+          "start": 5093.100000023842,
+          "duration": 74
+        },
+        {
+          "start": 5244.900000035763,
+          "duration": 51
+        },
+        {
+          "start": 5358.900000035763,
+          "duration": 50
+        },
+        {
+          "start": 5681.5,
+          "duration": 66
+        },
+        {
+          "start": 5830.600000023842,
+          "duration": 64
+        },
+        {
+          "start": 5987.600000023842,
+          "duration": 80
+        },
+        {
+          "start": 6171.699999988079,
+          "duration": 79
+        },
+        {
+          "start": 6341.5,
+          "duration": 76
+        },
+        {
+          "start": 6516.900000035763,
+          "duration": 77
+        },
+        {
+          "start": 6693.400000035763,
+          "duration": 81
+        }
+      ],
+      "addedNodes": 50797,
+      "domNodes": 17901,
+      "rects": 17830,
+      "opening": {
+        "frames": 45,
+        "p95GapMs": 66.6,
+        "maxGapMs": 166.7,
+        "gapsOver25ms": 4
+      },
+      "scrolling": {
+        "frames": 103,
+        "p95GapMs": 133.3,
+        "maxGapMs": 150,
+        "gapsOver25ms": 76
+      },
+      "delta": {
+        "ScriptDuration": 0.8298,
+        "TaskDuration": 5.2563,
+        "LayoutDuration": 0.0384,
+        "RecalcStyleDuration": 1.0371
+      },
+      "topFunctions": [
+        [
+          "(program) :-1",
+          4269.554000000002
+        ],
+        [
+          "(idle) :-1",
+          545.1319999999997
+        ],
+        [
+          "setAttribute :-1",
+          112.05400000000006
+        ],
+        [
+          "(anonymous) 3bxjupe4li8e_.js:0",
+          105.22499999999995
+        ],
+        [
+          "(garbage collector) :-1",
+          92.41900000000001
+        ],
+        [
+          "focus :-1",
+          60.888
+        ],
+        [
+          "removeChild :-1",
+          46.269999999999996
+        ],
+        [
+          "arc 3bxjupe4li8e_.js:0",
+          43.087999999999994
+        ],
+        [
+          "createElementNS :-1",
+          41.63299999999999
+        ],
+        [
+          "(anonymous) 39_j1bdzreq0m.js:0",
+          36.681
+        ],
+        [
+          "poly 3bxjupe4li8e_.js:0",
+          33.236999999999995
+        ],
+        [
+          "_ 3bxjupe4li8e_.js:0",
+          27.754
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "cpuSlowdown": 4,
+      "longTasks": [
+        {
+          "start": 2204.099999964237,
+          "duration": 60
+        },
+        {
+          "start": 2759.300000011921,
+          "duration": 64
+        },
+        {
+          "start": 2900,
+          "duration": 67
+        },
+        {
+          "start": 2967.899999976158,
+          "duration": 78
+        },
+        {
+          "start": 3128.800000011921,
+          "duration": 86
+        },
+        {
+          "start": 3312.199999988079,
+          "duration": 93
+        },
+        {
+          "start": 3485.399999976158,
+          "duration": 89
+        },
+        {
+          "start": 3652.099999964237,
+          "duration": 91
+        },
+        {
+          "start": 3846.899999976158,
+          "duration": 90
+        },
+        {
+          "start": 4005.699999988079,
+          "duration": 90
+        },
+        {
+          "start": 4196.5,
+          "duration": 92
+        },
+        {
+          "start": 4391.699999988079,
+          "duration": 89
+        },
+        {
+          "start": 4581.300000011921,
+          "duration": 88
+        },
+        {
+          "start": 4771.599999964237,
+          "duration": 93
+        },
+        {
+          "start": 4955.099999964237,
+          "duration": 72
+        },
+        {
+          "start": 5105.899999976158,
+          "duration": 50
+        },
+        {
+          "start": 5220.899999976158,
+          "duration": 51
+        },
+        {
+          "start": 5541.5,
+          "duration": 65
+        },
+        {
+          "start": 5689.800000011921,
+          "duration": 65
+        },
+        {
+          "start": 5847.300000011921,
+          "duration": 77
+        },
+        {
+          "start": 6025.199999988079,
+          "duration": 76
+        },
+        {
+          "start": 6169.099999964237,
+          "duration": 91
+        },
+        {
+          "start": 6260.699999988079,
+          "duration": 91
+        },
+        {
+          "start": 6473.5,
+          "duration": 88
+        },
+        {
+          "start": 6673.099999964237,
+          "duration": 89
+        }
+      ],
+      "addedNodes": 50797,
+      "domNodes": 17901,
+      "rects": 17830,
+      "opening": {
+        "frames": 46,
+        "p95GapMs": 66.7,
+        "maxGapMs": 149.9,
+        "gapsOver25ms": 4
+      },
+      "scrolling": {
+        "frames": 103,
+        "p95GapMs": 133.3,
+        "maxGapMs": 183.4,
+        "gapsOver25ms": 74
+      },
+      "delta": {
+        "ScriptDuration": 0.9139,
+        "TaskDuration": 5.1907,
+        "LayoutDuration": 0.0364,
+        "RecalcStyleDuration": 1.0225
+      },
+      "topFunctions": [
+        [
+          "(program) :-1",
+          4179.060999999994
+        ],
+        [
+          "(idle) :-1",
+          653.3679999999997
+        ],
+        [
+          "(anonymous) 3bxjupe4li8e_.js:0",
+          105.74799999999998
+        ],
+        [
+          "setAttribute :-1",
+          104.37199999999997
+        ],
+        [
+          "(garbage collector) :-1",
+          86.47099999999996
+        ],
+        [
+          "createElementNS :-1",
+          63.37399999999998
+        ],
+        [
+          "focus :-1",
+          60.25399999999999
+        ],
+        [
+          "arc 3bxjupe4li8e_.js:0",
+          54.267
+        ],
+        [
+          "(anonymous) 39_j1bdzreq0m.js:0",
+          52.271
+        ],
+        [
+          "removeChild :-1",
+          42.104000000000006
+        ],
+        [
+          "poly 3bxjupe4li8e_.js:0",
+          38.50800000000001
+        ],
+        [
+          "l 3bxjupe4li8e_.js:0",
+          30.894000000000002
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1030 @@
+{
+  "url": "http://localhost:5173/",
+  "reports": [
+    {
+      "width": 1440,
+      "menu": "actions",
+      "cpuSlowdown": 4,
+      "firstFrameMs": 35.1,
+      "p95GapMs": 17.7,
+      "maxGapMs": 31.3,
+      "cancelledTransforms": 0,
+      "painting": {
+        "Paint": {
+          "count": 29,
+          "totalMs": 5.39
+        },
+        "RasterTask": {
+          "count": 4,
+          "totalMs": 0.32
+        },
+        "UpdateLayoutTree": {
+          "count": 48,
+          "totalMs": 11.55
+        },
+        "Layout": {
+          "count": 0,
+          "totalMs": 0
+        }
+      },
+      "frames": [
+        {
+          "time": 35.10000002384186
+        },
+        {
+          "time": 38.5
+        },
+        {
+          "time": 45
+        },
+        {
+          "time": 76.30000001192093
+        },
+        {
+          "time": 79.40000003576279
+        },
+        {
+          "time": 94.30000001192093
+        },
+        {
+          "time": 110.70000004768372
+        },
+        {
+          "time": 127.20000004768372
+        },
+        {
+          "time": 144.4000000357628
+        },
+        {
+          "time": 160.70000004768372
+        },
+        {
+          "time": 177.30000001192093
+        },
+        {
+          "time": 194
+        },
+        {
+          "time": 210.9000000357628
+        },
+        {
+          "time": 228.60000002384186
+        },
+        {
+          "time": 244.4000000357628
+        },
+        {
+          "time": 260.7000000476837
+        },
+        {
+          "time": 277.7000000476837
+        },
+        {
+          "time": 294.9000000357628
+        },
+        {
+          "time": 311.30000001192093
+        },
+        {
+          "time": 327.2000000476837
+        },
+        {
+          "time": 344
+        },
+        {
+          "time": 360.80000001192093
+        },
+        {
+          "time": 377.2000000476837
+        },
+        {
+          "time": 393.80000001192093
+        },
+        {
+          "time": 410.5
+        },
+        {
+          "time": 427.10000002384186
+        },
+        {
+          "time": 444.30000001192093
+        },
+        {
+          "time": 460.5
+        },
+        {
+          "time": 477.5
+        },
+        {
+          "time": 493.80000001192093
+        },
+        {
+          "time": 511
+        },
+        {
+          "time": 527.8000000119209
+        },
+        {
+          "time": 544.1000000238419
+        },
+        {
+          "time": 561.2000000476837
+        },
+        {
+          "time": 577.7000000476837
+        },
+        {
+          "time": 594.2000000476837
+        },
+        {
+          "time": 611.5
+        },
+        {
+          "time": 627.3000000119209
+        },
+        {
+          "time": 644
+        },
+        {
+          "time": 660.5
+        }
+      ],
+      "transitions": [
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 34.40000003576279,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 34.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 44.80000001192093,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 45,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 76.20000004768372,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 76.20000004768372,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 194,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 210.80000001192093,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 227.80000001192093,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 277.60000002384186,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 294.7000000476837,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 310.5,
+          "elapsed": 0.24
+        }
+      ],
+      "tasks": []
+    },
+    {
+      "width": 1440,
+      "menu": "wardrobe",
+      "cpuSlowdown": 4,
+      "firstFrameMs": 34.1,
+      "p95GapMs": 18.1,
+      "maxGapMs": 87,
+      "cancelledTransforms": 0,
+      "painting": {
+        "Paint": {
+          "count": 31,
+          "totalMs": 5.34
+        },
+        "RasterTask": {
+          "count": 33,
+          "totalMs": 3.67
+        },
+        "UpdateLayoutTree": {
+          "count": 47,
+          "totalMs": 37.79
+        },
+        "Layout": {
+          "count": 1,
+          "totalMs": 0.65
+        }
+      },
+      "frames": [
+        {
+          "time": 34.09999996423721
+        },
+        {
+          "time": 39.30000001192093
+        },
+        {
+          "time": 57.39999997615814
+        },
+        {
+          "time": 73.19999998807907
+        },
+        {
+          "time": 86.89999997615814
+        },
+        {
+          "time": 103.39999997615814
+        },
+        {
+          "time": 120
+        },
+        {
+          "time": 136.69999998807907
+        },
+        {
+          "time": 153.39999997615814
+        },
+        {
+          "time": 170.0999999642372
+        },
+        {
+          "time": 186.80000001192093
+        },
+        {
+          "time": 204.5
+        },
+        {
+          "time": 220.69999998807907
+        },
+        {
+          "time": 237.5
+        },
+        {
+          "time": 253.30000001192093
+        },
+        {
+          "time": 270.5
+        },
+        {
+          "time": 288
+        },
+        {
+          "time": 304.0999999642372
+        },
+        {
+          "time": 321.80000001192093
+        },
+        {
+          "time": 408.80000001192093
+        },
+        {
+          "time": 413.5999999642372
+        },
+        {
+          "time": 421.5999999642372
+        },
+        {
+          "time": 436.80000001192093
+        },
+        {
+          "time": 453.5999999642372
+        },
+        {
+          "time": 470.19999998807907
+        },
+        {
+          "time": 486.69999998807907
+        },
+        {
+          "time": 503.30000001192093
+        },
+        {
+          "time": 519.8999999761581
+        },
+        {
+          "time": 536.5
+        },
+        {
+          "time": 553.5999999642372
+        },
+        {
+          "time": 570.5
+        },
+        {
+          "time": 586.6999999880791
+        },
+        {
+          "time": 603.8999999761581
+        },
+        {
+          "time": 620.8000000119209
+        },
+        {
+          "time": 637
+        },
+        {
+          "time": 653.6999999880791
+        }
+      ],
+      "transitions": [
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 71.30000001192093,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 71.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.69999998807907,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.80000001192093,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.80000001192093,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 71.80000001192093,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72.39999997615814,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 72.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 72.59999996423721,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 236.80000001192093,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 237.30000001192093,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 237.30000001192093,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 237.5,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 237.5,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 320.5999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 320.5999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 320.5999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 320.5999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 321.39999997615814,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 321.5,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 321.80000001192093,
+          "elapsed": 0.24
+        }
+      ],
+      "tasks": [
+        {
+          "start": 348.89999997615814,
+          "duration": 64
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "menu": "actions",
+      "cpuSlowdown": 4,
+      "firstFrameMs": 50.5,
+      "p95GapMs": 19.9,
+      "maxGapMs": 75.7,
+      "cancelledTransforms": 0,
+      "painting": {
+        "Paint": {
+          "count": 29,
+          "totalMs": 4.66
+        },
+        "RasterTask": {
+          "count": 4,
+          "totalMs": 0.73
+        },
+        "UpdateLayoutTree": {
+          "count": 50,
+          "totalMs": 29.81
+        },
+        "Layout": {
+          "count": 0,
+          "totalMs": 0
+        }
+      },
+      "frames": [
+        {
+          "time": 50.5
+        },
+        {
+          "time": 56.799999952316284
+        },
+        {
+          "time": 71.79999995231628
+        },
+        {
+          "time": 147.5
+        },
+        {
+          "time": 155.79999995231628
+        },
+        {
+          "time": 161.29999995231628
+        },
+        {
+          "time": 170.89999997615814
+        },
+        {
+          "time": 187.39999997615814
+        },
+        {
+          "time": 204.0999999642372
+        },
+        {
+          "time": 221.0999999642372
+        },
+        {
+          "time": 236.89999997615814
+        },
+        {
+          "time": 255.39999997615814
+        },
+        {
+          "time": 270.0999999642372
+        },
+        {
+          "time": 287.5
+        },
+        {
+          "time": 303.2999999523163
+        },
+        {
+          "time": 320.5
+        },
+        {
+          "time": 337.5
+        },
+        {
+          "time": 353.7999999523163
+        },
+        {
+          "time": 370.7999999523163
+        },
+        {
+          "time": 387.2999999523163
+        },
+        {
+          "time": 403.69999998807907
+        },
+        {
+          "time": 420.69999998807907
+        },
+        {
+          "time": 437
+        },
+        {
+          "time": 452.7999999523163
+        },
+        {
+          "time": 469.5999999642372
+        },
+        {
+          "time": 489.5
+        },
+        {
+          "time": 504
+        },
+        {
+          "time": 520.6999999880791
+        },
+        {
+          "time": 537.1999999880791
+        },
+        {
+          "time": 554
+        },
+        {
+          "time": 570.8999999761581
+        },
+        {
+          "time": 586.5
+        },
+        {
+          "time": 604.1999999880791
+        },
+        {
+          "time": 619.8999999761581
+        },
+        {
+          "time": 637.7999999523163
+        },
+        {
+          "time": 653.6999999880791
+        }
+      ],
+      "transitions": [
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 47.799999952316284,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 49.19999998807907,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 70.19999998807907,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.79999995231628,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 145.79999995231628,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 147.5,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 220.5,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 236.89999997615814,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 254.29999995231628,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 303.2999999523163,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 320.0999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 337,
+          "elapsed": 0.24
+        }
+      ],
+      "tasks": [
+        {
+          "start": -23.600000023841858,
+          "duration": 69
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "menu": "wardrobe",
+      "cpuSlowdown": 4,
+      "firstFrameMs": 36,
+      "p95GapMs": 19.6,
+      "maxGapMs": 75.2,
+      "cancelledTransforms": 0,
+      "painting": {
+        "Paint": {
+          "count": 31,
+          "totalMs": 5.15
+        },
+        "RasterTask": {
+          "count": 40,
+          "totalMs": 5.2
+        },
+        "UpdateLayoutTree": {
+          "count": 48,
+          "totalMs": 41.69
+        },
+        "Layout": {
+          "count": 1,
+          "totalMs": 1.07
+        }
+      },
+      "frames": [
+        {
+          "time": 36
+        },
+        {
+          "time": 41.09999996423721
+        },
+        {
+          "time": 59.19999998807907
+        },
+        {
+          "time": 73
+        },
+        {
+          "time": 82.09999996423721
+        },
+        {
+          "time": 99.19999998807907
+        },
+        {
+          "time": 115
+        },
+        {
+          "time": 131.79999995231628
+        },
+        {
+          "time": 148.19999998807907
+        },
+        {
+          "time": 164.5
+        },
+        {
+          "time": 181.79999995231628
+        },
+        {
+          "time": 199.5999999642372
+        },
+        {
+          "time": 215.39999997615814
+        },
+        {
+          "time": 231.79999995231628
+        },
+        {
+          "time": 248.39999997615814
+        },
+        {
+          "time": 265.0999999642372
+        },
+        {
+          "time": 282.69999998807907
+        },
+        {
+          "time": 297.5999999642372
+        },
+        {
+          "time": 317.19999998807907
+        },
+        {
+          "time": 332.89999997615814
+        },
+        {
+          "time": 408.0999999642372
+        },
+        {
+          "time": 411.5999999642372
+        },
+        {
+          "time": 415.19999998807907
+        },
+        {
+          "time": 431.69999998807907
+        },
+        {
+          "time": 448.7999999523163
+        },
+        {
+          "time": 464
+        },
+        {
+          "time": 480.7999999523163
+        },
+        {
+          "time": 498.0999999642372
+        },
+        {
+          "time": 514.5
+        },
+        {
+          "time": 532.1999999880791
+        },
+        {
+          "time": 547.6999999880791
+        },
+        {
+          "time": 564.7999999523163
+        },
+        {
+          "time": 580.6999999880791
+        },
+        {
+          "time": 598.7999999523163
+        },
+        {
+          "time": 614.7999999523163
+        },
+        {
+          "time": 631.8999999761581
+        },
+        {
+          "time": 648.1999999880791
+        },
+        {
+          "time": 665
+        }
+      ],
+      "transitions": [
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 71.29999995231628,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 71.29999995231628,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.29999995231628,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.89999997615814,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 71.89999997615814,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 72,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 72,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "transform",
+          "time": 72.09999996423721,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionstart",
+          "property": "opacity",
+          "time": 72.89999997615814,
+          "elapsed": 0
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 231.69999998807907,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 231.69999998807907,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 231.79999995231628,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 231.79999995231628,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "opacity",
+          "time": 231.79999995231628,
+          "elapsed": 0.16
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 315.39999997615814,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 315.39999997615814,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 315.39999997615814,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 315.5,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 316.5,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 317.0999999642372,
+          "elapsed": 0.24
+        },
+        {
+          "type": "transitionend",
+          "property": "transform",
+          "time": 317.0999999642372,
+          "elapsed": 0.24
+        }
+      ],
+      "tasks": [
+        {
+          "start": 354.7999999523163,
+          "duration": 54
+        }
+      ]
+    }
+  ]
+}

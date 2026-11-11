@@ -29,9 +29,9 @@ try {
   await page.keyboard.press('Escape');assert.equal(await page.locator('.companion-settings').count(),0);
   await page.waitForTimeout(400);await pet.dblclick();await page.locator('.pixel-dialogue').waitFor();assert.equal(await pet.getAttribute('aria-expanded'),'false');
   await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();await pet.focus();
-  await page.keyboard.press('Enter');assert.equal(await pet.getAttribute('aria-expanded'),'true');await page.keyboard.press('Enter');await page.locator('.pixel-dialogue').waitFor();
-  await page.keyboard.press('Escape');await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await page.getByRole('button',{name:'Следующий персонаж',exact:true}).waitFor();await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Чат',exact:true}).click();await page.locator('.pixel-dialogue').waitFor();await page.keyboard.press('Escape');
+  await page.keyboard.press('Enter');assert.equal(await pet.getAttribute('aria-expanded'),'true');await page.keyboard.press('Enter');await page.getByRole('dialog',{name:'Запрос к Орби'}).waitFor();
+  await page.keyboard.press('Escape');await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Гардероб',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#companion-wardrobe')?.matches(':not([inert])'));await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);await pet.click();await page.getByRole('button',{name:'Чат',exact:true}).click();await page.locator('.companion-chat').waitFor();await page.keyboard.press('Escape');
   let b=await pet.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(15,80,{steps:10});await page.mouse.up();assert.equal(await pet.getAttribute('aria-expanded'),'false');
   await page.waitForTimeout(400);await pet.click();await page.waitForTimeout(400);
   for(const b of await page.locator('.orbit-action').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};})))assert(b.x>=0&&b.y>=0&&b.x+b.w<=width&&b.y+b.h<=900);
