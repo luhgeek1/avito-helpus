@@ -1,15 +1,15 @@
 import { useLayoutEffect, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 
-export function useChatPlacement(anchor: RefObject<HTMLDivElement | null>, position: CSSProperties) {
+export function useChatPlacement(anchor: RefObject<HTMLDivElement | null>, position: CSSProperties, topInset = 0) {
   const [style, setStyle] = useState<CSSProperties>({ visibility: "hidden" });
   useLayoutEffect(() => {
     function update() {
       if (!anchor.current) return;
       const box = anchor.current.getBoundingClientRect();
       const viewport = window.visualViewport;
-      const vx = viewport?.offsetLeft ?? 0, vy = viewport?.offsetTop ?? 0;
-      const vw = viewport?.width ?? innerWidth, vh = viewport?.height ?? innerHeight;
+      const vx = viewport?.offsetLeft ?? 0, vy = (viewport?.offsetTop ?? 0) + topInset;
+      const vw = viewport?.width ?? innerWidth, vh = (viewport?.height ?? innerHeight) - topInset;
       const width = Math.min(360, vw - 24);
       const above = Math.max(0, Math.min(box.top - 16, vy + vh - 12) - vy - 12);
       const below = Math.max(0, vy + vh - 12 - Math.max(box.bottom + 16, vy + 12));
@@ -29,6 +29,6 @@ export function useChatPlacement(anchor: RefObject<HTMLDivElement | null>, posit
       window.visualViewport?.removeEventListener("resize", update);
       window.visualViewport?.removeEventListener("scroll", update);
     };
-  }, [anchor, position.left, position.top]);
+  }, [anchor, position.left, position.top, topInset]);
   return style;
 }
