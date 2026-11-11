@@ -31,12 +31,12 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
       aria-hidden={!open} inert={!open || !interactive}>
       {orbit && actions.map((action, index) => (
         <button key={action.id} type="button" aria-label={action.label} onClick={() => onAction(action.id)}
-          className={`orbit-action fixed z-38 flex flex-col items-center gap-[5px] bg-transparent p-0 text-[#383c62]
+          className={`orbit-action fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]
             outline-none [transition:transform_280ms_cubic-bezier(.22,1,.36,1),opacity_180ms_ease]
             motion-reduce:transition-none hover:[&_svg.orbit-disc]:brightness-105
             focus-visible:[&_.orbit-disc]:drop-shadow-[0_0_3px_#00aaff]
             ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
-          style={{ left: orbit.origin.x - 4, top: orbit.origin.y, width: orbit.size + 8,
+          style={{ left: orbit.origin.x - 4, top: orbit.origin.y - 4, width: orbit.size + 8, height: orbit.size + 8,
             transform: open ? `translate(${orbit.offsets[index].x}px, ${orbit.offsets[index].y}px) scale(1)` : "translate(0, 0) scale(.35)",
             transitionDelay: open ? `${index * 40}ms` : `${(2 - index) * 20}ms`,
           }}>
@@ -47,9 +47,6 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
               <path d={outline} transform="translate(3 3) scale(.892857)" fill="#ffffff" />
             </svg>
             <span className="relative"><PixelActionIcon action={action.id} /></span>
-          </span>
-          <span className="whitespace-nowrap bg-[#f7f8fa]/95 px-1 py-[2px] font-pixel text-[7px] leading-[1.4] max-sm:text-[6px]">
-            {action.label}
           </span>
         </button>
       ))}
