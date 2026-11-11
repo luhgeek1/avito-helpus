@@ -5,6 +5,7 @@ type Position = { x: number; y: number };
 const storageKey = "buddy-position";
 
 function readPosition(): Position | null {
+  if (typeof window === "undefined") return null;
   try {
     const value = JSON.parse(localStorage.getItem(storageKey) ?? "null");
     return value && Number.isFinite(value.x) && Number.isFinite(value.y)

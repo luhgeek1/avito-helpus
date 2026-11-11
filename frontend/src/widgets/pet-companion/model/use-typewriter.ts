@@ -4,11 +4,12 @@ export function useTypewriter(text: string, active: boolean, paused: boolean) {
   const finished = useRef(false);
   const [progress, setProgress] = useState({ text, count: 0 });
   const [reducedMotion, setReducedMotion] = useState(
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    false,
   );
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(query.matches);
+    update();
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);

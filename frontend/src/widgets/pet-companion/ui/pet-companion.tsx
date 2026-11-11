@@ -24,7 +24,8 @@ export function PetCompanion() {
       {chosenPet && widgetVisible && (
         <div
           ref={movement.ref}
-          className={`companion${movement.dragging ? " is-dragging" : ""}${dialogue.typing && !paused ? " is-talking" : ""}`}
+          className={`companion [&.is-talking_.widget-pet_.pixel-pet]:animate-companion-talk fixed bottom-5 right-[25px] z-35 w-40
+            animate-appear max-sm:bottom-3 max-sm:right-[10px] max-sm:w-36 [&.is-dragging_.widget-pet]:cursor-grabbing${movement.dragging ? " is-dragging" : ""}${dialogue.typing && !paused ? " is-talking" : ""}`}
           style={
             {
               ...movement.style,
@@ -34,21 +35,35 @@ export function PetCompanion() {
           }
         >
           {widgetSpeaking && (
-            <div ref={placement.ref} className="widget-bubble pixel-dialogue"
+            <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-5 pb-3 text-[#faf7ff] bg-[#303552]
+            rounded-[0] [box-shadow:0_0_0_3px_#373b60,_6px_6px_0_3px_#373b6026] font-pixel text-[10px] font-normal
+            leading-[2] [-webkit-font-smoothing:none] animate-dialogue-open max-sm:pt-[18px] max-sm:pb-[10px]
+            max-sm:text-[9px] [&[data-side=left]::after]:[content:''] [&[data-side=left]::after]:absolute
+            [&[data-side=left]::after]:top-[calc(50%_-_8px)] [&[data-side=left]::after]:w-2 [&[data-side=left]::after]:h-4
+            [&[data-side=left]::after]:bg-[#e9e5ff] [&[data-side=left]::after]:[box-shadow:4px_4px_#373b60]
+            [&[data-side=left]::after]:right-[-12px] [&[data-side=right]::after]:[content:'']
+            [&[data-side=right]::after]:absolute [&[data-side=right]::after]:top-[calc(50%_-_8px)]
+            [&[data-side=right]::after]:w-2 [&[data-side=right]::after]:h-4 [&[data-side=right]::after]:bg-[#e9e5ff]
+            [&[data-side=right]::after]:[box-shadow:4px_4px_#373b60] [&[data-side=right]::after]:left-[-12px]
+            [&_>_button]:absolute [&_>_button]:top-1 [&_>_button]:right-1 [&_>_button]:grid [&_>_button]:place-items-center
+            [&_>_button]:w-8 [&_>_button]:h-8 [&_>_button]:bg-transparent [&_>_button]:text-[#c7bbdf]
+            [&_>_button:hover]:text-white border-[4px] border-solid border-[#e9e5ff] [&_>_button]:p-0 px-[18px] max-sm:px-3`}
               style={placement.style} data-side={placement.side}>
-              <strong className="dialogue-name">{chosenPet.name}</strong>
-              <div className="dialogue-copy" aria-hidden="true">
-                <span className="dialogue-star">*</span>
-                <span className="dialogue-lines">
-                  <span className="dialogue-reserve">{chosenPet.greeting}</span>
-                  <span className="dialogue-typed">{dialogue.displayed}</span>
+              <strong className={`dialogue-name block mb-3 pr-6 text-[#9de1f3] [font-family:inherit] text-[11px] font-[inherit]
+            [font-style:inherit] leading-[inherit] max-sm:text-[10px]`}>{chosenPet.name}</strong>
+              <div className="dialogue-copy flex gap-[10px] max-xs:gap-[8px] xs:max-sm:gap-[8px]" aria-hidden="true">
+                <span className="dialogue-star text-[#d7b5ff]">*</span>
+                <span className="dialogue-lines grid min-w-[0] [overflow-wrap:anywhere]">
+                  <span className="dialogue-reserve [grid-area:1_/_1] invisible">{chosenPet.greeting}</span>
+                  <span className="dialogue-typed [grid-area:1_/_1] whitespace-pre-wrap">{dialogue.displayed}</span>
                 </span>
               </div>
-              <span className="dialogue-accessible" role="status">{chosenPet.greeting}</span>
-              <div className="dialogue-footer">
+              <span className={`dialogue-accessible absolute w-[1px] h-[1px] overflow-hidden [clip-path:inset(50%)] whitespace-nowrap`} role="status">{chosenPet.greeting}</span>
+              <div className="dialogue-footer flex justify-end h-[28px] mt-[10px]">
                 {dialogue.typing ? (
-                  <button className="dialogue-skip" onClick={dialogue.complete}>Показать сразу</button>
-                ) : <span className="dialogue-ready" aria-hidden="true">◆</span>}
+                  <button className={`dialogue-skip pr-0 pl-2 bg-transparent text-[#c7bbdf] [font-family:inherit] text-[8px] font-[inherit]
+            [font-style:inherit] leading-[inherit] max-sm:text-[7px] [&:hover]:text-white py-1`} onClick={dialogue.complete}>Показать сразу</button>
+                ) : <span className="dialogue-ready text-[#ee95bf] animate-dialogue-cursor" aria-hidden="true">◆</span>}
               </div>
               <button
                 onClick={() => setWidgetSpeaking(false)}
@@ -59,14 +74,17 @@ export function PetCompanion() {
             </div>
           )}
           <button
-            className="widget-close"
+            className={`widget-close absolute right-0 top-2 grid place-items-center bg-white w-[22px] h-[22px] rounded-full
+            text-[#a093ac] z-3 max-sm:right-[-1px] max-sm:top-[1px] max-sm:w-7 max-sm:h-7 border border-solid
+            border-[#eee8f3]`}
             onClick={() => setWidgetVisible(false)}
             aria-label="Скрыть спутника"
           >
             <X size={12} />
           </button>
           <button
-            className="widget-pet"
+            className={`widget-pet flex flex-col items-center bg-transparent w-full cursor-grab touch-none select-none
+            [-webkit-user-select:none] max-sm:[&_.pixel-pet]:w-24 max-sm:[&_.pixel-pet]:h-24 p-0`}
             onClick={() => {
               if (!movement.consumeDragClick()) setWidgetSpeaking(!widgetSpeaking);
             }}
@@ -80,7 +98,8 @@ export function PetCompanion() {
       )}
       {chosenPet && !widgetVisible && (
         <button
-          className="restore-buddy"
+          className={`restore-buddy fixed bottom-[18px] right-5 flex items-center gap-2 bg-white rounded-[7px] text-[10px]
+            text-[#8a769a] z-40 max-sm:text-[9px] border border-solid border-[#e4d9ee] py-[10px] px-[13px]`}
           onClick={() => setWidgetVisible(true)}
         >
           <Volume2 size={15} />
