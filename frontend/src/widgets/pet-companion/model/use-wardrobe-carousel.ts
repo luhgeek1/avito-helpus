@@ -51,7 +51,8 @@ export function useWardrobeCarousel(
     const wheel = (event: WheelEvent) => {
       const box = element.getBoundingClientRect();
       const distance = Math.hypot(event.clientX - box.left - box.width / 2, event.clientY - box.top - box.height / 2);
-      if (distance > (innerWidth <= 650 ? 210 : 260)) return;
+      const scale = Math.max(1, box.width / (innerWidth <= 650 ? 144 : 160));
+      if (distance > (innerWidth <= 650 ? 210 : 260) * scale) return;
       event.preventDefault();
       const units = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1;
       accumulated += (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY) * units;

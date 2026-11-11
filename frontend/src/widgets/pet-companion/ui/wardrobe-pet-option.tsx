@@ -13,8 +13,8 @@ export function WardrobePetOption({ pet, layout, offset, slot, revealed, interac
   onChoose: (keyboard: boolean) => void;
   onTransitionEnd?: TransitionEventHandler<HTMLSpanElement>;
 }) {
-  const visible = Math.abs(slot) <= 2;
-  const angle = (layout.horizontal < 0 ? 180 : 0) + layout.horizontal * layout.vertical * (48 + offset * 24);
+  const visible = Math.abs(slot) <= (layout.semicircle ? 3 : 2);
+  const angle = layout.semicircle ? offset * 30 : (layout.horizontal < 0 ? 180 : 0) + layout.horizontal * layout.vertical * (48 + offset * 24);
   const scale = .9 + .14 * Math.max(0, 1 - Math.abs(offset));
   const radians = angle * Math.PI / 180;
   const dx = Math.cos(radians) * layout.radius, dy = Math.sin(radians) * layout.radius;

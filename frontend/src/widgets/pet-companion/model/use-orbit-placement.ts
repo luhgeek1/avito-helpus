@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 
-type Orbit = { origin: { x: number; y: number }; offsets: { x: number; y: number }[]; size: number };
+type Orbit = { origin: { x: number; y: number }; offsets: { x: number; y: number }[]; size: number; scale: number };
 
 export function useOrbitPlacement(
   anchor: RefObject<HTMLDivElement | null>,
@@ -14,8 +14,9 @@ export function useOrbitPlacement(
       if (!anchor.current) return;
       const box = anchor.current.getBoundingClientRect();
       const compact = window.innerWidth <= 650;
-      const size = compact ? 40 : 44;
-      const radius = compact ? 100 : 112;
+      const scale = Math.max(1, box.width / (compact ? 144 : 160));
+      const size = (compact ? 40 : 44) * scale;
+      const radius = (compact ? 100 : 112) * scale;
       const cx = box.left + box.width / 2;
       const cy = box.top + box.height / 2;
       const horizontal = cx >= window.innerWidth / 2 ? -1 : 1;
@@ -26,11 +27,13 @@ export function useOrbitPlacement(
         const top = Math.max(12, Math.min(origin.y + vertical * radius * dy, window.innerHeight - size - 32));
         return { x: left - origin.x, y: top - origin.y };
       });
-      setOrbit({ origin, offsets, size });
+      setOrbit({ origin, offsets, size, scale });
     };
     update();
+    const observer = new ResizeObserver(update);
+    if (anchor.current) observer.observe(anchor.current);
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    return () => { observer.disconnect(); window.removeEventListener("resize", update); };
   }, [anchor, x, y]);
   return orbit;
 }

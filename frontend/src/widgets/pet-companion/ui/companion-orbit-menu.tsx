@@ -41,7 +41,7 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
               <path d={outline} fill="#383c62" />
               <path d={outline} transform="translate(3 3) scale(.892857)" fill="#ffffff" />
             </svg>
-            <span className="relative"><PixelActionIcon action={action.id} /></span>
+            <span className="relative" style={{ transform: `scale(${orbit.scale})` }}><PixelActionIcon action={action.id} /></span>
           </span>
         </button>
       ))}

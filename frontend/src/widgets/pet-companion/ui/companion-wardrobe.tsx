@@ -8,13 +8,13 @@ import { useWardrobePlacement } from "../model/use-wardrobe-placement";
 import { useRadialTransition } from "../model/use-radial-transition";
 import { WardrobePetOption } from "./wardrobe-pet-option";
 
-export function CompanionWardrobe({ anchor, position, open }: {
-  anchor: RefObject<HTMLDivElement | null>; position: CSSProperties; open: boolean;
+export function CompanionWardrobe({ anchor, position, open, semicircle = false }: {
+  anchor: RefObject<HTMLDivElement | null>; position: CSSProperties; open: boolean; semicircle?: boolean;
 }) {
   const { chosenPet, choosePet, paused } = usePetPreferences();
   const initialIndex = Math.max(0, wardrobePets.findIndex((pet) => pet.id === chosenPet?.id));
   const { cursor, move } = useWardrobeCarousel(anchor, open, initialIndex);
-  const layout = useWardrobePlacement(anchor, position);
+  const layout = useWardrobePlacement(anchor, position, semicircle);
   const gesture = useWardrobeGesture(move);
   const root = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -42,7 +42,7 @@ export function CompanionWardrobe({ anchor, position, open }: {
         event.preventDefault();
         move(event.key === "ArrowLeft" ? -1 : 1);
       }}>
-      {layout && Array.from({ length: 7 }, (_, i) => i - 3).map((offset) => {
+      {layout && Array.from({ length: semicircle ? 9 : 7 }, (_, i) => i - (semicircle ? 4 : 3)).map((offset) => {
         const logical = Math.round(cursor) + offset;
         const pet = wardrobePets[wardrobeIndex(logical)];
         return <WardrobePetOption key={logical} pet={pet} layout={layout} offset={logical - cursor} slot={offset}
