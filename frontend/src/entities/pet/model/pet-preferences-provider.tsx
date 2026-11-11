@@ -10,11 +10,17 @@ import {
 import { PetPreferencesContext } from "./context";
 import type { Pet } from "./types";
 export function PetPreferencesProvider({ children }: { children: ReactNode }) {
-  const [chosenId, setChosenId] = useState(readChosenPet);
-  const [favoriteIds, setFavoriteIds] = useState(readFavoritePetIds);
+  const [chosenId, setChosenId] = useState<string | null>(null);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    saveFavoritePetIds(favoriteIds);
-  }, [favoriteIds]);
+    setChosenId(readChosenPet());
+    setFavoriteIds(readFavoritePetIds());
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (hydrated) saveFavoritePetIds(favoriteIds);
+  }, [favoriteIds, hydrated]);
   const toggleFavorite = useCallback((id: string) => {
     setFavoriteIds((ids) =>
       ids.includes(id) ? ids.filter((value) => value !== id) : [...ids, id],

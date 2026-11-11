@@ -18,7 +18,8 @@ export function PixelPet({
   }, [pet]);
   return (
     <svg
-      className={`pixel-pet ${paused ? "is-paused" : ""} ${className}`}
+      className={`pixel-pet block relative [image-rendering:pixelated] shrink-0 z-2 [&.is-paused_.sprite-frame]:animate-none
+            [&.is-paused_.sprite-frame]:opacity-0 [&.is-paused_.frame-0]:opacity-100 ${paused ? "is-paused" : ""}  ${className}`}
       width={size}
       height={size}
       viewBox={`0 0 ${edge} ${edge}`}
@@ -28,7 +29,8 @@ export function PixelPet({
     >
       {frames.map((runs, i) => (
         <g
-          className={`sprite-frame frame-${i}`}
+          className={`sprite-frame opacity-0 animate-sprite-frame motion-reduce:opacity-0 motion-reduce:[&.frame-0]:opacity-100
+            frame-${i}`}
           key={i}
           style={{ animationDelay: `-${(4 - i) * 0.8}s` }}
         >
