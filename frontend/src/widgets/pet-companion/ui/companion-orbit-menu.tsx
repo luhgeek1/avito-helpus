@@ -4,10 +4,10 @@ import { useOrbitPlacement } from "../model/use-orbit-placement";
 import { PixelActionIcon } from "./pixel-action-icon";
 import type { CompanionAction } from "./pixel-action-icon";
 
-const actions: { id: CompanionAction; label: string; color: string }[] = [
-  { id: "chat", label: "Чат", color: "#d8f4ff" },
-  { id: "wardrobe", label: "Гардероб", color: "#eee1ff" },
-  { id: "settings", label: "Настройки", color: "#ffe2ed" },
+const actions: { id: CompanionAction; label: string }[] = [
+  { id: "chat", label: "Чат" },
+  { id: "wardrobe", label: "Гардероб" },
+  { id: "settings", label: "Настройки" },
 ];
 const outline = "M16 0h24v4h8v4h4v8h4v24h-4v8h-4v4h-8v4H16v-4H8v-4H4v-8H0V16h4V8h4V4h8z";
 
@@ -44,8 +44,7 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
             <svg className="orbit-disc absolute inset-0 size-full overflow-visible [filter:drop-shadow(2px_3px_0_#383c6218)]"
               viewBox="0 0 56 56" shapeRendering="crispEdges" aria-hidden="true">
               <path d={outline} fill="#383c62" />
-              <path d={outline} transform="translate(3 3) scale(.892857)" fill={action.color} />
-              <path d="M16 7h24v3H16z M10 11h5v3h-5z" fill="#ffffff" fillOpacity=".85" />
+              <path d={outline} transform="translate(3 3) scale(.892857)" fill="#ffffff" />
             </svg>
             <span className="relative"><PixelActionIcon action={action.id} /></span>
           </span>
