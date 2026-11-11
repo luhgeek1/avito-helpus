@@ -1,20 +1,30 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { CompanionWardrobe } from "./companion-wardrobe";
 import { CompanionOrbitMenu } from "./companion-orbit-menu";
 import { CompanionSettings } from "./companion-settings";
+import { CompanionChat } from "./companion-chat";
+import { CompanionSpotlight } from "./companion-spotlight";
+import { useSpotlightShortcut } from "../model/use-spotlight-shortcut";
+import { useCompanionChat } from "../model/use-companion-chat";
 import { useCompanionActions } from "../model/use-companion-actions";
 import { Volume2, X } from "lucide-react";
 import { PixelPet, usePetPreferences } from "@/entities/pet";
 import { useTypewriter } from "../model/use-typewriter";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
 import { useCompanionPosition } from "../model/use-companion-position";
+import type { ChatMessage } from "../model/chat-messages";
 export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
   const [widgetSpeaking, setWidgetSpeaking] = useState(false);
+  const [widgetReply, setWidgetReply] = useState<ChatMessage | null>(null);
+  const showGreeting = useCallback((open: boolean) => { setWidgetReply(null); setWidgetSpeaking(open); }, []);
   const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible);
-  const actions = useCompanionActions(movement.ref, setWidgetSpeaking, movement.dragging, widgetVisible);
+  const actions = useCompanionActions(movement.ref, showGreeting, movement.dragging, widgetVisible);
+  const chat = useCompanionChat();
+  const openSpotlight = useCallback(() => { actions.dismiss(); setWidgetSpeaking(false); }, [actions.dismiss]);
+  const spotlight = useSpotlightShortcut(Boolean(chosenPet), openSpotlight);
   useEffect(() => {
     if (selectionVersion > 0) {
       setWidgetVisible(true);
@@ -22,11 +32,14 @@ export function PetCompanion() {
       actions.dismiss();
     }
   }, [selectionVersion, actions.dismiss]);
-  const dialogue = useTypewriter(chosenPet?.greeting ?? "", widgetSpeaking && widgetVisible, paused);
+  const dialogueText = widgetReply?.text ?? chosenPet?.greeting ?? "";
+  const dialogue = useTypewriter(dialogueText, widgetSpeaking && widgetVisible, paused, widgetReply?.id);
   const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
     movement.style.left, movement.style.top);
   return (
     <>
+      {chosenPet && spotlight.open && <CompanionSpotlight pet={chosenPet} chat={chat} onClose={spotlight.close}
+        onReply={reply => { actions.dismiss(); setWidgetReply(reply); setWidgetVisible(true); setWidgetSpeaking(true); }} />}
       {chosenPet && widgetVisible && (
         <div
           ref={movement.ref}
@@ -40,6 +53,8 @@ export function PetCompanion() {
             } as CSSProperties
           }
         >
+          {actions.chatOpen && <CompanionChat anchor={movement.ref} position={movement.style} name={chosenPet.name} chat={chat}
+            onClose={() => { actions.dismiss(); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
           {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
             onClose={actions.dismiss} onHide={() => { actions.dismiss(); setWidgetVisible(false); }} />}
           {widgetSpeaking && (
@@ -62,11 +77,11 @@ export function PetCompanion() {
               <div className="dialogue-copy flex gap-2 max-sm:gap-[6px]" aria-hidden="true">
                 <span className="dialogue-star text-[#d7b5ff]">*</span>
                 <span className="dialogue-lines grid min-w-[0] [overflow-wrap:anywhere]">
-                  <span className="dialogue-reserve [grid-area:1_/_1] invisible">{chosenPet.greeting}</span>
+                  <span className="dialogue-reserve [grid-area:1_/_1] invisible">{dialogueText}</span>
                   <span className="dialogue-typed [grid-area:1_/_1] whitespace-pre-wrap">{dialogue.displayed}</span>
                 </span>
               </div>
-              <span className={`dialogue-accessible absolute w-[1px] h-[1px] overflow-hidden [clip-path:inset(50%)] whitespace-nowrap`} role="status">{chosenPet.greeting}</span>
+              <span className={`dialogue-accessible absolute w-[1px] h-[1px] overflow-hidden [clip-path:inset(50%)] whitespace-nowrap`} role="status">{dialogueText}</span>
               <div className="dialogue-footer flex items-center justify-end h-4 mt-1 leading-none">
                 {dialogue.typing ? (
                   <button className={`dialogue-skip pr-0 pl-2 bg-transparent text-[#c7bbdf] [font-family:inherit] text-[8px] font-[inherit]
@@ -75,7 +90,7 @@ export function PetCompanion() {
               </div>
               <button
                 onClick={() => setWidgetSpeaking(false)}
-                aria-label="Закрыть приветствие"
+                aria-label={widgetReply ? "Закрыть ответ" : "Закрыть приветствие"}
               >
                 <X size={16} strokeWidth={3} />
               </button>
@@ -91,10 +106,10 @@ export function PetCompanion() {
             <X size={12} />
           </button>
           <button
-            className={`widget-pet flex flex-col items-center bg-transparent w-full cursor-grab touch-none select-none
+            className={`widget-pet flex flex-col items-center bg-transparent w-full cursor-grab touch-none! select-none
             [-webkit-user-select:none] max-sm:[&_.pixel-pet]:w-24 max-sm:[&_.pixel-pet]:h-24 p-0`}
             onClick={(event) => {
-              if (movement.consumeDragClick()) { actions.dismiss(); return; }
+              if (movement.consumeDragClick()) return;
               actions.activate(event.detail > 1);
             }}
             {...movement.handlers}
@@ -104,9 +119,9 @@ export function PetCompanion() {
                 if (!event.repeat) actions.activate();
               } else movement.handlers.onKeyDown(event);
             }}
-            aria-expanded={actions.menuOpen || actions.wardrobeOpen}
-            aria-controls={actions.wardrobeOpen ? "companion-wardrobe" : "companion-actions"}
-            title="Нажмите для меню. Двойной клик или два Enter — реплика. Можно перетаскивать."
+            aria-expanded={actions.menuOpen || actions.wardrobeOpen || actions.chatOpen}
+            aria-controls={actions.chatOpen ? "companion-chat" : actions.wardrobeOpen ? "companion-wardrobe" : "companion-actions"}
+            title="Нажмите для меню. Двойной клик — реплика, два Enter — запрос. Можно перетаскивать."
             aria-label={`Действия спутника ${chosenPet.name}`}
           >
             <PixelPet pet={chosenPet} size={128} paused={paused} />
