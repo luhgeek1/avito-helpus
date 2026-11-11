@@ -5,29 +5,44 @@ export function useWardrobeCarousel(
   anchor: RefObject<HTMLDivElement | null>, open: boolean, initialIndex: number,
 ) {
   const [cursor, setCursor] = useState(initialIndex);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const busy = useRef(false);
-  const pending = useRef(0);
-  const move = useCallback(function advance(direction: number) {
+  const motion = useRef({ position: initialIndex, target: initialIndex, velocity: 0, time: 0 });
+  const frame = useRef<number | null>(null);
+  const move = useCallback((direction: number) => {
     if (!open) return;
     const step = Math.sign(direction);
     if (!step) return;
-    if (busy.current) { pending.current = step; return; }
-    setCursor((current) => current + step);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    busy.current = true;
-    timer.current = setTimeout(() => {
-      busy.current = false;
-      const next = pending.current;
-      pending.current = 0;
-      if (next) advance(next);
-    }, 280);
+    const state = motion.current;
+    state.target += step;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
+      frame.current = null;
+      state.position = state.target;
+      state.velocity = 0;
+      setCursor(state.target);
+      return;
+    }
+    if (frame.current !== null) return;
+    state.time = performance.now();
+    function animate(time: number) {
+      const dt = Math.min((time - state.time) / 1000, .04);
+      state.time = time;
+      // Analytic critical damping preserves velocity when input retargets the arc.
+      const distance = state.position - state.target;
+      const impulse = state.velocity + 16 * distance;
+      const decay = Math.exp(-16 * dt);
+      state.position = state.target + (distance + impulse * dt) * decay;
+      state.velocity = (state.velocity - 16 * impulse * dt) * decay;
+      const settled = Math.abs(state.position - state.target) < .001 && Math.abs(state.velocity) < .01;
+      setCursor(settled ? state.target : state.position);
+      frame.current = settled ? null : requestAnimationFrame(animate);
+    }
+    frame.current = requestAnimationFrame(animate);
   }, [open]);
   useEffect(() => {
     if (open) setCursor(initialIndex);
-    busy.current = false;
-    pending.current = 0;
-    return () => { if (timer.current) clearTimeout(timer.current); };
+    motion.current = { position: initialIndex, target: initialIndex, velocity: 0, time: 0 };
+    frame.current = null;
+    return () => { if (frame.current !== null) cancelAnimationFrame(frame.current); };
   }, [open, initialIndex]);
   useEffect(() => {
     const element = anchor.current;
