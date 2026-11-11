@@ -2,6 +2,8 @@
   "results": [
     {
       "width": 1440,
+      "restoredPosition": true,
+      "reload": true,
       "buttons": 3,
       "arc": true,
       "singleClick": true,
@@ -14,6 +16,8 @@
     },
     {
       "width": 390,
+      "restoredPosition": true,
+      "reload": true,
       "buttons": 3,
       "arc": true,
       "singleClick": true,
@@ -26,6 +30,8 @@
     },
     {
       "width": 320,
+      "restoredPosition": true,
+      "reload": true,
       "buttons": 3,
       "arc": true,
       "singleClick": true,

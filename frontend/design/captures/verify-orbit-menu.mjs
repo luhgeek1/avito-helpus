@@ -5,11 +5,17 @@ const browser=await chromium.launch();const errors=[],results=[];
 try {
  for(const width of [1440,390,320]) {
   const context=await browser.newContext({viewport:{width,height:900},hasTouch:width<650});
-  await context.addInitScript(()=>localStorage.setItem('buddy-pet','orbit'));
+  await context.addInitScript(()=>{
+   localStorage.setItem('buddy-pet','orbit');
+   const compact=innerWidth<=650;
+   localStorage.setItem('buddy-position',JSON.stringify({x:innerWidth-(compact?154:185),y:innerHeight-(compact?108:148)}));
+  });
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://localhost:5173/',{waitUntil:'networkidle'});
   const pet=page.locator('.widget-pet'), menu=page.locator('.companion-orbit-menu');
   await pet.click();assert.equal(await pet.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('.pixel-dialogue').count(),0);
+  await page.waitForFunction(()=>document.querySelectorAll('.orbit-action').length===3);
+  await page.reload({waitUntil:'networkidle'});await pet.click();await page.waitForFunction(()=>document.querySelectorAll('.orbit-action').length===3);
   await page.waitForTimeout(400);
   assert.equal(await menu.getAttribute('aria-hidden'),'false');
   const boxes=await page.locator('.orbit-action').evaluateAll(es=>es.map(e=>{const b=e.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
@@ -33,7 +39,7 @@ try {
   await page.mouse.click(width-10,400);assert.equal(await pet.getAttribute('aria-expanded'),'false');
   if(width<650){await page.waitForTimeout(400);await pet.tap();assert.equal(await pet.getAttribute('aria-expanded'),'true');await page.waitForTimeout(80);await pet.tap();await page.locator('.pixel-dialogue').waitFor();await page.keyboard.press('Escape');}
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(400);await pet.click();assert.equal(await page.locator('.orbit-action').first().evaluate(e=>getComputedStyle(e).transitionProperty),'none');
-  results.push({width,buttons:3,arc:true,singleClick:true,doubleClick:true,doubleEnter:true,actions:true,drag:true,edgePlacement:true,reducedMotion:true});await context.close();
+  results.push({width,restoredPosition:true,reload:true,buttons:3,arc:true,singleClick:true,doubleClick:true,doubleEnter:true,actions:true,drag:true,edgePlacement:true,reducedMotion:true});await context.close();
  }
  assert.deepEqual(errors,[]);await writeFile('frontend/design/captures/orbit-menu-verification.json',JSON.stringify({results,errors},null,2));console.log('PASS orbit menu: single/double click, double Enter, actions, drag, edge bounds, reduced motion, desktop/mobile');
 }finally{await browser.close();}

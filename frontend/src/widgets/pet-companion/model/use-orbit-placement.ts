@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 
 type Orbit = { origin: { x: number; y: number }; offsets: { x: number; y: number }[]; size: number };
@@ -8,7 +8,8 @@ export function useOrbitPlacement(
   x: CSSProperties["left"], y: CSSProperties["top"],
 ) {
   const [orbit, setOrbit] = useState<Orbit | null>(null);
-  useLayoutEffect(() => {
+  // The parent DOM ref is attached before passive effects, including restored-position mounts.
+  useEffect(() => {
     const update = () => {
       if (!anchor.current) return;
       const box = anchor.current.getBoundingClientRect();
