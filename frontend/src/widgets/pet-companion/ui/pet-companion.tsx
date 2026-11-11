@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Volume2, X } from "lucide-react";
 import { PixelPet, usePetPreferences } from "@/entities/pet";
+import { useTypewriter } from "../model/use-typewriter";
+import { useDialoguePlacement } from "../model/use-dialogue-placement";
 import { useCompanionPosition } from "../model/use-companion-position";
 export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
@@ -14,17 +16,15 @@ export function PetCompanion() {
       setWidgetSpeaking(true);
     }
   }, [selectionVersion]);
-  useEffect(() => {
-    if (!widgetSpeaking) return;
-    const timer = setTimeout(() => setWidgetSpeaking(false), 7000);
-    return () => clearTimeout(timer);
-  }, [widgetSpeaking, selectionVersion]);
+  const dialogue = useTypewriter(chosenPet?.greeting ?? "", widgetSpeaking && widgetVisible, paused);
+  const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
+    movement.style.left, movement.style.top);
   return (
     <>
       {chosenPet && widgetVisible && (
         <div
           ref={movement.ref}
-          className={`companion${movement.dragging ? " is-dragging" : ""}`}
+          className={`companion${movement.dragging ? " is-dragging" : ""}${dialogue.typing && !paused ? " is-talking" : ""}`}
           style={
             {
               ...movement.style,
@@ -34,14 +34,27 @@ export function PetCompanion() {
           }
         >
           {widgetSpeaking && (
-            <div className="widget-bubble" style={movement.bubbleStyle} role="status">
-              <strong>{chosenPet.name} теперь рядом!</strong>
-              <span>{chosenPet.greeting}</span>
+            <div ref={placement.ref} className="widget-bubble pixel-dialogue"
+              style={placement.style} data-side={placement.side}>
+              <strong className="dialogue-name">{chosenPet.name}</strong>
+              <div className="dialogue-copy" aria-hidden="true">
+                <span className="dialogue-star">*</span>
+                <span className="dialogue-lines">
+                  <span className="dialogue-reserve">{chosenPet.greeting}</span>
+                  <span className="dialogue-typed">{dialogue.displayed}</span>
+                </span>
+              </div>
+              <span className="dialogue-accessible" role="status">{chosenPet.greeting}</span>
+              <div className="dialogue-footer">
+                {dialogue.typing ? (
+                  <button className="dialogue-skip" onClick={dialogue.complete}>Показать сразу</button>
+                ) : <span className="dialogue-ready" aria-hidden="true">◆</span>}
+              </div>
               <button
                 onClick={() => setWidgetSpeaking(false)}
                 aria-label="Закрыть приветствие"
               >
-                <X size={13} />
+                <X size={16} strokeWidth={3} />
               </button>
             </div>
           )}

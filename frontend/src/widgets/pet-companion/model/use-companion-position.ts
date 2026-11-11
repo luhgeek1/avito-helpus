@@ -101,18 +101,8 @@ export function useCompanionPosition(visible: boolean) {
   }
 
   const style: CSSProperties = position ? { left: position.x, top: position.y, right: "auto", bottom: "auto" } : {};
-  const width = typeof window !== "undefined" && window.innerWidth <= 650 ? 205 : 230;
-  const bubbleStyle: CSSProperties = position ? {
-    position: "fixed",
-    left: Math.max(8, Math.min(position.x, window.innerWidth - width - 8)),
-    right: "auto",
-    ...(position.y < 180
-      ? { top: position.y + (ref.current?.offsetHeight ?? 128) + 12, bottom: "auto" }
-      : { bottom: window.innerHeight - position.y + 12, top: "auto" }),
-  } : {};
-
   return {
-    ref, style, bubbleStyle, dragging,
+    ref, style, dragging,
     handlers: { onPointerDown, onPointerMove, onPointerUp: onPointerEnd, onPointerCancel: onPointerEnd, onLostPointerCapture: onPointerEnd, onKeyDown },
     consumeDragClick() {
       const suppressed = suppressClick.current;
