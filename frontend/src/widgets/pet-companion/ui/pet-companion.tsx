@@ -14,6 +14,8 @@ import { useTypewriter } from "../model/use-typewriter";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
 import { useCompanionPosition } from "../model/use-companion-position";
 import type { ChatMessage } from "../model/chat-messages";
+import { useCompanionTour } from "../model/use-companion-tour";
+import { CompanionTourShell } from "./companion-tour";
 export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
@@ -25,6 +27,8 @@ export function PetCompanion() {
   const chat = useCompanionChat();
   const openSpotlight = useCallback(() => { actions.dismiss(); setWidgetSpeaking(false); }, [actions.dismiss]);
   const spotlight = useSpotlightShortcut(Boolean(chosenPet), openSpotlight);
+  const tour = useCompanionTour({ movement, actions, spotlight, draft: chat.draft,
+    show: () => setWidgetVisible(true), silence: () => setWidgetSpeaking(false) });
   useEffect(() => {
     if (selectionVersion > 0) {
       setWidgetVisible(true);
@@ -37,7 +41,7 @@ export function PetCompanion() {
   const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
     movement.style.left, movement.style.top);
   return (
-    <>
+    <CompanionTourShell tour={tour} hideCopy={widgetSpeaking || actions.chatOpen}>
       {chosenPet && spotlight.open && <CompanionSpotlight pet={chosenPet} chat={chat} onClose={spotlight.close}
         onReply={reply => { actions.dismiss(); setWidgetReply(reply); setWidgetVisible(true); setWidgetSpeaking(true); }} />}
       {chosenPet && widgetVisible && (
@@ -48,34 +52,36 @@ export function PetCompanion() {
           style={
             {
               ...movement.style,
+              width: tour.active ? (tour.viewport.width <= 650 ? 144 : 160) * tour.scale : undefined,
+              "--tour-pet-size": `${(tour.viewport.width <= 650 ? 96 : 128) * (tour.active ? tour.scale : 1)}px`,
               "--pet-bg": chosenPet.bg,
               "--pet-color": chosenPet.color,
             } as CSSProperties
           }
         >
-          {actions.chatOpen && <CompanionChat anchor={movement.ref} position={movement.style} name={chosenPet.name} chat={chat}
-            onClose={() => { actions.dismiss(); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
+          {actions.chatOpen && <CompanionChat anchor={movement.ref} position={movement.style} name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0}
+            onClose={() => { actions.dismiss(); if (tour.active) tour.visit("wardrobe"); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
           {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
-            onClose={actions.dismiss} onHide={() => { actions.dismiss(); setWidgetVisible(false); }} />}
+            onClose={() => { actions.dismiss(); if (tour.active) tour.visit("spotlight"); }} onHide={() => { actions.dismiss(); setWidgetVisible(false); }} />}
           {widgetSpeaking && (
-            <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-3 pb-2 text-[#faf7ff] bg-[#303552]
-            rounded-[0] [box-shadow:0_0_0_3px_#373b60,_6px_6px_0_3px_#373b6026] font-pixel text-[10px] font-normal
+            <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-3 pb-2 text-[#25252b] bg-[#ffffff]
+            rounded-[0] [box-shadow:0_0_0_3px_#cbd3df,_6px_6px_0_3px_#cbd3df26] font-pixel text-[10px] font-normal
             leading-[1.6] [-webkit-font-smoothing:none] animate-dialogue-open max-sm:pt-[10px] max-sm:pb-[6px]
             max-sm:text-[9px] [&[data-side=left]::after]:[content:''] [&[data-side=left]::after]:absolute
             [&[data-side=left]::after]:top-[calc(50%_-_8px)] [&[data-side=left]::after]:w-2 [&[data-side=left]::after]:h-4
-            [&[data-side=left]::after]:bg-[#e9e5ff] [&[data-side=left]::after]:[box-shadow:4px_4px_#373b60]
+            [&[data-side=left]::after]:bg-[#f5f7fa] [&[data-side=left]::after]:[box-shadow:4px_4px_#cbd3df]
             [&[data-side=left]::after]:right-[-12px] [&[data-side=right]::after]:[content:'']
             [&[data-side=right]::after]:absolute [&[data-side=right]::after]:top-[calc(50%_-_8px)]
-            [&[data-side=right]::after]:w-2 [&[data-side=right]::after]:h-4 [&[data-side=right]::after]:bg-[#e9e5ff]
-            [&[data-side=right]::after]:[box-shadow:4px_4px_#373b60] [&[data-side=right]::after]:left-[-12px]
+            [&[data-side=right]::after]:w-2 [&[data-side=right]::after]:h-4 [&[data-side=right]::after]:bg-[#f5f7fa]
+            [&[data-side=right]::after]:[box-shadow:4px_4px_#cbd3df] [&[data-side=right]::after]:left-[-12px]
             [&_>_button]:absolute [&_>_button]:top-1 [&_>_button]:right-1 [&_>_button]:grid [&_>_button]:place-items-center
-            [&_>_button]:w-8 [&_>_button]:h-8 [&_>_button]:bg-transparent [&_>_button]:text-[#c7bbdf]
-            [&_>_button:hover]:text-white border-[4px] border-solid border-[#e9e5ff] [&_>_button]:p-0 px-3 max-sm:px-[10px]`}
+            [&_>_button]:w-8 [&_>_button]:h-8 [&_>_button]:bg-transparent [&_>_button]:text-[#687181]
+            [&_>_button:hover]:text-[#25252b] border-[4px] border-solid border-[#f5f7fa] [&_>_button]:p-0 px-3 max-sm:px-[10px]`}
               style={placement.style} data-side={placement.side}>
-              <strong className={`dialogue-name block mb-[6px] pr-6 text-[#9de1f3] [font-family:inherit] text-[11px] font-[inherit]
+              <strong className={`dialogue-name block mb-[6px] pr-6 text-[#0079ac] [font-family:inherit] text-[11px] font-[inherit]
             [font-style:inherit] leading-[inherit] max-sm:text-[10px]`}>{chosenPet.name}</strong>
               <div className="dialogue-copy flex gap-2 max-sm:gap-[6px]" aria-hidden="true">
-                <span className="dialogue-star text-[#d7b5ff]">*</span>
+                <span className="dialogue-star text-[#55bfee]">*</span>
                 <span className="dialogue-lines grid min-w-[0] [overflow-wrap:anywhere]">
                   <span className="dialogue-reserve [grid-area:1_/_1] invisible">{dialogueText}</span>
                   <span className="dialogue-typed [grid-area:1_/_1] whitespace-pre-wrap">{dialogue.displayed}</span>
@@ -84,9 +90,9 @@ export function PetCompanion() {
               <span className={`dialogue-accessible absolute w-[1px] h-[1px] overflow-hidden [clip-path:inset(50%)] whitespace-nowrap`} role="status">{dialogueText}</span>
               <div className="dialogue-footer flex items-center justify-end h-4 mt-1 leading-none">
                 {dialogue.typing ? (
-                  <button className={`dialogue-skip pr-0 pl-2 bg-transparent text-[#c7bbdf] [font-family:inherit] text-[8px] font-[inherit]
-            [font-style:inherit] leading-[inherit] max-sm:text-[7px] [&:hover]:text-white py-0`} onClick={dialogue.complete}>Показать сразу</button>
-                ) : <span className="dialogue-ready text-[#ee95bf] animate-dialogue-cursor" aria-hidden="true">◆</span>}
+                  <button className={`dialogue-skip pr-0 pl-2 bg-transparent text-[#687181] [font-family:inherit] text-[8px] font-[inherit]
+            [font-style:inherit] leading-[inherit] max-sm:text-[7px] [&:hover]:text-[#25252b] py-0`} onClick={dialogue.complete}>Показать сразу</button>
+                ) : <span className="dialogue-ready text-[#008cc7] animate-dialogue-cursor" aria-hidden="true">◆</span>}
               </div>
               <button
                 onClick={() => setWidgetSpeaking(false)}
@@ -96,7 +102,7 @@ export function PetCompanion() {
               </button>
             </div>
           )}
-          <button
+          {!tour.active && <button
             className={`widget-close absolute right-0 top-2 grid place-items-center bg-white w-[22px] h-[22px] rounded-full
             text-[#a093ac] z-3 max-sm:right-[-1px] max-sm:top-[1px] max-sm:w-7 max-sm:h-7 border border-solid
             border-[#eee8f3]`}
@@ -104,35 +110,37 @@ export function PetCompanion() {
             aria-label="Скрыть спутника"
           >
             <X size={12} />
-          </button>
+          </button>}
           <button
             className={`widget-pet flex flex-col items-center bg-transparent w-full cursor-grab touch-none! select-none
             [-webkit-user-select:none] max-sm:[&_.pixel-pet]:w-24 max-sm:[&_.pixel-pet]:h-24 p-0`}
             onClick={(event) => {
-              if (movement.consumeDragClick()) return;
+              if (movement.consumeDragClick()) { tour.dragged(); return; }
+              if (tour.active && tour.scene === "intro") { tour.visit("menu"); return; }
               actions.activate(event.detail > 1);
             }}
             {...movement.handlers}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
-                if (!event.repeat) actions.activate();
-              } else movement.handlers.onKeyDown(event);
+                if (!event.repeat) { if (tour.active && tour.scene === "intro") tour.visit("menu"); else actions.activate(); }
+              } else { movement.handlers.onKeyDown(event); if (event.key.startsWith("Arrow")) tour.dragged(); }
             }}
             aria-expanded={actions.menuOpen || actions.wardrobeOpen || actions.chatOpen}
             aria-controls={actions.chatOpen ? "companion-chat" : actions.wardrobeOpen ? "companion-wardrobe" : "companion-actions"}
             title="Нажмите для меню. Двойной клик — реплика, два Enter — запрос. Можно перетаскивать."
             aria-label={`Действия спутника ${chosenPet.name}`}
           >
-            <PixelPet pet={chosenPet} size={128} paused={paused} />
+            <PixelPet pet={chosenPet} size={128} paused={paused} className={tour.active ? "[width:var(--tour-pet-size)]! [height:var(--tour-pet-size)]!" : ""} />
           </button>
           <CompanionOrbitMenu anchor={movement.ref} position={movement.style} open={actions.menuOpen}
             onAction={(action) => {
+              if (tour.active) { tour.visit(action); return; }
               if (action === "chat") actions.chat();
               if (action === "settings") actions.settings();
               if (action === "wardrobe") actions.wardrobe();
             }} />
-          <CompanionWardrobe anchor={movement.ref} position={movement.style} open={actions.wardrobeOpen} />
+          <CompanionWardrobe anchor={movement.ref} position={movement.style} open={actions.wardrobeOpen} semicircle={tour.active && tour.scene === "wardrobe"} />
         </div>
       )}
       {chosenPet && !widgetVisible && (
@@ -145,6 +153,6 @@ export function PetCompanion() {
           {chosenPet.name} рядом
         </button>
       )}
-    </>
+    </CompanionTourShell>
   );
 }
