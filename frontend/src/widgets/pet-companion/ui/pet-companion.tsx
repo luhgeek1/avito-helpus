@@ -60,6 +60,7 @@ export function PetCompanion() {
           }
         >
           {actions.chatOpen && <CompanionChat anchor={movement.ref} position={movement.style} name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0}
+            onBack={() => { if (tour.active) tour.visit("menu"); else actions.menu(); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }}
             onClose={() => { actions.dismiss(); if (tour.active) tour.visit("wardrobe"); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
           {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
             onClose={() => { actions.dismiss(); if (tour.active) tour.visit("spotlight"); }} onHide={() => { actions.dismiss(); setWidgetVisible(false); }} />}

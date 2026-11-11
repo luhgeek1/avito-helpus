@@ -4,9 +4,9 @@ import { X } from "lucide-react";
 import { useChatPlacement } from "../model/use-chat-placement";
 import type { useCompanionChat } from "../model/use-companion-chat";
 
-export function CompanionChat({ anchor, position, name, chat, onClose, topInset = 0 }: {
+export function CompanionChat({ anchor, position, name, chat, onClose, onBack, topInset = 0 }: {
   anchor: RefObject<HTMLDivElement | null>; position: CSSProperties; name: string;
-  chat: ReturnType<typeof useCompanionChat>; onClose: () => void; topInset?: number;
+  chat: ReturnType<typeof useCompanionChat>; onClose: () => void; onBack: () => void; topInset?: number;
 }) {
   const style = useChatPlacement(anchor, position, topInset);
   const history = useRef<HTMLDivElement>(null);
@@ -29,6 +29,12 @@ export function CompanionChat({ anchor, position, name, chat, onClose, topInset 
         <span className="flex-1 bg-[#ff4053]" /><span className="flex-1 bg-[#965eeb]" />
       </div>
       <header className="flex shrink-0 bg-[#f2f9ff] items-center gap-3 border-b-2 border-[#d5eafb] py-2 pl-4 pr-2">
+        <button type="button" onClick={onBack} aria-label="Назад к меню пета"
+          className="grid size-11 shrink-0 place-items-center bg-transparent text-[#0079ac] hover:bg-[#e0f2fd] focus-visible:outline-2 focus-visible:outline-[#0079ac]">
+          <svg width="20" height="20" viewBox="0 0 20 20" shapeRendering="crispEdges" aria-hidden="true">
+            <path d="M8 2h4v2h2v2h2v2h2v2h-4V8h-2v10H8V8H6v2H2V8h2V6h2V4h2z" transform="rotate(-90 10 10)" fill="currentColor" />
+          </svg>
+        </button>
         <div className="min-w-0 flex-1">
           <h2 id="companion-chat-title" className="truncate font-pixel text-[10px] leading-5 text-[#0079ac]">{name}</h2>
           <p className="text-[11px] text-[#687181]">Твой напарник рядом</p>
