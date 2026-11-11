@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import type { Pet } from "../model/types";
-import { pixelRuns, spriteGrid } from "../lib/sprite";
+import { spriteFrames } from "../lib/sprite-frames";
 export function PixelPet({
   pet,
   size = 160,
@@ -12,14 +11,11 @@ export function PixelPet({
   paused?: boolean;
   className?: string;
 }) {
-  const { frames, edge } = useMemo(() => {
-    const grids = [0, 1, 2, 3].map((frame) => spriteGrid(pet, frame));
-    return { frames: grids.map(pixelRuns), edge: grids[0].length };
-  }, [pet]);
+  const { frames, edge } = spriteFrames(pet);
   return (
     <svg
       className={`pixel-pet block relative [image-rendering:pixelated] shrink-0 z-2 [&.is-paused_.sprite-frame]:animate-none
-            [&.is-paused_.sprite-frame]:opacity-0 [&.is-paused_.frame-0]:opacity-100 ${paused ? "is-paused" : ""}  ${className}`}
+            [&.is-paused_.sprite-frame:not(.frame-0)]:opacity-0 [&.is-paused_.frame-0]:opacity-100 ${paused ? "is-paused" : ""}  ${className}`}
       width={size}
       height={size}
       viewBox={`0 0 ${edge} ${edge}`}
@@ -34,15 +30,8 @@ export function PixelPet({
           key={i}
           style={{ animationDelay: `-${(4 - i) * 0.8}s` }}
         >
-          {runs.map((run, j) => (
-            <rect
-              key={j}
-              x={run.x}
-              y={run.y}
-              width={run.w}
-              height="1"
-              fill={run.color}
-            />
+          {runs.map(({ color, path }) => (
+            <path key={color} d={path} fill={color} />
           ))}
         </g>
       ))}
