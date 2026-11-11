@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 import { useOrbitPlacement } from "../model/use-orbit-placement";
+import { useRadialTransition } from "../model/use-radial-transition";
 import { PixelActionIcon } from "./pixel-action-icon";
 import type { CompanionAction } from "./pixel-action-icon";
 
@@ -18,31 +18,26 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
   onAction: (action: CompanionAction) => void;
 }) {
   const orbit = useOrbitPlacement(anchor, position.left, position.top);
-  const [interactive, setInteractive] = useState(false);
-  useEffect(() => {
-    setInteractive(false);
-    if (!open) return;
-    const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 360;
-    const timer = setTimeout(() => setInteractive(true), delay);
-    return () => clearTimeout(timer);
-  }, [open]);
+  const { interactive, onTransitionEnd } = useRadialTransition(open);
   return (
     <div id="companion-actions" className="companion-orbit-menu" role="group" aria-label="Действия спутника"
       aria-hidden={!open} inert={!open || !interactive}>
       {orbit && actions.map((action, index) => (
         <button key={action.id} type="button" aria-label={action.label} onClick={() => onAction(action.id)}
+          onTransitionEnd={index === actions.length - 1 ? onTransitionEnd : undefined}
           className={`orbit-action fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]
-            outline-none [transition:transform_280ms_cubic-bezier(.22,1,.36,1),opacity_180ms_ease]
-            motion-reduce:transition-none hover:[&_svg.orbit-disc]:brightness-105
+            outline-none [will-change:transform,opacity] [transition:transform_240ms_cubic-bezier(.22,1,.36,1),opacity_160ms_ease-out]
+            motion-reduce:transition-none
             focus-visible:[&_.orbit-disc]:drop-shadow-[0_0_3px_#00aaff]
             ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
           style={{ left: orbit.origin.x - 4, top: orbit.origin.y - 4, width: orbit.size + 8, height: orbit.size + 8,
-            transform: open ? `translate(${orbit.offsets[index].x}px, ${orbit.offsets[index].y}px) scale(1)` : "translate(0, 0) scale(.35)",
-            transitionDelay: open ? `${index * 40}ms` : `${(2 - index) * 20}ms`,
+            transform: open ? `translate3d(${orbit.offsets[index].x}px, ${orbit.offsets[index].y}px, 0) scale(1)` : "translate3d(0, 0, 0) scale(.45)",
+            transitionDelay: open ? `${index * 16}ms` : "0ms",
           }}>
           <span className="relative grid aspect-square place-items-center" style={{ width: orbit.size, height: orbit.size }}>
-            <svg className="orbit-disc absolute inset-0 size-full overflow-visible [filter:drop-shadow(2px_3px_0_#383c6218)]"
+            <svg className="orbit-disc absolute inset-0 size-full overflow-visible"
               viewBox="0 0 56 56" shapeRendering="crispEdges" aria-hidden="true">
+              <path d={outline} transform="translate(2 3)" fill="#383c6218" />
               <path d={outline} fill="#383c62" />
               <path d={outline} transform="translate(3 3) scale(.892857)" fill="#ffffff" />
             </svg>
