@@ -10,16 +10,21 @@ export function useCompanionActions(
   const [menuOpen, setMenuOpen] = useState(false);
   const [wardrobeOpen, setWardrobeOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const lastActivation = useRef(0);
   const dismiss = useCallback(() => {
     setMenuOpen(false);
     setSettingsOpen(false);
     setWardrobeOpen(false);
+    setChatOpen(false);
     lastActivation.current = 0;
   }, []);
   useEffect(() => {
-    if (dragging || !visible) dismiss();
-    if (!visible) showDialogue(false);
+    if (dragging) lastActivation.current = 0;
+    if (!visible) {
+      dismiss();
+      showDialogue(false);
+    }
   }, [dragging, visible, dismiss, showDialogue]);
   useEffect(() => {
     const outside = (event: PointerEvent) => {
@@ -27,7 +32,7 @@ export function useCompanionActions(
     };
     const escape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      if (!menuOpen && !settingsOpen && !wardrobeOpen && !anchor.current?.querySelector(".pixel-dialogue")) return;
+      if (!menuOpen && !settingsOpen && !wardrobeOpen && !chatOpen && !anchor.current?.querySelector(".pixel-dialogue")) return;
       dismiss();
       showDialogue(false);
       anchor.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus();
@@ -38,7 +43,7 @@ export function useCompanionActions(
       document.removeEventListener("pointerdown", outside);
       document.removeEventListener("keydown", escape);
     };
-  }, [anchor, dismiss, showDialogue, menuOpen, settingsOpen, wardrobeOpen]);
+  }, [anchor, dismiss, showDialogue, menuOpen, settingsOpen, wardrobeOpen, chatOpen]);
 
   function activate(doubleClick = false) {
     const now = performance.now();
@@ -50,13 +55,14 @@ export function useCompanionActions(
       showDialogue(false);
       setSettingsOpen(false);
       setWardrobeOpen(false);
+      setChatOpen(false);
       setMenuOpen((open) => !open);
     }
   }
   return {
-    menuOpen, settingsOpen, wardrobeOpen, activate, dismiss,
+    menuOpen, settingsOpen, wardrobeOpen, chatOpen, activate, dismiss,
     wardrobe() { dismiss(); showDialogue(false); setWardrobeOpen(true); },
-    chat() { dismiss(); showDialogue(true); },
+    chat() { dismiss(); showDialogue(false); setChatOpen(true); },
     settings() { dismiss(); showDialogue(false); setSettingsOpen(true); },
   };
 }
