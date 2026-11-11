@@ -61,6 +61,7 @@ export function useCompanionActions(
   }
   return {
     menuOpen, settingsOpen, wardrobeOpen, chatOpen, activate, dismiss,
+    menu() { dismiss(); showDialogue(false); setMenuOpen(true); },
     wardrobe() { dismiss(); showDialogue(false); setWardrobeOpen(true); },
     chat() { dismiss(); showDialogue(false); setChatOpen(true); },
     settings() { dismiss(); showDialogue(false); setSettingsOpen(true); },

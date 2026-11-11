@@ -37,5 +37,6 @@ export function useSpotlightShortcut(enabled: boolean, onOpen: () => void) {
       window.removeEventListener("blur", reset);
     };
   }, [enabled, onOpen, open]);
-  return { open, close: () => { lastEnter.current = null; setOpen(false); } };
+  return { open, show: () => { lastEnter.current = null; onOpen(); setOpen(true); },
+    close: () => { lastEnter.current = null; setOpen(false); } };
 }

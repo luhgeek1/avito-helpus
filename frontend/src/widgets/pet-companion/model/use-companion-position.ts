@@ -104,6 +104,7 @@ export function useCompanionPosition(visible: boolean) {
   const style: CSSProperties = position ? { left: position.x, top: position.y, right: "auto", bottom: "auto" } : {};
   return {
     ref, style, dragging,
+    relocate: (next: Position) => setPosition(clamp(next)),
     handlers: { onPointerDown, onPointerMove, onPointerUp: onPointerEnd, onPointerCancel: onPointerEnd, onLostPointerCapture: onPointerEnd, onKeyDown },
     consumeDragClick() {
       const suppressed = suppressClick.current;
