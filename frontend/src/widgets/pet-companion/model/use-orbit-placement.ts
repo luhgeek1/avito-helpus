@@ -13,8 +13,8 @@ export function useOrbitPlacement(
       if (!anchor.current) return;
       const box = anchor.current.getBoundingClientRect();
       const compact = window.innerWidth <= 650;
-      const size = compact ? 48 : 56;
-      const radius = compact ? 104 : 120;
+      const size = compact ? 40 : 44;
+      const radius = compact ? 92 : 104;
       const cx = box.left + box.width / 2;
       const cy = box.top + box.height / 2;
       const horizontal = cx >= window.innerWidth / 2 ? -1 : 1;

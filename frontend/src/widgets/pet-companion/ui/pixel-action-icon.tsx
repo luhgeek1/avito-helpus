@@ -6,6 +6,6 @@ const icons: Record<CompanionAction, string> = {
   settings: "M6 1h4v2h2v1h2v2h1v4h-2v2h-1v2h-2v1H6v-2H4v-1H2v-2H1V6h2V4h1V2h2z M6 5v1H5v4h1v1h4v-1h1V6h-1V5z M7 7h2v2H7z",
 };
 export function PixelActionIcon({ action }: { action: CompanionAction }) {
-  return <svg width="25" height="25" viewBox="0 0 16 16" fill="currentColor"
+  return <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"
     shapeRendering="crispEdges" aria-hidden="true"><path fillRule="evenodd" d={icons[action]} /></svg>;
 }
