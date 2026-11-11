@@ -8,11 +8,13 @@ export function useCompanionActions(
   visible: boolean,
 ) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [wardrobeOpen, setWardrobeOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const lastActivation = useRef(0);
   const dismiss = useCallback(() => {
     setMenuOpen(false);
     setSettingsOpen(false);
+    setWardrobeOpen(false);
     lastActivation.current = 0;
   }, []);
   useEffect(() => {
@@ -25,7 +27,7 @@ export function useCompanionActions(
     };
     const escape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      if (!menuOpen && !settingsOpen && !anchor.current?.querySelector(".pixel-dialogue")) return;
+      if (!menuOpen && !settingsOpen && !wardrobeOpen && !anchor.current?.querySelector(".pixel-dialogue")) return;
       dismiss();
       showDialogue(false);
       anchor.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus();
@@ -36,7 +38,7 @@ export function useCompanionActions(
       document.removeEventListener("pointerdown", outside);
       document.removeEventListener("keydown", escape);
     };
-  }, [anchor, dismiss, showDialogue, menuOpen, settingsOpen]);
+  }, [anchor, dismiss, showDialogue, menuOpen, settingsOpen, wardrobeOpen]);
 
   function activate(doubleClick = false) {
     const now = performance.now();
@@ -47,11 +49,13 @@ export function useCompanionActions(
       lastActivation.current = now;
       showDialogue(false);
       setSettingsOpen(false);
+      setWardrobeOpen(false);
       setMenuOpen((open) => !open);
     }
   }
   return {
-    menuOpen, settingsOpen, activate, dismiss,
+    menuOpen, settingsOpen, wardrobeOpen, activate, dismiss,
+    wardrobe() { dismiss(); showDialogue(false); setWardrobeOpen(true); },
     chat() { dismiss(); showDialogue(true); },
     settings() { dismiss(); showDialogue(false); setSettingsOpen(true); },
   };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
-import { useRouter } from "next/navigation";
+import { CompanionWardrobe } from "./companion-wardrobe";
 import { CompanionOrbitMenu } from "./companion-orbit-menu";
 import { CompanionSettings } from "./companion-settings";
 import { useCompanionActions } from "../model/use-companion-actions";
@@ -13,7 +13,6 @@ export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
   const [widgetSpeaking, setWidgetSpeaking] = useState(false);
-  const router = useRouter();
   const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible);
   const actions = useCompanionActions(movement.ref, setWidgetSpeaking, movement.dragging, widgetVisible);
   useEffect(() => {
@@ -105,8 +104,8 @@ export function PetCompanion() {
                 if (!event.repeat) actions.activate();
               } else movement.handlers.onKeyDown(event);
             }}
-            aria-expanded={actions.menuOpen}
-            aria-controls="companion-actions"
+            aria-expanded={actions.menuOpen || actions.wardrobeOpen}
+            aria-controls={actions.wardrobeOpen ? "companion-wardrobe" : "companion-actions"}
             title="Нажмите для меню. Двойной клик или два Enter — реплика. Можно перетаскивать."
             aria-label={`Действия спутника ${chosenPet.name}`}
           >
@@ -116,8 +115,9 @@ export function PetCompanion() {
             onAction={(action) => {
               if (action === "chat") actions.chat();
               if (action === "settings") actions.settings();
-              if (action === "wardrobe") { actions.dismiss(); router.push("/pets"); }
+              if (action === "wardrobe") actions.wardrobe();
             }} />
+          <CompanionWardrobe anchor={movement.ref} position={movement.style} open={actions.wardrobeOpen} />
         </div>
       )}
       {chosenPet && !widgetVisible && (
