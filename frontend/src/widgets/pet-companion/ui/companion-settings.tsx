@@ -3,6 +3,7 @@ import type { CSSProperties, RefObject } from "react";
 import { X } from "lucide-react";
 import { usePetPreferences } from "@/entities/pet";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
+import { usePetOnboarding } from "@/features/pet/onboarding";
 
 export function CompanionSettings({ anchor, position, onClose, onHide }: {
   anchor: RefObject<HTMLDivElement | null>; position: CSSProperties;
@@ -10,6 +11,7 @@ export function CompanionSettings({ anchor, position, onClose, onHide }: {
 }) {
   const closeButton = useRef<HTMLButtonElement>(null);
   const { paused, setPaused } = usePetPreferences();
+  const onboarding = usePetOnboarding();
   const placement = useDialoguePlacement(anchor, true, position.left, position.top);
   useEffect(() => {
     if (placement.style.visibility !== "hidden") closeButton.current?.focus();
@@ -28,6 +30,8 @@ export function CompanionSettings({ anchor, position, onClose, onHide }: {
         className="flex min-h-11 w-full items-center justify-between gap-2 bg-[#414667] px-3 text-[12px]">
         Анимация <span className="text-[#9de1f3]">{paused ? "Выкл" : "Вкл"}</span>
       </button>
+      <button onClick={() => { onClose(); onboarding.start(); }}
+        className="mt-2 min-h-11 w-full bg-[#414667] px-3 text-left text-[12px]">Знакомство с петом</button>
       <button onClick={onHide} className="mt-2 min-h-11 w-full bg-transparent text-left text-[12px] text-[#eeb1d0]">
         Скрыть спутника
       </button>

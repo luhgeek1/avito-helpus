@@ -8,14 +8,22 @@ import { WorkspaceShell } from "@/widgets/workspace-shell";
 import { useRoute } from "./router/use-route";
 import { PortalShell } from "@/widgets/portal-shell";
 import { PortalProvider } from "./model/portal-provider";
+import { PetOnboardingProvider, usePetOnboarding } from "@/features/pet/onboarding";
 
-export function App({ children }: { children: ReactNode }) {
+function AppContent({ children }: { children: ReactNode }) {
   const { page, navigate } = useRoute();
+  const { active } = usePetOnboarding();
   return (
-    <PetPreferencesProvider>
+    <>
+      <div className="contents" inert={active}>
       {page === "pets" ? <WorkspaceShell page={page} navigate={navigate} companion={null}>{children}</WorkspaceShell>
           : <Suspense fallback={<div className="min-h-screen bg-white" />}><PortalProvider><PortalShell>{children}</PortalShell></PortalProvider></Suspense>}
+      </div>
       <PetCompanion />
-    </PetPreferencesProvider>
+    </>
   );
+}
+
+export function App({ children }: { children: ReactNode }) {
+  return <PetPreferencesProvider><PetOnboardingProvider><AppContent>{children}</AppContent></PetOnboardingProvider></PetPreferencesProvider>;
 }
