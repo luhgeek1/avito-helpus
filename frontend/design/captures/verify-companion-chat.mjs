@@ -1,3 +1,4 @@
+const baseURL = process.env.PET_TEST_URL ?? 'http://localhost:5173';
 import { chromium } from '/Users/stepanvasiliev/.codex/skills/design-studio/scripts/node_modules/playwright/index.mjs';
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
@@ -8,6 +9,7 @@ try {
   for (const width of [1440, 1366, 390, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 844 }, hasTouch: width < 650 });
     await context.addInitScript(() => {
+      localStorage.setItem("buddy-onboarding-v1", "done");
       if (localStorage.getItem('chat-test')) return;
       localStorage.setItem('chat-test', 'true');
       localStorage.setItem('buddy-pet', 'orbit');
@@ -15,7 +17,7 @@ try {
     });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto(baseURL + '/', { waitUntil: 'networkidle' });
     const pet = page.locator('.widget-pet');
     const chat = page.getByRole('dialog', { name: 'Орби', exact: true });
     const input = page.getByRole('textbox', { name: 'Сообщение спутнику' });
@@ -77,14 +79,16 @@ try {
     await page.keyboard.press('Escape'); assert.equal(await chat.count(), 0);
     assert.equal(await pet.evaluate(element => element === document.activeElement), true);
     await open(); await page.mouse.click(20, 150); assert.equal(await chat.count(), 0);
-    await page.goto('http://localhost:5173/pets', { waitUntil: 'networkidle' });
+    await page.goto(baseURL + '/pets', { waitUntil: 'networkidle' });
     await open(); assert.equal(await chat.locator('article').count(), 13); await page.keyboard.press('Escape');
     const box = await pet.boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down(); await page.mouse.move(width / 2, 55, { steps: 10 }); await page.mouse.up();
     await open(); await checkBounds();
     await page.screenshot({ path: `frontend/design/captures/companion-chat-edge-${width}.png` });
-    await page.setViewportSize({ width, height: 400 }); await checkBounds();
+    await page.setViewportSize({ width, height: 400 });
+    await page.waitForFunction(() => { const b = document.querySelector('#companion-chat')?.getBoundingClientRect(); return b && b.top >= 8 && b.bottom <= innerHeight - 8; });
+    await checkBounds();
     await page.screenshot({ path: `frontend/design/captures/companion-chat-short-${width}.png` });
     await page.keyboard.press('Escape');
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -98,6 +102,7 @@ try {
   for (const mode of ['corrupt', 'disabled']) {
     const context = await browser.newContext();
     await context.addInitScript(mode => {
+      localStorage.setItem("buddy-onboarding-v1", "done");
       localStorage.setItem('buddy-pet', 'orbit');
       localStorage.setItem('buddy-chat', '{broken');
       if (mode === 'disabled') {
@@ -107,7 +112,7 @@ try {
       }
     }, mode);
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto(baseURL + '/', { waitUntil: 'networkidle' });
     await page.locator('.widget-pet').click(); await page.getByRole('button', { name: 'Чат', exact: true }).click();
     await page.getByRole('textbox').fill('Привет'); await page.getByRole('button', { name: 'Отправить сообщение' }).click();
     assert.equal(await page.locator('.companion-chat article').count(), 7);

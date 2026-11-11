@@ -1,3 +1,4 @@
+const baseURL = process.env.PET_TEST_URL ?? 'http://localhost:5173';
 import { chromium } from '/Users/stepanvasiliev/.codex/skills/design-studio/scripts/node_modules/playwright/index.mjs';
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
@@ -8,12 +9,13 @@ try {
   for (const width of [1440, 390, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 650 });
     await context.addInitScript(() => {
+      localStorage.setItem("buddy-onboarding-v1", "done");
       localStorage.setItem('buddy-pet', 'orbit');
       localStorage.setItem('buddy-favorites', '["orbit","orbi-neo"]');
     });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto(baseURL + '/', { waitUntil: 'networkidle' });
     const pet = page.locator('.widget-pet');
     const cdp = await context.newCDPSession(page);
     async function dragTo(x, y, check, touch = false) {

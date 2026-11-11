@@ -9,6 +9,7 @@ try {
     const context = await browser.newContext({ viewport: { width, height: 844 },
       recordVideo: { dir: 'frontend/design/captures', size: { width, height: 844 } } });
     await context.addInitScript(() => {
+      localStorage.setItem("buddy-onboarding-v1", "done");
       localStorage.setItem('buddy-pet', 'orbit');
       localStorage.setItem('buddy-favorites', '["orbit","orbi-neo"]');
     });

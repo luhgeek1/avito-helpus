@@ -7,7 +7,7 @@ const reports = [];
 try {
   for (const mode of ['production', 'development']) for (const width of [1440, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
-    await context.addInitScript(() => localStorage.setItem('buddy-pet', 'orbit'));
+    await context.addInitScript(() => { localStorage.setItem('buddy-onboarding-v1', 'done'); localStorage.setItem('buddy-pet', 'orbit'); });
     const page = await context.newPage();
     const cdp = await context.newCDPSession(page);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });

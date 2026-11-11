@@ -19,6 +19,7 @@ try {
   for (const width of [1440, 390, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 650 });
     await context.addInitScript(() => {
+      localStorage.setItem("buddy-onboarding-v1", "done");
       if (localStorage.getItem('merge-test')) return;
       localStorage.setItem('merge-test', 'true');
       localStorage.setItem('buddy-pet', 'orbit');

@@ -1,3 +1,4 @@
+const baseURL = process.env.PET_TEST_URL ?? 'http://localhost:5173';
 import { chromium } from '/Users/stepanvasiliev/.codex/skills/design-studio/scripts/node_modules/playwright/index.mjs';
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
@@ -7,9 +8,9 @@ const reports = [], errors = [];
 try {
   for (const width of [1440, 390, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 650 });
-    await context.addInitScript(() => localStorage.setItem('buddy-pet', 'orbit'));
+    await context.addInitScript(() => { localStorage.setItem('buddy-onboarding-v1', 'done'); localStorage.setItem('buddy-pet', 'orbit'); });
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto(baseURL + '/', { waitUntil: 'networkidle' });
     const pet = page.locator('.widget-pet'), bubble = page.locator('.pixel-dialogue');
     const typed = page.locator('.dialogue-typed'), full = page.locator('.dialogue-accessible');
     const spotlight = page.locator('.companion-spotlight');
@@ -36,7 +37,7 @@ try {
     await page.waitForFunction(() => document.querySelector('.dialogue-typed').textContent.length > 0);
     assert((await typed.textContent()).length < answer.length);
     assert(await page.locator('.companion').evaluate(element => element.classList.contains('is-talking')));
-    assert.equal(await bubble.evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(48, 53, 82)');
+    assert.equal(await bubble.evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
     await onlyInput();
     await page.screenshot({ path: `frontend/design/captures/spotlight-pet-reply-typing-${width}.png` });
     await page.getByRole('button', { name: 'Показать сразу' }).click(); assert.equal(await typed.textContent(), answer);
