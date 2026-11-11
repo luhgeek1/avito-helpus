@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "buttons": 3,
+      "arc": true,
+      "singleClick": true,
+      "doubleClick": true,
+      "doubleEnter": true,
+      "actions": true,
+      "drag": true,
+      "edgePlacement": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 390,
+      "buttons": 3,
+      "arc": true,
+      "singleClick": true,
+      "doubleClick": true,
+      "doubleEnter": true,
+      "actions": true,
+      "drag": true,
+      "edgePlacement": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 320,
+      "buttons": 3,
+      "arc": true,
+      "singleClick": true,
+      "doubleClick": true,
+      "doubleEnter": true,
+      "actions": true,
+      "drag": true,
+      "edgePlacement": true,
+      "reducedMotion": true
+    }
+  ],
+  "errors": []
+}

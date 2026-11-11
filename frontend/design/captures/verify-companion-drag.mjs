@@ -14,7 +14,7 @@ try {
  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('buddy-position')));
  await page.reload();await pet.waitFor();box=await widget.boundingBox();assert.equal(box.x,saved.x);assert.equal(box.y,saved.y);
  await dragTo(-200,-200);box=await widget.boundingBox();assert.equal(box.x,8);assert.equal(box.y,8);
- await pet.click();let bubble=await page.locator('.widget-bubble').boundingBox();assert(bubble.x>=0 && bubble.y>=0 && bubble.x+bubble.width<=1440 && bubble.y+bubble.height<=900);
+ await pet.dblclick();let bubble=await page.locator('.widget-bubble').boundingBox();assert(bubble.x>=0 && bubble.y>=0 && bubble.x+bubble.width<=1440 && bubble.y+bubble.height<=900);
  await page.screenshot({path:'frontend/design/captures/draggable-companion-desktop.png'});
  await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();
  await dragTo(1700,1200);box=await widget.boundingBox();assert(box.x+box.width<=1440 && box.y+box.height<=900);
@@ -29,7 +29,7 @@ try {
  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:100,y:220}]});
  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
  await phone.waitForTimeout(100);const moved=await phone.locator('.companion').boundingBox();assert(moved.y<300);assert.equal(await phone.locator('.widget-bubble').count(),0);
- await phone.locator('.widget-pet').tap();const mb=await phone.locator('.widget-bubble').boundingBox();assert(mb.x>=0 && mb.x+mb.width<=390 && mb.y>=0 && mb.y+mb.height<=844);
+ await phone.locator('.widget-pet').tap();await phone.waitForTimeout(80);await phone.locator('.widget-pet').tap();const mb=await phone.locator('.widget-bubble').boundingBox();assert(mb.x>=0 && mb.x+mb.width<=390 && mb.y>=0 && mb.y+mb.height<=844);
  await phone.screenshot({path:'frontend/design/captures/draggable-companion-mobile.png'});
  assert.deepEqual(errors,[]);console.log('PASS: mouse/touch dragging, boundary clamping, persistence, resize, keyboard, hide/restore, click vs drag, bubbles on desktop/mobile; no browser errors');
 } finally {await browser.close();}

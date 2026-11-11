@@ -31,7 +31,7 @@ try {
   const download=await downloadPromise;assert.match(await readFile(await download.path(),'utf8'),/viewBox="0 0 32 32"/);
   await page.getByRole('button',{name:'Рассмотреть: Неоновый разведчик Нео',exact:true}).click();
   assert.equal(await page.locator('.pet-detail .pixel-pet').getAttribute('viewBox'),'0 0 64 64');
-  await page.getByRole('button',{name:'Выбрать бадди',exact:true}).click();assert.match(await page.locator('.dialogue-name').textContent(),/Нео/);
+  await page.getByRole('button',{name:'Выбрать бадди',exact:true}).click();await page.locator('.widget-pet').dblclick();assert.match(await page.locator('.dialogue-name').textContent(),/Нео/);
   assert.equal(await page.evaluate(()=>localStorage.getItem('buddy-pet')),'orbi-neo');
   await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();
   await page.getByRole('button',{name:'Приостановить анимацию',exact:true}).click();assert(await page.locator('.pixel-pet').first().evaluate(e=>e.classList.contains('is-paused')));

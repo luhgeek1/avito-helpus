@@ -9,7 +9,7 @@ try {
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://localhost:5173/',{waitUntil:'networkidle'});
   const pet=page.locator('.widget-pet'), panel=page.locator('.pixel-dialogue'), typed=page.locator('.dialogue-typed');
-  await pet.click();await panel.waitFor();
+  await pet.dblclick();await panel.waitFor();
   const whole=await page.locator('.dialogue-reserve').textContent();
   await page.waitForTimeout(250);let partial=await typed.textContent();assert(partial.length>0&&partial.length<whole.length);
   assert(await page.locator('.companion').evaluate(e=>e.classList.contains('is-talking')));
@@ -22,10 +22,10 @@ try {
   await page.waitForTimeout(350);assert.equal(await typed.textContent(),whole,'Skipped text must remain complete');
   assert(!(await page.locator('.companion').evaluate(e=>e.classList.contains('is-talking'))));
   await page.screenshot({path:`frontend/design/captures/pixel-dialogue-${viewport.width}.png`});
-  await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();await pet.click();await page.waitForTimeout(250);assert((await typed.textContent()).length<whole.length,'Reopen restarts typing');
+  await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();await pet.dblclick();await page.waitForTimeout(250);assert((await typed.textContent()).length<whole.length,'Reopen restarts typing');
   await page.getByRole('button',{name:'Закрыть приветствие',exact:true}).click();
   let b=await pet.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(20,100,{steps:8});await page.mouse.up();
-  assert.equal(await panel.count(),0,'Dragging must not open dialogue');await pet.click();
+  assert.equal(await panel.count(),0,'Dragging must not open dialogue');await pet.dblclick();
   b=await panel.boundingBox();assert(b.x>=0&&b.x+b.width<=viewport.width&&b.y>=0&&b.y+b.height<=viewport.height,'Edge placement');
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(50);assert.equal(await typed.textContent(),whole);
   await context.close();

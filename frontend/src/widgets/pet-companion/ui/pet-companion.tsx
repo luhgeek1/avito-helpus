@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { useRouter } from "next/navigation";
+import { CompanionOrbitMenu } from "./companion-orbit-menu";
+import { CompanionSettings } from "./companion-settings";
+import { useCompanionActions } from "../model/use-companion-actions";
 import { Volume2, X } from "lucide-react";
 import { PixelPet, usePetPreferences } from "@/entities/pet";
 import { useTypewriter } from "../model/use-typewriter";
@@ -9,13 +13,16 @@ export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
   const [widgetSpeaking, setWidgetSpeaking] = useState(false);
+  const router = useRouter();
   const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible);
+  const actions = useCompanionActions(movement.ref, setWidgetSpeaking, movement.dragging, widgetVisible);
   useEffect(() => {
     if (selectionVersion > 0) {
       setWidgetVisible(true);
-      setWidgetSpeaking(true);
+      setWidgetSpeaking(false);
+      actions.dismiss();
     }
-  }, [selectionVersion]);
+  }, [selectionVersion, actions.dismiss]);
   const dialogue = useTypewriter(chosenPet?.greeting ?? "", widgetSpeaking && widgetVisible, paused);
   const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
     movement.style.left, movement.style.top);
@@ -34,6 +41,8 @@ export function PetCompanion() {
             } as CSSProperties
           }
         >
+          {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
+            onClose={actions.dismiss} onHide={() => { actions.dismiss(); setWidgetVisible(false); }} />}
           {widgetSpeaking && (
             <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-3 pb-2 text-[#faf7ff] bg-[#303552]
             rounded-[0] [box-shadow:0_0_0_3px_#373b60,_6px_6px_0_3px_#373b6026] font-pixel text-[10px] font-normal
@@ -85,15 +94,30 @@ export function PetCompanion() {
           <button
             className={`widget-pet flex flex-col items-center bg-transparent w-full cursor-grab touch-none select-none
             [-webkit-user-select:none] max-sm:[&_.pixel-pet]:w-24 max-sm:[&_.pixel-pet]:h-24 p-0`}
-            onClick={() => {
-              if (!movement.consumeDragClick()) setWidgetSpeaking(!widgetSpeaking);
+            onClick={(event) => {
+              if (movement.consumeDragClick()) { actions.dismiss(); return; }
+              actions.activate(event.detail > 1);
             }}
             {...movement.handlers}
-            title="Перетащите спутника или перемещайте стрелками клавиатуры"
-            aria-label={`Поговорить с ${chosenPet.name}`}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                if (!event.repeat) actions.activate();
+              } else movement.handlers.onKeyDown(event);
+            }}
+            aria-expanded={actions.menuOpen}
+            aria-controls="companion-actions"
+            title="Нажмите для меню. Двойной клик или два Enter — реплика. Можно перетаскивать."
+            aria-label={`Действия спутника ${chosenPet.name}`}
           >
             <PixelPet pet={chosenPet} size={128} paused={paused} />
           </button>
+          <CompanionOrbitMenu anchor={movement.ref} position={movement.style} open={actions.menuOpen}
+            onAction={(action) => {
+              if (action === "chat") actions.chat();
+              if (action === "settings") actions.settings();
+              if (action === "wardrobe") { actions.dismiss(); router.push("/pets"); }
+            }} />
         </div>
       )}
       {chosenPet && !widgetVisible && (

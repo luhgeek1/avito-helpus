@@ -60,8 +60,8 @@ Dev и production-сервер по умолчанию доступны на htt
 
 Оригинальный Орби рисуется в `entities/pet/lib/mascot-sprites.ts` на 32×32 с боковыми деталями, ножками и шарфом. Его четыре исходных кадра сохраняются. Вариации `orbi-*` рисуются отдельно на 64×64: `orbi-base.ts`, `orbi-sprites.ts`, `orbi-details.ts`, `orbi-detail-painter.ts`. Они парят без конечностей. Данные и палитры — в `entities/pet/config/`.
 
-Избранное хранится в `buddy-favorites`, выбранный спутник — в `buddy-pet`, положение — в `buddy-position`. Спутника можно перетаскивать мышью/пальцем или двигать стрелками. По клику слева открывается пиксельная реплика с печатью по буквам; у краёв окно меняет сторону. Кнопка «Показать сразу» завершает печать. При reduced motion или паузе весь текст виден сразу.
+Избранное хранится в `buddy-favorites`, выбранный спутник — в `buddy-pet`, положение — в `buddy-position`. Спутника можно перетаскивать мышью/пальцем или двигать стрелками. Одиночный клик/тап раскрывает три пиксельных кружка по дуге: чат, гардероб и настройки. Двойной клик/тап или два Enter открывают пиксельную реплику с печатью по буквам; у краёв окно меняет сторону. Кнопка «Показать сразу» завершает печать. При reduced motion или паузе весь текст виден сразу.
 
-UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
+UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`, `verify-orbit-menu.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
 
 Общие требования — `../AGENTS.md`, дизайн — `../DESIGN.md`, история — `../CONTEXT.md`.

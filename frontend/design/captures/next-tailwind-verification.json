@@ -109,14 +109,5 @@
       "noOverflow": true
     }
   ],
-  "errors": [],
-  "production": {
-    "nextStart": true,
-    "routes": [
-      "/",
-      "/pets?pet=orbit"
-    ],
-    "dialogue": true,
-    "errors": []
-  }
+  "errors": []
 }
