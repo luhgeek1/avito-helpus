@@ -1,0 +1,30 @@
+{
+  "reports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "smoothShrink": true,
+      "cornerLanding": true,
+      "stableFinalFrames": true,
+      "frames": 35
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "smoothShrink": true,
+      "cornerLanding": true,
+      "stableFinalFrames": true,
+      "frames": 56
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "smoothShrink": true,
+      "cornerLanding": true,
+      "stableFinalFrames": true,
+      "frames": 55
+    }
+  ],
+  "reducedMotion": true,
+  "errors": []
+}

@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePetPreferences } from "@/entities/pet";
 import { usePetOnboarding } from "@/features/pet/onboarding";
 import type { useCompanionPosition } from "./use-companion-position";
 import type { useCompanionActions } from "./use-companion-actions";
 import type { useSpotlightShortcut } from "./use-spotlight-shortcut";
+
+import { useTourExit } from "./use-tour-exit";
 
 type Scene = "intro" | "menu" | "chat" | "wardrobe" | "settings" | "spotlight" | "move";
 const order: Scene[] = ["intro", "menu", "wardrobe", "settings", "spotlight", "move"];
@@ -30,7 +32,14 @@ export function useCompanionTour(controls: Controls) {
   const dragged = useRef(false);
   const sceneRef = useRef(scene); sceneRef.current = scene;
   const scale = viewport.width > 1000 ? 3 : viewport.width > 650 ? 1.75 : 2;
-  const finish = useRef(onboarding.finish); finish.current = onboarding.finish;
+  const exit = useTourExit({ active, anchor: controls.movement.ref,
+    prepare: () => { const c = live.current; c.actions.dismiss(); c.spotlight.close(); c.silence(); c.show(); },
+    land: target => {
+      original.current = target; dragged.current = false;
+      try { localStorage.setItem("buddy-position", JSON.stringify(target)); } catch { /* Keep the corner in memory. */ }
+    }, complete: onboarding.finish,
+  });
+  const finish = useRef(exit.finish); finish.current = exit.finish;
   const advance = useCallback(() => {
     const current = sceneRef.current;
     if (current === "move") finish.current();
@@ -41,7 +50,7 @@ export function useCompanionTour(controls: Controls) {
     resize(); window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!active) { setScene("intro"); return; }
     const c = live.current, box = c.movement.ref.current?.getBoundingClientRect();
     if (box && !original.current) {
@@ -62,7 +71,7 @@ export function useCompanionTour(controls: Controls) {
     };
   }, [active]);
   useEffect(() => {
-    if (!active) return;
+    if (!active || exit.closing) return;
     const c = live.current, compact = viewport.width <= 650;
     const width = (compact ? 144 : 160) * scale;
     const height = (compact ? 96 : 128) * scale;
@@ -88,12 +97,12 @@ export function useCompanionTour(controls: Controls) {
       if (scene === "spotlight" && compact) current.spotlight.show();
     }, duration + 120);
     return () => { clearTimeout(timer); cancelAnimationFrame(frame); animation?.cancel(); };
-  }, [active, scene, viewport, scale]);
+  }, [active, scene, viewport, scale, exit.closing]);
   useEffect(() => {
     if (active && scene === "move" && controls.movement.dragging) dragged.current = true;
   }, [active, scene, controls.movement.dragging]);
-  return { active, scene, text: copy[scene].replace("{name}", chosenPet?.name ?? "Орби"), viewport, scale, next: advance,
-    finish: onboarding.finish, visit: setScene,
+  return { active, scene, text: copy[scene].replace("{name}", chosenPet?.name ?? "Орби"), viewport, scale, closing: exit.closing, next: advance,
+    finish: exit.finish, visit: setScene,
     dragged: () => { if (active && scene === "move") dragged.current = true; },
   };
 }
