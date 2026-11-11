@@ -35,9 +35,9 @@ export function PetCompanion() {
           }
         >
           {widgetSpeaking && (
-            <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-5 pb-3 text-[#faf7ff] bg-[#303552]
+            <div ref={placement.ref} className={`widget-bubble pixel-dialogue fixed z-36 w-81 max-w-[calc(100vw_-_16px)] pt-3 pb-2 text-[#faf7ff] bg-[#303552]
             rounded-[0] [box-shadow:0_0_0_3px_#373b60,_6px_6px_0_3px_#373b6026] font-pixel text-[10px] font-normal
-            leading-[2] [-webkit-font-smoothing:none] animate-dialogue-open max-sm:pt-[18px] max-sm:pb-[10px]
+            leading-[1.6] [-webkit-font-smoothing:none] animate-dialogue-open max-sm:pt-[10px] max-sm:pb-[6px]
             max-sm:text-[9px] [&[data-side=left]::after]:[content:''] [&[data-side=left]::after]:absolute
             [&[data-side=left]::after]:top-[calc(50%_-_8px)] [&[data-side=left]::after]:w-2 [&[data-side=left]::after]:h-4
             [&[data-side=left]::after]:bg-[#e9e5ff] [&[data-side=left]::after]:[box-shadow:4px_4px_#373b60]
@@ -47,11 +47,11 @@ export function PetCompanion() {
             [&[data-side=right]::after]:[box-shadow:4px_4px_#373b60] [&[data-side=right]::after]:left-[-12px]
             [&_>_button]:absolute [&_>_button]:top-1 [&_>_button]:right-1 [&_>_button]:grid [&_>_button]:place-items-center
             [&_>_button]:w-8 [&_>_button]:h-8 [&_>_button]:bg-transparent [&_>_button]:text-[#c7bbdf]
-            [&_>_button:hover]:text-white border-[4px] border-solid border-[#e9e5ff] [&_>_button]:p-0 px-[18px] max-sm:px-3`}
+            [&_>_button:hover]:text-white border-[4px] border-solid border-[#e9e5ff] [&_>_button]:p-0 px-3 max-sm:px-[10px]`}
               style={placement.style} data-side={placement.side}>
-              <strong className={`dialogue-name block mb-3 pr-6 text-[#9de1f3] [font-family:inherit] text-[11px] font-[inherit]
+              <strong className={`dialogue-name block mb-[6px] pr-6 text-[#9de1f3] [font-family:inherit] text-[11px] font-[inherit]
             [font-style:inherit] leading-[inherit] max-sm:text-[10px]`}>{chosenPet.name}</strong>
-              <div className="dialogue-copy flex gap-[10px] max-xs:gap-[8px] xs:max-sm:gap-[8px]" aria-hidden="true">
+              <div className="dialogue-copy flex gap-2 max-sm:gap-[6px]" aria-hidden="true">
                 <span className="dialogue-star text-[#d7b5ff]">*</span>
                 <span className="dialogue-lines grid min-w-[0] [overflow-wrap:anywhere]">
                   <span className="dialogue-reserve [grid-area:1_/_1] invisible">{chosenPet.greeting}</span>
@@ -59,10 +59,10 @@ export function PetCompanion() {
                 </span>
               </div>
               <span className={`dialogue-accessible absolute w-[1px] h-[1px] overflow-hidden [clip-path:inset(50%)] whitespace-nowrap`} role="status">{chosenPet.greeting}</span>
-              <div className="dialogue-footer flex justify-end h-[28px] mt-[10px]">
+              <div className="dialogue-footer flex items-center justify-end h-4 mt-1 leading-none">
                 {dialogue.typing ? (
                   <button className={`dialogue-skip pr-0 pl-2 bg-transparent text-[#c7bbdf] [font-family:inherit] text-[8px] font-[inherit]
-            [font-style:inherit] leading-[inherit] max-sm:text-[7px] [&:hover]:text-white py-1`} onClick={dialogue.complete}>Показать сразу</button>
+            [font-style:inherit] leading-[inherit] max-sm:text-[7px] [&:hover]:text-white py-0`} onClick={dialogue.complete}>Показать сразу</button>
                 ) : <span className="dialogue-ready text-[#ee95bf] animate-dialogue-cursor" aria-hidden="true">◆</span>}
               </div>
               <button
