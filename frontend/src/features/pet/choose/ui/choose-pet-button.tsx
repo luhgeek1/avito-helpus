@@ -5,21 +5,20 @@ export function ChoosePetButton({ pet }: { pet: Pet }) {
   const { chosenPet, choosePet } = usePetPreferences();
   return (
     <button
-      className={`primary-button adopt-button flex items-center justify-between gap-[10px] bg-[#8067b6] text-white text-[11px]
-            font-[450] min-h-[42px] rounded-[7px] [transition:background_0.18s,_transform_0.18s] [&:hover]:bg-[#6c54a0]
-            [&:active]:[transform:translateY(1px)] w-full max-xs:text-[11px] max-sm:min-h-11 max-sm:gap-1
-            xs:max-sm:text-[9px] max-sm:[&_svg]:w-[14px] max-sm:p-[10px] py-3 px-5`}
+      className="flex min-h-10.5 w-full items-center justify-between gap-2.5 rounded-[7px] bg-[#8067b6] px-5 py-3 text-11
+            font-[450] text-white transition-[background,translate] duration-180 hover:bg-[#6c54a0] active:translate-y-px
+            max-sm:min-h-11 max-sm:gap-1 max-sm:p-2.5 max-xs:text-11 xs:max-sm:text-9"
       onClick={() => choosePet(pet)}
     >
       {chosenPet?.id === pet.id ? (
         <>
-          <Check size={17} />
+          <Check size={17} className="max-sm:w-3.5" />
           Мой бадди
         </>
       ) : (
         <>
           Выбрать бадди
-          <ArrowRight size={17} />
+          <ArrowRight size={17} className="max-sm:w-3.5" />
         </>
       )}
     </button>

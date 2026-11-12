@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { usePetPreferences } from "@/entities/pet";
 import type { Pet } from "@/entities/pet";
+import { cx } from "@/shared/lib/cx";
 
 export function FavoritePetButton({
   pet,
@@ -15,13 +16,13 @@ export function FavoritePetButton({
   return (
     <button
       type="button"
-      className={`favorite-button inline-flex items-center justify-center gap-2 w-11 h-11 rounded-[9px] bg-white text-[#94819f]
-            [transition:color_150ms,_background_150ms] [&:hover]:text-[#be668d] [&:hover]:bg-[#fdf1f6]
-            [&.is-favorite]:text-[#bd5f89] [&.with-label]:w-full [&.with-label]:h-10 [&.with-label]:mt-2
-            [&.with-label]:rounded-[6px] [&.with-label]:text-[#8b779a] [&.with-label]:text-[10px]
-            max-sm:[&.with-label]:h-11 max-sm:[&.with-label]:text-[9px] [&.with-label.is-favorite]:bg-[#fff2f7]
-            [&.with-label.is-favorite]:text-[#b75f86] [&.with-label]:border [&.with-label]:border-solid
-            [&.with-label]:border-[#ebe5ef] [&.with-label.is-favorite]:border-[#efd7e2] p-0 ${isFavorite ? "is-favorite" : ""}  ${showLabel ? "with-label" : ""}`}
+      className={cx(
+        "inline-flex size-11 items-center justify-center gap-2 rounded-[9px] bg-white p-0 text-[#94819f]",
+        "transition-[color,background] duration-150 hover:bg-[#fdf1f6] hover:text-[#be668d]",
+        isFavorite && "text-[#bd5f89]",
+        showLabel && "mt-2 h-10 w-full rounded-md border border-[#ebe5ef] text-10 text-[#8b779a] max-sm:h-11 max-sm:text-9",
+        showLabel && isFavorite && "border-[#efd7e2] bg-[#fff2f7] text-[#b75f86]",
+      )}
       onClick={() => toggleFavorite(pet.id)}
       aria-label={label}
       aria-pressed={isFavorite}
