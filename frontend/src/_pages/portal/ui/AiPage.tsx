@@ -70,8 +70,11 @@ export function AiPage() {
                 type="button"
                 role="tab"
                 aria-selected={item.id === topicId}
-                // The original item rule outranked the active one, so the selected tab looks the same.
-                className="inline-flex h-10 items-center rounded-xl border-0 bg-white/10 px-4 text-white transition-colors duration-150 ease-out hover:bg-white/18 hover:duration-200"
+                // The original item rule outranked the active one: the selected tab differs only by its hover text colour.
+                className={cx(
+                  'inline-flex h-10 items-center rounded-xl border-0 bg-white/10 px-4 text-white transition-colors duration-150 ease-out hover:bg-white/18 hover:duration-200',
+                  item.id === topicId && 'hover:text-primary',
+                )}
                 onClick={() => setTopicId(item.id)}
               >
                 {item.title}
