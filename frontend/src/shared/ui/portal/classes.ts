@@ -6,6 +6,9 @@ export { cx }
 /** Page column with the portal gutter: 24px, 16px on phones. */
 export const container = 'mx-auto w-full max-w-341 px-6 hub-max-720:max-w-337 hub-max-720:px-4'
 
+/** Blue focus ring of portal form controls; buttons and links keep the global ring. */
+export const focusRing = 'focus-visible:outline-3 focus-visible:outline-focus focus-visible:outline-offset-0'
+
 /** Sets the tone-* colours for a card, avatar or badge. */
 export const paletteClass: Record<Palette, string> = {
   blue: 'palette-blue',

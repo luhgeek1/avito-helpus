@@ -6,7 +6,7 @@ import { initials } from '@/shared/lib/portal-format'
 import { buttonClass, chipClass, cx, heading, paletteClass, type ButtonSize, type ButtonVariant } from './classes'
 import { Illustration } from './Illustration'
 
-export { buttonClass, chipClass, container, cx, heading, paletteClass } from './classes'
+export { buttonClass, chipClass, container, cx, focusRing, heading, paletteClass } from './classes'
 
 /* ---------- Ссылка на путь из данных ---------- */
 
