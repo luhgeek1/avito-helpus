@@ -1,0 +1,48 @@
+{
+  "base": "http://127.0.0.1:5180",
+  "results": [
+    {
+      "width": 1440,
+      "route": "/",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1440,
+      "route": "/services",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1440,
+      "route": "/pets?pet=orbit",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "route": "/services",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "route": "/pets?pet=orbit",
+      "status": 200,
+      "noBrokenImages": true,
+      "noOverflow": true
+    }
+  ],
+  "errors": []
+}

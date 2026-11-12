@@ -5,6 +5,8 @@ on:
     branches: [main, deploy/home-server]
     paths:
       - 'frontend/**'
+      - '!frontend/design/**'
+      - '!frontend/**/*.md'
       - '.github/workflows/deploy-home.yml'
   workflow_dispatch:
 

@@ -46,7 +46,7 @@ curl --fail 'http://127.0.0.1:5180/pets?pet=orbit' >/dev/null
 
 Workflow: `.github/workflows/deploy-home.yml` в корне репозитория.
 
-1. Push в `main` или `deploy/home-server`, затрагивающий `frontend/**` или workflow, запускает TypeScript, тесты, Steiger и Docker build.
+1. Push в `main` или `deploy/home-server`, затрагивающий `frontend/**` или workflow, запускает TypeScript, тесты, Steiger и Docker build. Документация и `frontend/design/**` исключены: обновление отчётов и исходников иллюстраций не меняет поставляемое приложение. Новые готовые изображения в `frontend/public/**` запускают сборку.
 2. Образ публикуется в GHCR с тегом SHA. Ветка `deploy/home-server` только собирается.
 3. Только `main` запускает деплой: Tailscale → SSH с pinned host key → `avito <sha>` → ожидание healthy.
 4. Проверяются публичные HTTPS `/healthz` и `/pets?pet=orbit`. `workflow_dispatch` позволяет повторить процесс; для выкладки выбери `main`.
