@@ -1,9 +1,7 @@
-import { portalGlobals } from '@/shared/ui/portal'
 import { useState } from 'react'
 import type { Illustration as IllustrationName, Palette } from '@/shared/api'
-import { cx, Illustration } from '@/shared/ui/portal'
-import p from './pages.styles'
-import s from './ai.styles'
+import { container, cx, heading, Illustration, paletteClass } from '@/shared/ui/portal'
+import { besideCornerArt, page } from './classes'
 
 type Topic = { id: string; title: string; cards: { title: string; text: string; illustration: IllustrationName; palette: Palette }[] }
 
@@ -60,19 +58,20 @@ export function AiPage() {
   const topic = TOPICS.find((item) => item.id === topicId) ?? TOPICS[0]
 
   return (
-    <div className={`${portalGlobals.container} ${p.page}`}>
-      <section className={s.hero}>
+    <div className={cx(container, page)}>
+      <section className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-6 overflow-hidden rounded-3xl bg-dark px-10 pt-12 pb-10 text-white hub-max-900:grid-cols-1 hub-max-720:px-5 hub-max-720:py-7">
         <div>
-          <h1>Искусственный интеллект в Авито</h1>
-          <p className={s.lead}>Создаём продукты и инструменты на основе ИИ — для пользователей и для себя</p>
-          <div className={s.nav} role="tablist" aria-label="Разделы">
+          <h1 className={cx(heading.h1, 'mb-3')}>Искусственный интеллект в Авито</h1>
+          <p className="mb-7 max-w-130 text-16 leading-6 text-white/72">Создаём продукты и инструменты на основе ИИ — для пользователей и для себя</p>
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Разделы">
             {TOPICS.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 role="tab"
                 aria-selected={item.id === topicId}
-                className={cx(s.navItem, item.id === topicId && s.navActive)}
+                // The original item rule outranked the active one, so the selected tab looks the same.
+                className="inline-flex h-10 items-center rounded-xl border-0 bg-white/10 px-4 text-white transition-colors duration-150 ease-out hover:bg-white/18 hover:duration-200"
                 onClick={() => setTopicId(item.id)}
               >
                 {item.title}
@@ -80,22 +79,29 @@ export function AiPage() {
             ))}
           </div>
         </div>
-        <div className={s.art} aria-hidden>
-          <Illustration name="robot" size={160} className={cx(s.artItem, 'left-0 top-[10px]')} />
-          <Illustration name="sparkles" size={84} className={cx(s.artItem, 'right-0 top-0')} />
-          <Illustration name="chip" size={96} className={cx(s.artItem, 'right-0 bottom-0')} />
+        <div className="relative h-55 w-65 hub-max-900:hidden" aria-hidden>
+          <Illustration name="robot" size={160} className="absolute top-2.5 left-0" />
+          <Illustration name="sparkles" size={84} className="absolute top-0 right-0" />
+          <Illustration name="chip" size={96} className="absolute right-0 bottom-0" />
         </div>
       </section>
 
-      <section className={s.section} role="tabpanel" aria-label={topic.title}>
-        <h2>{topic.title}</h2>
-        <p>Демо-раздел: описания условные и нужны для прототипа</p>
-        <div className={s.grid}>
+      <section role="tabpanel" aria-label={topic.title}>
+        <h2 className={cx(heading.h2, 'mb-1')}>{topic.title}</h2>
+        <p className="mb-5 text-secondary">Демо-раздел: описания условные и нужны для прототипа</p>
+        <div className="grid grid-cols-3 gap-4 hub-max-720:grid-cols-1">
           {topic.cards.map((card) => (
-            <article key={card.title} className={cx(s.card, portalGlobals[`palette-${card.palette}`])}>
-              <h3>{card.title}</h3>
-              <p>{card.text}</p>
-              <Illustration name={card.illustration} size={124} className={s.cardArt} />
+            <article
+              key={card.title}
+              className={cx(
+                'relative flex min-h-42 flex-col gap-1.5 overflow-hidden rounded-3xl bg-tone-soft px-6 py-5',
+                paletteClass[card.palette],
+              )}
+            >
+              <h3 className={cx(heading.h3, besideCornerArt)}>{card.title}</h3>
+              <p className={cx(besideCornerArt, 'text-secondary')}>{card.text}</p>
+              <Illustration name={card.illustration} size={124} className="absolute -right-1.5 -bottom-4 h-auto w-[min(40%,124px)] hub-max-720:-right-2.5 hub-max-720:size-26"
+              />
             </article>
           ))}
         </div>
