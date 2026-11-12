@@ -10,6 +10,7 @@ import type {
   CalendarItem,
   Channel,
   CompanyEvent,
+  Illustration,
   Notification,
   Person,
   PersonShort,
@@ -274,38 +275,38 @@ export const benefitServiceCategories: Record<string, string[]> = {
   care: ['Здоровье'],
 }
 
-type BenefitArticleSeed = { id: string; title: string; text: string; emoji: string }
+type BenefitArticleSeed = { id: string; title: string; text: string; illustration: Illustration }
 
 export const benefitArticles: Record<string, BenefitArticleSeed[]> = {
   savings: [
-    { id: 'friend', title: 'Приведи друга', text: 'Порекомендуй знакомого в команду и получи вознаграждение после испытательного срока', emoji: '🤝' },
-    { id: 'partners', title: 'Скидки партнёров', text: 'Специальные условия на технику, путешествия и сервисы', emoji: '🏷️' },
-    { id: 'merch', title: 'Мерч со скидкой', text: 'Раз в квартал — скидка на коллекцию мерча', emoji: '👕' },
-    { id: 'delivery', title: 'Доставка для своих', text: 'Бесплатная доставка на заказы сотрудников в демо-программе', emoji: '📦' },
-    { id: 'tax', title: 'Налоговый вычет', text: 'Как вернуть часть уплаченного НДФЛ за обучение и спорт', emoji: '🧾' },
-    { id: 'cards', title: 'Подписки для сотрудников', text: 'Музыка, кино и книги по специальной цене', emoji: '🎧' },
+    { id: 'friend', title: 'Приведи друга', text: 'Порекомендуй знакомого в команду и получи вознаграждение после испытательного срока', illustration: 'hello-bubble' },
+    { id: 'partners', title: 'Скидки партнёров', text: 'Специальные условия на технику, путешествия и сервисы', illustration: 'tag' },
+    { id: 'merch', title: 'Мерч со скидкой', text: 'Раз в квартал — скидка на коллекцию мерча', illustration: 'tshirt' },
+    { id: 'delivery', title: 'Доставка для своих', text: 'Бесплатная доставка на заказы сотрудников в демо-программе', illustration: 'parcel' },
+    { id: 'tax', title: 'Налоговый вычет', text: 'Как вернуть часть уплаченного НДФЛ за обучение и спорт', illustration: 'receipt' },
+    { id: 'cards', title: 'Подписки для сотрудников', text: 'Музыка, кино и книги по специальной цене', illustration: 'headphones' },
   ],
   health: [
-    { id: 'dms', title: 'Программа ДМС', text: 'Что входит в страховку и как записаться к врачу', emoji: '🩺' },
-    { id: 'psy', title: 'Психологическая помощь', text: 'До шести бесплатных консультаций в год', emoji: '🧠' },
-    { id: 'checkup', title: 'Ежегодный чекап', text: 'Комплексное обследование в клиниках-партнёрах', emoji: '🫀' },
+    { id: 'dms', title: 'Программа ДМС', text: 'Что входит в страховку и как записаться к врачу', illustration: 'stethoscope' },
+    { id: 'psy', title: 'Психологическая помощь', text: 'До шести бесплатных консультаций в год', illustration: 'couch' },
+    { id: 'checkup', title: 'Ежегодный чекап', text: 'Комплексное обследование в клиниках-партнёрах', illustration: 'heart' },
   ],
   growth: [
-    { id: 'conf', title: 'Конференции', text: 'Как получить компенсацию участия в профильной конференции', emoji: '🎤' },
-    { id: 'english', title: 'Английский', text: 'Групповые занятия с преподавателем два раза в неделю', emoji: '🗣️' },
-    { id: 'review', title: 'Ревью компетенций', text: 'Как проходит ревью и как к нему подготовиться', emoji: '📈' },
+    { id: 'conf', title: 'Конференции', text: 'Как получить компенсацию участия в профильной конференции', illustration: 'microphone' },
+    { id: 'english', title: 'Английский', text: 'Групповые занятия с преподавателем два раза в неделю', illustration: 'chat-bubbles' },
+    { id: 'review', title: 'Ревью компетенций', text: 'Как проходит ревью и как к нему подготовиться', illustration: 'chart' },
   ],
   sport: [
-    { id: 'fitness', title: 'Компенсация фитнеса', text: 'Частичная компенсация абонемента в любой зал', emoji: '🏋️' },
-    { id: 'teams', title: 'Корпоративные команды', text: 'Футбол, бег, волейбол и киберспорт', emoji: '⚽️' },
+    { id: 'fitness', title: 'Компенсация фитнеса', text: 'Частичная компенсация абонемента в любой зал', illustration: 'dumbbell' },
+    { id: 'teams', title: 'Корпоративные команды', text: 'Футбол, бег, волейбол и киберспорт', illustration: 'football' },
   ],
   office: [
-    { id: 'booking', title: 'Как забронировать место', text: 'Правила гибридного графика и бронирования', emoji: '🪑' },
-    { id: 'food', title: 'Питание в офисе', text: 'Меню, кофе-поинты и компенсация обедов', emoji: '🍝' },
+    { id: 'booking', title: 'Как забронировать место', text: 'Правила гибридного графика и бронирования', illustration: 'chair' },
+    { id: 'food', title: 'Питание в офисе', text: 'Меню, кофе-поинты и компенсация обедов', illustration: 'food-bowl' },
   ],
   care: [
-    { id: 'volunteer', title: 'Волонтёрство', text: 'Проекты, в которых можно помочь вместе с коллегами', emoji: '🌱' },
-    { id: 'family', title: 'Поддержка семьи', text: 'Подарки к рождению ребёнка и детские праздники', emoji: '👶' },
+    { id: 'volunteer', title: 'Волонтёрство', text: 'Проекты, в которых можно помочь вместе с коллегами', illustration: 'plant-pot' },
+    { id: 'family', title: 'Поддержка семьи', text: 'Подарки к рождению ребёнка и детские праздники', illustration: 'stroller' },
   ],
 }
 
@@ -331,7 +332,7 @@ const benefitPostSeeds: PostSeed[] = Object.values(benefitArticles)
     publishedAt: hoursAgo(48 + index * 20),
     palette: (['green', 'blue', 'purple', 'red'] as const)[index % 4],
     coverLabel: article.title,
-    emoji: article.emoji,
+    illustration: article.illustration,
     lead: article.text,
     summary: null,
     body: [
@@ -351,7 +352,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'Стажировка',
     title: 'Первая неделя стажёра: что важно успеть',
     publishedAt: hoursAgo(1),
-    palette: 'green', emoji: '🎒',
+    palette: 'green', illustration: 'backpack',
     coverLabel: 'Чек-лист первой недели',
     lead: 'Собрали советы от стажёров прошлых наборов: доступы, знакомство с командой и первые задачи.',
     summary:
@@ -373,7 +374,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'Компания',
     title: 'Год качества: что изменилось и что дальше',
     publishedAt: hoursAgo(20),
-    palette: 'purple', emoji: '💎',
+    palette: 'purple', illustration: 'gem',
     coverLabel: 'Год качества',
     lead: 'Подводим промежуточные итоги инициатив по качеству продукта и делимся планами.',
     summary:
@@ -394,7 +395,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'Достижения',
     title: '«Самый надёжный релиз»: итоги октября',
     publishedAt: hoursAgo(3),
-    palette: 'blue', emoji: '🏆',
+    palette: 'blue', illustration: 'trophy',
     coverLabel: 'Итоги октября',
     lead: 'Инженерные команды традиционно подводят итоги месяца и отмечают тех, кто задал высокую планку.',
     summary: 'Отметили команды с самыми стабильными релизами и лучшими постмортемами месяца.',
@@ -413,7 +414,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'Инженерия',
     title: 'Как мы ускорили поиск по объявлениям',
     publishedAt: hoursAgo(30),
-    palette: 'dark', emoji: '🔍',
+    palette: 'dark', illustration: 'magnifier',
     coverLabel: 'Поиск',
     lead: 'Рассказываем, как переписали горячий путь поиска и что это дало пользователям.',
     summary: 'Команда вынесла ранжирование в отдельный сервис и добавила кеширование — это сократило задержку ответа.',
@@ -432,7 +433,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'События',
     title: 'Новогодний вечер: открыта регистрация',
     publishedAt: hoursAgo(50),
-    palette: 'red', emoji: '🎄',
+    palette: 'red', illustration: 'xmas-tree',
     coverLabel: 'Новый год',
     lead: 'Музыка, настолки, подарки и фотозона. Регистрируйтесь заранее — места ограничены.',
     summary: null,
@@ -450,7 +451,7 @@ export const postSeeds: PostSeed[] = [
     tag: 'Команда',
     title: 'Как устроено code review в нашей команде',
     publishedAt: hoursAgo(72),
-    palette: 'green', emoji: '👀',
+    palette: 'green', illustration: 'eyes',
     coverLabel: 'Code review',
     lead: 'Договорённости команды Платформы: сроки ответа, размер изменений и тон комментариев.',
     summary: 'Ревью — в течение рабочего дня, небольшие пулреквесты, доброжелательные комментарии с объяснением «почему».',
@@ -469,16 +470,16 @@ export const postSeeds: PostSeed[] = [
 /* ---------- События ---------- */
 
 export const events: CompanyEvent[] = [
-  { id: 'ev-1', title: 'ML-академия: задача регрессии', description: 'Открытая лекция для всех, кто хочет разобраться в основах ML', category: 'development', format: 'online', startsAt: daysFromNow(1, 10), place: 'Онлайн', palette: 'dark', emoji: '🧠', featured: true, registered: false, seatsLeft: null },
-  { id: 'ev-2', title: 'День ИИ-инструментов', description: 'Команды показывают, как используют ИИ в повседневной работе', category: 'development', format: 'online', startsAt: daysFromNow(1, 12), place: 'Онлайн', palette: 'purple', emoji: '🤖', featured: true, registered: false, seatsLeft: null },
-  { id: 'ev-3', title: 'Встреча стажёров ноябрьского набора', description: 'Знакомство, ответы на вопросы и пицца', category: 'office', format: 'offline', startsAt: daysFromNow(2, 18), place: 'Москва, переговорная «Юпитер»', palette: 'green', emoji: '🍕', featured: true, registered: true, seatsLeft: 12 },
-  { id: 'ev-4', title: 'Утренняя йога', description: 'Мягкая практика перед рабочим днём', category: 'health', format: 'offline', startsAt: daysFromNow(0, 9), place: 'Москва, спортзал', palette: 'blue', emoji: '🧘', featured: false, registered: false, seatsLeft: 6 },
-  { id: 'ev-5', title: 'Корпоративный забег 5 км', description: 'Бежим вместе в парке, есть дистанция для новичков', category: 'sport', format: 'offline', startsAt: daysFromNow(5, 10), place: 'Парк рядом с офисом', palette: 'red', emoji: '🏃', featured: false, registered: false, seatsLeft: 40 },
-  { id: 'ev-6', title: 'Как не выгореть в первые месяцы', description: 'Психолог расскажет о балансе работы и отдыха', category: 'health', format: 'online', startsAt: daysFromNow(3, 16), place: 'Онлайн', palette: 'purple', emoji: '🌿', featured: false, registered: false, seatsLeft: null },
-  { id: 'ev-7', title: 'Киноклуб: фильм и обсуждение', description: 'Смотрим и обсуждаем фантастику', category: 'culture', format: 'offline', startsAt: daysFromNow(6, 19), place: 'Москва, лаунж', palette: 'dark', emoji: '🎬', featured: false, registered: false, seatsLeft: 25 },
-  { id: 'ev-8', title: 'Экскурсия по дата-центру', description: 'Посмотрим, где живут наши сервисы', category: 'office', format: 'offline', startsAt: daysFromNow(12, 11), place: 'Подмосковье', palette: 'blue', emoji: '🖥️', featured: false, registered: false, seatsLeft: 3 },
-  { id: 'ev-9', title: 'Турнир по настольному теннису', description: 'Сетка на выбывание, призы победителям', category: 'sport', format: 'offline', startsAt: daysFromNow(20, 18), place: 'Москва, зона отдыха', palette: 'green', emoji: '🏓', featured: false, registered: false, seatsLeft: 16 },
-  { id: 'ev-10', title: 'Новогодний вечер для своих', description: 'Музыка, настолки и подарки', category: 'culture', format: 'offline', startsAt: daysFromNow(35, 19), place: 'Москва, головной офис', palette: 'red', emoji: '🎄', featured: false, registered: false, seatsLeft: 120 },
+  { id: 'ev-1', title: 'ML-академия: задача регрессии', description: 'Открытая лекция для всех, кто хочет разобраться в основах ML', category: 'development', format: 'online', startsAt: daysFromNow(1, 10), place: 'Онлайн', palette: 'dark', illustration: 'chip', featured: true, registered: false, seatsLeft: null },
+  { id: 'ev-2', title: 'День ИИ-инструментов', description: 'Команды показывают, как используют ИИ в повседневной работе', category: 'development', format: 'online', startsAt: daysFromNow(1, 12), place: 'Онлайн', palette: 'purple', illustration: 'robot', featured: true, registered: false, seatsLeft: null },
+  { id: 'ev-3', title: 'Встреча стажёров ноябрьского набора', description: 'Знакомство, ответы на вопросы и пицца', category: 'office', format: 'offline', startsAt: daysFromNow(2, 18), place: 'Москва, переговорная «Юпитер»', palette: 'green', illustration: 'pizza', featured: true, registered: true, seatsLeft: 12 },
+  { id: 'ev-4', title: 'Утренняя йога', description: 'Мягкая практика перед рабочим днём', category: 'health', format: 'offline', startsAt: daysFromNow(0, 9), place: 'Москва, спортзал', palette: 'blue', illustration: 'yoga-mat', featured: false, registered: false, seatsLeft: 6 },
+  { id: 'ev-5', title: 'Корпоративный забег 5 км', description: 'Бежим вместе в парке, есть дистанция для новичков', category: 'sport', format: 'offline', startsAt: daysFromNow(5, 10), place: 'Парк рядом с офисом', palette: 'red', illustration: 'stopwatch', featured: false, registered: false, seatsLeft: 40 },
+  { id: 'ev-6', title: 'Как не выгореть в первые месяцы', description: 'Психолог расскажет о балансе работы и отдыха', category: 'health', format: 'online', startsAt: daysFromNow(3, 16), place: 'Онлайн', palette: 'purple', illustration: 'plant-pot', featured: false, registered: false, seatsLeft: null },
+  { id: 'ev-7', title: 'Киноклуб: фильм и обсуждение', description: 'Смотрим и обсуждаем фантастику', category: 'culture', format: 'offline', startsAt: daysFromNow(6, 19), place: 'Москва, лаунж', palette: 'dark', illustration: 'clapperboard', featured: false, registered: false, seatsLeft: 25 },
+  { id: 'ev-8', title: 'Экскурсия по дата-центру', description: 'Посмотрим, где живут наши сервисы', category: 'office', format: 'offline', startsAt: daysFromNow(12, 11), place: 'Подмосковье', palette: 'blue', illustration: 'server', featured: false, registered: false, seatsLeft: 3 },
+  { id: 'ev-9', title: 'Турнир по настольному теннису', description: 'Сетка на выбывание, призы победителям', category: 'sport', format: 'offline', startsAt: daysFromNow(20, 18), place: 'Москва, зона отдыха', palette: 'green', illustration: 'ping-pong', featured: false, registered: false, seatsLeft: 16 },
+  { id: 'ev-10', title: 'Новогодний вечер для своих', description: 'Музыка, настолки и подарки', category: 'culture', format: 'offline', startsAt: daysFromNow(35, 19), place: 'Москва, головной офис', palette: 'red', illustration: 'xmas-tree', featured: false, registered: false, seatsLeft: 120 },
 ]
 
 /* ---------- Уведомления и календарь ---------- */

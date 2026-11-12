@@ -108,7 +108,7 @@ export function ArticlePage() {
         <div className={a.layout}>
           <article>
             <h1 className={a.title}>{post.title}</h1>
-            <Cover emoji={post.emoji} palette={post.palette} ratio="16 / 9" emojiSize={160} className={a.cover} />
+            <Cover illustration={post.illustration} palette={post.palette} ratio="16 / 9" className={a.cover} />
             {post.summary && <Summary text={post.summary} />}
             <h2 className={a.bodyTitle}>Описание</h2>
             <div className={a.body}>

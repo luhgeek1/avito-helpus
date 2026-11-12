@@ -2,9 +2,10 @@ import portalGlobals from './global.styles'
 import { Link } from '@/shared/lib/portal-navigation'
 import { ChevronRight, X } from 'lucide-react'
 import { useEffect, type ButtonHTMLAttributes, type ComponentProps, type CSSProperties, type ReactNode } from 'react'
-import type { Palette } from '@/shared/api'
+import type { Illustration as IllustrationName, Palette } from '@/shared/api'
 import { initials } from '@/shared/lib/portal-format'
 import { buttonClass, cx, type ButtonSize, type ButtonVariant } from './classes'
+import { Illustration } from './Illustration'
 import s from './ui.styles'
 
 export { buttonClass, chipClass, cx } from './classes'
@@ -61,19 +62,23 @@ export function Emoji({ children, size, className, style }: { children: string; 
 }
 
 type CoverProps = {
-  emoji: string
+  illustration: IllustrationName
   palette: Palette
   ratio?: string
-  emojiSize?: number
   badge?: ReactNode
   className?: string
 }
 
-/** Обложка карточки: светлый фон палитры и крупная иллюстрация, как фото товара на Авито. */
-export function Cover({ emoji, palette, ratio = '1 / 1', emojiSize = 72, badge, className }: CoverProps) {
+/** Обложка карточки: светлый фон палитры и крупная иллюстрация на 84 % высоты, как фото товара на Авито. */
+export function Cover({ illustration, palette, ratio = '1 / 1', badge, className }: CoverProps) {
   return (
     <div className={cx(s.cover, portalGlobals[`palette-${palette}`], className)} style={{ aspectRatio: ratio }}>
-      <Emoji size={emojiSize}>{emoji}</Emoji>
+      <Illustration
+        name={illustration}
+        size={480}
+        // With a badge the art drops lower so the top-left label never covers it.
+        style={badge ? { height: '78%', width: 'auto', marginTop: '18%' } : { height: '84%', width: 'auto' }}
+      />
       {badge && <span className={s.coverBadge}>{badge}</span>}
     </div>
   )

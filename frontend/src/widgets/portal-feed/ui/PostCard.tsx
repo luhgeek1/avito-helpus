@@ -59,7 +59,7 @@ export function PostCard({ post }: { post: Post }) {
   return (
     <article className={s.card}>
       <Link to="/feed/$postId" params={{ postId: post.id }} className={s.coverLink} tabIndex={-1} aria-hidden>
-        <Cover emoji={post.emoji} palette={post.palette} emojiSize={80} badge={post.tag} />
+        <Cover illustration={post.illustration} palette={post.palette} badge={post.tag} />
       </Link>
       <div className={s.titleRow}>
         <h3 className={s.title}>

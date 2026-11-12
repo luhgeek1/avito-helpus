@@ -2,7 +2,7 @@ import { portalGlobals } from '@/shared/ui/portal'
 import { getRouteApi, Link } from '@/shared/lib/portal-navigation'
 import { ApiError } from '@/shared/api'
 import { useBenefitCategory } from '@/shared/api'
-import { buttonClass, Emoji, EmptyState, ErrorState, Skeleton } from '@/shared/ui/portal'
+import { buttonClass, EmptyState, ErrorState, Illustration, Skeleton } from '@/shared/ui/portal'
 import { BackButton } from './BackButton'
 import { NotFoundPage } from './NotFoundPage'
 import { ServiceRow } from './ServicesPage'
@@ -64,9 +64,7 @@ export function BenefitsPage() {
                   >
                     Читать
                   </Link>
-                  <Emoji size={64} className={s.infoArt}>
-                    {article.emoji}
-                  </Emoji>
+                  <Illustration name={article.illustration} size={124} className={s.infoArt} />
                 </article>
               ))}
             </div>

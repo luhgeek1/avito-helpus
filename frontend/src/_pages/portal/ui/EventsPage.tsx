@@ -49,7 +49,7 @@ function FeaturedEvents() {
       <div className={s.featured}>
         {featured.map((event) => (
           <article key={event.id} className={s.eventCard}>
-            <Cover emoji={event.emoji} palette={event.palette} emojiSize={88} badge={formatTitle(event)} />
+            <Cover illustration={event.illustration} palette={event.palette} badge={formatTitle(event)} />
             <div className={s.eventDate}>{formatDateTime(event.startsAt)}</div>
             <div>{event.title}</div>
             <div className={s.eventMeta}>{event.place}</div>

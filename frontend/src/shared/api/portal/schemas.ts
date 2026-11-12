@@ -165,8 +165,8 @@ export const benefitArticleSchema = z.object({
   title: z.string(),
   text: z.string(),
   postId: z.string(),
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 
 export const benefitCategoryDetailSchema = benefitCategorySchema.extend({
@@ -199,8 +199,8 @@ export const postSchema = z.object({
   likes: z.number(),
   liked: z.boolean(),
   comments: z.number(),
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 export type Post = z.infer<typeof postSchema>
 
@@ -222,8 +222,8 @@ export const eventSchema = z.object({
   featured: z.boolean(),
   registered: z.boolean(),
   seatsLeft: z.number().nullable(),
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 export type CompanyEvent = z.infer<typeof eventSchema>
 
