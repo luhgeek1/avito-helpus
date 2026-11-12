@@ -8,6 +8,11 @@ import { ChoosePetButton } from "@/features/pet/choose";
 import { DownloadPetButton } from "@/features/pet/download";
 import { GreetPetButton, usePetGreeting } from "@/features/pet/greet";
 import { cx } from "@/shared/lib/cx";
+
+const actionButton = cx(
+  "flex min-h-9.25 items-center justify-center gap-1.75 rounded-md border border-[#ebe7f0] bg-white text-10 text-[#7f6b8f]",
+  "hover:bg-[#f9f6fc] max-sm:min-h-11 max-sm:gap-1 max-sm:text-8",
+);
 export function PetInspector({ pet: active }: { pet: Pet }) {
   const [scale, setScale] = useState(2);
   const { paused } = usePetPreferences();
@@ -105,49 +110,38 @@ export function PetInspector({ pet: active }: { pet: Pet }) {
           ))}
         </div>
       </div>
-      <div className={`detail-copy pt-[21px] pb-[14px] max-sm:[grid-column:2] max-sm:[grid-row:2/4] max-sm:[align-self:start]
-            max-xs:w-full xs:max-sm:pr-[13px] xs:max-sm:pl-[15px] [&_>_p]:text-[12px] [&_>_p]:leading-[1.9]
-            [&_>_p]:text-[#756b7e] [&_>_p]:mt-3 [&_>_p]:min-h-[63px] max-sm:[&_>_p]:leading-[1.7] max-sm:[&_>_p]:mt-[10px]
-            max-sm:[&_>_p]:min-h-0 xs:max-sm:[&_>_p]:text-[10px] xl:p-6 max-xs:py-[15px] xs:max-sm:py-0 px-[19px]
-            max-xs:px-[18px]`}>
-        <div className={`detail-name flex items-baseline gap-[9px] xs:max-sm:block [&_h2]:text-[25px] [&_h2]:font-semibold
-            [&_h2]:tracking-[-0.7px] max-sm:[&_h2]:text-[24px] [&_>_span]:text-[11px] [&_>_span]:text-[#8b7e96]
-            max-sm:[&_>_span]:text-[10px] max-sm:[&_>_span]:block max-sm:[&_>_span]:mt-1`}>
-          <h2>{active.name}</h2>
-          <span>{active.kind}</span>
+      <div className="px-4.75 pt-5.25 pb-3.5 max-sm:col-start-2 max-sm:row-[2/4] max-sm:self-start max-xs:w-full
+            max-xs:px-4.5 max-xs:py-3.75 xs:max-sm:py-0 xs:max-sm:pr-3.25 xs:max-sm:pl-3.75 xl:p-6">
+        <div className="flex items-baseline gap-2.25 xs:max-sm:block">
+          <h2 className="text-25 font-semibold tracking-[-0.7px] max-sm:text-24">{active.name}</h2>
+          <span className="text-11 text-[#8b7e96] max-sm:mt-1 max-sm:block max-sm:text-10">{active.kind}</span>
         </div>
-        <p>{active.description}</p>
-        <span className={`personality inline-block text-[9px] text-[#796784] bg-[#f7f4f9] rounded-[5px] mt-[15px] max-sm:mt-[9px]
-            max-sm:whitespace-nowrap xs:max-sm:text-[7px] max-sm:p-[6px] py-[7px] px-[9px]`}>{active.personality}</span>
-        <div className={`palette-row flex items-center justify-between [&_>_span]:text-[10px] [&_>_span]:text-[#83718e]
-            xs:max-sm:[&_>_span]:text-[8px] [&_>_div]:flex [&_>_div]:gap-[5px] max-sm:[&_>_div]:gap-1
-            [&_>_div_>_span]:h-[15px] [&_>_div_>_span]:w-[15px] [&_>_div_>_span]:rounded-full
-            xs:max-sm:[&_>_div_>_span]:h-3 xs:max-sm:[&_>_div_>_span]:w-3 [&_>_div_>_span]:border
-            [&_>_div_>_span]:border-solid [&_>_div_>_span]:border-[#00000008] my-[22px] max-sm:my-3 mx-0`}>
-          <span>Его цвета</span>
-          <div>
+        <p className="mt-3 min-h-15.75 text-12 leading-[1.9] text-[#756b7e] max-sm:mt-2.5 max-sm:min-h-0 max-sm:leading-[1.7]
+            xs:max-sm:text-10">{active.description}</p>
+        <span className="mt-3.75 inline-block rounded-[5px] bg-[#f7f4f9] px-2.25 py-1.75 text-9 text-[#796784] max-sm:mt-2.25
+            max-sm:p-1.5 max-sm:whitespace-nowrap xs:max-sm:text-7">{active.personality}</span>
+        <div className="mx-0 my-5.5 flex items-center justify-between max-sm:my-3">
+          <span className="text-10 text-[#83718e] xs:max-sm:text-8">Его цвета</span>
+          <div className="flex gap-1.25 max-sm:gap-1">
             {active.palette.map((c) => (
-              <span key={c} style={{ background: c }} title={c} />
+              <span
+                key={c}
+                className="size-3.75 rounded-full border border-[#00000008] xs:max-sm:size-3"
+                style={{ background: c }}
+                title={c}
+              />
             ))}
           </div>
         </div>
         <ChoosePetButton pet={active} />
         <FavoritePetButton pet={active} showLabel />
-        <div className={`detail-actions flex mt-[9px] gap-2 max-sm:mt-[6px] max-sm:gap-[5px] [&_button]:flex [&_button]:justify-center
-            [&_button]:items-center [&_button]:gap-[7px] [&_button]:min-h-[37px] [&_button]:rounded-[6px]
-            [&_button]:bg-white [&_button]:text-[#7f6b8f] [&_button]:text-[10px] max-sm:[&_button]:gap-1
-            max-sm:[&_button]:min-h-11 max-sm:[&_button]:text-[8px] [&_button:hover]:bg-[#f9f6fc]
-            [&_button:first-child]:[flex:1] max-xs:[&_button:first-child]:text-[10px]
-            xs:max-sm:[&_button:first-child]:text-[8px] [&_button:last-child]:w-[37px]
-            max-sm:[&_button:last-child]:w-[35px] max-sm:[&_button_svg]:w-[13px] [&_button]:border [&_button]:border-solid
-            [&_button]:border-[#ebe7f0]`}>
-          <GreetPetButton onGreet={greet} />
-          <DownloadPetButton pet={active} />
+        <div className="mt-2.25 flex gap-2 max-sm:mt-1.5 max-sm:gap-1.25">
+          <GreetPetButton onGreet={greet} className={cx(actionButton, "flex-1 max-xs:text-10 xs:max-sm:text-8")} />
+          <DownloadPetButton pet={active} className={cx(actionButton, "w-9.25 max-sm:w-8.75")} />
         </div>
       </div>
-      <div className={`detail-footnote flex justify-center items-center gap-[6px] text-[8px] text-[#8a7898] bg-[#fbfafc]
-            [border-top-width:1px] [border-top-style:solid] [border-top-color:#f1edf5] max-sm:[grid-column:1/-1]
-            max-xs:w-full xs:max-sm:mt-3 py-[13px] px-2 max-xs:m-0`}>
+      <div className="flex items-center justify-center gap-1.5 border-t border-[#f1edf5] bg-[#fbfafc] px-2 py-3.25 text-8
+            text-[#8a7898] max-sm:col-span-full max-xs:m-0 max-xs:w-full xs:max-sm:mt-3">
         <Sparkles size={14} />
         <span>Маленький пет, большая поддержка.</span>
       </div>
