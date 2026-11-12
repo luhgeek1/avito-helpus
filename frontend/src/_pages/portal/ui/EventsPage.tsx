@@ -1,22 +1,22 @@
 import { portalGlobals } from '@/shared/ui/portal'
 import { getRouteApi } from '@/shared/lib/portal-navigation'
-import { Search } from 'lucide-react'
+import { Check, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useEventRegistration, useEvents, type EventsFilter } from '@/shared/api'
-import type { CompanyEvent, EventCategory } from '@/shared/api'
-import { Button, Cover, cx, Emoji, EmptyState, ErrorState, Skeleton } from '@/shared/ui/portal'
+import type { CompanyEvent, EventCategory, Illustration as IllustrationName } from '@/shared/api'
+import { Button, Cover, cx, EmptyState, ErrorState, Illustration, Skeleton } from '@/shared/ui/portal'
 import { formatDateTime, formatTime } from '@/shared/lib/portal-format'
 import s from './events.styles'
 import p from './pages.styles'
 
 const route = getRouteApi('/events')
 
-const CATEGORIES: { id: EventCategory; title: string; emoji: string }[] = [
-  { id: 'development', title: 'Развитие', emoji: '🎓' },
-  { id: 'health', title: 'Здоровье', emoji: '🧘' },
-  { id: 'sport', title: 'Спорт', emoji: '⚽️' },
-  { id: 'office', title: 'Офис', emoji: '🏢' },
-  { id: 'culture', title: 'Афиша', emoji: '🎭' },
+const CATEGORIES: { id: EventCategory; title: string; illustration: IllustrationName }[] = [
+  { id: 'development', title: 'Развитие', illustration: 'grad-cap' },
+  { id: 'health', title: 'Здоровье', illustration: 'yoga-mat' },
+  { id: 'sport', title: 'Спорт', illustration: 'football' },
+  { id: 'office', title: 'Офис', illustration: 'office-building' },
+  { id: 'culture', title: 'Афиша', illustration: 'tickets' },
 ]
 
 const categoryTitle = (id: EventCategory) => CATEGORIES.find((item) => item.id === id)?.title ?? id
@@ -33,7 +33,8 @@ function RegisterButton({ event, size = 'm' }: { event: CompanyEvent; size?: 'm'
       onClick={() => registration.mutate({ id: event.id, register: !event.registered })}
       aria-label={`${event.registered ? 'Отменить запись' : 'Записаться'}: ${event.title}`}
     >
-      {full ? 'Мест нет' : event.registered ? 'Вы записаны ✓' : 'Записаться'}
+      {full ? 'Мест нет' : event.registered ? 'Вы записаны' : 'Записаться'}
+      {event.registered && !full && <Check size={16} aria-hidden />}
     </Button>
   )
 }
@@ -125,9 +126,7 @@ export function EventsPage() {
           <h2>Все события — в одном месте</h2>
           <p>Рассказываем обо всём, что происходит у нас в компании</p>
         </div>
-        <Emoji size={150} className={s.bannerArt}>
-          🎉
-        </Emoji>
+        <Illustration name="party-popper" size={210} className={s.bannerArt} />
       </section>
 
       <div className={s.categories} role="group" aria-label="Категории">
@@ -142,9 +141,7 @@ export function EventsPage() {
               onClick={() => setFilter({ category: active ? undefined : category.id })}
             >
               <span className={s.categoryTitle}>{category.title}</span>
-              <Emoji size={44} className={s.categoryArt}>
-                {category.emoji}
-              </Emoji>
+              <Illustration name={category.illustration} size={92} className={s.categoryArt} />
             </button>
           )
         })}

@@ -212,7 +212,7 @@ describe('Плюсы и сервисы', () => {
     server.use(
       http.get('/api/benefits/:id', ({ params }) =>
         params.id === 'care'
-          ? HttpResponse.json({ id: 'care', title: 'Забота', description: 'd', palette: 'purple', href: '/benefits/care', emoji: '🤝', services: [], articles: [] })
+          ? HttpResponse.json({ id: 'care', title: 'Забота', description: 'd', palette: 'purple', href: '/benefits/care', illustration: 'heart', services: [], articles: [] })
           : HttpResponse.json({}, { status: 404 }),
       ),
     )

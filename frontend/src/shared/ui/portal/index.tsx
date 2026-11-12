@@ -1,7 +1,7 @@
 import portalGlobals from './global.styles'
 import { Link } from '@/shared/lib/portal-navigation'
 import { ChevronRight, X } from 'lucide-react'
-import { useEffect, type ButtonHTMLAttributes, type ComponentProps, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
 import type { Illustration as IllustrationName, Palette } from '@/shared/api'
 import { initials } from '@/shared/lib/portal-format'
 import { buttonClass, cx, type ButtonSize, type ButtonVariant } from './classes'
@@ -51,15 +51,6 @@ export function Avatar({ firstName, lastName, palette, size = 40, className }: A
 }
 
 /* ---------- Иллюстрации ---------- */
-
-/** Объёмный эмодзи — замена 3D-иллюстрациям Авито. */
-export function Emoji({ children, size, className, style }: { children: string; size: number; className?: string; style?: CSSProperties }) {
-  return (
-    <span className={cx(s.emoji, className)} style={{ fontSize: size, ...style }} aria-hidden>
-      {children}
-    </span>
-  )
-}
 
 type CoverProps = {
   illustration: IllustrationName

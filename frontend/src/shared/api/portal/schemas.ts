@@ -86,8 +86,8 @@ export const bannerSchema = z.object({
   cta: z.string(),
   href: z.string(),
   palette: paletteSchema,
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 export type Banner = z.infer<typeof bannerSchema>
 
@@ -127,6 +127,7 @@ export const serviceIconSchema = z.enum([
 ])
 export type ServiceIcon = z.infer<typeof serviceIconSchema>
 
+
 export const serviceSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -144,8 +145,8 @@ export const promoSchema = z.object({
   text: z.string(),
   href: z.string(),
   palette: paletteSchema,
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 export type Promo = z.infer<typeof promoSchema>
 
@@ -155,8 +156,8 @@ export const benefitCategorySchema = z.object({
   description: z.string(),
   palette: paletteSchema,
   href: z.string(),
-  /** Эмодзи-иллюстрация для обложки. */
-  emoji: z.string(),
+  /** 3D-иллюстрация для обложки. */
+  illustration: illustrationSchema,
 })
 export type BenefitCategory = z.infer<typeof benefitCategorySchema>
 

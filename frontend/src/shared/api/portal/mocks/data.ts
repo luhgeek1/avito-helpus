@@ -178,7 +178,7 @@ export const banners: Banner[] = [
     text: 'Собрали в одном месте всё для первых недель: доступы, чек-лист новичка и контакты наставника',
     cta: 'Открыть чек-лист',
     href: '/services/onboarding',
-    palette: 'blue', emoji: '👋',
+    palette: 'blue', illustration: 'hello-bubble',
   },
   {
     id: 'b-2',
@@ -186,7 +186,7 @@ export const banners: Banner[] = [
     text: 'Музыка, настолки и подарки. Регистрация открыта до конца месяца',
     cta: 'Записаться',
     href: '/events',
-    palette: 'purple', emoji: '🎄',
+    palette: 'purple', illustration: 'xmas-tree',
   },
   {
     id: 'b-3',
@@ -194,7 +194,7 @@ export const banners: Banner[] = [
     text: 'Как модели помогают в поиске, модерации и ежедневной работе команд',
     cta: 'Узнать больше',
     href: '/ai',
-    palette: 'dark', emoji: '🤖',
+    palette: 'dark', illustration: 'robot',
   },
   {
     id: 'b-4',
@@ -202,7 +202,7 @@ export const banners: Banner[] = [
     text: 'Двое суток, команды из разных направлений и призы для лучших прототипов',
     cta: 'Читать',
     href: '/feed/post-3',
-    palette: 'green', emoji: '🏆',
+    palette: 'green', illustration: 'trophy',
   },
   {
     id: 'b-5',
@@ -210,7 +210,7 @@ export const banners: Banner[] = [
     text: 'Пять минут, чтобы рассказать, что помогает и что мешает в работе',
     cta: 'Пройти опрос',
     href: '/services/growth',
-    palette: 'red', emoji: '📊',
+    palette: 'red', illustration: 'pie-chart',
   },
 ]
 
@@ -249,20 +249,20 @@ export const services: Service[] = [
 ]
 
 export const promos: Promo[] = [
-  { id: 'pr-1', title: 'Новый год уже близко', text: 'Собрали все праздничные активности на одной странице', href: '/events', palette: 'green', emoji: '🎁' },
-  { id: 'pr-2', title: 'Всё о качестве', text: 'Ключевые инициативы, инструменты и планы на следующий год', href: '/feed/post-2', palette: 'purple', emoji: '💎' },
+  { id: 'pr-1', title: 'Новый год уже близко', text: 'Собрали все праздничные активности на одной странице', href: '/events', palette: 'green', illustration: 'gift' },
+  { id: 'pr-2', title: 'Всё о качестве', text: 'Ключевые инициативы, инструменты и планы на следующий год', href: '/feed/post-2', palette: 'purple', illustration: 'gem' },
 ]
 
 /* ---------- Бенефиты («Плюсы») ---------- */
 
 export const benefitCategories: BenefitCategory[] = [
-  { id: 'savings', title: 'Выгода', description: 'Специальные предложения от компании и партнёров', palette: 'green', emoji: '💰', href: '/benefits/savings' },
-  { id: 'health', title: 'Здоровье', description: 'ДМС, психологическая помощь и чекапы', palette: 'blue', emoji: '🩺', href: '/benefits/health' },
-  { id: 'growth', title: 'Развитие', description: 'Обучение, конференции и ревью', palette: 'purple', emoji: '📚', href: '/benefits/growth' },
-  { id: 'sport', title: 'Спорт', description: 'Тренировки, соревнования, победы', palette: 'red', emoji: '⚽️', href: '/benefits/sport' },
-  { id: 'office', title: 'Офис', description: 'Бронь мест, питание, пропуск и парковка', palette: 'dark', emoji: '🏢', href: '/benefits/office' },
-  { id: 'events', title: 'События', description: 'Наши активности и внутренние продукты', palette: 'blue', emoji: '🎉', href: '/events' },
-  { id: 'care', title: 'Забота', description: 'Социальные проекты и поддержка семьи', palette: 'purple', emoji: '🤝', href: '/benefits/care' },
+  { id: 'savings', title: 'Выгода', description: 'Специальные предложения от компании и партнёров', palette: 'green', illustration: 'piggy-bank', href: '/benefits/savings' },
+  { id: 'health', title: 'Здоровье', description: 'ДМС, психологическая помощь и чекапы', palette: 'blue', illustration: 'stethoscope', href: '/benefits/health' },
+  { id: 'growth', title: 'Развитие', description: 'Обучение, конференции и ревью', palette: 'purple', illustration: 'books', href: '/benefits/growth' },
+  { id: 'sport', title: 'Спорт', description: 'Тренировки, соревнования, победы', palette: 'red', illustration: 'football', href: '/benefits/sport' },
+  { id: 'office', title: 'Офис', description: 'Бронь мест, питание, пропуск и парковка', palette: 'dark', illustration: 'office-building', href: '/benefits/office' },
+  { id: 'events', title: 'События', description: 'Наши активности и внутренние продукты', palette: 'blue', illustration: 'party-popper', href: '/events' },
+  { id: 'care', title: 'Забота', description: 'Социальные проекты и поддержка семьи', palette: 'purple', illustration: 'heart', href: '/benefits/care' },
 ]
 
 /** Категория бенефитов → категории сервисов, которые в ней показываются. */

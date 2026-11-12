@@ -20,7 +20,6 @@ import {
   Button,
   buttonClass,
   cx,
-  Emoji,
   ErrorState,
   HrefLink,
   IconButton,
@@ -57,9 +56,7 @@ function HeroCarousel() {
             {banner.cta}
           </HrefLink>
         </div>
-        <Emoji key={`art-${banner.id}`} size={150} className={s.slideArt}>
-          {banner.emoji}
-        </Emoji>
+        <Illustration key={`art-${banner.id}`} name={banner.illustration} size={230} className={s.slideArt} />
       </div>
       <div className={s.heroControls}>
         <div className={s.dots}>
@@ -250,9 +247,7 @@ function Promos() {
         <HrefLink key={promo.id} href={promo.href} className={cx(s.promo, portalGlobals[`palette-${promo.palette}`])}>
           <h3>{promo.title}</h3>
           <p>{promo.text}</p>
-          <Emoji size={76} className={s.promoArt}>
-            {promo.emoji}
-          </Emoji>
+          <Illustration name={promo.illustration} size={160} className={s.promoArt} />
         </HrefLink>
       ))}
     </section>
@@ -271,9 +266,7 @@ function Plus() {
           <HrefLink key={category.id} href={category.href} className={cx(s.plusTile, portalGlobals[`palette-${category.palette}`])}>
             <h3>{category.title}</h3>
             <p>{category.description}</p>
-            <Emoji size={72} className={s.plusArt}>
-              {category.emoji}
-            </Emoji>
+            <Illustration name={category.illustration} size={160} className={s.plusArt} />
           </HrefLink>
         ))}
       </div>
