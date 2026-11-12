@@ -4,6 +4,18 @@ import { z } from 'zod'
 export const paletteSchema = z.enum(['blue', 'green', 'red', 'purple', 'dark'])
 export type Palette = z.infer<typeof paletteSchema>
 
+/** 3D-rendered illustration from public/portal/illustrations (sources in design/illustrations). */
+export const illustrationSchema = z.enum([
+  'backpack', 'beach', 'books', 'bulb', 'camera', 'car', 'chair', 'chart', 'chat-bubbles', 'checklist',
+  'chip', 'clapperboard', 'couch', 'document', 'dumbbell', 'eyes', 'flask', 'folders', 'food-bowl',
+  'football', 'gamepad', 'gear', 'gem', 'gift', 'grad-cap', 'headphones', 'heart', 'hello-bubble', 'key',
+  'laptop', 'magnifier', 'medal', 'microphone', 'office-building', 'parcel', 'party-popper', 'pencil',
+  'pie-chart', 'piggy-bank', 'ping-pong', 'pizza', 'plant-pot', 'puzzle', 'receipt', 'robot', 'rocket',
+  'rotation', 'server', 'shield', 'sparkles', 'stethoscope', 'stopwatch', 'stroller', 'suitcase', 'tag',
+  'tickets', 'trophy', 'tshirt', 'xmas-tree', 'yoga-mat',
+])
+export type Illustration = z.infer<typeof illustrationSchema>
+
 export const personShortSchema = z.object({
   id: z.string(),
   firstName: z.string(),

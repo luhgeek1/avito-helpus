@@ -10,3 +10,4 @@ export { ProfilePage } from './ui/ProfilePage';
 export { SearchPage } from './ui/SearchPage';
 export { AiPage } from './ui/AiPage';
 export { NotFoundPage } from './ui/NotFoundPage';
+export { IllustrationsPage } from './ui/IllustrationsPage';

@@ -163,4 +163,5 @@ export function IconButton({
 }
 
 export { default as portalGlobals } from './global.styles';
+export { Illustration } from './Illustration';
 export { ServiceIcon, SERVICE_EMOJI } from './ServiceIcon';
