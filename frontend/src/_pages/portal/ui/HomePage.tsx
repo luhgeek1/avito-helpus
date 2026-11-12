@@ -14,17 +14,34 @@ import {
 import type { QuickAction } from '@/shared/api'
 import { ChannelList } from '@/widgets/portal-feed'
 import { PostCard, postGridClass } from '@/widgets/portal-feed'
-import { Avatar, Button, buttonClass, cx, ErrorState, focusRing, heading, HrefLink, IconButton, Illustration, Modal, paletteClass, SectionHead, Skeleton } from '@/shared/ui/portal'
+import {
+  Avatar,
+  Button,
+  buttonClass,
+  container,
+  cx,
+  ErrorState,
+  focusRing,
+  heading,
+  HrefLink,
+  IconButton,
+  Illustration,
+  Modal,
+  paletteClass,
+  SectionHead,
+  Skeleton,
+} from '@/shared/ui/portal'
 import { SERVICE_ILLUSTRATION } from '@/shared/ui/portal'
 import { formatDayMonthShort } from '@/shared/lib/portal-format'
 import { usePreferences } from '@/entities/portal'
-import { portalGlobals } from '@/shared/ui/portal'
-import s from './home.styles'
+import { stickyAside, withAside } from './classes'
 
 const panel = 'flex flex-col rounded-3xl bg-fill px-6 pt-5 pb-6 hub-max-720:p-4'
 const panelHead = 'mb-4 flex items-center justify-between gap-3'
 /** Quick actions fill one row up to three, then two even rows of at most four columns. */
 const quickColumns = ['grid-cols-1', 'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4']
+const promoText = 'relative z-1 max-w-[calc(100%-160px)] hub-max-720:max-w-[calc(100%-94px)]'
+const plusText = 'relative z-1 max-w-[max(calc(60%+4px),calc(100%-136px))] hub-max-720:max-w-[calc(100%-92px)]'
 
 /** Баннеры листаются только по клику, как на avito.ru: без автопрокрутки, с плавной сменой. */
 function HeroCarousel() {
@@ -217,26 +234,30 @@ function Services() {
       {isPending && <Skeleton height={212} radius={24} />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {data && (
-        <div className={s.services}>
-          <div className={s.tiles}>
+        <div className="grid grid-cols-[minmax(0,1fr)_368px] items-stretch gap-4 hub-max-1100:grid-cols-1">
+          <div className="grid grid-cols-4 gap-2 hub-max-1100:grid-cols-3 hub-max-720:grid-cols-2">
             {featured.map((service) => (
               <Link
                 key={service.id}
                 to="/services/$serviceId"
                 params={{ serviceId: service.id }}
-                className={s.tile}
+                className="relative h-25.5 overflow-hidden rounded-3xl border border-white bg-fill px-5 py-3.5 hover:bg-fill-hover"
               >
-                <span className={s.tileTitle}>{service.title}</span>
-                <Illustration name={SERVICE_ILLUSTRATION[service.icon]} size={100} className={s.tileArt} />
+                <span className="relative z-1 block max-w-[calc(100%-76px)] hub-max-720:max-w-[calc(100%-46px)]">{service.title}</span>
+                <Illustration name={SERVICE_ILLUSTRATION[service.icon]} size={100}
+                  className="absolute -right-3 -bottom-5.5 hub-max-720:-right-3.5 hub-max-720:size-18"
+                />
               </Link>
             ))}
           </div>
-          <div className={s.docs}>
-            <h3>Документы</h3>
-            <div className={s.docsItems}>
+          <div className="flex flex-col gap-4 rounded-3xl bg-fill px-6 py-5">
+            <h3 className={heading.h3}>Документы</h3>
+            <div className="grid grid-cols-3 gap-2">
               {DOCS.map((doc) => (
-                <Link key={doc.id} to="/services/$serviceId" params={{ serviceId: doc.id }} className={s.docsItem}>
-                  <span className={s.docsIcon}>
+                <Link key={doc.id} to="/services/$serviceId" params={{ serviceId: doc.id }}
+                  className="flex flex-col items-center gap-1.5 text-center text-13 leading-4 hover:text-link-hover"
+                >
+                  <span className="flex size-16 items-center justify-center rounded-2xl bg-white">
                     <Illustration name={doc.illustration} size={58} />
                   </span>
                   {doc.title}
@@ -246,7 +267,7 @@ function Services() {
             <Link
               to="/services/$serviceId"
               params={{ serviceId: 'edo' }}
-              className={cx(buttonClass('white', 'm'), s.docsButton)}
+              className={cx(buttonClass('white', 'm'), 'mt-auto w-full')}
             >
               Все документы
             </Link>
@@ -261,12 +282,18 @@ function Promos() {
   const { data } = usePromos()
   if (!data?.length) return null
   return (
-    <section className={s.promos} aria-label="Анонсы">
+    <section className="grid grid-cols-2 gap-4 hub-max-720:grid-cols-1" aria-label="Анонсы">
       {data.map((promo) => (
-        <HrefLink key={promo.id} href={promo.href} className={cx(s.promo, portalGlobals[`palette-${promo.palette}`])}>
-          <h3>{promo.title}</h3>
-          <p>{promo.text}</p>
-          <Illustration name={promo.illustration} size={160} className={s.promoArt} />
+        <HrefLink
+          key={promo.id}
+          href={promo.href}
+          className={cx('relative min-h-34 overflow-hidden rounded-3xl bg-tone-soft p-6', paletteClass[promo.palette])}
+        >
+          <h3 className={cx(promoText, 'text-21 leading-6.5 font-bold')}>{promo.title}</h3>
+          <p className={cx(promoText, 'mt-1.5 text-secondary')}>{promo.text}</p>
+          <Illustration name={promo.illustration} size={160}
+            className="absolute right-4 -bottom-6 hub-max-720:-right-2.5 hub-max-720:-bottom-5 hub-max-720:size-30"
+          />
         </HrefLink>
       ))}
     </section>
@@ -280,12 +307,22 @@ function Plus() {
       <SectionHead title="Плюсы" href="/benefits/savings" linkText="Подробнее о Плюсах" />
       {isPending && <Skeleton height={336} radius={24} />}
       {isError && <ErrorState onRetry={() => refetch()} />}
-      <div className={s.plusTiles}>
+      <div className="grid grid-cols-12 gap-4">
         {data?.map((category) => (
-          <HrefLink key={category.id} href={category.href} className={cx(s.plusTile, portalGlobals[`palette-${category.palette}`])}>
-            <h3>{category.title}</h3>
-            <p>{category.description}</p>
-            <Illustration name={category.illustration} size={160} className={s.plusArt} />
+          <HrefLink
+            key={category.id}
+            href={category.href}
+            className={cx(
+              'relative col-span-4 min-h-40 overflow-hidden rounded-3xl bg-tone p-6 text-tone-fg nth-[n+4]:col-span-3',
+              'hub-max-900:col-span-6 hub-max-900:nth-[n+4]:col-span-6 hub-max-720:col-span-12 hub-max-720:min-h-30 hub-max-720:nth-[n+4]:col-span-12',
+              paletteClass[category.palette],
+            )}
+          >
+            <h3 className={cx(plusText, 'mb-1 text-21 leading-6.5 font-bold')}>{category.title}</h3>
+            <p className={cx(plusText, 'opacity-92')}>{category.description}</p>
+            <Illustration name={category.illustration} size={160}
+              className="absolute -right-2 -bottom-6.5 h-auto w-[min(40%,160px)] hub-max-720:-right-4 hub-max-720:-bottom-5.5 hub-max-720:size-31"
+            />
           </HrefLink>
         ))}
       </div>
@@ -298,7 +335,7 @@ function Feed() {
   return (
     <section aria-label="Это что-то новенькое">
       <SectionHead title="Это что-то новенькое" href="/feed" linkText="Перейти в ленту" />
-      <div className={s.feed}>
+      <div className={withAside}>
         <div>
           {isPending && <Skeleton height={360} />}
           {isError && <ErrorState onRetry={() => refetch()} />}
@@ -306,7 +343,7 @@ function Feed() {
             {data?.slice(0, 6).map((post) => <PostCard key={post.id} post={post} />)}
           </div>
         </div>
-        <div className={s.sticky}>
+        <div className={stickyAside}>
           <ChannelList />
         </div>
       </div>
@@ -318,14 +355,14 @@ export function HomePage() {
   const { data: me } = useMe()
 
   return (
-    <div className={`${portalGlobals.container} ${s.page}`}>
+    <div className={cx(container, 'flex flex-col gap-12 hub-max-720:gap-9')}>
       <HeroCarousel />
       <section>
-        <div className={s.greeting}>
-          <h1>{me ? `Привет, ${me.firstName}! Хорошего дня в Авито` : 'Привет! Хорошего дня в Авито'}</h1>
-          <p className={s.greetingSub}>Всё для работы, развития и заботы о себе — в одном месте</p>
+        <div className="mb-4">
+          <h1 className={heading.h1}>{me ? `Привет, ${me.firstName}! Хорошего дня в Авито` : 'Привет! Хорошего дня в Авито'}</h1>
+          <p className="mt-1 text-secondary">Всё для работы, развития и заботы о себе — в одном месте</p>
         </div>
-        <div className={s.row}>
+        <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-4 hub-max-900:grid-cols-1">
           <QuickActions />
           <Birthdays />
         </div>
