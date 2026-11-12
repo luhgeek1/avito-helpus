@@ -1,27 +1,28 @@
 import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Maximize2, Sparkles } from "lucide-react";
-import { PixelPet, usePetPreferences } from "@/entities/pet";
+import { GroundShadow, PixelPet, usePetPreferences } from "@/entities/pet";
 import type { Pet } from "@/entities/pet";
 import { FavoritePetButton } from "@/features/pet/favorite";
 import { ChoosePetButton } from "@/features/pet/choose";
 import { DownloadPetButton } from "@/features/pet/download";
 import { GreetPetButton, usePetGreeting } from "@/features/pet/greet";
+import { cx } from "@/shared/lib/cx";
 export function PetInspector({ pet: active }: { pet: Pet }) {
   const [scale, setScale] = useState(2);
   const { paused } = usePetPreferences();
   const { speaking, greet } = usePetGreeting();
   return (
-    <aside className={`pet-detail bg-white rounded-[13px] overflow-hidden sticky top-6 [box-shadow:0_4px_12px_#2b213903]
-            max-sm:relative max-sm:top-[auto] max-sm:w-full max-xs:flex max-sm:grid-cols-2 max-sm:[scroll-margin-top:78px]
-            max-xs:flex-col xs:max-sm:grid border border-solid border-[#e6e3ec]`} aria-label="Знакомство с выбранным петом">
-      <div className={`detail-heading flex items-center justify-between pt-[18px] pb-4 max-sm:[grid-column:1/-1] max-xs:w-full
-            [&_>_span:first-child]:text-[8px] [&_>_span:first-child]:tracking-[1.1px] [&_>_span:first-child]:text-[#807488]
-            max-sm:p-[17px] px-[18px]`}>
-        <span>ПОЗНАКОМИМСЯ?</span>
+    <aside
+      className="pet-detail sticky top-6 overflow-hidden rounded-[13px] border border-[#e6e3ec] bg-white
+            shadow-[0_4px_12px_#2b213903] max-sm:relative max-sm:top-auto max-sm:w-full max-sm:scroll-mt-19.5
+            max-sm:grid-cols-2 max-xs:flex max-xs:flex-col xs:max-sm:grid"
+      aria-label="Знакомство с выбранным петом"
+    >
+      <div className="flex items-center justify-between px-4.5 pt-4.5 pb-4 max-sm:col-span-full max-sm:p-4.25 max-xs:w-full">
+        <span className="text-8 tracking-[1.1px] text-[#807488]">ПОЗНАКОМИМСЯ?</span>
         <button
-          className={`detail-mobile-back hidden max-sm:block max-sm:bg-transparent max-sm:text-[#9480ab] max-sm:text-[9px]
-            max-sm:min-h-11 max-sm:p-[6px]`}
+          className="hidden max-sm:block max-sm:min-h-11 max-sm:bg-transparent max-sm:p-1.5 max-sm:text-9 max-sm:text-[#9480ab]"
           onClick={() =>
             document
               .querySelector(".collection-toolbar")
@@ -30,21 +31,16 @@ export function PetInspector({ pet: active }: { pet: Pet }) {
         >
           К коллекции ↑
         </button>
-        <span className={`detail-online text-[9px] flex items-center gap-[5px] text-[#7d8b7a] [&_i]:w-[5px] [&_i]:h-[5px]
-            [&_i]:bg-[#9bbc89] [&_i]:rounded-full`}>
-          <i />
+        <span className="flex items-center gap-1.25 text-9 text-[#7d8b7a]">
+          <i className="size-1.25 rounded-full bg-[#9bbc89]" />
           Рядом
         </span>
       </div>
       <div
-        className={`detail-stage h-61 relative bg-[var(--pet-bg)] rounded-[8px] overflow-hidden flex flex-col justify-center
-            items-center max-sm:[grid-column:1] max-sm:[grid-row:2] max-sm:[align-self:stretch]
-            max-xs:w-[calc(100%_-_20px)] xs:max-sm:h-[230px] xs:max-sm:mr-0 xl:h-[270px] [&::before]:[content:'']
-            [&::before]:absolute [&::before]:top-0 [&::before]:right-0 [&::before]:bottom-0 [&::before]:left-0
-            [&::before]:[background-image:radial-gradient(var(--pet-color)_0.6px,_transparent_0.6px)]
-            [&::before]:[background-size:12px_12px] [&::before]:opacity-10 max-sm:[&_.speech-bubble]:left-[7px]
-            max-sm:[&_.speech-bubble]:right-[7px] max-sm:[&_.speech-bubble]:top-[10px] max-sm:[&_.speech-bubble]:text-[9px]
-            max-sm:[&_.speech-bubble]:p-[7px] my-0 mx-[10px]`}
+        className="relative mx-2.5 my-0 flex h-61 flex-col items-center justify-center overflow-hidden rounded-lg bg-pet-bg
+            before:absolute before:inset-0 before:bg-[radial-gradient(var(--pet-color)_0.6px,transparent_0.6px)]
+            before:bg-size-[12px_12px] before:opacity-10 before:content-[''] max-sm:col-start-1 max-sm:row-start-2
+            max-sm:self-stretch max-xs:w-[calc(100%-20px)] xs:max-sm:mr-0 xs:max-sm:h-57.5 xl:h-67.5"
         style={
           {
             "--pet-bg": active.bg,
@@ -52,37 +48,32 @@ export function PetInspector({ pet: active }: { pet: Pet }) {
           } as CSSProperties
         }
       >
-        <span className={`detail-orbit orbit-one w-[5px] h-[5px] bg-[var(--pet-color)] opacity-25 absolute top-[45px] right-[43px]
-            [box-shadow:-5px_5px_var(--pet-color),_5px_5px_var(--pet-color),_0_10px_var(--pet-color)]`} />
-        <span className={`detail-orbit orbit-two w-[3px] h-[3px] bg-[var(--pet-color)] opacity-25 absolute left-[39px] bottom-14
-            [box-shadow:3px_-3px_var(--pet-color)]`} />
+        <span className="absolute top-11.25 right-10.75 size-1.25 bg-pet opacity-25
+            shadow-[-5px_5px_var(--pet-color),5px_5px_var(--pet-color),0_10px_var(--pet-color)]" />
+        <span className="absolute bottom-14 left-9.75 size-0.75 bg-pet opacity-25 shadow-[3px_-3px_var(--pet-color)]" />
         {speaking && (
-          <div className={`speech-bubble absolute z-5 left-[13px] right-[13px] top-[13px] bg-white rounded-[7px] text-[10px] leading-[1.6]
-            text-[#756482] [box-shadow:0_3px_0_#00000003] [&::after]:[content:''] [&::after]:absolute [&::after]:w-[7px]
-            [&::after]:h-[7px] [&::after]:left-[50%] [&::after]:bottom-[-5px] [&::after]:[border-bottom-width:1px]
-            [&::after]:[border-bottom-style:solid] [&::after]:[border-bottom-color:#e3dbe9]
-            [&::after]:[border-right-width:1px] [&::after]:[border-right-style:solid]
-            [&::after]:[border-right-color:#e3dbe9] [&::after]:[transform:rotate(45deg)] [&::after]:bg-white border
-            border-solid border-[#e3dbe9] py-[10px] px-[11px]`} role="status">
+          <div
+            className="absolute inset-x-3.25 top-3.25 z-5 rounded-[7px] border border-[#e3dbe9] bg-white px-2.75 py-2.5
+            text-10 leading-[1.6] text-[#756482] shadow-[0_3px_0_#00000003] after:absolute after:-bottom-1.25 after:left-1/2
+            after:size-1.75 after:rotate-45 after:border-r after:border-b after:border-[#e3dbe9] after:bg-white
+            after:content-[''] max-sm:inset-x-1.75 max-sm:top-2.5 max-sm:p-1.75 max-sm:text-9"
+            role="status"
+          >
             {active.greeting}
           </div>
         )}
-        <div className={`detail-pet-space relative w-full h-50 flex items-end justify-center pb-[14px] [&_.ground-shadow]:bottom-[17px]
-            [&_.ground-shadow]:w-[83px] max-xs:[&_.pixel-pet]:max-w-48 max-xs:[&_.pixel-pet]:max-h-48
-            xs:max-sm:[&_.pixel-pet]:max-w-40 xs:max-sm:[&_.pixel-pet]:max-h-40`}>
-          <span className={`ground-shadow absolute bottom-[18px] w-[70px] h-[7px] left-[50%] [transform:translateX(-50%)]
-            bg-[var(--pet-color)] opacity-13
-            [clip-path:polygon(_10%_0,_90%_0,_90%_25%,_100%_25%,_100%_75%,_90%_75%,_90%_100%,_10%_100%,_10%_75%,_0_75%,_0_25%,_10%_25%_)]
-            max-sm:bottom-3`} />
+        <div className="relative flex h-50 w-full items-end justify-center pb-3.5">
+          <GroundShadow className="bottom-4.25 w-20.75" />
           <PixelPet
             key={active.id}
             pet={active}
             size={scale === 1 ? 128 : scale === 2 ? 160 : 192}
             paused={paused}
+            className="max-xs:max-h-48 max-xs:max-w-48 xs:max-sm:max-h-40 xs:max-sm:max-w-40"
           />
         </div>
-        <span className={`detail-stage-label text-[8px] text-[var(--pet-color)] opacity-100 absolute bottom-3 tracking-[0.3px]
-            [filter:brightness(0.8)] max-sm:bottom-[14px] xs:max-sm:text-[7px]`}>
+        <span className="absolute bottom-3 text-8 tracking-[0.3px] text-pet opacity-100 brightness-80 max-sm:bottom-3.5
+            xs:max-sm:text-7">
           {paused
             ? "тихий режим"
             : active.category === "orbi" || active.id === "orbit"
@@ -90,26 +81,22 @@ export function PetInspector({ pet: active }: { pet: Pet }) {
               : "чувствует себя как дома"}
         </span>
       </div>
-      <div className={`scale-toolbar flex justify-between items-center [border-bottom-width:1px] [border-bottom-style:solid]
-            [border-bottom-color:#f1eef4] max-sm:[grid-column:1] max-sm:[grid-row:3] max-sm:[border-top-style:solid]
-            max-sm:[border-right-style:solid] max-sm:[border-left-style:solid] max-sm:gap-1 [&_>_span]:text-[9px]
-            [&_>_span]:text-[#8a7c94] [&_>_span]:flex [&_>_span]:gap-[6px] [&_>_span]:items-center
-            xs:max-sm:[&_>_span]:text-[0px] xs:max-sm:[&_>_span]:gap-0 [&_>_div]:flex [&_>_div]:gap-[3px]
-            [&_button]:text-[9px] [&_button]:w-[27px] [&_button]:h-[23px] [&_button]:bg-transparent
-            [&_button]:text-[#a9a2b1] [&_button]:rounded-[4px] max-sm:[&_button]:w-10 max-sm:[&_button]:h-11
-            max-sm:[&_button]:min-w-[26px] [&_button.selected]:bg-[#f1edf7] [&_button.selected]:text-[#807090]
-            [&_button.selected]:font-[550] max-sm:border-0 max-sm:border-[currentColor] py-[13px] max-xs:py-2
-            xs:max-sm:py-[5px] px-[19px] max-sm:px-0 max-sm:my-0 max-xs:mx-[17px] xs:max-sm:mx-2`}>
-        <span>
+      <div className="flex items-center justify-between border-b border-[#f1eef4] px-4.75 py-3.25 max-sm:col-start-1
+            max-sm:row-start-3 max-sm:my-0 max-sm:gap-1 max-sm:border-0 max-sm:px-0 max-xs:mx-4.25 max-xs:py-2
+            xs:max-sm:mx-2 xs:max-sm:py-1.25">
+        <span className="flex items-center gap-1.5 text-9 text-[#8a7c94] xs:max-sm:gap-0 xs:max-sm:text-[0px]">
           <Maximize2 size={13} />
           Масштаб
         </span>
-        <div aria-label="Масштаб персонажа">
+        <div className="flex gap-0.75" aria-label="Масштаб персонажа">
           {[1, 2, 3].map((s) => (
             <button
               key={s}
               onClick={() => setScale(s)}
-              className={`${s === scale ? " selected" : ""}`}
+              className={cx(
+                "h-5.75 w-6.75 rounded-sm bg-transparent text-9 text-[#a9a2b1] max-sm:h-11 max-sm:w-10 max-sm:min-w-6.5",
+                s === scale && "bg-[#f1edf7] font-[550] text-[#807090]",
+              )}
               aria-label={`Масштаб ${s}×`}
               aria-pressed={s === scale}
             >
