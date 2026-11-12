@@ -48,6 +48,12 @@ function SearchBox({ initial }: { initial: string }) {
 
 function Notifications() {
   const [open, setOpen] = useState(false)
+  // Панель остаётся в DOM, пока проигрывается анимация закрытия.
+  const [closing, setClosing] = useState(false)
+  const close = () => {
+    setOpen(false)
+    setClosing(true)
+  }
   const ref = useRef<HTMLDivElement>(null)
   const { data } = useNotifications()
   const markRead = useMarkNotificationsRead()
@@ -56,9 +62,9 @@ function Notifications() {
   useEffect(() => {
     if (!open) return
     const onClick = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(event.target as Node)) close()
     }
-    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
+    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && close()
     document.addEventListener('mousedown', onClick)
     document.addEventListener('keydown', onKey)
     return () => {
@@ -74,13 +80,19 @@ function Notifications() {
         className={s.iconAction}
         aria-label={unread ? `Уведомления: ${unread} новых` : 'Уведомления'}
         aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => (open ? close() : (setClosing(false), setOpen(true)))}
       >
         <Bell size={28} fill="currentColor" />
         {unread > 0 && <span className={s.badge}>{unread}</span>}
       </button>
-      {open && (
-        <div className={s.panel} role="dialog" aria-label="Уведомления">
+      {(open || closing) && (
+        <div
+          className={cx(s.panel, closing && s.panelClosing)}
+          role="dialog"
+          aria-label="Уведомления"
+          aria-hidden={closing || undefined}
+          onAnimationEnd={(event) => event.target === event.currentTarget && setClosing(false)}
+        >
           <div className={s.panelHead}>
             <h3>Уведомления</h3>
             {unread > 0 && (
@@ -90,7 +102,7 @@ function Notifications() {
             )}
           </div>
           {data?.map((item) => (
-            <HrefLink key={item.id} href={item.href ?? '/'} className={s.notification} onClick={() => setOpen(false)}>
+            <HrefLink key={item.id} href={item.href ?? '/'} className={s.notification} onClick={close}>
               <div className={s.notificationTitle}>
                 {!item.read && <span className={s.unreadDot} aria-label="Новое" />}
                 {item.title}

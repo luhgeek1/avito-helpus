@@ -6,7 +6,7 @@ import { usePost, useToggleSubscription } from '@/shared/api'
 import type { Post } from '@/shared/api'
 import { subscribersLabel } from '@/widgets/portal-feed'
 import { ChannelAvatar, LikeButtonLarge } from '@/widgets/portal-feed'
-import { Button, Cover, cx, ErrorState, Skeleton } from '@/shared/ui/portal'
+import { Button, Cover, cx, ErrorState, portalGlobals, Skeleton } from '@/shared/ui/portal'
 import { formatRelative, plural } from '@/shared/lib/portal-format'
 import { NotFoundPage } from './NotFoundPage'
 import a from './article.styles'
@@ -88,7 +88,7 @@ export function ArticlePage() {
   if (isError && error instanceof ApiError && error.status === 404) return <NotFoundPage />
 
   return (
-    <div className="container">
+    <div className={portalGlobals.container}>
       <nav className={s.crumbs} aria-label="Хлебные крошки">
         <Link to="/">Главная</Link>
         <ChevronRight size={14} aria-hidden />

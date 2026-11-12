@@ -1,6 +1,6 @@
 import { Link } from '@/shared/lib/portal-navigation'
 import { useState } from 'react'
-import { Button } from '@/shared/ui/portal'
+import { Button, portalGlobals } from '@/shared/ui/portal'
 import { APP_NAME } from './Logo'
 import s from './layout.styles'
 
@@ -40,7 +40,7 @@ export function Footer() {
 
   return (
     <footer className={s.footer}>
-      <div className="container">
+      <div className={portalGlobals.container}>
         <div className={s.footerGrid}>
           <nav className={s.footerColumn} aria-label="Сотрудникам">
             <h4>Сотрудникам</h4>

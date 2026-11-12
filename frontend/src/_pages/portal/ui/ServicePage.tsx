@@ -1,7 +1,7 @@
 import { getRouteApi, Link } from '@/shared/lib/portal-navigation'
 import { ApiError } from '@/shared/api'
 import { useService } from '@/shared/api'
-import { buttonClass, Emoji, ErrorState, Skeleton } from '@/shared/ui/portal'
+import { buttonClass, Emoji, ErrorState, portalGlobals, Skeleton } from '@/shared/ui/portal'
 import { SERVICE_EMOJI } from '@/shared/ui/portal'
 import { BackButton } from './BackButton'
 import { NotFoundPage } from './NotFoundPage'
@@ -17,7 +17,7 @@ export function ServicePage() {
   if (isError && error instanceof ApiError && error.status === 404) return <NotFoundPage />
 
   return (
-    <div className="container">
+    <div className={portalGlobals.container}>
       <BackButton />
       {isPending && <Skeleton height={300} radius={24} />}
       {isError && <ErrorState onRetry={() => refetch()} />}

@@ -32,6 +32,7 @@ export default {
 "hub-ui-fade": {"from":{"opacity":"0"}},
 "hub-ui-rise": {"from":{"opacity":"0","transform":"translateY(12px)"}},
 "hub-layout-drop": {"from":{"opacity":"0","transform":"translateY(-6px)"}},
+"hub-layout-lift": {"to":{"opacity":"0","transform":"translateY(-6px)"}},
         "sprite-frame": {
           "0%,\n  24.999%": {
             "opacity": "1"
@@ -73,6 +74,7 @@ export default {
 "hub-ui-fade": "hub-ui-fade 0.15s ease-out",
 "hub-ui-rise": "hub-ui-rise 0.18s ease-out",
 "hub-layout-drop": "hub-layout-drop 0.2s ease-out",
+"hub-layout-lift": "hub-layout-lift 0.15s ease-in forwards",
         "sprite-frame": "sprite-frame 3.2s steps(1, end) infinite",
         "dialogue-open": "dialogue-open 120ms steps(2, end)",
         "dialogue-cursor": "dialogue-cursor 800ms steps(1) infinite",

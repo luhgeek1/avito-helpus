@@ -375,7 +375,7 @@ export function ProfilePage({ personId }: { personId: string }) {
   const activeTab = tabs.some((item) => item.id === tab) ? tab : 'work'
 
   return (
-    <div className="container">
+    <div className={portalGlobals.container}>
       {query.isPending && <Skeleton height={480} />}
       {query.isError && <ErrorState onRetry={() => query.refetch()} />}
       {person && (
