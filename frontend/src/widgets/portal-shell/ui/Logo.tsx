@@ -1,5 +1,4 @@
 import { Link } from '@/shared/lib/portal-navigation'
-import s from './layout.styles'
 
 export const APP_NAME = 'Хаб'
 
@@ -24,9 +23,13 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Logo() {
   return (
-    <Link to="/" className={s.logo} aria-label="На главную">
-      <LogoMark className={s.logoMark} />
-      <span className={s.logoText}>{APP_NAME}</span>
+    <Link
+      to="/"
+      className="mr-12 inline-flex min-w-25.75 shrink-0 items-center gap-1.5 text-30 leading-none font-bold hub-max-720:col-start-1 hub-max-720:row-start-1 hub-max-720:mr-0 hub-max-720:min-w-0 hub-max-720:text-26"
+      aria-label="На главную"
+    >
+      <LogoMark className="size-8 hub-max-720:size-7" />
+      <span>{APP_NAME}</span>
     </Link>
   )
 }

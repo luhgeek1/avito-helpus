@@ -1,8 +1,11 @@
 import { Link } from '@/shared/lib/portal-navigation'
 import { useState } from 'react'
-import { Button, portalGlobals } from '@/shared/ui/portal'
+import { Button, container } from '@/shared/ui/portal'
 import { APP_NAME } from './Logo'
-import s from './layout.styles'
+
+const column = 'mb-6 flex flex-col gap-2.5 hub-max-720:mb-0'
+const columnLink = 'text-secondary hover:text-link-hover'
+const card = 'flex items-center justify-between gap-4 rounded-3xl bg-fill px-5 py-4'
 
 /** Декоративный «QR-код»: настоящий появится, когда будет мобильное приложение. */
 function FakeQr() {
@@ -24,7 +27,7 @@ function FakeQr() {
     </g>
   )
   return (
-    <svg className={s.qr} viewBox={`0 0 ${size} ${size}`} shapeRendering="crispEdges" aria-label="QR-код приложения">
+    <svg className="size-19 shrink-0 rounded-xl bg-white p-1.5" viewBox={`0 0 ${size} ${size}`} shapeRendering="crispEdges" aria-label="QR-код приложения">
       {cells.map((cell) => (
         <rect key={`${cell.x}-${cell.y}`} x={cell.x} y={cell.y} width={1} height={1} fill="#000" />
       ))}
@@ -39,42 +42,42 @@ export function Footer() {
   const [subscribed, setSubscribed] = useState(false)
 
   return (
-    <footer className={s.footer}>
-      <div className={portalGlobals.container}>
-        <div className={s.footerGrid}>
-          <nav className={s.footerColumn} aria-label="Сотрудникам">
-            <h4>Сотрудникам</h4>
-            <ul>
-              <li><Link to="/ai">Искусственный интеллект</Link></li>
-              <li><Link to="/feed/$postId" params={{ postId: 'benefit-friend' }}>Приведи друга</Link></li>
-              <li><Link to="/services/$serviceId" params={{ serviceId: 'sport' }}>Компенсация спорта</Link></li>
-              <li><Link to="/services/$serviceId" params={{ serviceId: 'psy' }}>Психологическая помощь</Link></li>
-              <li><Link to="/services/$serviceId" params={{ serviceId: 'dms' }}>ДМС</Link></li>
+    <footer className="border-t border-divider pt-8 pb-10 hub-max-720:pt-6">
+      <div className={container}>
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] gap-8 hub-max-900:grid-cols-2 hub-max-720:grid-cols-[minmax(0,max-content)_minmax(0,1fr)] hub-max-720:gap-x-8 hub-max-720:gap-y-6">
+          <nav aria-label="Сотрудникам">
+            <h4 className="mb-3 text-15 font-bold">Сотрудникам</h4>
+            <ul className={column}>
+              <li><Link to="/ai" className={columnLink}>Искусственный интеллект</Link></li>
+              <li><Link to="/feed/$postId" params={{ postId: 'benefit-friend' }} className={columnLink}>Приведи друга</Link></li>
+              <li><Link to="/services/$serviceId" params={{ serviceId: 'sport' }} className={columnLink}>Компенсация спорта</Link></li>
+              <li><Link to="/services/$serviceId" params={{ serviceId: 'psy' }} className={columnLink}>Психологическая помощь</Link></li>
+              <li><Link to="/services/$serviceId" params={{ serviceId: 'dms' }} className={columnLink}>ДМС</Link></li>
             </ul>
           </nav>
 
-          <nav className={s.footerColumn} aria-label="Портал">
-            <h4>Портал</h4>
-            <ul>
-              <li><Link to="/services">Все сервисы</Link></li>
-              <li><Link to="/feed">Лента</Link></li>
-              <li><Link to="/events">События</Link></li>
-              <li><Link to="/benefits/$categoryId" params={{ categoryId: 'savings' }}>Плюсы</Link></li>
+          <nav aria-label="Портал">
+            <h4 className="mb-3 text-15 font-bold">Портал</h4>
+            <ul className={column}>
+              <li><Link to="/services" className={columnLink}>Все сервисы</Link></li>
+              <li><Link to="/feed" className={columnLink}>Лента</Link></li>
+              <li><Link to="/events" className={columnLink}>События</Link></li>
+              <li><Link to="/benefits/$categoryId" params={{ categoryId: 'savings' }} className={columnLink}>Плюсы</Link></li>
             </ul>
           </nav>
 
-          <div className={s.footerCards}>
-            <div className={s.footerCard}>
+          <div className="flex flex-col gap-3 hub-max-900:col-span-full">
+            <div className={card}>
               <div>
-                <h3>{APP_NAME} в смартфоне</h3>
-                <p>Отсканируйте QR-код и установите приложение для сотрудников</p>
+                <h3 className="mb-0.5 text-15 leading-5 font-bold">{APP_NAME} в смартфоне</h3>
+                <p className="text-13 leading-4.5 text-secondary">Отсканируйте QR-код и установите приложение для сотрудников</p>
               </div>
               <FakeQr />
             </div>
-            <div className={s.footerCard}>
+            <div className={card}>
               <div>
-                <h3>Дайджест недели</h3>
-                <p>Самое важное из жизни компании — раз в неделю на почту</p>
+                <h3 className="mb-0.5 text-15 leading-5 font-bold">Дайджест недели</h3>
+                <p className="text-13 leading-4.5 text-secondary">Самое важное из жизни компании — раз в неделю на почту</p>
               </div>
               <Button
                 variant={subscribed ? 'secondary' : 'primary'}
@@ -88,7 +91,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <p className={s.footerNote}>
+        <p className="mt-2 text-13 leading-4.5 text-secondary">
           Демо-портал для хакатона Hack&amp;Change 2026. Все данные синтетические и не являются регламентами Авито.
         </p>
       </div>
