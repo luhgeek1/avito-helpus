@@ -143,7 +143,10 @@ function QuickActions() {
           aria-label="Настроить подборку"
         >
           <Settings2 size={16} aria-hidden />
-          Настроить<span className={s.settingsExtra}> подборку</span>
+          {/* One label span: the flex gap belongs only between the icon and the text. */}
+          <span>
+            Настроить<span className={s.settingsExtra}> подборку</span>
+          </span>
         </button>
       </div>
       {isPending && <Skeleton height={88} />}
