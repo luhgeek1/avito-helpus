@@ -1,7 +1,6 @@
 import type { Illustration, ServiceIcon as ServiceIconName } from '@/shared/api'
 import { cx } from './classes'
 import { Illustration as IllustrationImage } from './Illustration'
-import s from './ui.styles'
 
 export const SERVICE_ILLUSTRATION: Record<ServiceIconName, Illustration> = {
   game: 'gamepad',
@@ -29,7 +28,7 @@ export const SERVICE_ILLUSTRATION: Record<ServiceIconName, Illustration> = {
 export function ServiceIcon({ icon, size = 48, className }: { icon: ServiceIconName; size?: number; className?: string }) {
   return (
     <span
-      className={cx(s.serviceIcon, className)}
+      className={cx('inline-flex shrink-0 items-center justify-center bg-fill leading-none', className)}
       style={{ width: size, height: size, borderRadius: Math.round(size * 0.3) }}
       aria-hidden
     >
