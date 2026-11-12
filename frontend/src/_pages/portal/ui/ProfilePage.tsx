@@ -14,11 +14,9 @@ import { useState, type ReactNode } from 'react'
 import { ApiError } from '@/shared/api'
 import { useCalendar, useMe, usePerson } from '@/shared/api'
 import type { Person, PersonShort } from '@/shared/api'
-import { Avatar, cx, EmptyState, ErrorState, Illustration, paletteClass, Skeleton } from '@/shared/ui/portal'
+import { Avatar, container, cx, EmptyState, ErrorState, heading, Illustration, paletteClass, Skeleton } from '@/shared/ui/portal'
 import { formatDayMonth, formatTime, formatWeekday, toDateKey } from '@/shared/lib/portal-format'
 import { NotFoundPage } from './NotFoundPage'
-import { portalGlobals } from '@/shared/ui/portal'
-import s from './profile.styles'
 
 const box = 'rounded-3xl bg-fill p-5'
 const link = 'text-link hover:text-link-hover'
@@ -27,6 +25,10 @@ const contact = cx('inline-flex size-10 items-center justify-center rounded-full
 const calendarMode = 'h-7 rounded-lg border-0 bg-transparent px-2.5 text-13 text-secondary'
 const calendarModeActive = 'bg-white text-primary shadow-[0_1px_3px_rgba(0,0,0,0.08)]'
 const calendarArrow = 'inline-flex size-7 items-center justify-center rounded-full border-0 bg-white'
+const section = 'not-first:mt-10'
+const sectionHead = 'mb-3 flex items-center justify-between gap-3'
+const tableRow = 'flex items-center justify-between gap-4 rounded-2xl bg-fill px-4 py-3.5'
+const muted = 'text-13 text-secondary'
 
 /* ---------- Левая колонка ---------- */
 
@@ -210,9 +212,9 @@ type TabId = (typeof TABS)[number]['id']
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className={s.field}>
-      <span className={s.fieldLabel}>{label}</span>
-      <span className={s.fieldValue}>{children}</span>
+    <div className="grid min-h-14 grid-cols-[240px_minmax(0,1fr)] items-center gap-4 border-b border-divider py-2 hub-max-720:grid-cols-1 hub-max-720:gap-1">
+      <span className="text-secondary">{label}</span>
+      <span>{children}</span>
     </div>
   )
 }
@@ -220,11 +222,11 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 function PersonLink({ person }: { person: PersonShort | null }) {
   if (!person) return <>—</>
   return (
-    <Link to="/people/$personId" params={{ personId: person.id }} className={s.personLink}>
+    <Link to="/people/$personId" params={{ personId: person.id }} className="inline-flex items-center gap-3 hover:text-link-hover">
       <Avatar firstName={person.firstName} lastName={person.lastName} palette={person.palette} size={40} />
       <span>
         {person.lastName} {person.firstName}
-        <span className={s.personRole}>{person.position}</span>
+        <span className="block text-13 leading-4.5 text-secondary">{person.position}</span>
       </span>
     </Link>
   )
@@ -233,11 +235,11 @@ function PersonLink({ person }: { person: PersonShort | null }) {
 function WorkTab({ person, isMe }: { person: Person; isMe: boolean }) {
   return (
     <>
-      <section className={s.section}>
-        <div className={s.sectionHead}>
-          <h2>{isMe ? 'Обо мне' : 'О сотруднике'}</h2>
+      <section className={section}>
+        <div className={sectionHead}>
+          <h2 className={heading.h2}>{isMe ? 'Обо мне' : 'О сотруднике'}</h2>
         </div>
-        <div className={s.fields}>
+        <div className="flex flex-col">
           <Field label="Специализация">{person.specialization}</Field>
           <Field label="Грейд">{person.grade}</Field>
           <Field label="Продукты">
@@ -266,23 +268,28 @@ function WorkTab({ person, isMe }: { person: Person; isMe: boolean }) {
         </div>
       </section>
 
-      <section className={s.section}>
-        <div className={s.sectionHead}>
-          <h2>
+      <section className={section}>
+        <div className={sectionHead}>
+          <h2 className={heading.h2}>
             {isMe ? 'Мои достижения' : 'Достижения'} {person.achievements.length}
           </h2>
         </div>
         {person.achievements.length === 0 ? (
           <EmptyState>Достижений пока нет</EmptyState>
         ) : (
-          <div className={s.achievements}>
+          <div className="flex flex-wrap gap-4">
             {person.achievements.map((achievement) => (
-              <div key={achievement.id} className={s.achievement}>
-                <span className={cx(s.medal, portalGlobals[`palette-${achievement.palette}`])}>
+              <div key={achievement.id} className="flex w-33 flex-col items-center gap-1.5 text-center">
+                <span
+                  className={cx(
+                    'inline-flex size-24 items-center justify-center rounded-3xl bg-tone-soft',
+                    paletteClass[achievement.palette],
+                  )}
+                >
                   <Illustration name={achievement.palette === 'green' ? 'trophy' : 'medal'} size={64} />
                 </span>
                 <span>{achievement.title}</span>
-                <span className={s.achievementText}>{achievement.description}</span>
+                <span className="text-13 leading-4.5 text-secondary">{achievement.description}</span>
               </div>
             ))}
           </div>
@@ -290,21 +297,21 @@ function WorkTab({ person, isMe }: { person: Person; isMe: boolean }) {
       </section>
 
       {isMe && (
-        <section className={s.section}>
-          <div className={s.sectionHead}>
-            <h2>Моё оборудование</h2>
-            <Link to="/services/$serviceId" params={{ serviceId: 'it' }} className={s.link}>
+        <section className={section}>
+          <div className={sectionHead}>
+            <h2 className={heading.h2}>Моё оборудование</h2>
+            <Link to="/services/$serviceId" params={{ serviceId: 'it' }} className={link}>
               Заказать
             </Link>
           </div>
-          <div className={s.table}>
+          <div className="flex flex-col gap-2">
             {person.equipment.map((item) => (
-              <div key={item.id} className={s.tableRow}>
-                <span className={s.rowTitle}>
+              <div key={item.id} className={tableRow}>
+                <span className="inline-flex items-center gap-2.5">
                   <Laptop size={18} aria-hidden />
                   {item.title}
                 </span>
-                <span className={s.muted}>{item.inventoryNumber}</span>
+                <span className={muted}>{item.inventoryNumber}</span>
               </div>
             ))}
           </div>
@@ -320,11 +327,11 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
       return <WorkTab person={person} isMe={isMe} />
     case 'personal':
       return (
-        <section className={s.section}>
-          <div className={s.sectionHead}>
-            <h2>Личные данные</h2>
+        <section className={section}>
+          <div className={sectionHead}>
+            <h2 className={heading.h2}>Личные данные</h2>
           </div>
-          <div className={s.fields}>
+          <div className="flex flex-col">
             <Field label="Рабочая почта">{person.email}</Field>
             <Field label="День рождения">{person.birthday}</Field>
             <Field label="Город">{person.city}</Field>
@@ -333,18 +340,23 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
       )
     case 'documents':
       return (
-        <section className={s.section}>
-          <div className={s.sectionHead}>
-            <h2>Документы</h2>
+        <section className={section}>
+          <div className={sectionHead}>
+            <h2 className={heading.h2}>Документы</h2>
           </div>
-          <div className={s.table}>
+          <div className="flex flex-col gap-2">
             {person.documents.map((doc) => (
-              <div key={doc.id} className={s.tableRow}>
+              <div key={doc.id} className={tableRow}>
                 <span>
                   {doc.title}
-                  <span className={s.muted}> · {formatDayMonth(doc.date)}</span>
+                  <span className={muted}> · {formatDayMonth(doc.date)}</span>
                 </span>
-                <span className={cx(s.status, doc.status === 'signed' ? s.signed : s.pending)}>
+                <span
+                  className={cx(
+                    'shrink-0 rounded-lg px-2.5 py-1 text-13',
+                    doc.status === 'signed' ? 'bg-green-soft text-green-text' : 'bg-red-soft text-red-text',
+                  )}
+                >
                   {doc.status === 'signed' ? 'Подписан' : 'Ждёт подписи'}
                 </span>
               </div>
@@ -358,19 +370,19 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
       return <EmptyState>{isMe ? 'Вы пока ничего не публиковали' : 'Постов пока нет'}</EmptyState>
     case 'learning':
       return (
-        <section className={s.section}>
-          <div className={s.sectionHead}>
-            <h2>Обучение</h2>
-            <Link to="/services/$serviceId" params={{ serviceId: 'learning' }} className={s.link}>
+        <section className={section}>
+          <div className={sectionHead}>
+            <h2 className={heading.h2}>Обучение</h2>
+            <Link to="/services/$serviceId" params={{ serviceId: 'learning' }} className={link}>
               Все курсы
             </Link>
           </div>
-          <div className={s.table}>
+          <div className="flex flex-col gap-2">
             {person.courses.map((course) => (
-              <div key={course.id} className={s.tableRow}>
+              <div key={course.id} className={tableRow}>
                 <span>
                   {course.title}
-                  <span className={s.muted}>
+                  <span className={muted}>
                     {course.progress === 100
                       ? ' · пройден'
                       : course.deadline
@@ -379,14 +391,14 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
                   </span>
                 </span>
                 <span
-                  className={s.progress}
+                  className="h-1.5 w-40 shrink-0 overflow-hidden rounded-[3px] bg-fill-strong hub-max-720:w-20"
                   role="progressbar"
                   aria-valuenow={course.progress}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-label={`Прогресс: ${course.progress}%`}
                 >
-                  <span className={s.progressBar} style={{ width: `${course.progress}%` }} />
+                  <span className="h-full rounded-[3px] bg-green" style={{ width: `${course.progress}%` }} />
                 </span>
               </div>
             ))}
@@ -412,40 +424,43 @@ export function ProfilePage({ personId }: { personId: string }) {
   const activeTab = tabs.some((item) => item.id === tab) ? tab : 'work'
 
   return (
-    <div className={portalGlobals.container}>
+    <div className={container}>
       {query.isPending && <Skeleton height={480} />}
       {query.isError && <ErrorState onRetry={() => query.refetch()} />}
       {person && (
-        <div className={s.layout}>
-          <div className={s.aside}>
+        <div className="grid grid-cols-[320px_minmax(0,1fr)] items-start gap-10 hub-max-900:grid-cols-1">
+          <div className="flex flex-col gap-4">
             <IdentityCard person={person} isMe={isMe} />
             {isMe && <CalendarWidget />}
-            <div className={s.box}>
-              <div className={s.stats}>
-                <h3>{isMe ? 'Мои посты' : 'Посты'}</h3>
-                <Link to="/feed" className={s.link}>
+            <div className={box}>
+              <div className="flex items-center justify-between">
+                <h3 className={heading.h3}>{isMe ? 'Мои посты' : 'Посты'}</h3>
+                <Link to="/feed" className={link}>
                   Подробнее
                 </Link>
               </div>
-              <div className={s.statsRow}>
+              <div className="mt-2 flex gap-4 text-secondary">
                 <span>
-                  <b>{person.followers}</b> подписчиков
+                  <b className="text-primary">{person.followers}</b> подписчиков
                 </span>
                 <span>
-                  <b>{person.following}</b> подписок
+                  <b className="text-primary">{person.following}</b> подписок
                 </span>
               </div>
             </div>
           </div>
           <div>
-            <div className={s.tabs} role="tablist" aria-label="Разделы профиля">
+            <div className="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Разделы профиля">
               {tabs.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   role="tab"
                   aria-selected={activeTab === item.id}
-                  className={cx(s.tab, activeTab === item.id && s.tabActive)}
+                  className={cx(
+                    'h-10 rounded-xl border-0 bg-control px-4 transition-colors duration-150 ease-out hover:bg-control-hover hover:duration-200 active:bg-control-pressed',
+                    activeTab === item.id && 'bg-dark text-white hover:bg-dark active:bg-dark',
+                  )}
                   onClick={() => setTab(item.id)}
                 >
                   {item.title}
