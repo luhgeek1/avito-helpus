@@ -160,10 +160,12 @@ export const me: Person = {
 const yulia: PersonShort = { id: 'p-yulia', firstName: 'Юлия', lastName: 'Гришина', position: 'Продуктовый дизайнер', palette: 'red' }
 const mikhail: PersonShort = { id: 'p-mikhail', firstName: 'Михаил', lastName: 'Зайцев', position: 'QA-инженер', palette: 'blue' }
 const andrey: PersonShort = { id: 'p-andrey', firstName: 'Андрей', lastName: 'Котов', position: 'Аналитик данных', palette: 'purple' }
+const daria: PersonShort = { id: 'p-daria', firstName: 'Дарья', lastName: 'Соколова', position: 'Frontend-разработчик', palette: 'green' }
 
 export const people: Person[] = [me, olga, artem, ksenia]
 
 export const birthdays: Birthday[] = [
+  { person: daria, date: daysFromNow(1) },
   { person: yulia, date: daysFromNow(3) },
   { person: mikhail, date: daysFromNow(7) },
   { person: andrey, date: daysFromNow(22) },
