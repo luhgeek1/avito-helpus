@@ -1,4 +1,3 @@
-import { portalGlobals } from '@/shared/ui/portal'
 import { Link } from '@/shared/lib/portal-navigation'
 import {
   CalendarDays,
@@ -15,10 +14,19 @@ import { useState, type ReactNode } from 'react'
 import { ApiError } from '@/shared/api'
 import { useCalendar, useMe, usePerson } from '@/shared/api'
 import type { Person, PersonShort } from '@/shared/api'
-import { Avatar, cx, EmptyState, ErrorState, Illustration, Skeleton } from '@/shared/ui/portal'
+import { Avatar, cx, EmptyState, ErrorState, Illustration, paletteClass, Skeleton } from '@/shared/ui/portal'
 import { formatDayMonth, formatTime, formatWeekday, toDateKey } from '@/shared/lib/portal-format'
 import { NotFoundPage } from './NotFoundPage'
+import { portalGlobals } from '@/shared/ui/portal'
 import s from './profile.styles'
+
+const box = 'rounded-3xl bg-fill p-5'
+const link = 'text-link hover:text-link-hover'
+const roundAction = 'transition-colors duration-150 ease-button hover:text-link-hover active:bg-white-pressed'
+const contact = cx('inline-flex size-10 items-center justify-center rounded-full border-0 bg-white text-primary', roundAction)
+const calendarMode = 'h-7 rounded-lg border-0 bg-transparent px-2.5 text-13 text-secondary'
+const calendarModeActive = 'bg-white text-primary shadow-[0_1px_3px_rgba(0,0,0,0.08)]'
+const calendarArrow = 'inline-flex size-7 items-center justify-center rounded-full border-0 bg-white'
 
 /* ---------- Левая колонка ---------- */
 
@@ -34,7 +42,11 @@ function CopyButton({ value, label }: { value: string; label: string }) {
     }
   }
   return (
-    <button type="button" className={s.copy} onClick={copy} aria-label={`Скопировать ${label}`}>
+    <button
+      type="button"
+      className={cx('inline-flex h-7 items-center gap-1 rounded-lg border-0 bg-white px-2.5 text-13', roundAction)}
+      onClick={copy}
+      aria-label={`Скопировать ${label}`}>
       <Copy size={13} />
       {copied ? 'Скопировано' : value}
     </button>
@@ -43,37 +55,40 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 
 function IdentityCard({ person, isMe }: { person: Person; isMe: boolean }) {
   return (
-    <div className={cx(s.box, s.identity)}>
+    <div className={cx(box, 'flex flex-col items-center gap-1 text-center')}>
       <Avatar firstName={person.firstName} lastName={person.lastName} palette={person.palette} size={96} />
-      <div className={s.name}>
+      <div className="mt-3 text-21 leading-6.5 font-bold">
         {person.lastName} {person.firstName}
         {person.middleName ? ` ${person.middleName}` : ''}
       </div>
-      <div className={s.position}>
-        {person.position} · <Link to="/feed" search={{ channel: 'platform' }}>{person.team}</Link>
+      <div className="text-secondary">
+        {person.position} ·{' '}
+        <Link to="/feed" search={{ channel: 'platform' }} className={link}>
+          {person.team}
+        </Link>
       </div>
-      <div className={s.ids}>
+      <div className="mt-2 flex justify-center gap-2">
         <CopyButton value={person.login} label="логин" />
         <CopyButton value={person.employeeId} label="табельный номер" />
       </div>
-      <div className={s.contacts}>
-        <a className={s.contact} href={`mailto:${person.email}`} aria-label="Написать письмо">
+      <div className="mt-3 flex gap-2">
+        <a className={contact} href={`mailto:${person.email}`} aria-label="Написать письмо">
           <Mail size={16} />
         </a>
-        <button type="button" className={s.contact} aria-label="Написать в мессенджер">
+        <button type="button" className={contact} aria-label="Написать в мессенджер">
           <MessageCircle size={16} />
         </button>
-        <button type="button" className={s.contact} aria-label="Позвонить">
+        <button type="button" className={contact} aria-label="Позвонить">
           <Phone size={16} />
         </button>
-        <button type="button" className={s.contact} aria-label="Созвониться по видео">
+        <button type="button" className={contact} aria-label="Созвониться по видео">
           <Video size={16} />
         </button>
       </div>
       {isMe && (
-        <div className={s.office}>
+        <div className="mt-4 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3 font-bold">
           <span>В офис</span>
-          <Link to="/services/$serviceId" params={{ serviceId: 'booking' }}>
+          <Link to="/services/$serviceId" params={{ serviceId: 'booking' }} className={cx(link, 'font-normal')}>
             Забронировать место
           </Link>
         </div>
@@ -102,55 +117,77 @@ export function CalendarWidget() {
   const weekStart = startOfWeek(date)
 
   return (
-    <section className={s.box} aria-label="Календарь">
-      <div className={s.calendarHead}>
-        <div className={s.modes} role="group" aria-label="Режим календаря">
-          <button type="button" className={cx(s.mode, mode === 'week' && s.modeActive)} aria-pressed={mode === 'week'} onClick={() => setMode('week')}>
+    <section className={box} aria-label="Календарь">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex rounded-[10px] bg-control p-0.5" role="group" aria-label="Режим календаря">
+          <button
+            type="button"
+            className={cx(calendarMode, mode === 'week' && calendarModeActive)}
+            aria-pressed={mode === 'week'}
+            onClick={() => setMode('week')}
+          >
             Неделя
           </button>
-          <button type="button" className={cx(s.mode, mode === 'day' && s.modeActive)} aria-pressed={mode === 'day'} onClick={() => setMode('day')}>
+          <button
+            type="button"
+            className={cx(calendarMode, mode === 'day' && calendarModeActive)}
+            aria-pressed={mode === 'day'}
+            onClick={() => setMode('day')}
+          >
             День
           </button>
         </div>
-        <div className={s.calendarNav}>
-          <button type="button" className={s.navButton} aria-label="Назад" onClick={() => setDate((d) => addDays(d, -step))}>
+        <div className="flex gap-1">
+          <button type="button" className={calendarArrow} aria-label="Назад" onClick={() => setDate((d) => addDays(d, -step))}>
             <ChevronLeft size={16} />
           </button>
-          <button type="button" className={s.navButton} aria-label="Вперёд" onClick={() => setDate((d) => addDays(d, step))}>
+          <button type="button" className={calendarArrow} aria-label="Вперёд" onClick={() => setDate((d) => addDays(d, step))}>
             <ChevronRight size={16} />
           </button>
         </div>
       </div>
-      <div className={s.calendarBody}>
+      <div className="rounded-2xl bg-white p-3">
         {mode === 'week' && (
-          <div className={s.week}>
+          <div className="mb-2 grid grid-cols-7 gap-0.5 text-center text-12">
             {Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)).map((day) => (
               <button
                 key={day.toISOString()}
                 type="button"
-                className={cx(s.weekDay, toDateKey(day) === key && s.weekDayActive)}
+                className={cx(
+                  'flex flex-col gap-0.5 rounded-[10px] border-0 bg-transparent py-1.5 text-secondary transition-colors duration-150 ease-out hover:bg-control-hover hover:duration-200',
+                  toDateKey(day) === key && 'bg-dark text-white hover:bg-dark hover:text-white',
+                )}
                 onClick={() => setDate(day)}
                 aria-label={formatDayMonth(day.toISOString())}
               >
                 <span>{formatWeekday(day)}</span>
-                <span className={s.weekNumber}>{day.getDate()}</span>
+                <span className={cx('text-15 font-bold', toDateKey(day) !== key && 'text-primary')}>{day.getDate()}</span>
               </button>
             ))}
           </div>
         )}
-        <div className={s.calendarDate}>
+        <div className="mb-2 text-center text-13 font-bold">
           {formatDayMonth(date.toISOString())}, {formatWeekday(date)}
         </div>
         {isPending && <Skeleton height={120} />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {data?.map((item) => (
-          <div key={item.id} className={s.slot}>
-            <span className={s.slotTime}>{formatTime(item.start)}</span>
-            <span className={cx(s.slotEvent, portalGlobals[`palette-${item.palette}`])}>{item.title}</span>
+          <div
+            key={item.id}
+            className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-2 border-t border-divider py-1.5 text-13 leading-4"
+          >
+            <span className="text-secondary">{formatTime(item.start)}</span>
+            <span
+              className={cx('truncate rounded-lg border-l-3 border-tone bg-tone-soft px-2 py-1.5', paletteClass[item.palette])}
+            >
+              {item.title}
+            </span>
           </div>
         ))}
       </div>
-      <Link to="/services/$serviceId" params={{ serviceId: 'booking' }} className={s.calendarLink}>
+      <Link to="/services/$serviceId" params={{ serviceId: 'booking' }}
+        className={cx(link, 'mt-3 flex items-center justify-center gap-1.5')}
+      >
         <CalendarDays size={14} />
         Перейти в календарь
       </Link>
