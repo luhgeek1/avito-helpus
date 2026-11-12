@@ -177,4 +177,3 @@ export function IconButton({
 
 export { Illustration } from './Illustration';
 export { ServiceIcon, SERVICE_ILLUSTRATION } from './ServiceIcon';
-export { default as portalGlobals } from './global.styles';

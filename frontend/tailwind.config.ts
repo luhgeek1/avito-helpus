@@ -29,6 +29,8 @@ const buddyColors = {
   line: "#e9e9ef",
   muted: "#81818c",
   lilac: "#7760c4",
+  // Colours of the pet on screen, set inline from its palette.
+  pet: { DEFAULT: "var(--pet-color)", bg: "var(--pet-bg)" },
 };
 
 const palettes = {
@@ -61,20 +63,6 @@ export default {
       "body :where(button, a):focus-visible": { outline: "3px solid #a28bdd", "outline-offset": "4px" },
       ":where(button, a) svg": { "flex-shrink": "0" },
       svg: { "vertical-align": "middle" },
-      // Portal element defaults; scoped to the portal shell while pages move to explicit classes.
-      ".hub-global-root :where(h1)": { "font-size": "32px", "line-height": "36px", "font-weight": "700" },
-      ".hub-global-root :where(h2)": { "font-size": "26px", "line-height": "30px", "font-weight": "700" },
-      ".hub-global-root :where(h3)": { "font-size": "18px", "line-height": "22px", "font-weight": "700" },
-      "@media (max-width: 720px)": {
-        ".hub-global-root :where(h1)": { "font-size": "26px", "line-height": "30px" },
-        ".hub-global-root :where(h2)": { "font-size": "22px", "line-height": "26px" },
-      },
-      ".hub-global-root :where(b, strong)": { "font-weight": "700" },
-      ".hub-global-root :where(a)": { color: "inherit", "text-decoration": "none", transition: "color 0.15s ease-in-out, background-color 0.15s ease-in-out" },
-      ".hub-global-root :where(button)": { font: "inherit", color: "inherit", cursor: "pointer" },
-      ".hub-global-root :where(input, select, textarea)": { font: "inherit", color: "inherit" },
-      ".hub-global-root :where(:focus-visible)": { outline: "3px solid #45c1ff", "outline-offset": "0" },
-      ".hub-global-root :where(img)": { display: "block", "max-width": "100%" },
       "@media (prefers-reduced-motion: reduce)": {
         "body *": { animation: "none !important", transition: "none !important", "scroll-behavior": "auto !important" },
       },
