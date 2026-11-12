@@ -1,0 +1,9 @@
+48	style color [static]
+5	rect  [static]
+4	style bottom [static]
+4	style clip [static]
+4	style clip-path [static]
+4	style margin-top [static]
+4	style right [static]
+1	style width [static]
+expected (hidden): {"transition-list":5498,"tailwind-ease":3093,"transition-colors":2573,"bg-position-0":490,"shadow-layers":576,"grid-placement":345,"keyword-alias":31,"color-format":186,"transform-split":852}
