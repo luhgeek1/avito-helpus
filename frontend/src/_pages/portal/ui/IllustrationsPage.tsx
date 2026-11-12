@@ -11,7 +11,7 @@ export function IllustrationsPage() {
     <div className={cx(container, 'flex flex-col gap-8')}>
       <header>
         <h1 className={heading.h1}>Иллюстрации</h1>
-        <p className="text-secondary">{NAMES.length} шт. в стиле объёмных рендеров Авито</p>
+        <p className="mt-1 text-secondary">{NAMES.length} шт. в стиле объёмных рендеров Авито</p>
       </header>
 
       <section aria-label="Все иллюстрации" className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">

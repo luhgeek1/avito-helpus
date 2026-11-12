@@ -111,10 +111,9 @@ export function PetCompanion() {
             <X size={12} />
           </button>}
           <button
-            // The global button cursor used to win over the grab cursor; only dragging switches it.
             className={cx(
               "widget-pet flex w-full touch-none! flex-col items-center bg-transparent p-0 select-none [-webkit-user-select:none]",
-              movement.dragging && "cursor-grabbing",
+              movement.dragging ? "cursor-grabbing" : "cursor-grab",
             )}
             onClick={(event) => {
               if (movement.consumeDragClick()) { tour.dragged(); return; }

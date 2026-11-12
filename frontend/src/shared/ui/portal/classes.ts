@@ -28,7 +28,7 @@ const buttonVariants: Record<ButtonVariant, string> = {
   success: 'bg-green text-white not-disabled:hover:bg-green-hover not-disabled:active:bg-green-pressed',
   secondary: 'bg-control text-primary not-disabled:hover:bg-control-hover not-disabled:active:bg-control-pressed',
   white: 'bg-white text-primary shadow-float not-disabled:active:bg-white-pressed',
-  ghost: 'bg-transparent text-link not-disabled:hover:text-link-hover',
+  ghost: 'bg-transparent px-1 text-link not-disabled:hover:text-link-hover',
 }
 
 const buttonSizes: Record<ButtonSize, string> = {
@@ -42,8 +42,8 @@ export const buttonClass = (variant: ButtonVariant = 'primary', size: ButtonSize
   cx(
     'inline-flex items-center justify-center gap-2 border-0 font-normal whitespace-nowrap',
     'transition-colors duration-150 ease-button disabled:cursor-default disabled:opacity-50',
-    buttonVariants[variant],
     buttonSizes[size],
+    buttonVariants[variant],
   )
 
 export const chipClass = cx(

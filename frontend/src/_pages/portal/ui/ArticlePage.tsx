@@ -113,11 +113,10 @@ export function ArticlePage() {
       {isPending && <Skeleton height={520} radius={24} />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {post && (
-        <div className="grid grid-cols-[minmax(0,1fr)_380px] items-start gap-12 hub-max-900:grid-cols-[1fr] hub-max-900:gap-8">
-          {/* 1fr keeps the original min-content column: the 480px cover image still widens it on phones. */}
+        <div className="grid grid-cols-[minmax(0,1fr)_380px] items-start gap-12 hub-max-900:grid-cols-1 hub-max-900:gap-8">
           <article>
             <h1 className={cx(heading.h1, 'mb-5')}>{post.title}</h1>
-            <Cover illustration={post.illustration} palette={post.palette} ratio="16 / 9" className="mb-6" />
+            <Cover illustration={post.illustration} palette={post.palette} ratio="16 / 9" className="mb-6 rounded-3xl" />
             {post.summary && <Summary text={post.summary} />}
             <h2 className={cx(heading.h2, 'mb-3')}>Описание</h2>
             <div className="flex flex-col gap-3.5 text-16 leading-6">

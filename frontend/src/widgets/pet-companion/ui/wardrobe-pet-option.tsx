@@ -23,8 +23,7 @@ export function WardrobePetOption({ pet, layout, offset, slot, revealed, interac
       data-pet-id={pet.id} data-center={slot === 0} aria-hidden={!visible}
       disabled={!visible || !interactive} tabIndex={visible ? 0 : -1}
       onClick={(event) => onChoose(event.detail === 0)}
-      // Touch handling stays as before: the global button rule outranked touch-none here.
-      className={`pointer-events-auto fixed grid touch-manipulation select-none place-items-center bg-transparent p-0
+      className={`pointer-events-auto fixed grid touch-none select-none place-items-center bg-transparent p-0
         [will-change:transform,opacity] [transition:opacity_160ms_ease-out]
         motion-reduce:transition-none group
         ${revealed && visible ? "opacity-100" : "pointer-events-none opacity-0"}`}

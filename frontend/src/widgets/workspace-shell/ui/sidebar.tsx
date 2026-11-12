@@ -7,7 +7,7 @@ import { cx } from "@/shared/lib/cx";
 
 const navItem = cx(
   "mb-1.5 flex items-center gap-2.75 rounded-[9px] px-3 py-3.5 text-13 text-[#74727e] transition-[background] duration-150",
-  "hover:bg-[#f5f3f9] max-md:justify-center max-md:gap-0 max-md:text-[0px] max-sm:min-h-11",
+  "hover:bg-[#f5f3f9] max-md:justify-center max-md:gap-0 max-md:text-[0px] max-sm:m-0 max-sm:min-h-11",
   "max-sm:rounded-[7px] max-sm:py-2.5 sm:max-md:px-0 sm:max-md:py-3.75 md:max-lg:text-12",
 );
 const navItemActive = "bg-[#eee9f8] font-[550] text-[#7760b2]";

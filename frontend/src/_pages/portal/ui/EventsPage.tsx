@@ -88,7 +88,7 @@ function UpcomingRow({ event }: { event: CompanyEvent }) {
           <span className={tag}>{categoryTitle(event.category)}</span>
           <span className={tag}>{formatTitle(event)}</span>
           {event.seatsLeft !== null && <span>Осталось мест: {event.seatsLeft}</span>}
-          {event.registered && <span className={tag}>Вы идёте</span>}
+          {event.registered && <span className={cx(tag, 'bg-green-soft text-green-text')}>Вы идёте</span>}
         </div>
       </div>
       <RegisterButton event={event} className="hub-max-720:col-span-full" />

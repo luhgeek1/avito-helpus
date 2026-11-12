@@ -47,7 +47,7 @@ export function LikeButtonLarge({ post }: { post: Post }) {
     <Button
       variant="secondary"
       size="l"
-      className="w-full"
+      className={cx('w-full', post.liked && 'text-red')}
       aria-pressed={post.liked}
       aria-label={post.liked ? 'Убрать лайк' : 'Поставить лайк'}
       disabled={toggle.isPending}
