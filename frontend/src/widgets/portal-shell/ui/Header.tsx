@@ -142,7 +142,7 @@ export function Header() {
         <div className={s.topActions}>
           <Link to="/services/$serviceId" params={{ serviceId: 'it' }} className={s.action}>
             <Plus size={18} aria-hidden />
-            <span>Заявка в IT</span>
+            <span>Заявка в IT-поддержку</span>
           </Link>
           <Link to="/services/$serviceId" params={{ serviceId: 'edo' }} className={s.action}>
             <FileText size={18} aria-hidden />
