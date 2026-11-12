@@ -24,11 +24,12 @@ import {
   ErrorState,
   HrefLink,
   IconButton,
+  Illustration,
   Modal,
   SectionHead,
   Skeleton,
 } from '@/shared/ui/portal'
-import { SERVICE_EMOJI } from '@/shared/ui/portal'
+import { SERVICE_ILLUSTRATION } from '@/shared/ui/portal'
 import { formatDayMonthShort } from '@/shared/lib/portal-format'
 import { usePreferences } from '@/entities/portal'
 import s from './home.styles'
@@ -185,9 +186,9 @@ function Birthdays() {
 }
 
 const DOCS = [
-  { id: 'edo', title: 'ЭДО', emoji: '📄' },
-  { id: 'vacation', title: 'Справки и отпуск', emoji: '🗂️' },
-  { id: 'trip', title: 'Командировки', emoji: '🧳' },
+  { id: 'edo', title: 'ЭДО', illustration: 'document' as const },
+  { id: 'vacation', title: 'Справки и отпуск', illustration: 'folders' as const },
+  { id: 'trip', title: 'Командировки', illustration: 'suitcase' as const },
 ]
 
 function Services() {
@@ -210,9 +211,7 @@ function Services() {
                 className={s.tile}
               >
                 <span className={s.tileTitle}>{service.title}</span>
-                <Emoji size={52} className={s.tileArt}>
-                  {SERVICE_EMOJI[service.icon]}
-                </Emoji>
+                <Illustration name={SERVICE_ILLUSTRATION[service.icon]} size={100} className={s.tileArt} />
               </Link>
             ))}
           </div>
@@ -222,7 +221,7 @@ function Services() {
               {DOCS.map((doc) => (
                 <Link key={doc.id} to="/services/$serviceId" params={{ serviceId: doc.id }} className={s.docsItem}>
                   <span className={s.docsIcon}>
-                    <Emoji size={34}>{doc.emoji}</Emoji>
+                    <Illustration name={doc.illustration} size={58} />
                   </span>
                   {doc.title}
                 </Link>

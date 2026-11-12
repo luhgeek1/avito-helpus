@@ -1,8 +1,8 @@
 import { getRouteApi, Link } from '@/shared/lib/portal-navigation'
 import { ApiError } from '@/shared/api'
 import { useService } from '@/shared/api'
-import { buttonClass, Emoji, ErrorState, portalGlobals, Skeleton } from '@/shared/ui/portal'
-import { SERVICE_EMOJI } from '@/shared/ui/portal'
+import { buttonClass, ErrorState, Illustration, portalGlobals, Skeleton } from '@/shared/ui/portal'
+import { SERVICE_ILLUSTRATION } from '@/shared/ui/portal'
 import { BackButton } from './BackButton'
 import { NotFoundPage } from './NotFoundPage'
 import s from './pages.styles'
@@ -34,9 +34,7 @@ export function ServicePage() {
               На главную
             </Link>
           </div>
-          <Emoji size={160} className={s.stubArt}>
-            {SERVICE_EMOJI[data.icon]}
-          </Emoji>
+          <Illustration name={SERVICE_ILLUSTRATION[data.icon]} size={230} className={s.stubArt} />
         </section>
       )}
     </div>

@@ -15,7 +15,7 @@ import { useState, type ReactNode } from 'react'
 import { ApiError } from '@/shared/api'
 import { useCalendar, useMe, usePerson } from '@/shared/api'
 import type { Person, PersonShort } from '@/shared/api'
-import { Avatar, cx, Emoji, EmptyState, ErrorState, Skeleton } from '@/shared/ui/portal'
+import { Avatar, cx, EmptyState, ErrorState, Illustration, Skeleton } from '@/shared/ui/portal'
 import { formatDayMonth, formatTime, formatWeekday, toDateKey } from '@/shared/lib/portal-format'
 import { NotFoundPage } from './NotFoundPage'
 import s from './profile.styles'
@@ -242,7 +242,7 @@ function WorkTab({ person, isMe }: { person: Person; isMe: boolean }) {
             {person.achievements.map((achievement) => (
               <div key={achievement.id} className={s.achievement}>
                 <span className={cx(s.medal, portalGlobals[`palette-${achievement.palette}`])}>
-                  <Emoji size={48}>{achievement.palette === 'green' ? '🏆' : '🏅'}</Emoji>
+                  <Illustration name={achievement.palette === 'green' ? 'trophy' : 'medal'} size={64} />
                 </span>
                 <span>{achievement.title}</span>
                 <span className={s.achievementText}>{achievement.description}</span>
