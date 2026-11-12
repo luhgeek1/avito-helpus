@@ -3,6 +3,7 @@ import { useParams as useNextParams, usePathname, useRouter as useNextRouter, us
 import { useCallback, useMemo } from "react";
 import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { eventCategorySchema, eventFormatSchema } from "@/shared/api";
+import { cx } from "@/shared/lib/cx";
 import type { EventCategory, EventFormat } from "@/shared/api";
 
 type SearchValues = { q?: string; channel?: string; category?: EventCategory; format?: EventFormat; period?: "today" | "week" | "month" };
@@ -40,8 +41,13 @@ export function useNavigate() {
 type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   to: string; params?: Record<string, string>; search?: SearchValues; children?: ReactNode;
 };
-export function Link({ to, params, search, children, ...rest }: LinkProps) {
-  return <NextLink href={href(to, params, search)} {...rest}>{children}</NextLink>;
+/** Portal link; colour changes fade unless the className sets another transition. */
+export function Link({ to, params, search, children, className, ...rest }: LinkProps) {
+  return (
+    <NextLink href={href(to, params, search)} className={cx("transition-colors duration-150 ease-in-out", className)} {...rest}>
+      {children}
+    </NextLink>
+  );
 }
 
 export function useRouterState<T>({ select }: { select: (state: { location: { pathname: string; search: SearchValues } }) => T }) {

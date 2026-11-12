@@ -19,14 +19,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" className={`${golos.variable} ${pixel.variable} ${portal.variable}`}>
-      <body className={`m-0 bg-[#f7f8fa] font-sans text-[14px] leading-[normal] font-normal text-[#25252b] antialiased
-            [font-synthesis:none] [text-rendering:optimizeLegibility] [--line:#e9e9ef] [--muted:#81818c] [--purple:#7760c4]
-            [--ink:#25252b] [&_:where(button,a)]:touch-manipulation
-            [&_:where(button,a)]:[-webkit-tap-highlight-color:transparent] [&_:where(button)]:cursor-pointer
-            [&_:where(button:disabled)]:cursor-default [&_:where(button,a):focus-visible]:outline-[3px]
-            [&_:where(button,a):focus-visible]:outline-[#a28bdd] [&_:where(button,a):focus-visible]:outline-offset-4
-            [&_:where(button,a)_svg]:shrink-0 [&_svg]:align-middle motion-reduce:[&_*]:animate-none!
-            motion-reduce:[&_*]:transition-none! motion-reduce:[&_*]:scroll-auto!`}>
+      <body className="m-0 bg-canvas font-sans text-14 leading-[normal] font-normal text-ink antialiased
+            [--line:#e9e9ef] [--muted:#81818c] [--purple:#7760c4] [--ink:#25252b]">
         <App>{children}</App>
       </body>
     </html>
