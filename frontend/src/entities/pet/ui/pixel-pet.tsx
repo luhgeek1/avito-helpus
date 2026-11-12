@@ -1,4 +1,5 @@
 import type { Pet } from "../model/types";
+import { cx } from "@/shared/lib/cx";
 import { spriteFrames } from "../lib/sprite-frames";
 export function PixelPet({
   pet,
@@ -14,8 +15,7 @@ export function PixelPet({
   const { frames, edge } = spriteFrames(pet);
   return (
     <svg
-      className={`pixel-pet block relative [image-rendering:pixelated] shrink-0 z-2 [&.is-paused_.sprite-frame]:animate-none
-            [&.is-paused_.sprite-frame:not(.frame-0)]:opacity-0 [&.is-paused_.frame-0]:opacity-100 ${paused ? "is-paused" : ""}  ${className}`}
+      className={cx("pixel-pet relative z-2 block shrink-0 [image-rendering:pixelated]", className)}
       width={size}
       height={size}
       viewBox={`0 0 ${edge} ${edge}`}
@@ -25,8 +25,12 @@ export function PixelPet({
     >
       {frames.map((runs, i) => (
         <g
-          className={`sprite-frame opacity-0 animate-sprite-frame motion-reduce:opacity-0 motion-reduce:[&.frame-0]:opacity-100
-            frame-${i}`}
+          // A paused pet shows its first frame; otherwise the frames take turns, and reduced motion keeps the first one.
+          className={cx(
+            "opacity-0",
+            paused ? "animate-none" : "animate-sprite-frame",
+            i === 0 && (paused ? "opacity-100" : "motion-reduce:opacity-100"),
+          )}
           key={i}
           style={{ animationDelay: `-${(4 - i) * 0.8}s` }}
         >

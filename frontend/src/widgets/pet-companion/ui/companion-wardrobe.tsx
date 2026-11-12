@@ -33,9 +33,7 @@ export function CompanionWardrobe({ anchor, position, open, semicircle = false }
   return (
     <div ref={root} id="companion-wardrobe" role="region" aria-roledescription="карусель" aria-label="Гардероб спутника"
       aria-hidden={!open} inert={!open || !interactive} tabIndex={-1}
-      className={`companion-wardrobe pointer-events-none touch-none fixed inset-0 z-37 outline-none
-        motion-reduce:[&_.sprite-frame]:animate-none
-        ${open && interactive ? "" : "[&_.sprite-frame]:animate-none [&_.sprite-frame]:opacity-0 [&_.frame-0]:opacity-100!"}`}
+      className="pointer-events-none fixed inset-0 z-37 touch-none outline-none"
       {...gesture.handlers}
       onKeyDown={(event) => {
         if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;

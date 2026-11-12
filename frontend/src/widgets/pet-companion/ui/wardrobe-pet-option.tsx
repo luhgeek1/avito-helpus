@@ -23,25 +23,27 @@ export function WardrobePetOption({ pet, layout, offset, slot, revealed, interac
       data-pet-id={pet.id} data-center={slot === 0} aria-hidden={!visible}
       disabled={!visible || !interactive} tabIndex={visible ? 0 : -1}
       onClick={(event) => onChoose(event.detail === 0)}
-      className={`wardrobe-pet pointer-events-auto fixed grid touch-none select-none place-items-center bg-transparent p-0
+      // Touch handling stays as before: the global button rule outranked touch-none here.
+      className={`pointer-events-auto fixed grid touch-manipulation select-none place-items-center bg-transparent p-0
         [will-change:transform,opacity] [transition:opacity_160ms_ease-out]
-        motion-reduce:transition-none focus-visible:[&_svg.wardrobe-disc]:drop-shadow-[0_0_4px_#00aaff]
+        motion-reduce:transition-none group
         ${revealed && visible ? "opacity-100" : "pointer-events-none opacity-0"}`}
       style={{ left: layout.cx - (layout.size + 8) / 2, top: layout.cy - (layout.size + 8) / 2,
         width: layout.size + 8, height: layout.size + 8,
         transform: `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`,
       }}>
       <span onTransitionEnd={onTransitionEnd}
-        className="radial-reveal relative grid place-items-center will-change-transform [transition:transform_240ms_cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
+        className="relative grid place-items-center will-change-transform [transition:transform_240ms_cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
         style={{ width: layout.size, height: layout.size,
           transform: revealed ? "translate3d(0, 0, 0) scale(1)" : `translate3d(${-dx / scale}px, ${-dy / scale}px, 0) scale(.45)` }}>
-        <svg className="wardrobe-disc absolute inset-0 size-full overflow-visible"
+        <svg className="absolute inset-0 size-full overflow-visible group-focus-visible:drop-shadow-[0_0_4px_#00aaff]"
           viewBox="0 0 56 56" shapeRendering="crispEdges" aria-hidden="true">
           <path d={outline} transform="translate(2 3)" fill="#383c6218" />
           <path d={outline} fill={chosen ? "#00aaff" : "#383c62"} />
           <path d={outline} transform="translate(2 2) scale(.928571)" fill="#ffffff" />
         </svg>
-        <Preview pet={pet} size={layout.size - 4} paused={paused} />
+        {/* Hidden or animating options stay on their first frame. */}
+        <Preview pet={pet} size={layout.size - 4} paused={paused || !interactive} />
       </span>
     </button>
   );
