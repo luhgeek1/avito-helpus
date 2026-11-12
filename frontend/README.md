@@ -57,6 +57,8 @@ npm run start
 
 Dev и production-сервер по умолчанию доступны на http://localhost:5173/. Для другого порта: `npm run dev -- --port 3000`. Production start выполняется после build. Артефакты Next.js находятся в `.next/` и игнорируются Git. Vite и старый React DOM entrypoint удалены. Корневого npm workspace нет.
 
+Деплой на домашний сервер, Docker и автодеплой из GitHub Actions: [deploy/home/README.md](deploy/home/README.md). Для контейнера включён Next.js standalone; локальная команда `npm run start` сохраняется.
+
 ## Петы и состояние
 
 Всего 40 персонажей, по четыре кадра. «Орби» — оригинал и 15 вариаций (16), «Раньше» — 25, «Все» — 40. Оригинал `orbit` находится в обеих тематических группах, без дублирования общего каталога. `/pets?pet=orbit` открывает его в предпросмотре, не меняя сохранённого спутника.
