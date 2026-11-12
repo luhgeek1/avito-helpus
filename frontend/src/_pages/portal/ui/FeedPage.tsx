@@ -1,10 +1,9 @@
-import { portalGlobals } from '@/shared/ui/portal'
 import { getRouteApi } from '@/shared/lib/portal-navigation'
 import { useChannels, usePosts } from '@/shared/api'
 import { ChannelList } from '@/widgets/portal-feed'
 import { PostCard, postGridClass } from '@/widgets/portal-feed'
-import { Chip, EmptyState, ErrorState, Skeleton } from '@/shared/ui/portal'
-import s from './pages.styles'
+import { Chip, container, cx, EmptyState, ErrorState, heading, Skeleton } from '@/shared/ui/portal'
+import { page, stickyAside, subtitle, withAside } from './classes'
 
 const route = getRouteApi('/feed')
 
@@ -17,14 +16,14 @@ export function FeedPage() {
   const select = (id?: string) => void navigate({ search: { channel: id } })
 
   return (
-    <div className={`${portalGlobals.container} ${s.page}`}>
+    <div className={cx(container, page)}>
       <div>
-        <h1>Лента</h1>
-        <p className={s.subtitle}>Новости компании, команд и сообществ</p>
+        <h1 className={heading.h1}>Лента</h1>
+        <p className={subtitle}>Новости компании, команд и сообществ</p>
       </div>
-      <div className={s.split}>
+      <div className={withAside}>
         <div>
-          <div className={s.filters} role="group" aria-label="Каналы">
+          <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Каналы">
             <Chip active={!channel} onClick={() => select(undefined)}>
               Все
             </Chip>
@@ -41,7 +40,7 @@ export function FeedPage() {
             {data?.map((post) => <PostCard key={post.id} post={post} />)}
           </div>
         </div>
-        <div className={s.sticky}>
+        <div className={cx(stickyAside, 'flex flex-col gap-4')}>
           <ChannelList />
         </div>
       </div>

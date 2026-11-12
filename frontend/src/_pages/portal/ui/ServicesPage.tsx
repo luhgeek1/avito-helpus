@@ -1,19 +1,19 @@
-import { portalGlobals } from '@/shared/ui/portal'
 import { Link } from '@/shared/lib/portal-navigation'
 import { useMemo } from 'react'
 import { useServices } from '@/shared/api'
 import type { Service } from '@/shared/api'
-import { ErrorState, Skeleton } from '@/shared/ui/portal'
-import { ServiceIcon } from '@/shared/ui/portal'
-import s from './pages.styles'
+import { container, cx, ErrorState, heading, ServiceIcon, Skeleton } from '@/shared/ui/portal'
+import { page, serviceList, subtitle } from './classes'
 
 export function ServiceRow({ service }: { service: Service }) {
   return (
-    <Link to="/services/$serviceId" params={{ serviceId: service.id }} className={s.serviceRow}>
+    <Link to="/services/$serviceId" params={{ serviceId: service.id }}
+      className="flex items-center gap-3.5 rounded-2xl p-2.5 transition-colors duration-150 ease-out hover:bg-fill hover:duration-200"
+    >
       <ServiceIcon icon={service.icon} size={52} />
       <div>
         <div>{service.title}</div>
-        <div className={s.serviceRowText}>{service.description}</div>
+        <div className="text-13 leading-4.5 text-secondary">{service.description}</div>
       </div>
     </Link>
   )
@@ -31,18 +31,18 @@ export function ServicesPage() {
   }, [data])
 
   return (
-    <div className={`${portalGlobals.container} ${s.page}`}>
+    <div className={cx(container, page)}>
       <div>
-        <h1>Все сервисы</h1>
-        <p className={s.subtitle}>Документы, офис, развитие и забота — всё, что нужно для работы</p>
+        <h1 className={heading.h1}>Все сервисы</h1>
+        <p className={subtitle}>Документы, офис, развитие и забота — всё, что нужно для работы</p>
       </div>
       <div>
         {isPending && <Skeleton height={400} />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {groups.map(([category, services]) => (
-          <section key={category} className={s.group} aria-label={category}>
-            <h2 className={s.groupTitle}>{category}</h2>
-            <div className={s.serviceList}>
+          <section key={category} className="not-first:mt-8" aria-label={category}>
+            <h2 className="mb-2 text-21 leading-6.5 font-bold">{category}</h2>
+            <div className={serviceList}>
               {services.map((service) => (
                 <ServiceRow key={service.id} service={service} />
               ))}
