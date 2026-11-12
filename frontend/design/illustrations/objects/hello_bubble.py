@@ -22,6 +22,8 @@ def build(r):
     bubble_mat = r.plastic('bubble', '#fbfcfe', rough=0.22, coat=0.6)
     # Flush, thin and dark: raised light-blue letters cast shadows and blended into the pale bubble.
     ink = r.material('ink', r.NAVY, rough=0.5)
-    r.shape('Bubble', outline(), 0.16, (0, 0, 0.08), mat=bubble_mat, bevel=0.06)
+    lift = 0.08
+    r.shape('Bubble', outline(), 0.16, (0, 0, lift), mat=bubble_mat, bevel=0.06)
     front = -0.08 - 0.06 * r.BEVEL_SCALE
-    r.text('Hello', 'Привет!', 0.27, 0.012, (0, front - 0.002, 0.42), mat=ink)
+    # Centre of the rounded body: outline centre (0.42) plus the lift.
+    r.text('Hello', 'Привет!', 0.27, 0.012, (0, front - 0.002, 0.42 + lift), mat=ink)
