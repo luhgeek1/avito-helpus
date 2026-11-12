@@ -1,7 +1,6 @@
-import { portalGlobals } from '@/shared/ui/portal'
 import { Link } from '@/shared/lib/portal-navigation'
 import { ChevronLeft, ChevronRight, Settings2 } from 'lucide-react'
-import { useState, type CSSProperties } from 'react'
+import { useState } from 'react'
 import {
   useBanners,
   useBenefitCategories,
@@ -15,23 +14,17 @@ import {
 import type { QuickAction } from '@/shared/api'
 import { ChannelList } from '@/widgets/portal-feed'
 import { PostCard, postGridClass } from '@/widgets/portal-feed'
-import {
-  Avatar,
-  Button,
-  buttonClass,
-  cx,
-  ErrorState,
-  HrefLink,
-  IconButton,
-  Illustration,
-  Modal,
-  SectionHead,
-  Skeleton,
-} from '@/shared/ui/portal'
+import { Avatar, Button, buttonClass, cx, ErrorState, focusRing, heading, HrefLink, IconButton, Illustration, Modal, paletteClass, SectionHead, Skeleton } from '@/shared/ui/portal'
 import { SERVICE_ILLUSTRATION } from '@/shared/ui/portal'
 import { formatDayMonthShort } from '@/shared/lib/portal-format'
 import { usePreferences } from '@/entities/portal'
+import { portalGlobals } from '@/shared/ui/portal'
 import s from './home.styles'
+
+const panel = 'flex flex-col rounded-3xl bg-fill px-6 pt-5 pb-6 hub-max-720:p-4'
+const panelHead = 'mb-4 flex items-center justify-between gap-3'
+/** Quick actions fill one row up to three, then two even rows of at most four columns. */
+const quickColumns = ['grid-cols-1', 'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4']
 
 /** Баннеры листаются только по клику, как на avito.ru: без автопрокрутки, с плавной сменой. */
 function HeroCarousel() {
@@ -48,30 +41,41 @@ function HeroCarousel() {
 
   return (
     <section aria-roledescription="карусель" aria-label="Главное в компании">
-      <div className={cx(s.slide, portalGlobals[`palette-${banner.palette}`])} aria-live="polite">
-        <div key={banner.id} className={s.slideText}>
-          <h2 className={s.slideTitle}>{banner.title}</h2>
-          <p className={s.slideBody}>{banner.text}</p>
+      <div
+        className={cx(
+          'relative flex min-h-60 items-center justify-between gap-6 overflow-hidden rounded-3xl bg-tone px-10 py-9 text-tone-fg',
+          'transition-colors duration-200 ease-out hub-max-720:min-h-55 hub-max-720:p-6',
+          paletteClass[banner.palette],
+        )}
+        aria-live="polite"
+      >
+        <div key={banner.id} className="relative z-1 max-w-145 animate-hub-home-slideIn">
+          <h2 className={cx(heading.h1, 'mb-2.5')}>{banner.title}</h2>
+          <p className="mb-6 text-16 leading-6 opacity-92">{banner.text}</p>
           <HrefLink href={banner.href} className={buttonClass('white', 'l')}>
             {banner.cta}
           </HrefLink>
         </div>
-        <Illustration key={`art-${banner.id}`} name={banner.illustration} size={230} className={s.slideArt} />
+        <Illustration key={`art-${banner.id}`} name={banner.illustration} size={230} className="mr-6 animate-hub-home-slideIn hub-max-720:hidden"
+        />
       </div>
-      <div className={s.heroControls}>
-        <div className={s.dots}>
+      <div className="mt-3 flex items-center justify-between">
+        <div className="flex gap-1.5">
           {data.map((item, i) => (
             <button
               key={item.id}
               type="button"
-              className={cx(s.dot, i === index % count && s.dotActive)}
+              className={cx(
+                'h-2 w-2 rounded-sm border-0 bg-fill-strong transition-[width,background-color] duration-200 ease-out',
+                i === index % count && 'w-6 bg-dark',
+              )}
               aria-label={`Слайд ${i + 1}: ${item.title}`}
               aria-current={i === index % count}
               onClick={() => setIndex(i)}
             />
           ))}
         </div>
-        <div className={s.arrows}>
+        <div className="flex gap-1">
           <IconButton label="Предыдущий слайд" onClick={() => go(-1)}>
             <ChevronLeft size={20} />
           </IconButton>
@@ -103,15 +107,20 @@ function QuickActionsSettings({ all, onClose }: { all: QuickAction[]; onClose: (
 
   return (
     <Modal title="Настроить подборку" onClose={onClose}>
-      <div className={s.options}>
+      <div className="mb-5 flex flex-col gap-0.5">
         {all.map((item) => (
-          <label key={item.id} className={s.option}>
-            <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggle(item.id)} />
+          <label key={item.id} className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-fill">
+            <input
+              type="checkbox"
+              className={cx('size-5 accent-blue', focusRing)}
+              checked={selected.has(item.id)}
+              onChange={() => toggle(item.id)}
+            />
             {item.title}
           </label>
         ))}
       </div>
-      <div className={s.modalActions}>
+      <div className="flex justify-end gap-2">
         <Button variant="secondary" onClick={onClose}>
           Отмена
         </Button>
@@ -132,12 +141,12 @@ function QuickActions() {
   const columns = visible.length <= 3 ? Math.max(visible.length, 1) : Math.min(4, Math.ceil(visible.length / 2))
 
   return (
-    <section className={s.panel} aria-label="Быстрые действия">
-      <div className={s.panelHead}>
-        <h3>Когда нужно быстрое решение</h3>
+    <section className={panel} aria-label="Быстрые действия">
+      <div className={panelHead}>
+        <h3 className={heading.h3}>Когда нужно быстрое решение</h3>
         <button
           type="button"
-          className={s.settings}
+          className="inline-flex shrink-0 items-center gap-1.5 border-0 bg-transparent whitespace-pre text-link hover:text-link-hover"
           onClick={() => setEditing(true)}
           disabled={!data}
           aria-label="Настроить подборку"
@@ -145,16 +154,23 @@ function QuickActions() {
           <Settings2 size={16} aria-hidden />
           {/* One label span: the flex gap belongs only between the icon and the text. */}
           <span>
-            Настроить<span className={s.settingsExtra}> подборку</span>
+            Настроить<span className="hub-max-720:hidden"> подборку</span>
           </span>
         </button>
       </div>
       {isPending && <Skeleton height={88} />}
       {isError && <ErrorState onRetry={() => refetch()} />}
-      <div className={s.chips} style={{ '--cols': columns } as CSSProperties}>
+      <div
+        className={cx(
+          'grid flex-1 auto-rows-[minmax(40px,1fr)] gap-2 hub-max-720:grid-cols-2',
+          quickColumns[columns],
+        )}
+      >
         {visible.map((item) => (
-          <HrefLink key={item.id} href={item.href} className={s.quick} title={item.title}>
-            <span className={s.quickText}>{item.title}</span>
+          <HrefLink key={item.id} href={item.href} title={item.title}
+            className="flex min-w-0 items-center rounded-xl bg-white px-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-shadow duration-150 ease-out hover:shadow-float active:bg-white-pressed hub-max-720:min-h-12 hub-max-720:px-3 hub-max-720:py-1.5"
+          >
+            <span className="truncate hub-max-720:line-clamp-2 hub-max-720:leading-4.5 hub-max-720:whitespace-normal">{item.title}</span>
           </HrefLink>
         ))}
       </div>
@@ -166,18 +182,18 @@ function QuickActions() {
 function Birthdays() {
   const { data, isPending, isError, refetch } = useBirthdays()
   return (
-    <section className={s.panel} aria-label="Дни рождения">
-      <div className={s.panelHead}>
-        <h3>Дни рождения</h3>
+    <section className={panel} aria-label="Дни рождения">
+      <div className={panelHead}>
+        <h3 className={heading.h3}>Дни рождения</h3>
       </div>
       {isPending && <Skeleton height={88} />}
       {isError && <ErrorState onRetry={() => refetch()} />}
-      <div className={s.birthdays}>
+      <div className="flex justify-between gap-2">
         {data?.map(({ person, date }) => (
-          <div key={person.id} className={s.birthday}>
+          <div key={person.id} className="flex min-w-0 flex-col items-center gap-1.5 text-center">
             <Avatar firstName={person.firstName} lastName={person.lastName} palette={person.palette} size={56} />
             <span>{person.firstName}</span>
-            <span className={s.birthdayDate}>{formatDayMonthShort(date)}</span>
+            <span className="text-13 leading-4.5 text-secondary">{formatDayMonthShort(date)}</span>
           </div>
         ))}
       </div>
