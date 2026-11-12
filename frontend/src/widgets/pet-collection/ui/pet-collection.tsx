@@ -4,11 +4,20 @@ import { PetCard, pets, defaultPet, usePetPreferences } from "@/entities/pet";
 import type { Pet } from "@/entities/pet";
 import { FavoritePetButton } from "@/features/pet/favorite";
 import { TogglePetAnimation } from "@/features/pet/toggle-animation";
+import { cx } from "@/shared/lib/cx";
 type Filter = "orbi" | "previous" | "all" | "favorites";
 const orbiVariants = pets.filter(
   (pet) => pet.category === "orbi" && pet.id !== defaultPet.id,
 );
 const orbiPets = [defaultPet, ...orbiVariants];
+const filterButton = cx(
+  "rounded-[7px] bg-transparent px-3 py-2.25 text-11 whitespace-nowrap text-[#766c80] max-sm:min-h-11 max-sm:py-2.5",
+  "max-xs:px-2 xs:max-sm:px-2.75 sm:max-md:min-h-9.5 sm:max-md:p-2 md:max-lg:p-2",
+);
+const filterButtonSelected = cx(
+  "border border-[#e7e4ec] bg-white px-2.75 py-2 text-[#51485e] shadow-[0_1px_4px_#3320470b] max-sm:py-2.25",
+  "max-xs:px-1.75 xs:max-sm:px-2.5 sm:max-md:p-1.75 md:max-lg:p-1.75",
+);
 const previousCount = pets.filter((pet) => pet.category !== "orbi").length;
 
 export function PetCollection({
@@ -32,24 +41,17 @@ export function PetCollection({
     return filter === "orbi" || pet.category !== "orbi";
   });
   return (
-    <section className="collection max-xs:w-[100%] xs:max-sm:w-[100%]" aria-label="Коллекция петов">
-      <div className={`collection-toolbar flex justify-between items-center mb-5 gap-[10px] min-h-[34px] max-md:items-start
-            max-sm:mb-[15px] max-sm:gap-[5px] max-sm:[scroll-margin-top:80px] xl:mb-[22px]
-            max-md:[&_>_.animation-toggle]:mt-0 max-md:[&_>_.animation-toggle]:shrink-0`}>
-        <div className={`filters flex gap-1 items-center max-md:grid max-md:[grid-template-columns:repeat(2,_minmax(0,_1fr))]
-            max-md:[flex:1] [&_button]:text-[11px] [&_button]:bg-transparent [&_button]:text-[#766c80]
-            [&_button]:rounded-[7px] [&_button]:whitespace-nowrap max-sm:[&_button]:min-h-11
-            sm:max-md:[&_button]:min-h-[38px] [&_button.selected]:bg-white [&_button.selected]:text-[#51485e]
-            [&_button.selected]:[box-shadow:0_1px_4px_#3320470b] [&_button.selected]:border
-            [&_button.selected]:border-solid [&_button.selected]:border-[#e7e4ec] sm:max-md:[&_button]:p-2
-            md:max-lg:[&_button]:p-2 sm:max-md:[&_button.selected]:p-[7px] md:max-lg:[&_button.selected]:p-[7px]
-            [&_button]:py-[9px] max-sm:[&_button]:py-[10px] [&_button.selected]:py-2 max-sm:[&_button.selected]:py-[9px]
-            [&_button]:px-3 max-xs:[&_button]:px-2 xs:max-sm:[&_button]:px-[11px] [&_button.selected]:px-[11px]
-            max-xs:[&_button.selected]:px-[7px] xs:max-sm:[&_button.selected]:px-[10px]`} aria-label="Фильтр персонажей">
+    <section className="max-xs:w-full xs:max-sm:w-full" aria-label="Коллекция петов">
+      <div className="collection-toolbar mb-5 flex min-h-8.5 items-center justify-between gap-2.5 max-md:items-start
+            max-sm:mb-3.75 max-sm:scroll-mt-20 max-sm:gap-1.25 xl:mb-5.5">
+        <div
+          className="flex items-center gap-1 max-md:grid max-md:flex-1 max-md:grid-cols-2"
+          aria-label="Фильтр персонажей"
+        >
           {filters.map(({ value, label }) => (
             <button
               key={value}
-              className={`${filter === value ? " selected" : ""}`}
+              className={cx(filterButton, filter === value && filterButtonSelected)}
               onClick={() => setFilter(value)}
               aria-pressed={filter === value}
             >
@@ -60,8 +62,7 @@ export function PetCollection({
         <TogglePetAnimation />
       </div>
       {list.length ? (
-        <div className={`pet-grid grid [grid-template-columns:repeat(3,_minmax(0,_1fr))] gap-[17px]
-            max-lg:[grid-template-columns:repeat(2,_minmax(0,_1fr))] max-md:gap-3 xl:gap-5`}>
+        <div className="grid grid-cols-3 gap-4.25 max-lg:grid-cols-2 max-md:gap-3 xl:gap-5">
           {list.map((pet) => (
             <PetCard
               key={pet.id}
@@ -76,34 +77,35 @@ export function PetCollection({
           ))}
         </div>
       ) : (
-        <div className={`collection-empty min-h-75 flex flex-col items-center justify-center text-center rounded-[13px] bg-white
-            text-[#b58ba5] [&_h2]:mt-[17px] [&_h2]:text-[17px] [&_h2]:font-[550] [&_h2]:text-[#63556e] [&_p]:mt-3
-            [&_p]:text-[#95869f] [&_p]:text-[11px] [&_p]:leading-[1.9] [&_>_button]:mt-5 [&_>_button]:min-h-11
-            [&_>_button]:rounded-[7px] [&_>_button]:bg-[#f0eaf8] [&_>_button]:text-[#81679c] [&_>_button]:text-[11px]
-            border border-solid border-[#e8e3ee] py-[35px] [&_>_button]:py-[10px] px-5 [&_>_button]:px-4`} role="status">
+        <div
+          className="flex min-h-75 flex-col items-center justify-center rounded-[13px] border border-[#e8e3ee] bg-white px-5
+            py-8.75 text-center text-[#b58ba5]"
+          role="status"
+        >
           <Heart size={27} strokeWidth={1.4} />
-          <h2>Пока нет избранных</h2>
-          <p>
+          <h2 className="mt-4.25 text-17 font-[550] text-[#63556e]">Пока нет избранных</h2>
+          <p className="mt-3 text-11 leading-[1.9] text-[#95869f]">
             Нажимай на сердечко у понравившихся вариантов.
             <br />
             Они соберутся здесь — будет проще выбрать своего.
           </p>
-          <button onClick={() => setFilter("orbi")}>Посмотреть Орби</button>
+          <button
+            className="mt-5 min-h-11 rounded-[7px] bg-[#f0eaf8] px-4 py-2.5 text-11 text-[#81679c]"
+            onClick={() => setFilter("orbi")}
+          >
+            Посмотреть Орби
+          </button>
         </div>
       )}
-      <div className={`collection-footer flex items-center justify-between gap-[15px] text-[9px] text-[#82788d] mt-[22px]
-            max-sm:text-[8px] max-sm:mt-[17px] [&_>_span:first-child]:flex [&_>_span:first-child]:items-center
-            [&_>_span:first-child]:gap-[7px] max-xs:[&_>_span:first-child]:max-w-[145px]
-            max-md:[&_>_span:first-child]:leading-[1.7] xs:max-sm:[&_>_span:first-child]:max-w-[205px]
-            sm:max-md:[&_>_span:first-child]:max-w-[150px] [&_.tiny-pixel]:w-1 [&_.tiny-pixel]:h-1
-            [&_.tiny-pixel]:bg-[#c8bfd6] max-md:[&_>_span:last-child]:whitespace-nowrap`}>
-        <span>
-          <span className="tiny-pixel w-[6px] h-[6px] inline-block bg-[#b1a3cc] shrink-[0]" />
+      <div className="mt-5.5 flex items-center justify-between gap-3.75 text-9 text-[#82788d] max-sm:mt-4.25 max-sm:text-8">
+        <span className="flex items-center gap-1.75 max-md:leading-[1.7] max-xs:max-w-36.25 xs:max-sm:max-w-51.25
+            sm:max-md:max-w-37.5">
+          <span className="inline-block size-1 shrink-0 bg-[#c8bfd6]" />
           {filter === "favorites"
             ? "Те, кто тебе приглянулся."
             : "У каждого — свой характер. Как у нас."}
         </span>
-        <span>
+        <span className="max-md:whitespace-nowrap">
           {list.length} из {pets.length} персонажей
         </span>
       </div>
