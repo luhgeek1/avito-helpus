@@ -1,0 +1,19 @@
+services:
+  web:
+    image: ghcr.io/luhgeek1/avito-web:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 384m
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - SERVICE_FQDN_WEB_3000
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/healthz').then(async r => { if (!r.ok || (await r.json()).status !== 'ok') process.exit(1); }).catch(() => process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

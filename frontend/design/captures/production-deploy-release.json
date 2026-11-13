@@ -1,0 +1,18 @@
+{
+  "verifiedDateLocal": "2026-11-13",
+  "timezone": "Asia/Novosibirsk",
+  "url": "https://avito.prooood.ru",
+  "workflowRun": "https://github.com/luhgeek1/avito-helpus/actions/runs/43273496362",
+  "workflowConclusion": "success",
+  "image": "ghcr.io/luhgeek1/avito-web:92723c11dc0f6c66c3c3b9c278a9cd8532c1670c",
+  "coolifyService": "f87xwad3ydhgmn7ya4wrubos",
+  "coolifyStatus": "running:healthy",
+  "containerUser": "node",
+  "memoryLimitBytes": 402653184,
+  "memoryUsageMiBObserved": 68.67,
+  "healthResponse": { "status": "ok" },
+  "tlsVerified": true,
+  "certificateIssuer": "Let's Encrypt YR2",
+  "certificateExpiresUtc": "2027-02-10T16:54:12Z",
+  "browserReport": "production-deploy-verification.json"
+}
