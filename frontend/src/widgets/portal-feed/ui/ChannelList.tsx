@@ -37,13 +37,13 @@ export function ChannelList({ title = 'Будь в курсе' }: { title?: stri
       {data?.map((channel) => (
         <div key={channel.id} className="flex items-center gap-3 py-2">
           <ChannelAvatar channel={channel} />
-          <div className="min-w-0 flex-1">
-            <Link to="/feed" search={{ channel: channel.id }} className="block truncate hover:text-link-hover">
+          <div className="flex min-w-0 flex-1 flex-col items-start">
+            <Link to="/feed" search={{ channel: channel.id }} className="relative bottom-0.5 hover:text-link-hover">
               {channel.name}
             </Link>
             <div className="text-13 leading-4.5 text-secondary">{subscribersLabel(channel.subscribers)}</div>
+            <SubscribeButton channel={channel} />
           </div>
-          <SubscribeButton channel={channel} />
         </div>
       ))}
     </aside>
