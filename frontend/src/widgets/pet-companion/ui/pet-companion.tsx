@@ -59,7 +59,7 @@ export function PetCompanion() {
             } as CSSProperties
           }
         >
-          {actions.chatOpen && <CompanionChat anchor={movement.ref} position={movement.style} name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0}
+          {actions.chatOpen && <CompanionChat name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0}
             onBack={() => { if (tour.active) tour.visit("menu"); else actions.menu(); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }}
             onClose={() => { actions.dismiss(); if (tour.active) tour.visit("wardrobe"); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
           {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
@@ -103,8 +103,8 @@ export function PetCompanion() {
             </div>
           )}
           {!tour.active && <button
-            className="absolute top-2 right-0 z-3 grid size-5.5 place-items-center rounded-full border border-[#eee8f3] bg-white
-            text-[#a093ac] max-sm:top-px max-sm:-right-px max-sm:size-7"
+            className={cx("absolute top-2 right-0 z-3 grid size-5.5 place-items-center rounded-full border border-[#eee8f3] bg-white",
+              "text-[#a093ac] max-sm:top-px max-sm:-right-px max-sm:size-7", actions.chatOpen && "z-42")}
             onClick={() => setWidgetVisible(false)}
             aria-label="Скрыть спутника"
           >
@@ -114,6 +114,7 @@ export function PetCompanion() {
             className={cx(
               "widget-pet flex w-full touch-none! flex-col items-center bg-transparent p-0 select-none [-webkit-user-select:none]",
               movement.dragging ? "cursor-grabbing" : "cursor-grab",
+              actions.chatOpen && "relative z-41",
             )}
             onClick={(event) => {
               if (movement.consumeDragClick()) { tour.dragged(); return; }

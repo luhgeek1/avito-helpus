@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
-import type { CSSProperties, RefObject } from "react";
 import { ArrowLeft, ArrowUp, X } from "lucide-react";
+import { cx } from "@/shared/lib/cx";
 import { useChatPlacement } from "../model/use-chat-placement";
 import type { useCompanionChat } from "../model/use-companion-chat";
 
-export function CompanionChat({ anchor, position, name, chat, onClose, onBack, topInset = 0 }: {
-  anchor: RefObject<HTMLDivElement | null>; position: CSSProperties; name: string;
+export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
+  name: string;
   chat: ReturnType<typeof useCompanionChat>; onClose: () => void; onBack: () => void; topInset?: number;
 }) {
-  const style = useChatPlacement(anchor, position, topInset);
+  const { style, handles, moving } = useChatPlacement(topInset);
   const history = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
   const close = useRef<HTMLButtonElement>(null);
@@ -24,14 +24,26 @@ export function CompanionChat({ anchor, position, name, chat, onClose, onBack, t
     <section id="companion-chat" role="dialog" aria-labelledby="companion-chat-title" style={style}
       className="companion-chat fixed z-40 flex flex-col rounded-2xl border-2 border-dark bg-white text-ink
         shadow-pop animate-appear motion-reduce:animate-none">
-      <header className="flex shrink-0 rounded-t-2xl bg-white items-center gap-2 border-b border-dark/10 py-3 pl-5 pr-2">
+      <button type="button" aria-label="Изменить ширину чата" title="Потяни край или нажми ← / →"
+        className="absolute -left-2 top-8 bottom-8 z-1 w-4 touch-none! cursor-ew-resize rounded-lg bg-transparent focus-visible:outline-dark"
+        {...handles("width")} />
+      <button type="button" aria-label="Изменить высоту чата" title="Потяни край или нажми ↑ / ↓"
+        className="absolute -top-2 left-8 right-8 z-1 h-4 touch-none! cursor-ns-resize rounded-lg bg-transparent focus-visible:outline-dark"
+        {...handles("height")} />
+      <button type="button" aria-label="Изменить размер чата" title="Потяни угол или используй стрелки"
+        className="absolute -top-3 -left-3 z-2 size-11 touch-none! cursor-nwse-resize rounded-xl bg-transparent focus-visible:outline-dark"
+        {...handles("both")} />
+      <header tabIndex={0} role="group" aria-label="Переместить чат" title="Перетащи за шапку или используй стрелки"
+        {...handles("move")}
+        className={cx("flex shrink-0 touch-none! select-none rounded-t-2xl bg-white items-center gap-2 border-b border-dark/10 py-3 pl-5 pr-2 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-dark",
+          moving ? "cursor-grabbing" : "cursor-grab")}>
         <button type="button" onClick={onBack} aria-label="Назад к меню пета"
           className="grid size-11 shrink-0 place-items-center rounded-xl bg-transparent text-dark hover:bg-control focus-visible:outline-2 focus-visible:outline-dark">
           <ArrowLeft size={20} aria-hidden="true" />
         </button>
         <div className="min-w-0 flex-1">
           <h2 id="companion-chat-title" className="truncate font-sans text-14 font-semibold leading-5 text-dark">{name}</h2>
-          <p className="text-11 text-[#687181]">Твой напарник рядом</p>
+          <p className="text-11 text-[#687181]">Перетащи за шапку</p>
         </div>
         <button ref={close} type="button" onClick={onClose} aria-label="Закрыть чат"
           className="grid size-11 shrink-0 place-items-center rounded-xl bg-transparent text-secondary hover:bg-control hover:text-dark focus-visible:outline-2 focus-visible:outline-dark">

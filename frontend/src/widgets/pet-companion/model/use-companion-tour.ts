@@ -16,7 +16,7 @@ const copy: Record<Scene, string> = {
   wardrobe: "Покрути колесо или свайпни. Нажми на образ, чтобы выбрать его.",
   settings: "Здесь можно остановить анимацию или скрыть меня. Знакомство тоже можно повторить отсюда.",
   spotlight: "Два быстрых Enter — и можно задать вопрос. Ещё один Enter отправит его. Отвечу рядом с собой.",
-  move: "Теперь попробуй меня перетащить. Чат и гардероб всегда будут рядом со мной. Вот и всё — давай осваиваться!",
+  move: "Теперь попробуй меня перетащить. Гардероб останется рядом, а чат можно двигать отдельно за шапку. Вот и всё — давай осваиваться!",
 };
 type Controls = { movement: ReturnType<typeof useCompanionPosition>; actions: ReturnType<typeof useCompanionActions>;
   spotlight: ReturnType<typeof useSpotlightShortcut>; show: () => void; silence: () => void; draft: string };
