@@ -1,0 +1,89 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "initial": {
+        "x": 1028,
+        "y": 144,
+        "width": 400,
+        "height": 520
+      },
+      "resized": {
+        "x": 1044,
+        "y": 176,
+        "width": 384,
+        "height": 488
+      },
+      "mouse": true,
+      "touch": false,
+      "keyboard": true,
+      "savedSize": true,
+      "bounds": true,
+      "messagesPreserved": true
+    },
+    {
+      "width": 1366,
+      "initial": {
+        "x": 954,
+        "y": 144,
+        "width": 400,
+        "height": 520
+      },
+      "resized": {
+        "x": 970,
+        "y": 176,
+        "width": 384,
+        "height": 488
+      },
+      "mouse": true,
+      "touch": false,
+      "keyboard": true,
+      "savedSize": true,
+      "bounds": true,
+      "messagesPreserved": true
+    },
+    {
+      "width": 390,
+      "initial": {
+        "x": 12,
+        "y": 268,
+        "width": 366,
+        "height": 440
+      },
+      "resized": {
+        "x": 28,
+        "y": 300,
+        "width": 350,
+        "height": 408
+      },
+      "mouse": true,
+      "touch": true,
+      "keyboard": true,
+      "savedSize": true,
+      "bounds": true,
+      "messagesPreserved": true
+    },
+    {
+      "width": 320,
+      "initial": {
+        "x": 12,
+        "y": 268,
+        "width": 296,
+        "height": 440
+      },
+      "resized": {
+        "x": 12,
+        "y": 300,
+        "width": 296,
+        "height": 408
+      },
+      "mouse": true,
+      "touch": true,
+      "keyboard": true,
+      "savedSize": true,
+      "bounds": true,
+      "messagesPreserved": true
+    }
+  ],
+  "errors": []
+}

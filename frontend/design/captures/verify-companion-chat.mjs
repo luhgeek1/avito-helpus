@@ -40,7 +40,7 @@ try {
     const c = await chat.boundingBox(), p = await pet.boundingBox();
     assert(c.y + c.height < p.y, 'Chat should open above the pet');
     assert.equal(await page.locator('.pixel-dialogue').count(), 0);
-    assert.equal(await page.locator('.companion-orbit-menu').getAttribute('aria-hidden'), 'true');
+    assert.equal(await page.locator('#companion-actions').getAttribute('aria-hidden'), 'true');
     assert.equal(await chat.locator('article').count(), 5);
     assert(await send.isDisabled());
     await page.screenshot({ path: `frontend/design/captures/companion-chat-${width}.png` });

@@ -1,0 +1,23 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "fieldHeight": 42,
+      "textareaHeight": 32,
+      "sendSize": 32,
+      "blue": true,
+      "round": true,
+      "send": true
+    },
+    {
+      "width": 390,
+      "fieldHeight": 42,
+      "textareaHeight": 32,
+      "sendSize": 32,
+      "blue": true,
+      "round": true,
+      "send": true
+    }
+  ],
+  "errors": []
+}

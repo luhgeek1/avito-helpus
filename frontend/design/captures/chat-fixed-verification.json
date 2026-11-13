@@ -1,0 +1,57 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "fixedStart": true,
+      "independentPet": true,
+      "drag": "mouse",
+      "keyboard": true,
+      "petAboveChat": true,
+      "savedTallSize": true,
+      "draft": true,
+      "send": true,
+      "buttons": true,
+      "viewport": true
+    },
+    {
+      "width": 1366,
+      "fixedStart": true,
+      "independentPet": true,
+      "drag": "mouse",
+      "keyboard": true,
+      "petAboveChat": true,
+      "savedTallSize": true,
+      "draft": true,
+      "send": true,
+      "buttons": true,
+      "viewport": true
+    },
+    {
+      "width": 390,
+      "fixedStart": true,
+      "independentPet": true,
+      "drag": "touch",
+      "keyboard": true,
+      "petAboveChat": true,
+      "savedTallSize": true,
+      "draft": true,
+      "send": true,
+      "buttons": true,
+      "viewport": true
+    },
+    {
+      "width": 320,
+      "fixedStart": true,
+      "independentPet": true,
+      "drag": "touch",
+      "keyboard": true,
+      "petAboveChat": true,
+      "savedTallSize": true,
+      "draft": true,
+      "send": true,
+      "buttons": true,
+      "viewport": true
+    }
+  ],
+  "errors": []
+}
