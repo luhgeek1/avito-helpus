@@ -103,7 +103,7 @@ class TokenCodec:
     def csrf_matches(self, refresh_token: str, csrf_token: str | None) -> bool:
         if not csrf_token:
             return False
-        return hmac.compare_digest(self.csrf_for(refresh_token), csrf_token)
+        return hmac.compare_digest(self.csrf_for(refresh_token).encode(), csrf_token.encode())
 
 
 @dataclass(frozen=True, slots=True)

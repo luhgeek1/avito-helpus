@@ -2,14 +2,19 @@ import asyncio
 import json
 import time
 from collections.abc import AsyncIterator
+from contextlib import suppress
 from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, Query, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import StreamingResponse
+from pydantic import ValidationError
 
 from app.api.deps import (
+    CodecDep,
     CurrentUserDep,
+    DatabaseDep,
     EscalationServiceDep,
     KnowledgeServiceDep,
     MentorServiceDep,
@@ -32,13 +37,14 @@ from app.api.schemas.misc import (
 )
 from app.api.schemas.plan import PlanItemOut, ReviewIn
 from app.core.clock import today, utcnow
-from app.core.errors import ErrorCode, NotFoundError, UnauthorizedError
+from app.core.errors import DomainError, ErrorCode, NotFoundError, UnauthorizedError
 from app.core.security import webhooks
 from app.domain.corp import CorpTicketStatus
 from app.domain.escalations import EscalationStatus
 from app.domain.requests import RequestSource
 from app.domain.users import CurrentUser, Permission
 from app.infra.bus import subscribe
+from app.service.auth import resolve_current_user
 
 escalations_router = APIRouter(prefix="/escalations", tags=["Escalations"])
 mentees_router = APIRouter(prefix="/mentees", tags=["Mentor"])
@@ -194,10 +200,23 @@ async def read_all(user: CurrentUserDep, uow: UowDep) -> None:
     summary="Realtime SSE: notification.created, request.updated, plan.updated, escalation.updated",
     response_class=StreamingResponse,
 )
-async def events(request: Request, user: CurrentUserDep, redis: RedisDep) -> StreamingResponse:
+async def events(
+    request: Request, user: CurrentUserDep, redis: RedisDep, db: DatabaseDep, codec: CodecDep
+) -> StreamingResponse:
+    raw_token = request.headers["authorization"].split(" ", 1)[1]
+
+    async def authenticated() -> bool:
+        try:
+            claims = codec.decode_access(raw_token)
+            async with db.unit_of_work() as uow:
+                await resolve_current_user(uow, claims)
+        except DomainError:
+            return False
+        return True
+
     async def generate() -> AsyncIterator[str]:
         yield "retry: 3000\n\n"
-        queue: asyncio.Queue[dict[str, object]] = asyncio.Queue()
+        queue: asyncio.Queue[dict[str, object]] = asyncio.Queue(maxsize=100)
 
         async def pump() -> None:
             async for message in subscribe(redis, str(user.id)):
@@ -206,15 +225,23 @@ async def events(request: Request, user: CurrentUserDep, redis: RedisDep) -> Str
         task = asyncio.create_task(pump())
         try:
             while not await request.is_disconnected():
+                if not await authenticated():
+                    yield "event: auth.required\ndata: {}\n\n"
+                    return
                 try:
                     message = await asyncio.wait_for(queue.get(), timeout=KEEPALIVE_SEC)
                 except TimeoutError:
                     yield ": keepalive\n\n"
                     continue
+                if not await authenticated():
+                    yield "event: auth.required\ndata: {}\n\n"
+                    return
                 payload = json.dumps(message["data"], ensure_ascii=False, default=str)
                 yield f"event: {message['event']}\ndata: {payload}\n\n"
         finally:
             task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
 
     return StreamingResponse(
         generate(),
@@ -235,6 +262,12 @@ class WebhookSignatureError(UnauthorizedError):
     path="/corp/webhook",
     summary="Decision from a corporate service (HMAC-signed, replay-protected, idempotent)",
     responses={401: {"description": "Bad signature"}},
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {"application/json": {"schema": CorpWebhookIn.model_json_schema()}},
+        }
+    },
 )
 async def corp_webhook(
     request: Request,
@@ -253,11 +286,16 @@ async def corp_webhook(
         tolerance_sec=settings.corp_webhook_tolerance_sec,
     ):
         raise WebhookSignatureError()
-    payload = CorpWebhookIn.model_validate_json(body)
+    try:
+        payload = CorpWebhookIn.model_validate_json(body)
+    except ValidationError as exc:
+        raise RequestValidationError(exc.errors()) from exc
     view = await svc.apply_decision(
         external_id=payload.request_id,
         status=CorpTicketStatus(payload.status),
         comment=payload.comment,
         source=RequestSource.WEBHOOK,
+        service=payload.service,
+        idempotency_key=payload.idempotency_key,
     )
     return {"status": "accepted" if view else "ignored"}

@@ -2,7 +2,7 @@ from collections.abc import Sequence
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import AccessResource, RequestEvent, ServiceRequest
@@ -62,6 +62,23 @@ class RequestRepository:
             .execution_options(populate_existing=True)
         )
         return await self._session.scalar(stmt)
+
+    async def external_id_in_use(self, external_id: str) -> bool:
+        # Lock the name even when no row exists; two different requests may get the same number.
+        await self._session.execute(
+            select(
+                func.pg_advisory_xact_lock(func.hashtextextended("corp-ticket:" + external_id, 0))
+            )
+        )
+        return bool(
+            await self._session.scalar(
+                select(
+                    select(ServiceRequest.id)
+                    .where(ServiceRequest.external_id == external_id)
+                    .exists()
+                )
+            )
+        )
 
     async def for_user(
         self,

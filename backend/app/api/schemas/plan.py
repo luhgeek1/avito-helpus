@@ -1,10 +1,10 @@
-from datetime import date, datetime
+from datetime import date
 from typing import Any, Self
 from uuid import UUID
 
 from pydantic import Field
 
-from app.api.schemas.base import RequestModel, ResponseModel
+from app.api.schemas.base import MoscowDateTime, RequestModel, ResponseModel
 from app.domain.plan import (
     STAGE_TITLES,
     Audience,
@@ -40,8 +40,8 @@ class PlanItemOut(ResponseModel):
     status: ItemStatus
     due_date: date
     overdue: bool
-    started_at: datetime | None
-    completed_at: datetime | None
+    started_at: MoscowDateTime | None
+    completed_at: MoscowDateTime | None
     waiting_reason: WaitingReason | None
     blocked_reason: str | None
     review_comment: str | None
@@ -108,7 +108,7 @@ class PlanOut(ResponseModel):
 
 class TransitionIn(RequestModel):
     transition: Transition = Field(description="start, complete, submit_review, block, unblock")
-    comment: str | None = Field(None, max_length=1000)
+    comment: str | None = Field(None, max_length=500)
 
 
 class ReviewIn(RequestModel):

@@ -2,6 +2,7 @@ import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from time import perf_counter
 from uuid import UUID, uuid4
 from zlib import crc32
 
@@ -11,11 +12,12 @@ from app.core.clock import today, utcnow
 from app.core.config import Settings
 from app.db.database import Database
 from app.db.uow import UnitOfWork
-from app.domain.corp import CorpUnavailableError, EquipmentStatus
+from app.domain.corp import CorpRequestError, CorpUnavailableError, EquipmentStatus
 from app.domain.events import NotificationKind
 from app.domain.flags import Flag
 from app.domain.requests import RequestSource
 from app.domain.users import CurrentUser, Role
+from app.infra.metrics import WORKER_JOB_DURATION, WORKER_JOB_ITEMS, WORKER_JOBS, metric_job
 from app.service.escalations import EscalationService
 from app.service.mentor import MentorService
 from app.service.notify import notify
@@ -99,6 +101,17 @@ class Nudges:
                     ticket = await reconcile_ticket(self._corp, request)
                 except CorpUnavailableError:
                     return updated
+                except CorpRequestError:
+                    await service.mark_failed(
+                        request,
+                        (
+                            "Заявка отсутствует или изменилась в корпоративном сервисе "
+                            "после сброса демо. "
+                            "Обратись в IT-поддержку."
+                        ),
+                    )
+                    updated += 1
+                    continue
                 if ticket is None or request.external_id is None:
                     continue
                 before = request.status
@@ -232,10 +245,17 @@ async def run_due(jobs: list[ScheduledJob], next_runs: dict[str, datetime], now:
         if now < next_runs.get(job.name, now):
             continue
         next_runs[job.name] = now + job.every
+        label = metric_job(job.name)
+        started = perf_counter()
         try:
             done = await job.run()
         except Exception:  # one failing job must not stop the others
+            WORKER_JOBS.labels(task=label, outcome="error").inc()
             logger.exception("scheduled job %s failed", job.name)
             continue
+        finally:
+            WORKER_JOB_DURATION.labels(task=label).observe(perf_counter() - started)
+        WORKER_JOBS.labels(task=label, outcome="ok").inc()
+        WORKER_JOB_ITEMS.labels(task=label).inc(done)
         if done:
             logger.info("scheduled job %s: %s", job.name, done)

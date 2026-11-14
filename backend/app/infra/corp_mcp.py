@@ -89,8 +89,13 @@ class McpCorpServices:
     async def access_get(self, external_id: str) -> CorpTicket:
         return _ticket(await self._call("access_get_request", {"request_id": external_id}))
 
-    async def access_remind(self, external_id: str) -> None:
-        await self._call("access_remind", {"request_id": external_id})
+    async def access_remind(self, external_id: str, *, idempotency_key: str | None = None) -> None:
+        await self._call(
+            "access_remind", {"request_id": external_id, "idempotency_key": idempotency_key}
+        )
+
+    async def cancel_request(self, external_id: str) -> CorpTicket:
+        return _ticket(await self._call("request_cancel", {"request_id": external_id}))
 
     async def absence_balance(self, *, employee: str) -> int:
         data = await self._call("absence_balance", {"employee": employee})
@@ -203,4 +208,5 @@ def _ticket(data: dict[str, Any]) -> CorpTicket:
         comment=data.get("comment"),
         sla_hours=data.get("sla_hours"),
         approver=data.get("approver"),
+        idempotency_key=data.get("idempotency_key"),
     )

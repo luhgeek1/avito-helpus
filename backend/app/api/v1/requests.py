@@ -48,7 +48,7 @@ async def cancel_request(request_id: UUID, user: Requester, svc: RequestServiceD
 
 @router.post(
     path="/requests/{request_id}/remind",
-    summary="Remind the approver (once a day)",
+    summary="Remind the access approver (once a day)",
     responses={409: {"description": "Too soon or the request isn't waiting for approval"}},
 )
 async def remind(request_id: UUID, user: Requester, svc: RequestServiceDep) -> RequestOut:

@@ -1,10 +1,10 @@
-from datetime import date, datetime
-from typing import Any, Literal, Self
+from datetime import date
+from typing import Annotated, Any, Literal, Self
 from uuid import UUID
 
 from pydantic import Field
 
-from app.api.schemas.base import RequestModel, ResponseModel
+from app.api.schemas.base import MoscowDateTime, RequestModel, ResponseModel
 from app.api.schemas.people import PersonOut
 from app.api.schemas.plan import PlanItemOut, PlanOut
 from app.api.schemas.requests import RequestOut
@@ -108,10 +108,10 @@ class EscalationOut(ResponseModel):
     context: dict[str, Any]
     answer: str | None
     answered_by_name: str | None
-    answered_at: datetime | None
-    due_at: datetime
+    answered_at: MoscowDateTime | None
+    due_at: MoscowDateTime
     faq_document_slug: str | None
-    created_at: datetime
+    created_at: MoscowDateTime
 
     @classmethod
     def from_domain(cls, view: EscalationView) -> Self:
@@ -189,8 +189,8 @@ class MenteeDetailOut(ResponseModel):
 class ConversationOut(ResponseModel):
     id: UUID
     title: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: MoscowDateTime
+    updated_at: MoscowDateTime
 
     @classmethod
     def from_domain(cls, summary: ConversationSummary) -> Self:
@@ -204,7 +204,7 @@ class ChatMessageOut(ResponseModel):
         description="AI SDK UI parts: text, data-sources, data-action, ..."
     )
     feedback: str | None
-    created_at: datetime
+    created_at: MoscowDateTime
 
     @classmethod
     def from_domain(cls, view: ChatMessageView) -> Self:
@@ -246,8 +246,8 @@ class NotificationOut(ResponseModel):
     body: str
     link: str | None
     payload: dict[str, Any]
-    read_at: datetime | None
-    created_at: datetime
+    read_at: MoscowDateTime | None
+    created_at: MoscowDateTime
 
 
 class NotificationsOut(ResponseModel):
@@ -286,7 +286,10 @@ class FlagOut(ResponseModel):
 class FlagUpdateIn(RequestModel):
     enabled: bool
     rollout_percent: int = Field(..., ge=0, le=100)
-    variants: list[str] = Field(default_factory=list, max_length=4)
+    variants: list[Annotated[str, Field(min_length=1, max_length=32)]] = Field(
+        default_factory=list,
+        max_length=4,
+    )
 
 
 class AuditOut(ResponseModel):
@@ -296,7 +299,7 @@ class AuditOut(ResponseModel):
     target_type: str
     target_id: str | None
     details: dict[str, Any]
-    created_at: datetime
+    created_at: MoscowDateTime
 
 
 class UiEventIn(RequestModel):
@@ -312,3 +315,4 @@ class CorpWebhookIn(RequestModel):
     request_id: str = Field(..., max_length=64)
     status: Literal["approved", "rejected", "cancelled", "pending_approval"]
     comment: str | None = Field(None, max_length=2000)
+    idempotency_key: str | None = Field(None, max_length=256)
