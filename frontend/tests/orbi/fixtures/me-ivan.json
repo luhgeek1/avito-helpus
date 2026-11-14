@@ -1,0 +1,59 @@
+{
+ "id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+ "email": "ivan.mentor@buddy.test",
+ "full_name": "Иван Петров",
+ "title": "Senior Backend Engineer",
+ "role": "mentor",
+ "role_title": "Наставник",
+ "track": "backend",
+ "start_date": null,
+ "team": {
+  "id": "490d65a0-b55d-4383-ae41-3349867b75ae",
+  "slug": "listings",
+  "name": "Объявления: Backend",
+  "channel": "#listings-backend"
+ },
+ "mentor": null,
+ "lead": {
+  "id": "f6a19376-988c-4f34-8b85-bdf9dc35b638",
+  "full_name": "Мария Ким",
+  "title": "Engineering Manager",
+  "email": "maria.lead@buddy.test"
+ },
+ "hrbp": null,
+ "internship_day": null,
+ "permissions": [
+  "assistant:use",
+  "escalations:answer",
+  "escalations:create",
+  "faq:publish",
+  "knowledge:read",
+  "mentees:read",
+  "plan:own",
+  "plan:review",
+  "requests:own"
+ ],
+ "flags": {
+  "faq_publishing": {
+   "key": "faq_publishing",
+   "enabled": true,
+   "variant": null
+  },
+  "llm_conflict_check": {
+   "key": "llm_conflict_check",
+   "enabled": true,
+   "variant": null
+  },
+  "orbi_assistant": {
+   "key": "orbi_assistant",
+   "enabled": true,
+   "variant": null
+  },
+  "proactive_nudges": {
+   "key": "proactive_nudges",
+   "enabled": true,
+   "variant": null
+  }
+ },
+ "assistant_mode": "online"
+}

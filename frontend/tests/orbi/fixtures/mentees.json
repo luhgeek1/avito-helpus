@@ -1,0 +1,224 @@
+[
+ {
+  "person": {
+   "id": "4daec648-2100-4fc8-8aa3-9ac7e6740093",
+   "email": "anya.intern@buddy.test",
+   "full_name": "Аня Смирнова",
+   "title": "Стажёр-бэкендер",
+   "role": "intern",
+   "role_title": "Стажёр",
+   "track": "backend",
+   "start_date": "2026-11-12",
+   "team": {
+    "id": "490d65a0-b55d-4383-ae41-3349867b75ae",
+    "slug": "listings",
+    "name": "Объявления: Backend",
+    "channel": "#listings-backend"
+   },
+   "mentor": {
+    "id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+    "full_name": "Иван Петров",
+    "title": "Senior Backend Engineer",
+    "email": "ivan.mentor@buddy.test"
+   },
+   "lead": {
+    "id": "f6a19376-988c-4f34-8b85-bdf9dc35b638",
+    "full_name": "Мария Ким",
+    "title": "Engineering Manager",
+    "email": "maria.lead@buddy.test"
+   },
+   "hrbp": {
+    "id": "6277e5f3-1f51-46a1-a4c3-50ecb57f21f8",
+    "full_name": "Ольга Соколова",
+    "title": "HR Business Partner",
+    "email": "olga.hrbp@buddy.test"
+   }
+  },
+  "internship_day": 3,
+  "stage_title": "Первая неделя",
+  "percent": 16,
+  "done": 5,
+  "total": 32,
+  "overdue": 0,
+  "blocked": [],
+  "awaiting_review": [],
+  "mentor_tasks": [
+   {
+    "id": "6da0e364-40c1-4070-9a7c-762e3aacb747",
+    "slug": "mentor-check-access",
+    "stage": "week_1",
+    "title": "Наставник: проверить, что стажёр запросил доступы",
+    "description": "",
+    "category": "access",
+    "audience": "mentor",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2026-11-18",
+    "overdue": false,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   },
+   {
+    "id": "8b80a7b8-9b6e-49a4-a1c6-7140e8d1ca53",
+    "slug": "mentor-equator",
+    "stage": "after_3_months",
+    "title": "Наставник: подготовить напутственное слово к экватору",
+    "description": "",
+    "category": "development",
+    "audience": "mentor",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2027-05-10",
+    "overdue": false,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "open_requests": 0,
+  "open_questions": 0,
+  "needs_attention": false
+ },
+ {
+  "person": {
+   "id": "4f108de8-5901-4ec7-bbfa-d2f240675168",
+   "email": "kirill.intern@buddy.test",
+   "full_name": "Кирилл Орлов",
+   "title": "Стажёр-бэкендер",
+   "role": "intern",
+   "role_title": "Стажёр",
+   "track": "backend",
+   "start_date": "2026-10-29",
+   "team": {
+    "id": "490d65a0-b55d-4383-ae41-3349867b75ae",
+    "slug": "listings",
+    "name": "Объявления: Backend",
+    "channel": "#listings-backend"
+   },
+   "mentor": {
+    "id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+    "full_name": "Иван Петров",
+    "title": "Senior Backend Engineer",
+    "email": "ivan.mentor@buddy.test"
+   },
+   "lead": {
+    "id": "f6a19376-988c-4f34-8b85-bdf9dc35b638",
+    "full_name": "Мария Ким",
+    "title": "Engineering Manager",
+    "email": "maria.lead@buddy.test"
+   },
+   "hrbp": {
+    "id": "6277e5f3-1f51-46a1-a4c3-50ecb57f21f8",
+    "full_name": "Ольга Соколова",
+    "title": "HR Business Partner",
+    "email": "olga.hrbp@buddy.test"
+   }
+  },
+  "internship_day": 17,
+  "stage_title": "Первый месяц",
+  "percent": 53,
+  "done": 17,
+  "total": 32,
+  "overdue": 3,
+  "blocked": [
+   {
+    "id": "6f50ca3b-f0f8-4f51-95a6-615ea66769aa",
+    "slug": "team-docs",
+    "stage": "week_2",
+    "title": "Изучи документы и мануалы команды",
+    "description": "Гайд команды, дежурства и релизы, архитектура listings-api.",
+    "category": "team",
+    "audience": "intern",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [
+     "team-listings-handbook",
+     "team-listings-releases"
+    ],
+    "needs_laptop": false,
+    "status": "blocked",
+    "due_date": "2026-11-11",
+    "overdue": true,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": "Не запускается listings-api локально: падает docker compose на миграциях",
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "awaiting_review": [
+   {
+    "id": "53c0cd59-4011-439b-80b1-04e0b29d8993",
+    "slug": "first-pr",
+    "stage": "week_2",
+    "title": "Сделай первый PR и пройди ревью",
+    "description": "Небольшая задача от наставника: ветка, PR, ревью, мерж. Подтверждает наставник.",
+    "category": "tasks",
+    "audience": "intern",
+    "confirmation": "mentor",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [
+     "code-review-policy",
+     "team-listings-handbook",
+     "git-workflow"
+    ],
+    "needs_laptop": true,
+    "status": "waiting",
+    "due_date": "2026-11-11",
+    "overdue": false,
+    "started_at": "2026-10-28T17:00:00Z",
+    "completed_at": null,
+    "waiting_reason": "mentor_review",
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "mentor_tasks": [
+   {
+    "id": "bc3ae0a8-62fa-429d-8f13-f0fb476c70ef",
+    "slug": "mentor-equator",
+    "stage": "after_3_months",
+    "title": "Наставник: подготовить напутственное слово к экватору",
+    "description": "",
+    "category": "development",
+    "audience": "mentor",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2027-04-26",
+    "overdue": false,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "open_requests": 0,
+  "open_questions": 0,
+  "needs_attention": true
+ }
+]

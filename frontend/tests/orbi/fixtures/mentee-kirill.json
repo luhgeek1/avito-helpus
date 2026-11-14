@@ -1,0 +1,1194 @@
+{
+ "summary": {
+  "person": {
+   "id": "4f108de8-5901-4ec7-bbfa-d2f240675168",
+   "email": "kirill.intern@buddy.test",
+   "full_name": "Кирилл Орлов",
+   "title": "Стажёр-бэкендер",
+   "role": "intern",
+   "role_title": "Стажёр",
+   "track": "backend",
+   "start_date": "2026-10-29",
+   "team": {
+    "id": "490d65a0-b55d-4383-ae41-3349867b75ae",
+    "slug": "listings",
+    "name": "Объявления: Backend",
+    "channel": "#listings-backend"
+   },
+   "mentor": {
+    "id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+    "full_name": "Иван Петров",
+    "title": "Senior Backend Engineer",
+    "email": "ivan.mentor@buddy.test"
+   },
+   "lead": {
+    "id": "f6a19376-988c-4f34-8b85-bdf9dc35b638",
+    "full_name": "Мария Ким",
+    "title": "Engineering Manager",
+    "email": "maria.lead@buddy.test"
+   },
+   "hrbp": {
+    "id": "6277e5f3-1f51-46a1-a4c3-50ecb57f21f8",
+    "full_name": "Ольга Соколова",
+    "title": "HR Business Partner",
+    "email": "olga.hrbp@buddy.test"
+   }
+  },
+  "internship_day": 17,
+  "stage_title": "Первый месяц",
+  "percent": 53,
+  "done": 17,
+  "total": 32,
+  "overdue": 3,
+  "blocked": [
+   {
+    "id": "6f50ca3b-f0f8-4f51-95a6-615ea66769aa",
+    "slug": "team-docs",
+    "stage": "week_2",
+    "title": "Изучи документы и мануалы команды",
+    "description": "Гайд команды, дежурства и релизы, архитектура listings-api.",
+    "category": "team",
+    "audience": "intern",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [
+     "team-listings-handbook",
+     "team-listings-releases"
+    ],
+    "needs_laptop": false,
+    "status": "blocked",
+    "due_date": "2026-11-11",
+    "overdue": true,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": "Не запускается listings-api локально: падает docker compose на миграциях",
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "awaiting_review": [
+   {
+    "id": "53c0cd59-4011-439b-80b1-04e0b29d8993",
+    "slug": "first-pr",
+    "stage": "week_2",
+    "title": "Сделай первый PR и пройди ревью",
+    "description": "Небольшая задача от наставника: ветка, PR, ревью, мерж. Подтверждает наставник.",
+    "category": "tasks",
+    "audience": "intern",
+    "confirmation": "mentor",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [
+     "code-review-policy",
+     "team-listings-handbook",
+     "git-workflow"
+    ],
+    "needs_laptop": true,
+    "status": "waiting",
+    "due_date": "2026-11-11",
+    "overdue": false,
+    "started_at": "2026-10-28T17:00:00Z",
+    "completed_at": null,
+    "waiting_reason": "mentor_review",
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "mentor_tasks": [
+   {
+    "id": "bc3ae0a8-62fa-429d-8f13-f0fb476c70ef",
+    "slug": "mentor-equator",
+    "stage": "after_3_months",
+    "title": "Наставник: подготовить напутственное слово к экватору",
+    "description": "",
+    "category": "development",
+    "audience": "mentor",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2027-04-26",
+    "overdue": false,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "open_requests": 0,
+  "open_questions": 0,
+  "needs_attention": true
+ },
+ "plan": {
+  "start_date": "2026-10-29",
+  "today": "2026-11-14",
+  "current_stage": "month_1",
+  "current_stage_title": "Первый месяц",
+  "total": 32,
+  "done": 17,
+  "overdue": 3,
+  "percent": 53,
+  "next_steps": [
+   {
+    "id": "e2351a38-474b-4fea-97b9-84c234fda191",
+    "slug": "db-docs",
+    "stage": "week_2",
+    "title": "Изучи документацию по работе с базами данных",
+    "description": "Как мы проектируем схемы и пишем миграции.",
+    "category": "learning",
+    "audience": "intern",
+    "confirmation": "self",
+    "action": null,
+    "quiz": [],
+    "doc_slugs": [
+     "tools-overview"
+    ],
+    "needs_laptop": false,
+    "status": "in_progress",
+    "due_date": "2026-11-11",
+    "overdue": true,
+    "started_at": "2026-10-28T17:00:00Z",
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   },
+   {
+    "id": "06dc8727-5b55-48ae-9e53-79833b0906c8",
+    "slug": "access-grafana",
+    "stage": "week_2",
+    "title": "Получи доступ к дашбордам Grafana команды",
+    "description": "Пригодится, чтобы смотреть метрики своих изменений.",
+    "category": "access",
+    "audience": "intern",
+    "confirmation": "self",
+    "action": {
+     "kind": "access_request",
+     "resource": "grafana-listings"
+    },
+    "quiz": [],
+    "doc_slugs": [],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2026-11-11",
+    "overdue": true,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   },
+   {
+    "id": "509340bd-0cf4-4d83-8ad8-1106f3d0c8ca",
+    "slug": "data-protection",
+    "stage": "month_1",
+    "title": "Изучи основы защиты персональных данных (тест)",
+    "description": "Правила работы с данными пользователей и коллег.",
+    "category": "security",
+    "audience": "intern",
+    "confirmation": "quiz",
+    "action": null,
+    "quiz": [
+     {
+      "question": "Можно ли выгрузить данные пользователей в личную таблицу для анализа?",
+      "options": [
+       "Да, если таблица закрытая",
+       "Нет, только в согласованных инструментах",
+       "Да, если удалить через неделю"
+      ]
+     },
+     {
+      "question": "Куда сообщать о подозрении на утечку?",
+      "options": [
+       "В общий чат команды",
+       "В канал безопасности по инструкции",
+       "Никуда, само пройдёт"
+      ]
+     }
+    ],
+    "doc_slugs": [
+     "data-protection"
+    ],
+    "needs_laptop": false,
+    "status": "todo",
+    "due_date": "2026-11-27",
+    "overdue": false,
+    "started_at": null,
+    "completed_at": null,
+    "waiting_reason": null,
+    "blocked_reason": null,
+    "review_comment": null,
+    "request_id": null
+   }
+  ],
+  "stages": [
+   {
+    "stage": "week_1",
+    "title": "Первая неделя",
+    "due_date": "2026-11-04",
+    "total": 15,
+    "done": 15,
+    "percent": 100,
+    "items": [
+     {
+      "id": "6d60d605-db24-413c-8349-ebe8eeb2ad6e",
+      "slug": "meet-team",
+      "stage": "week_1",
+      "title": "Познакомься с командой",
+      "description": "Приди на стендап, представься, узнай, кто за что отвечает. Состав и ритуалы — в гайде команды.",
+      "category": "team",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "team-listings-handbook"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T17:00:00Z",
+      "completed_at": "2026-10-29T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "7d5d692f-17ca-40ba-a253-94586926442d",
+      "slug": "laptop",
+      "stage": "week_1",
+      "title": "Получи ноутбук и настрой рабочее место",
+      "description": "Узнай статус ноутбука, место и часы выдачи. Пока ждёшь — займись пунктами без ноутбука.",
+      "category": "org",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "equipment"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "equipment"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T18:00:00Z",
+      "completed_at": "2026-10-29T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "1eb8e133-d17e-4d94-8e8d-4c2e8a4d2c9d",
+      "slug": "chats-and-notes",
+      "stage": "week_1",
+      "title": "Проверь каналы и заведи конспект встреч с наставником",
+      "description": "Убедись, что ты в каналах команды, и записывай договорённости и обратную связь с 1:1.",
+      "category": "team",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T19:00:00Z",
+      "completed_at": "2026-10-29T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "9ab156be-80cd-46af-b82e-cf11fb84e89f",
+      "slug": "access-jira",
+      "stage": "week_1",
+      "title": "Получи доступ к Jira-проекту команды",
+      "description": "Задачи команды живут в проекте LST.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "jira-listings"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "access-policy"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T20:00:00Z",
+      "completed_at": "2026-10-30T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "bd18b23f-f9db-4a91-9095-d8c474d2d957",
+      "slug": "access-confluence",
+      "stage": "week_1",
+      "title": "Запроси доступ в пространство команды в Confluence и изучи его",
+      "description": "Там архитектура сервисов, решения и гайды команды.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "confluence-listings"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "access-policy"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T21:00:00Z",
+      "completed_at": "2026-10-30T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "24957a8a-e4be-4cbe-9ebf-d7404333880d",
+      "slug": "access-stash",
+      "stage": "week_1",
+      "title": "Получи доступ к репозиторию listings-api",
+      "description": "Нужен уровень «редактирование», чтобы пушить ветки и открывать PR.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "stash-listings-api"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "access-policy",
+       "git-workflow"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T22:00:00Z",
+      "completed_at": "2026-10-30T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "8f0b67d9-00c2-4962-a442-805df8fdd3b8",
+      "slug": "stash-keys",
+      "stage": "week_1",
+      "title": "Добавь SSH-ключ в Stash и склонируй репозиторий",
+      "description": "Без ключа не получится клонировать репозиторий по SSH.",
+      "category": "tools",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "git-workflow"
+      ],
+      "needs_laptop": true,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-28T23:00:00Z",
+      "completed_at": "2026-10-31T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "e793e201-112b-498f-8472-c847e0675c3c",
+      "slug": "avito-cli",
+      "stage": "week_1",
+      "title": "Настрой avito-cli",
+      "description": "Утилита для локального запуска сервисов и работы со стейджингом.",
+      "category": "tools",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "dev-environment"
+      ],
+      "needs_laptop": true,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T00:00:00Z",
+      "completed_at": "2026-10-31T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "89fea672-9b87-40be-ab61-80b756d086d4",
+      "slug": "dev-principles",
+      "stage": "week_1",
+      "title": "Изучи принципы разработки (тест)",
+      "description": "Короткий документ о том, как у нас пишут код. В конце — мини-тест из двух вопросов.",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "quiz",
+      "action": null,
+      "quiz": [
+       {
+        "question": "Что делать с кодом, который сгенерировала LLM?",
+        "options": [
+         "Сразу отправлять в PR",
+         "Читать, понимать и покрывать тестами, как свой",
+         "Не использовать никогда"
+        ]
+       },
+       {
+        "question": "Когда нужен design review?",
+        "options": [
+         "Для любого изменения",
+         "Для изменений контрактов и архитектуры",
+         "Никогда, достаточно код-ревью"
+        ]
+       }
+      ],
+      "doc_slugs": [
+       "dev-principles"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T01:00:00Z",
+      "completed_at": "2026-10-31T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "931c3bf5-de55-4e6a-b48d-c272406dc017",
+      "slug": "tech-dep-channel",
+      "stage": "week_1",
+      "title": "Попроси добавить тебя в канал Tech-dep",
+      "description": "В канале новости технического департамента.",
+      "category": "team",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "ask_mentor"
+      },
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T02:00:00Z",
+      "completed_at": "2026-11-01T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "300b2ce8-1a05-464b-b380-5901a00a1a4a",
+      "slug": "goals-1on1",
+      "stage": "week_1",
+      "title": "Обсуди с руководителем цели и критерии успешной стажировки",
+      "description": "Зафиксируй цели на период адаптации и ближайшие OKR команды. Подтверждает наставник.",
+      "category": "development",
+      "audience": "intern",
+      "confirmation": "mentor",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "ipr-and-goals"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T03:00:00Z",
+      "completed_at": "2026-11-01T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "70412494-9fb9-417b-8435-41e0bd872afa",
+      "slug": "learning-platform",
+      "stage": "week_1",
+      "title": "Прорешай задачи на учебной платформе",
+      "description": "Задачи знакомят с внутренними инструментами.",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T04:00:00Z",
+      "completed_at": "2026-11-01T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "005c3b1a-826f-49e1-a292-28595ee94dcf",
+      "slug": "mentor-add-chats",
+      "stage": "week_1",
+      "title": "Наставник: добавить стажёра во все чаты и каналы",
+      "description": "",
+      "category": "team",
+      "audience": "mentor",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T06:00:00Z",
+      "completed_at": "2026-11-02T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "bebf8f3c-30af-4d5b-bec9-f92911a4e879",
+      "slug": "mentor-check-access",
+      "stage": "week_1",
+      "title": "Наставник: проверить, что стажёр запросил доступы",
+      "description": "",
+      "category": "access",
+      "audience": "mentor",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T07:00:00Z",
+      "completed_at": "2026-11-02T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "819989da-f1f3-4ef8-a6c3-92b7703f9613",
+      "slug": "mentor-1on1",
+      "stage": "week_1",
+      "title": "Наставник: назначить регулярные 1:1",
+      "description": "",
+      "category": "team",
+      "audience": "mentor",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-04",
+      "overdue": false,
+      "started_at": "2026-10-29T08:00:00Z",
+      "completed_at": "2026-11-03T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   },
+   {
+    "stage": "week_2",
+    "title": "Вторая неделя",
+    "due_date": "2026-11-11",
+    "total": 5,
+    "done": 2,
+    "percent": 40,
+    "items": [
+     {
+      "id": "581ee880-559b-4b26-ba5a-72b7315090b0",
+      "slug": "progress-tool",
+      "stage": "week_2",
+      "title": "Внеси цели, задачи и ожидания в инструмент прогресса",
+      "description": "Попроси у куратора доступ к инструменту отслеживания прогресса. Подтверждает наставник.",
+      "category": "development",
+      "audience": "intern",
+      "confirmation": "mentor",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "ipr-and-goals"
+      ],
+      "needs_laptop": false,
+      "status": "done",
+      "due_date": "2026-11-11",
+      "overdue": false,
+      "started_at": "2026-10-29T05:00:00Z",
+      "completed_at": "2026-11-02T17:00:00Z",
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "6f50ca3b-f0f8-4f51-95a6-615ea66769aa",
+      "slug": "team-docs",
+      "stage": "week_2",
+      "title": "Изучи документы и мануалы команды",
+      "description": "Гайд команды, дежурства и релизы, архитектура listings-api.",
+      "category": "team",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "team-listings-handbook",
+       "team-listings-releases"
+      ],
+      "needs_laptop": false,
+      "status": "blocked",
+      "due_date": "2026-11-11",
+      "overdue": true,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": "Не запускается listings-api локально: падает docker compose на миграциях",
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "06dc8727-5b55-48ae-9e53-79833b0906c8",
+      "slug": "access-grafana",
+      "stage": "week_2",
+      "title": "Получи доступ к дашбордам Grafana команды",
+      "description": "Пригодится, чтобы смотреть метрики своих изменений.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "grafana-listings"
+      },
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-11-11",
+      "overdue": true,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "e2351a38-474b-4fea-97b9-84c234fda191",
+      "slug": "db-docs",
+      "stage": "week_2",
+      "title": "Изучи документацию по работе с базами данных",
+      "description": "Как мы проектируем схемы и пишем миграции.",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "tools-overview"
+      ],
+      "needs_laptop": false,
+      "status": "in_progress",
+      "due_date": "2026-11-11",
+      "overdue": true,
+      "started_at": "2026-10-28T17:00:00Z",
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "53c0cd59-4011-439b-80b1-04e0b29d8993",
+      "slug": "first-pr",
+      "stage": "week_2",
+      "title": "Сделай первый PR и пройди ревью",
+      "description": "Небольшая задача от наставника: ветка, PR, ревью, мерж. Подтверждает наставник.",
+      "category": "tasks",
+      "audience": "intern",
+      "confirmation": "mentor",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "code-review-policy",
+       "team-listings-handbook",
+       "git-workflow"
+      ],
+      "needs_laptop": true,
+      "status": "waiting",
+      "due_date": "2026-11-11",
+      "overdue": false,
+      "started_at": "2026-10-28T17:00:00Z",
+      "completed_at": null,
+      "waiting_reason": "mentor_review",
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   },
+   {
+    "stage": "month_1",
+    "title": "Первый месяц",
+    "due_date": "2026-11-27",
+    "total": 5,
+    "done": 0,
+    "percent": 0,
+    "items": [
+     {
+      "id": "509340bd-0cf4-4d83-8ad8-1106f3d0c8ca",
+      "slug": "data-protection",
+      "stage": "month_1",
+      "title": "Изучи основы защиты персональных данных (тест)",
+      "description": "Правила работы с данными пользователей и коллег.",
+      "category": "security",
+      "audience": "intern",
+      "confirmation": "quiz",
+      "action": null,
+      "quiz": [
+       {
+        "question": "Можно ли выгрузить данные пользователей в личную таблицу для анализа?",
+        "options": [
+         "Да, если таблица закрытая",
+         "Нет, только в согласованных инструментах",
+         "Да, если удалить через неделю"
+        ]
+       },
+       {
+        "question": "Куда сообщать о подозрении на утечку?",
+        "options": [
+         "В общий чат команды",
+         "В канал безопасности по инструкции",
+         "Никуда, само пройдёт"
+        ]
+       }
+      ],
+      "doc_slugs": [
+       "data-protection"
+      ],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-11-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "8f31d16d-2bf7-4e6f-8a47-349e4f7cfcda",
+      "slug": "microservices-course",
+      "stage": "month_1",
+      "title": "Пройди курс «Микросервисная архитектура»",
+      "description": "И курс про Agile-инструменты, если ещё не проходил.",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-11-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "33b83113-0672-416c-8320-d4919de94106",
+      "slug": "staging-access",
+      "stage": "month_1",
+      "title": "Получи доступ к стейджингу и проверь фичу на dev",
+      "description": "Нужен namespace listings-staging и LENS.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "k8s-listings-staging"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "dev-environment"
+      ],
+      "needs_laptop": true,
+      "status": "todo",
+      "due_date": "2026-11-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "21891790-8833-4a40-bae7-9b8cb19b646e",
+      "slug": "zbp-sentry",
+      "stage": "month_1",
+      "title": "Разберись с Zero Bug Policy и Sentry",
+      "description": "Как мы обращаемся с багами и где их видно.",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [
+       "tools-overview"
+      ],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-11-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "9cd4cbc9-2bc9-406f-a609-a4945e98f917",
+      "slug": "absence-rules",
+      "stage": "month_1",
+      "title": "Узнай, как оформлять отгулы и отпуска",
+      "description": "Правила и сроки подачи. Орби поможет оформить заявку.",
+      "category": "org",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "absence_request"
+      },
+      "quiz": [],
+      "doc_slugs": [
+       "absence-policy"
+      ],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-11-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   },
+   {
+    "stage": "month_2",
+    "title": "Второй месяц",
+    "due_date": "2026-12-27",
+    "total": 2,
+    "done": 0,
+    "percent": 0,
+    "items": [
+     {
+      "id": "25d2a1ef-074c-415f-8820-a6ca4a26e8c8",
+      "slug": "load-testing",
+      "stage": "month_2",
+      "title": "Изучи документацию по нагрузочному тестированию",
+      "description": "",
+      "category": "learning",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-12-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "5660fe5e-6883-4466-a03d-d05278d25592",
+      "slug": "practice-memo",
+      "stage": "month_2",
+      "title": "Изучи памятку о закрытии практики для вуза",
+      "description": "",
+      "category": "org",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2026-12-27",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   },
+   {
+    "stage": "month_3",
+    "title": "Третий месяц",
+    "due_date": "2027-01-26",
+    "total": 2,
+    "done": 0,
+    "percent": 0,
+    "items": [
+     {
+      "id": "fe89430d-4489-46e0-87d9-8cc61d26795d",
+      "slug": "redash",
+      "stage": "month_3",
+      "title": "Разберись с Redash",
+      "description": "Запроси доступ и построй первый запрос к витрине объявлений.",
+      "category": "access",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": {
+       "kind": "access_request",
+       "resource": "redash"
+      },
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2027-01-26",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "887625b0-2c3a-45f6-a3ef-ef50ab585a0d",
+      "slug": "communities",
+      "stage": "month_3",
+      "title": "Найди подходящее сообщество",
+      "description": "",
+      "category": "development",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2027-01-26",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   },
+   {
+    "stage": "after_3_months",
+    "title": "После трёх месяцев",
+    "due_date": "2027-04-26",
+    "total": 3,
+    "done": 0,
+    "percent": 0,
+    "items": [
+     {
+      "id": "b747a977-1ae2-4cc9-8478-37311a099ae5",
+      "slug": "equator",
+      "stage": "after_3_months",
+      "title": "Подготовься к экваторной встрече",
+      "description": "Презентация промежуточных результатов по структуре, согласованная с наставником.",
+      "category": "development",
+      "audience": "intern",
+      "confirmation": "mentor",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2027-04-26",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "0e4ced8b-36f4-427e-a6ea-fc0051684ba5",
+      "slug": "survey",
+      "stage": "after_3_months",
+      "title": "Пройди опрос о том, как прошла стажировка",
+      "description": "",
+      "category": "org",
+      "audience": "intern",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2027-04-26",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     },
+     {
+      "id": "bc3ae0a8-62fa-429d-8f13-f0fb476c70ef",
+      "slug": "mentor-equator",
+      "stage": "after_3_months",
+      "title": "Наставник: подготовить напутственное слово к экватору",
+      "description": "",
+      "category": "development",
+      "audience": "mentor",
+      "confirmation": "self",
+      "action": null,
+      "quiz": [],
+      "doc_slugs": [],
+      "needs_laptop": false,
+      "status": "todo",
+      "due_date": "2027-04-26",
+      "overdue": false,
+      "started_at": null,
+      "completed_at": null,
+      "waiting_reason": null,
+      "blocked_reason": null,
+      "review_comment": null,
+      "request_id": null
+     }
+    ]
+   }
+  ]
+ },
+ "requests": [
+  {
+   "id": "7cf9353c-485b-4104-b687-b74bc24603e5",
+   "kind": "access",
+   "status": "approved",
+   "status_title": "Одобрено",
+   "title": "Доступ: Репозиторий listings-api (редактирование)",
+   "external_id": "ACC-585",
+   "payload": {
+    "level": "write",
+    "system": "Stash",
+    "resource": "stash-listings-api",
+    "justification": "Задачи первой недели",
+    "resource_name": "Репозиторий listings-api"
+   },
+   "approver": "Мария Ким, руководитель команды",
+   "decision_comment": null,
+   "plan_item_id": "24957a8a-e4be-4cbe-9ebf-d7404333880d",
+   "sla_due_at": null,
+   "created_at": "2026-10-28T18:00:00Z",
+   "updated_at": "2026-11-14T08:21:06.925890Z",
+   "history": [
+    {
+     "status": "submitting",
+     "source": "webhook",
+     "note": null,
+     "created_at": "2026-11-14T08:21:06.930292Z"
+    },
+    {
+     "status": "submitted",
+     "source": "webhook",
+     "note": "Зарегистрирована: ACC-585",
+     "created_at": "2026-11-14T08:21:06.930297Z"
+    },
+    {
+     "status": "approved",
+     "source": "webhook",
+     "note": "Доступ выдан",
+     "created_at": "2026-11-14T08:21:06.930299Z"
+    }
+   ]
+  }
+ ],
+ "questions": [
+  {
+   "id": "0651052a-60c8-4b6a-b50a-3ae38b2fb04f",
+   "user_id": "4f108de8-5901-4ec7-bbfa-d2f240675168",
+   "user_name": "Кирилл Орлов",
+   "assignee_id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+   "assignee_name": "Иван Петров",
+   "level": "mentor",
+   "kind": "question",
+   "status": "answered",
+   "question": "Как правильно называть ветки: feature/<описание> или по ключу задачи LST-…?",
+   "context": {
+    "note": "В общем регламенте и в гайде команды написано по-разному",
+    "source": "chat"
+   },
+   "answer": "Называй по ключу задачи: LST-123-короткое-описание. Это правило команды, оно точнее общего регламента.",
+   "answered_by_name": "Иван Петров",
+   "answered_at": "2026-11-14T08:26:50.357389Z",
+   "due_at": "2026-11-14T12:21:06.934672Z",
+   "faq_document_slug": null,
+   "created_at": "2026-11-13T12:21:06.934672Z"
+  }
+ ]
+}
