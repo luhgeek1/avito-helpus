@@ -188,8 +188,15 @@ async def test_unknown_question_offers_the_mentor(
     assert "Как оформить командировку в Казань?" in {q["question"] for q in assigned}
 
 
-async def test_sensitive_topic_goes_to_hrbp(client: AsyncClient, anya: Account) -> None:
+async def test_colleague_pay_is_refused(client: AsyncClient, anya: Account) -> None:
     chunks = await (await Chat(client, anya).start()).say("Сколько зарплата у Ивана?")
+
+    assert parts(chunks, "action") == []
+    assert "не передаю" in text_of(chunks)
+
+
+async def test_sensitive_topic_goes_to_hrbp(client: AsyncClient, anya: Account) -> None:
+    chunks = await (await Chat(client, anya).start()).say("Хочу обсудить конфликт с руководителем")
 
     [card] = parts(chunks, "action")
     assert card["tool"] == "ask_mentor"

@@ -157,6 +157,9 @@ _SENSITIVE: Mapping[str, tuple[str, ...]] = {
     "dismissal": ("уволят", "увольнен", "уволиться", "уволить"),
 }
 
+# Other people's pay and personal data: refuse and do not route anywhere.
+PRIVATE_TOPICS = frozenset({"compensation", "personal_data"})
+
 SENSITIVE_TITLES: Mapping[str, str] = {
     "compensation": "вознаграждение",
     "personal_data": "персональные данные",

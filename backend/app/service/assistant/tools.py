@@ -6,13 +6,20 @@ from uuid import UUID
 from pydantic_ai import ApprovalRequired, FunctionToolset, RunContext
 from pydantic_ai.tools import ToolDefinition
 
+from app.core.clock import LOCAL_TZ
 from app.core.errors import DomainError
 from app.domain.absence import ABSENCE_TITLES, AbsenceType
 from app.domain.assistant import ActionCard, CardField
 from app.domain.corp import CorpUnavailableError
 from app.domain.escalations import LEVEL_TITLES, Chain, EscalationKind, first_assignment
 from app.domain.events import Topic
-from app.domain.knowledge import SENSITIVE_TITLES, SYNTHETIC_LABEL, coverage, detect_sensitive
+from app.domain.knowledge import (
+    PRIVATE_TOPICS,
+    SENSITIVE_TITLES,
+    SYNTHETIC_LABEL,
+    coverage,
+    detect_sensitive,
+)
 from app.domain.plan import STAGE_TITLES, ActionKind, ItemStatus, Transition
 from app.domain.requests import LEVEL_TITLES as ACCESS_LEVEL_TITLES
 from app.domain.requests import (
@@ -166,10 +173,15 @@ async def update_plan_step(
 async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
     """Search company and team documentation the user may read. Returns numbered sources."""
     if topic := detect_sensitive(query):
+        handoff = (
+            "Про чужие данные я не рассказываю и никому такие вопросы не передаю; "
+            "про своё вознаграждение можно спросить руководителя или HRBP."
+            if topic in PRIVATE_TOPICS
+            else "Могу конфиденциально передать вопрос HRBP."
+        )
         return {
             "message": (
-                f"Это деликатная тема ({SENSITIVE_TITLES[topic]}), её я не обсуждаю. "
-                "Могу конфиденциально передать вопрос HRBP."
+                f"Это деликатная тема ({SENSITIVE_TITLES[topic]}), её я не обсуждаю. {handoff}"
             ),
             "sensitive": topic,
             "sources": [],
@@ -656,7 +668,7 @@ async def ask_mentor(
     )
     return {
         "message": f"Передал вопрос: {view.assignee_name}. Ответ придёт уведомлением, "
-        f"ответить обещают до {view.due_at:%d.%m %H:%M} UTC.",
+        f"ответить обещают до {view.due_at.astimezone(LOCAL_TZ):%d.%m %H:%M} по Москве.",
         "escalation_id": str(view.id),
     }
 
