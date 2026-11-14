@@ -1,0 +1,42 @@
+# Secrets: real keys never reach git (keep *.env.example files)
+.env
+.env.*
+!.env.example
+backend/secrets/
+*.pem
+*.key
+
+# Private materials: Telegram exports and the original case PDF (TASK.md has its full text)
+/docs/telegram_exports/
+/case/
+/docs/case/*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# Node / Next.js (frontend/.gitignore has the details)
+node_modules/
+.next/
+
+# Coverage and test reports
+/reports/
+coverage/
+lcov.info
+
+# Tools and editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+.playwright-mcp/
+.claude/settings.local.json
