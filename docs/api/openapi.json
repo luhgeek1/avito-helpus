@@ -1,0 +1,5136 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Orbi — AI-buddy API",
+    "summary": "Помощник стажёра: план адаптации, заявки, база знаний, эскалации и агент.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Liveness: the process is up (never touches dependencies)",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ready": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Readiness: Postgres and Redis answer",
+        "operationId": "ready_api_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "503": {
+            "description": "A dependency is down"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign in with a corporate account (demo accounts are listed in the README)",
+        "operationId": "login_api_v1_auth_login_post",
+        "parameters": [
+          {
+            "name": "X-Client",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "enum": [
+                "web",
+                "mobile"
+              ],
+              "type": "string",
+              "default": "web",
+              "title": "X-Client"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Wrong email or password"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Rotate the refresh token and get a new access token",
+        "operationId": "refresh_api_v1_auth_refresh_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Browsers only: the csrf_token cookie",
+              "title": "X-Csrf-Token"
+            },
+            "description": "Browsers only: the csrf_token cookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "End the current session (idempotent)",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/logout-all": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "End every session of the current user and invalidate issued access tokens",
+        "operationId": "logout_all_api_v1_auth_logout_all_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Who I am: role, team, mentor, permissions, flags, assistant mode",
+        "operationId": "me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/team": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Members of my team",
+        "operationId": "team_api_v1_team_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PersonOut"
+                  },
+                  "type": "array",
+                  "title": "Response Team Api V1 Team Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/plan": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "My adaptation plan: stages, statuses, progress and the next steps",
+        "operationId": "plan_api_v1_plan_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/plan/items/{item_id}": {
+      "get": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "One step of my plan",
+        "operationId": "get_item_api_v1_plan_items__item_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanItemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/plan/items/{item_id}/transitions": {
+      "post": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Change the status of my step (start, complete, submit_review, block, unblock)",
+        "operationId": "transition_api_v1_plan_items__item_id__transitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanItemOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Transition not allowed or needs a quiz / mentor review"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/plan/items/{item_id}/quiz": {
+      "post": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Answer the step's quiz; passing completes it",
+        "operationId": "quiz_api_v1_plan_items__item_id__quiz_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuizIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/requests": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "My requests to corporate services",
+        "operationId": "list_requests_api_v1_requests_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RequestKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RequestStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestOut"
+                  },
+                  "title": "Response List Requests Api V1 Requests Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/requests/{request_id}": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "One request with its status history",
+        "operationId": "get_request_api_v1_requests__request_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/requests/{request_id}/cancel": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Withdraw my request",
+        "operationId": "cancel_request_api_v1_requests__request_id__cancel_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/requests/{request_id}/remind": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Remind the approver (once a day)",
+        "operationId": "remind_api_v1_requests__request_id__remind_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Too soon or the request isn't waiting for approval"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/access/resources": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Access catalog visible to my role and team",
+        "operationId": "resources_api_v1_access_resources_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceOut"
+                  },
+                  "type": "array",
+                  "title": "Response Resources Api V1 Access Resources Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/requests/access/preview": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "What an access request would look like (no side effects): the confirmation card",
+        "operationId": "preview_access_api_v1_requests_access_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessPreviewOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/requests/access": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Create an access request after the user confirmed the card (idempotent by key)",
+        "operationId": "create_access_api_v1_requests_access_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessCreateOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/requests/absence/check": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Days left, rules and meeting conflicts",
+        "operationId": "check_absence_api_v1_requests_absence_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AbsenceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AbsenceCheckOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/requests/absence": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "File a day off or vacation request (idempotent by key)",
+        "operationId": "create_absence_api_v1_requests_absence_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AbsenceCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/equipment": {
+      "get": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "My laptop and equipment: status, pickup, what to do meanwhile",
+        "operationId": "equipment_api_v1_equipment_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EquipmentOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/requests/it-ticket": {
+      "post": {
+        "tags": [
+          "Requests"
+        ],
+        "summary": "Open an IT support ticket (idempotent by key)",
+        "operationId": "create_it_ticket_api_v1_requests_it_ticket_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItTicketIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/knowledge/search": {
+      "get": {
+        "tags": [
+          "Knowledge"
+        ],
+        "summary": "Hybrid search over documents I may read, with conflicts",
+        "operationId": "search_api_v1_knowledge_search_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 300,
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10,
+              "minimum": 1,
+              "default": 5,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/knowledge/documents/{slug}": {
+      "get": {
+        "tags": [
+          "Knowledge"
+        ],
+        "summary": "A document I may read",
+        "operationId": "document_api_v1_knowledge_documents__slug__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/knowledge/conflicts/{conflict_id}/report": {
+      "post": {
+        "tags": [
+          "Knowledge"
+        ],
+        "summary": "Ask my mentor which of two conflicting instructions is right",
+        "operationId": "report_conflict_api_v1_knowledge_conflicts__conflict_id__report_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "conflict_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conflict Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConflictReportIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscalationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assistant/status": {
+      "get": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Online (LLM) or offline mode, model name",
+        "operationId": "assistant_status_api_v1_assistant_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantStatusOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/chat/conversations": {
+      "get": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "My conversations with Orbi",
+        "operationId": "conversations_api_v1_chat_conversations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ConversationOut"
+                  },
+                  "type": "array",
+                  "title": "Response Conversations Api V1 Chat Conversations Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Start a conversation",
+        "operationId": "create_conversation_api_v1_chat_conversations_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/chat/conversations/{conversation_id}": {
+      "get": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Conversation history (UI parts)",
+        "operationId": "history_api_v1_chat_conversations__conversation_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chat/conversations/{conversation_id}/messages": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Send a message; the answer streams back as SSE",
+        "operationId": "send_message_api_v1_chat_conversations__conversation_id__messages_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events in the Vercel AI SDK UI message stream format (v1): start, text-start/text-delta/text-end, tool-input-available, tool-output-available, data-status (transient), data-sources, data-request, data-action (confirmation card), data-escalation, data-plan, data-equipment, error, finish, then `data: [DONE]`.",
+            "content": {
+              "text/event-stream": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chat/conversations/{conversation_id}/actions/{action_id}": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Approve (optionally with edits) or reject a confirmation card; the run resumes as SSE",
+        "operationId": "decide_api_v1_chat_conversations__conversation_id__actions__action_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "action_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Action Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events in the Vercel AI SDK UI message stream format (v1): start, text-start/text-delta/text-end, tool-input-available, tool-output-available, data-status (transient), data-sources, data-request, data-action (confirmation card), data-escalation, data-plan, data-equipment, error, finish, then `data: [DONE]`.",
+            "content": {
+              "text/event-stream": {}
+            }
+          },
+          "409": {
+            "description": "Already decided or expired"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chat/messages/{message_id}/feedback": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Rate an answer (👍/👎) for quality metrics",
+        "operationId": "feedback_api_v1_chat_messages__message_id__feedback_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Message Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/escalations": {
+      "get": {
+        "tags": [
+          "Escalations"
+        ],
+        "summary": "Questions I asked, or (scope=assigned) questions I answer",
+        "operationId": "list_escalations_api_v1_escalations_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "mine",
+                "assigned"
+              ],
+              "type": "string",
+              "default": "mine",
+              "title": "Scope"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/EscalationStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EscalationOut"
+                  },
+                  "title": "Response List Escalations Api V1 Escalations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Escalations"
+        ],
+        "summary": "Ask my mentor directly",
+        "operationId": "create_escalation_api_v1_escalations_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EscalationIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscalationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/escalations/{escalation_id}": {
+      "get": {
+        "tags": [
+          "Escalations"
+        ],
+        "summary": "One question with its answer",
+        "operationId": "get_escalation_api_v1_escalations__escalation_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "escalation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Escalation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscalationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/escalations/{escalation_id}/answer": {
+      "post": {
+        "tags": [
+          "Escalations"
+        ],
+        "summary": "Answer; optionally publish to the team FAQ",
+        "operationId": "answer_api_v1_escalations__escalation_id__answer_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "escalation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Escalation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscalationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/escalations/{escalation_id}/close": {
+      "post": {
+        "tags": [
+          "Escalations"
+        ],
+        "summary": "Close my question (resolved myself)",
+        "operationId": "close_api_v1_escalations__escalation_id__close_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "escalation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Escalation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EscalationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mentees": {
+      "get": {
+        "tags": [
+          "Mentor"
+        ],
+        "summary": "My mentees (mentor), team interns (lead) or my interns (HRBP)",
+        "operationId": "mentees_api_v1_mentees_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MenteeOut"
+                  },
+                  "type": "array",
+                  "title": "Response Mentees Api V1 Mentees Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/mentees/{mentee_id}": {
+      "get": {
+        "tags": [
+          "Mentor"
+        ],
+        "summary": "Plan, requests and questions of one mentee",
+        "operationId": "mentee_api_v1_mentees__mentee_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mentee_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mentee Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenteeDetailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mentees/{mentee_id}/plan/items/{item_id}/review": {
+      "post": {
+        "tags": [
+          "Mentor"
+        ],
+        "summary": "Confirm (approve) or return a step, or complete a mentor task for the mentee",
+        "operationId": "review_api_v1_mentees__mentee_id__plan_items__item_id__review_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mentee_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mentee Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanItemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "My notifications, newest first",
+        "operationId": "notifications_api_v1_notifications_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "unread_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Unread Only"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 30,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationsOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/{notification_id}/read": {
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Mark one notification read",
+        "operationId": "read_one_api_v1_notifications__notification_id__read_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "notification_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Notification Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/read-all": {
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Mark all read",
+        "operationId": "read_all_api_v1_notifications_read_all_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Realtime SSE: notification.created, request.updated, plan.updated, escalation.updated",
+        "operationId": "events_api_v1_events_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/integrations/corp/webhook": {
+      "post": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Decision from a corporate service (HMAC-signed, replay-protected, idempotent)",
+        "operationId": "corp_webhook_api_v1_integrations_corp_webhook_post",
+        "parameters": [
+          {
+            "name": "X-Corp-Timestamp",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Corp-Timestamp"
+            }
+          },
+          {
+            "name": "X-Corp-Signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Corp-Signature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Corp Webhook Api V1 Integrations Corp Webhook Post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad signature"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/summary": {
+      "get": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Product metrics for the A/B check (lead, HRBP, admin)",
+        "operationId": "summary_api_v1_analytics_summary_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "default": 30,
+              "title": "Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/events": {
+      "post": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Track a UI event",
+        "operationId": "ui_event_api_v1_analytics_events_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UiEventIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/flags": {
+      "get": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Feature flags and experiments",
+        "operationId": "flags_api_v1_admin_flags_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FlagOut"
+                  },
+                  "type": "array",
+                  "title": "Response Flags Api V1 Admin Flags Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/flags/{key}": {
+      "put": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Change a flag (audited)",
+        "operationId": "update_flag_api_v1_admin_flags__key__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlagUpdateIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlagOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/audit": {
+      "get": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Audit log: confirmations, requests, answers, flag changes",
+        "operationId": "audit_api_v1_admin_audit_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditOut"
+                  },
+                  "title": "Response Audit Api V1 Admin Audit Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/demo/reset": {
+      "post": {
+        "tags": [
+          "Analytics & admin"
+        ],
+        "summary": "Reset the demo company to its initial state (admin only)",
+        "operationId": "reset_demo_api_v1_admin_demo_reset_post",
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Reset Demo Api V1 Admin Demo Reset Post"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AbsenceCheckOut": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          },
+          "working_days": {
+            "type": "integer",
+            "title": "Working Days"
+          },
+          "balance": {
+            "type": "integer",
+            "title": "Balance"
+          },
+          "balance_after": {
+            "type": "integer",
+            "title": "Balance After"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/CalendarConflictOut"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "start",
+          "end",
+          "working_days",
+          "balance",
+          "balance_after",
+          "warnings",
+          "conflicts"
+        ],
+        "title": "AbsenceCheckOut"
+      },
+      "AbsenceCreateIn": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Comment",
+            "default": ""
+          },
+          "idempotency_key": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Idempotency Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "start_date",
+          "end_date",
+          "idempotency_key"
+        ],
+        "title": "AbsenceCreateIn"
+      },
+      "AbsenceIn": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "start_date",
+          "end_date"
+        ],
+        "title": "AbsenceIn"
+      },
+      "AbsenceType": {
+        "type": "string",
+        "enum": [
+          "day_off",
+          "vacation"
+        ],
+        "title": "AbsenceType"
+      },
+      "AccessCreateIn": {
+        "properties": {
+          "resource": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Resource",
+            "description": "Slug or free text"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccessLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "justification": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Justification"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Idempotency Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource",
+          "idempotency_key"
+        ],
+        "title": "AccessCreateIn"
+      },
+      "AccessCreateOut": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "title": "Outcome"
+          },
+          "request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RequestOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "outcome",
+          "request"
+        ],
+        "title": "AccessCreateOut"
+      },
+      "AccessIn": {
+        "properties": {
+          "resource": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Resource",
+            "description": "Slug or free text"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccessLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "justification": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Justification"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource"
+        ],
+        "title": "AccessIn"
+      },
+      "AccessLevel": {
+        "type": "string",
+        "enum": [
+          "read",
+          "write",
+          "admin"
+        ],
+        "title": "AccessLevel"
+      },
+      "AccessPreviewOut": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "title": "Outcome"
+          },
+          "resource": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResourceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccessLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "justification": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Justification"
+          },
+          "approver": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approver"
+          },
+          "sla_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sla Hours"
+          },
+          "allowed_levels": {
+            "items": {
+              "$ref": "#/components/schemas/AccessLevel"
+            },
+            "type": "array",
+            "title": "Allowed Levels"
+          },
+          "existing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RequestOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceOut"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "card": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Card"
+          }
+        },
+        "type": "object",
+        "required": [
+          "outcome",
+          "resource",
+          "level",
+          "justification",
+          "approver",
+          "sla_hours",
+          "allowed_levels",
+          "existing",
+          "candidates",
+          "card"
+        ],
+        "title": "AccessPreviewOut"
+      },
+      "AnswerIn": {
+        "properties": {
+          "answer": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 2,
+            "title": "Answer"
+          },
+          "publish_to_faq": {
+            "type": "boolean",
+            "title": "Publish To Faq",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "answer"
+        ],
+        "title": "AnswerIn"
+      },
+      "AssistantStatusOut": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "embeddings": {
+            "type": "boolean",
+            "title": "Embeddings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "model",
+          "embeddings"
+        ],
+        "title": "AssistantStatusOut"
+      },
+      "Audience": {
+        "type": "string",
+        "enum": [
+          "intern",
+          "mentor"
+        ],
+        "title": "Audience",
+        "description": "Who acts on the item: the intern, or the mentor on the intern's behalf."
+      },
+      "AuditOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "actor_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "target_type": {
+            "type": "string",
+            "title": "Target Type"
+          },
+          "target_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Id"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "actor_id",
+          "action",
+          "target_type",
+          "target_id",
+          "details",
+          "created_at"
+        ],
+        "title": "AuditOut"
+      },
+      "CalendarConflictOut": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Starts At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "starts_at"
+        ],
+        "title": "CalendarConflictOut"
+      },
+      "ChatMessageOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "parts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Parts",
+            "description": "AI SDK UI parts: text, data-sources, data-action, ..."
+          },
+          "feedback": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feedback"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "role",
+          "parts",
+          "feedback",
+          "created_at"
+        ],
+        "title": "ChatMessageOut"
+      },
+      "Confirmation": {
+        "type": "string",
+        "enum": [
+          "self",
+          "quiz",
+          "mentor"
+        ],
+        "title": "Confirmation"
+      },
+      "ConflictOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "company": {
+            "$ref": "#/components/schemas/SourceOut"
+          },
+          "team": {
+            "$ref": "#/components/schemas/SourceOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "topic",
+          "summary",
+          "company",
+          "team"
+        ],
+        "title": "ConflictOut"
+      },
+      "ConflictReportIn": {
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ConflictReportIn"
+      },
+      "ConversationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ConversationOut"
+      },
+      "Decision": {
+        "type": "string",
+        "enum": [
+          "approve",
+          "reject"
+        ],
+        "title": "Decision"
+      },
+      "DecisionIn": {
+        "properties": {
+          "decision": {
+            "$ref": "#/components/schemas/Decision"
+          },
+          "edits": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Edits",
+            "description": "Changed editable card fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "DecisionIn"
+      },
+      "DocKind": {
+        "type": "string",
+        "enum": [
+          "policy",
+          "guide",
+          "tool",
+          "faq",
+          "glossary"
+        ],
+        "title": "DocKind"
+      },
+      "DocScope": {
+        "type": "string",
+        "enum": [
+          "company",
+          "team"
+        ],
+        "title": "DocScope"
+      },
+      "DocumentOut": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/DocKind"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/DocScope"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Name"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner"
+          },
+          "source_label": {
+            "type": "string",
+            "title": "Source Label"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date",
+            "title": "Updated At"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "title",
+          "kind",
+          "scope",
+          "team_name",
+          "owner",
+          "source_label",
+          "source_url",
+          "updated_at",
+          "body"
+        ],
+        "title": "DocumentOut"
+      },
+      "EquipmentItemOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EquipmentStatus"
+          },
+          "status_title": {
+            "type": "string",
+            "title": "Status Title"
+          },
+          "eta": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eta"
+          },
+          "pickup_location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pickup Location"
+          },
+          "pickup_hours": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pickup Hours"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "model",
+          "status",
+          "status_title",
+          "eta",
+          "pickup_location",
+          "pickup_hours",
+          "note"
+        ],
+        "title": "EquipmentItemOut"
+      },
+      "EquipmentOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EquipmentItemOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "meanwhile": {
+            "items": {
+              "$ref": "#/components/schemas/MeanwhileOut"
+            },
+            "type": "array",
+            "title": "Meanwhile"
+          },
+          "ticket": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RequestOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "meanwhile",
+          "ticket"
+        ],
+        "title": "EquipmentOut"
+      },
+      "EquipmentStatus": {
+        "type": "string",
+        "enum": [
+          "ordered",
+          "in_transit",
+          "ready_for_pickup",
+          "issued",
+          "delayed"
+        ],
+        "title": "EquipmentStatus"
+      },
+      "EscalationIn": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 5,
+            "title": "Question"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/EscalationKind",
+            "default": "question"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "EscalationIn"
+      },
+      "EscalationKind": {
+        "type": "string",
+        "enum": [
+          "question",
+          "conflict",
+          "blocker",
+          "sensitive"
+        ],
+        "title": "EscalationKind"
+      },
+      "EscalationLevel": {
+        "type": "string",
+        "enum": [
+          "mentor",
+          "lead",
+          "hrbp"
+        ],
+        "title": "EscalationLevel"
+      },
+      "EscalationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "user_name": {
+            "type": "string",
+            "title": "User Name"
+          },
+          "assignee_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Assignee Id"
+          },
+          "assignee_name": {
+            "type": "string",
+            "title": "Assignee Name"
+          },
+          "level": {
+            "$ref": "#/components/schemas/EscalationLevel"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/EscalationKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EscalationStatus"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Context"
+          },
+          "answer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer"
+          },
+          "answered_by_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answered By Name"
+          },
+          "answered_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answered At"
+          },
+          "due_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Due At"
+          },
+          "faq_document_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Faq Document Slug"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "user_name",
+          "assignee_id",
+          "assignee_name",
+          "level",
+          "kind",
+          "status",
+          "question",
+          "context",
+          "answer",
+          "answered_by_name",
+          "answered_at",
+          "due_at",
+          "faq_document_slug",
+          "created_at"
+        ],
+        "title": "EscalationOut"
+      },
+      "EscalationStatus": {
+        "type": "string",
+        "enum": [
+          "open",
+          "answered",
+          "closed"
+        ],
+        "title": "EscalationStatus"
+      },
+      "FeedbackIn": {
+        "properties": {
+          "rating": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ],
+            "title": "Rating"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rating"
+        ],
+        "title": "FeedbackIn"
+      },
+      "FlagDecisionOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "variant": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "enabled",
+          "variant"
+        ],
+        "title": "FlagDecisionOut"
+      },
+      "FlagOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "rollout_percent": {
+            "type": "integer",
+            "title": "Rollout Percent"
+          },
+          "variants": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "enabled",
+          "rollout_percent",
+          "variants",
+          "description"
+        ],
+        "title": "FlagOut"
+      },
+      "FlagUpdateIn": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "rollout_percent": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Rollout Percent"
+          },
+          "variants": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Variants"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "rollout_percent"
+        ],
+        "title": "FlagUpdateIn"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HistoryOut": {
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationOut"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/ChatMessageOut"
+            },
+            "type": "array",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation",
+          "messages"
+        ],
+        "title": "HistoryOut"
+      },
+      "ItTicketIn": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Category"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 5,
+            "title": "Description"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Idempotency Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "category",
+          "description",
+          "idempotency_key"
+        ],
+        "title": "ItTicketIn"
+      },
+      "ItemStatus": {
+        "type": "string",
+        "enum": [
+          "todo",
+          "in_progress",
+          "waiting",
+          "blocked",
+          "done"
+        ],
+        "title": "ItemStatus"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 320,
+            "minLength": 3,
+            "title": "Email",
+            "description": "Corporate e-mail"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Password",
+            "description": "User password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "Credentials used for login."
+      },
+      "MeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "role_title": {
+            "type": "string",
+            "title": "Role Title"
+          },
+          "track": {
+            "type": "string",
+            "title": "Track"
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Date"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TeamOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mentor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hrbp": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "internship_day": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internship Day",
+            "description": "Calendar day of the internship, from 1"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "flags": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FlagDecisionOut"
+            },
+            "type": "object",
+            "title": "Flags"
+          },
+          "assistant_mode": {
+            "type": "string",
+            "title": "Assistant Mode",
+            "description": "online (LLM) or offline (rule-based, no key)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "full_name",
+          "title",
+          "role",
+          "role_title",
+          "track",
+          "start_date",
+          "team",
+          "mentor",
+          "lead",
+          "hrbp",
+          "internship_day",
+          "permissions",
+          "flags",
+          "assistant_mode"
+        ],
+        "title": "MeOut"
+      },
+      "MeanwhileOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Due Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "due_date"
+        ],
+        "title": "MeanwhileOut"
+      },
+      "MenteeDetailOut": {
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/MenteeOut"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/PlanOut"
+          },
+          "requests": {
+            "items": {
+              "$ref": "#/components/schemas/RequestOut"
+            },
+            "type": "array",
+            "title": "Requests"
+          },
+          "questions": {
+            "items": {
+              "$ref": "#/components/schemas/EscalationOut"
+            },
+            "type": "array",
+            "title": "Questions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "summary",
+          "plan",
+          "requests",
+          "questions"
+        ],
+        "title": "MenteeDetailOut"
+      },
+      "MenteeOut": {
+        "properties": {
+          "person": {
+            "$ref": "#/components/schemas/PersonOut"
+          },
+          "internship_day": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internship Day"
+          },
+          "stage_title": {
+            "type": "string",
+            "title": "Stage Title"
+          },
+          "percent": {
+            "type": "integer",
+            "title": "Percent"
+          },
+          "done": {
+            "type": "integer",
+            "title": "Done"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "overdue": {
+            "type": "integer",
+            "title": "Overdue"
+          },
+          "blocked": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "type": "array",
+            "title": "Blocked"
+          },
+          "awaiting_review": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "type": "array",
+            "title": "Awaiting Review"
+          },
+          "mentor_tasks": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "type": "array",
+            "title": "Mentor Tasks"
+          },
+          "open_requests": {
+            "type": "integer",
+            "title": "Open Requests"
+          },
+          "open_questions": {
+            "type": "integer",
+            "title": "Open Questions"
+          },
+          "needs_attention": {
+            "type": "boolean",
+            "title": "Needs Attention"
+          }
+        },
+        "type": "object",
+        "required": [
+          "person",
+          "internship_day",
+          "stage_title",
+          "percent",
+          "done",
+          "total",
+          "overdue",
+          "blocked",
+          "awaiting_review",
+          "mentor_tasks",
+          "open_requests",
+          "open_questions",
+          "needs_attention"
+        ],
+        "title": "MenteeOut"
+      },
+      "MessageIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "MessageIn"
+      },
+      "MetricsOut": {
+        "properties": {
+          "period_days": {
+            "type": "integer",
+            "title": "Period Days"
+          },
+          "access_requests_approved": {
+            "type": "integer",
+            "title": "Access Requests Approved"
+          },
+          "access_hours_avg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Hours Avg"
+          },
+          "questions_total": {
+            "type": "integer",
+            "title": "Questions Total"
+          },
+          "escalations_total": {
+            "type": "integer",
+            "title": "Escalations Total"
+          },
+          "resolved_without_mentor_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved Without Mentor Share"
+          },
+          "escalations_resolved": {
+            "type": "integer",
+            "title": "Escalations Resolved"
+          },
+          "escalation_hours_avg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Escalation Hours Avg"
+          },
+          "plan_on_time_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan On Time Share"
+          },
+          "feedback_up": {
+            "type": "integer",
+            "title": "Feedback Up"
+          },
+          "feedback_down": {
+            "type": "integer",
+            "title": "Feedback Down"
+          },
+          "chat_by_variant": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Chat By Variant"
+          },
+          "fallbacks": {
+            "type": "integer",
+            "title": "Fallbacks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period_days",
+          "access_requests_approved",
+          "access_hours_avg",
+          "questions_total",
+          "escalations_total",
+          "resolved_without_mentor_share",
+          "escalations_resolved",
+          "escalation_hours_avg",
+          "plan_on_time_share",
+          "feedback_up",
+          "feedback_down",
+          "chat_by_variant",
+          "fallbacks"
+        ],
+        "title": "MetricsOut"
+      },
+      "NotificationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          },
+          "read_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Read At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "body",
+          "link",
+          "payload",
+          "read_at",
+          "created_at"
+        ],
+        "title": "NotificationOut"
+      },
+      "NotificationsOut": {
+        "properties": {
+          "unread": {
+            "type": "integer",
+            "title": "Unread"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/NotificationOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unread",
+          "items"
+        ],
+        "title": "NotificationsOut"
+      },
+      "PersonOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "role_title": {
+            "type": "string",
+            "title": "Role Title"
+          },
+          "track": {
+            "type": "string",
+            "title": "Track"
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Date"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TeamOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mentor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hrbp": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "full_name",
+          "title",
+          "role",
+          "role_title",
+          "track",
+          "start_date",
+          "team",
+          "mentor",
+          "lead",
+          "hrbp"
+        ],
+        "title": "PersonOut"
+      },
+      "PersonRefOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "full_name",
+          "title",
+          "email"
+        ],
+        "title": "PersonRefOut"
+      },
+      "PlanItemOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/Stage"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "audience": {
+            "$ref": "#/components/schemas/Audience"
+          },
+          "confirmation": {
+            "$ref": "#/components/schemas/Confirmation"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action",
+            "description": "What Orbi can do for this step"
+          },
+          "quiz": {
+            "items": {
+              "$ref": "#/components/schemas/QuizQuestionOut"
+            },
+            "type": "array",
+            "title": "Quiz",
+            "description": "Questions only; answers stay on the server"
+          },
+          "doc_slugs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Doc Slugs"
+          },
+          "needs_laptop": {
+            "type": "boolean",
+            "title": "Needs Laptop"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ItemStatus"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Due Date"
+          },
+          "overdue": {
+            "type": "boolean",
+            "title": "Overdue"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "waiting_reason": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WaitingReason"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "blocked_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocked Reason"
+          },
+          "review_comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review Comment"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "stage",
+          "title",
+          "description",
+          "category",
+          "audience",
+          "confirmation",
+          "action",
+          "quiz",
+          "doc_slugs",
+          "needs_laptop",
+          "status",
+          "due_date",
+          "overdue",
+          "started_at",
+          "completed_at",
+          "waiting_reason",
+          "blocked_reason",
+          "review_comment",
+          "request_id"
+        ],
+        "title": "PlanItemOut"
+      },
+      "PlanOut": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "today": {
+            "type": "string",
+            "format": "date",
+            "title": "Today"
+          },
+          "current_stage": {
+            "$ref": "#/components/schemas/Stage"
+          },
+          "current_stage_title": {
+            "type": "string",
+            "title": "Current Stage Title"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "done": {
+            "type": "integer",
+            "title": "Done"
+          },
+          "overdue": {
+            "type": "integer",
+            "title": "Overdue"
+          },
+          "percent": {
+            "type": "integer",
+            "title": "Percent"
+          },
+          "next_steps": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "type": "array",
+            "title": "Next Steps"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/StageOut"
+            },
+            "type": "array",
+            "title": "Stages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_date",
+          "today",
+          "current_stage",
+          "current_stage_title",
+          "total",
+          "done",
+          "overdue",
+          "percent",
+          "next_steps",
+          "stages"
+        ],
+        "title": "PlanOut"
+      },
+      "QuizIn": {
+        "properties": {
+          "answers": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Answers",
+            "description": "Chosen option index per question"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "answers"
+        ],
+        "title": "QuizIn"
+      },
+      "QuizOut": {
+        "properties": {
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "wrong": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Wrong"
+          },
+          "item": {
+            "$ref": "#/components/schemas/PlanItemOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "passed",
+          "wrong",
+          "item"
+        ],
+        "title": "QuizOut"
+      },
+      "QuizQuestionOut": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Options"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "options"
+        ],
+        "title": "QuizQuestionOut"
+      },
+      "RequestEventOut": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/RequestStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/RequestSource"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "source",
+          "note",
+          "created_at"
+        ],
+        "title": "RequestEventOut"
+      },
+      "RequestKind": {
+        "type": "string",
+        "enum": [
+          "access",
+          "absence",
+          "equipment"
+        ],
+        "title": "RequestKind"
+      },
+      "RequestOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/RequestKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/RequestStatus"
+          },
+          "status_title": {
+            "type": "string",
+            "title": "Status Title"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          },
+          "approver": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approver"
+          },
+          "decision_comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Comment"
+          },
+          "plan_item_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Item Id"
+          },
+          "sla_due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sla Due At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/RequestEventOut"
+            },
+            "type": "array",
+            "title": "History"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "status_title",
+          "title",
+          "external_id",
+          "payload",
+          "approver",
+          "decision_comment",
+          "plan_item_id",
+          "sla_due_at",
+          "created_at",
+          "updated_at",
+          "history"
+        ],
+        "title": "RequestOut"
+      },
+      "RequestSource": {
+        "type": "string",
+        "enum": [
+          "user",
+          "agent",
+          "worker",
+          "webhook"
+        ],
+        "title": "RequestSource"
+      },
+      "RequestStatus": {
+        "type": "string",
+        "enum": [
+          "submitting",
+          "submitted",
+          "approved",
+          "rejected",
+          "failed",
+          "cancelled"
+        ],
+        "title": "RequestStatus"
+      },
+      "ResourceOut": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "system": {
+            "type": "string",
+            "title": "System"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "default_level": {
+            "$ref": "#/components/schemas/AccessLevel"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "name",
+          "system",
+          "description",
+          "default_level"
+        ],
+        "title": "ResourceOut"
+      },
+      "ReviewIn": {
+        "properties": {
+          "transition": {
+            "$ref": "#/components/schemas/Transition",
+            "description": "approve or return for review items; start/complete for mentor tasks"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "transition"
+        ],
+        "title": "ReviewIn"
+      },
+      "Role": {
+        "type": "string",
+        "enum": [
+          "intern",
+          "mentor",
+          "lead",
+          "hrbp",
+          "admin"
+        ],
+        "title": "Role"
+      },
+      "SearchOut": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/ConflictOut"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "mode",
+          "sources",
+          "conflicts"
+        ],
+        "title": "SearchOut"
+      },
+      "SourceOut": {
+        "properties": {
+          "document_slug": {
+            "type": "string",
+            "title": "Document Slug"
+          },
+          "document_title": {
+            "type": "string",
+            "title": "Document Title"
+          },
+          "heading": {
+            "type": "string",
+            "title": "Heading"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/DocScope"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Name"
+          },
+          "source_label": {
+            "type": "string",
+            "title": "Source Label"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date",
+            "title": "Updated At"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_slug",
+          "document_title",
+          "heading",
+          "content",
+          "scope",
+          "team_name",
+          "source_label",
+          "source_url",
+          "updated_at",
+          "stale"
+        ],
+        "title": "SourceOut"
+      },
+      "Stage": {
+        "type": "string",
+        "enum": [
+          "week_1",
+          "week_2",
+          "month_1",
+          "month_2",
+          "month_3",
+          "after_3_months"
+        ],
+        "title": "Stage"
+      },
+      "StageOut": {
+        "properties": {
+          "stage": {
+            "$ref": "#/components/schemas/Stage"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Due Date"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "done": {
+            "type": "integer",
+            "title": "Done"
+          },
+          "percent": {
+            "type": "integer",
+            "title": "Percent"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage",
+          "title",
+          "due_date",
+          "total",
+          "done",
+          "percent",
+          "items"
+        ],
+        "title": "StageOut"
+      },
+      "TeamOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "channel": {
+            "type": "string",
+            "title": "Channel"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "channel"
+        ],
+        "title": "TeamOut"
+      },
+      "TokenPair": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In",
+            "description": "Access token lifetime in seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_in"
+        ],
+        "title": "TokenPair",
+        "description": "`refresh_token` is null for web clients: they get it as an httpOnly cookie\ntogether with a readable `csrf_token` cookie to echo in `X-CSRF-Token`."
+      },
+      "Transition": {
+        "type": "string",
+        "enum": [
+          "start",
+          "complete",
+          "submit_review",
+          "block",
+          "unblock",
+          "approve",
+          "return"
+        ],
+        "title": "Transition"
+      },
+      "TransitionIn": {
+        "properties": {
+          "transition": {
+            "$ref": "#/components/schemas/Transition",
+            "description": "start, complete, submit_review, block, unblock"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "transition"
+        ],
+        "title": "TransitionIn"
+      },
+      "UiEventIn": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Name"
+          },
+          "properties": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Properties"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "UiEventIn"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WaitingReason": {
+        "type": "string",
+        "enum": [
+          "mentor_review",
+          "request"
+        ],
+        "title": "WaitingReason"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "description": "Access token from /auth/login or /auth/refresh",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
