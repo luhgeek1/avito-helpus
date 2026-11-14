@@ -43,6 +43,19 @@ EVAL: list[tuple[str, str]] = [
 HIDDEN_FOR_LISTINGS_INTERN = {"team-payments-handbook", "mentor-guide"}
 RECALL_THRESHOLD = 0.9
 
+EXPANDED_EVAL = [
+    ("Что делать, если упала сборка или пайплайн?", "ci-troubleshooting", "сборка"),
+    ("Где смотреть логи CI?", "ci-troubleshooting", "логи"),
+    ("Как перезапустить упавший пайплайн?", "ci-troubleshooting", "перезапустить"),
+    ("Какой кодстайл у команды Объявления?", "team-listings-handbook", "кодстайл"),
+    ("Какие общие линтеры и кодстайл?", "dev-principles", "кодстайл"),
+    ("Как проверять код, сгенерированный LLM?", "dev-principles", "llm"),
+    ("Где документация по базам данных?", "database-guide", "документация"),
+    ("Как применять миграции базы данных?", "database-guide", "миграции"),
+    ("Как получить доступ к системе?", "access-policy", "заявку"),
+    ("Что описывает AvitoTech Playbook?", "public-avito-tech", "playbook"),
+]
+
 
 async def _top(client: AsyncClient, account: Account, question: str) -> list[str]:
     response = await client.get(
@@ -69,3 +82,33 @@ async def test_hidden_documents_never_leak(client: AsyncClient, anya: Account) -
     ]
     for question in probes:
         assert not HIDDEN_FOR_LISTINGS_INTERN & set(await _top(client, anya, question)), question
+
+
+async def test_expanded_retrieval(client: AsyncClient, anya: Account) -> None:
+    hits = sections = 0
+    reciprocal_ranks = 0.0
+    misses = []
+    for question, slug, heading in EXPANDED_EVAL:
+        response = await client.get(
+            "/api/v1/knowledge/search",
+            params={"q": question, "limit": 5},
+            headers=anya.headers,
+        )
+        assert response.status_code == 200
+        sources = response.json()["sources"]
+        ranks = [i for i, s in enumerate(sources, 1) if s["document_slug"] == slug]
+        hits += bool(ranks)
+        reciprocal_ranks += 1 / ranks[0] if ranks else 0
+        relevant = any(
+            s["document_slug"] == slug and heading in s["heading"].lower() for s in sources
+        )
+        sections += relevant
+        if not relevant:
+            misses.append(question)
+    count = len(EXPANDED_EVAL)
+    metrics = (
+        f"expanded n={count}, recall@5={hits / count:.3f}, "
+        f"MRR@5={reciprocal_ranks / count:.3f}, section_recall@5={sections / count:.3f}"
+    )
+    print(metrics)  # noqa: T201 - reproducible evaluation output
+    assert sections / count >= RECALL_THRESHOLD, f"{metrics}; misses={misses}"
