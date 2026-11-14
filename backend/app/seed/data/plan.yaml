@@ -1,0 +1,217 @@
+# Adaptation plan template built from the public Avito intern checklist (test data, see
+# docs/case/intern-checklist.md). Wording is ours; items addressed to the mentor have audience: mentor.
+# action.kind: access_request | absence_request | equipment | ask_mentor | learn
+items:
+  # ---- week 1 ---------------------------------------------------------------------------------
+  - slug: meet-team
+    stage: week_1
+    title: "Познакомься с командой"
+    description: "Приди на стендап, представься, узнай, кто за что отвечает. Состав и ритуалы — в гайде команды."
+    category: team
+    doc_slugs: [team-listings-handbook]
+  - slug: laptop
+    stage: week_1
+    title: "Получи ноутбук и настрой рабочее место"
+    description: "Узнай статус ноутбука, место и часы выдачи. Пока ждёшь — займись пунктами без ноутбука."
+    category: org
+    action: {kind: equipment}
+    doc_slugs: [equipment]
+  - slug: chats-and-notes
+    stage: week_1
+    title: "Проверь каналы и заведи конспект встреч с наставником"
+    description: "Убедись, что ты в каналах команды, и записывай договорённости и обратную связь с 1:1."
+    category: team
+  - slug: access-jira
+    stage: week_1
+    title: "Получи доступ к Jira-проекту команды"
+    description: "Задачи команды живут в проекте LST."
+    category: access
+    action: {kind: access_request, resource: jira-listings}
+    doc_slugs: [access-policy]
+  - slug: access-confluence
+    stage: week_1
+    title: "Запроси доступ в пространство команды в Confluence и изучи его"
+    description: "Там архитектура сервисов, решения и гайды команды."
+    category: access
+    action: {kind: access_request, resource: confluence-listings}
+    doc_slugs: [access-policy]
+  - slug: access-stash
+    stage: week_1
+    title: "Получи доступ к репозиторию listings-api"
+    description: "Нужен уровень «редактирование», чтобы пушить ветки и открывать PR."
+    category: access
+    action: {kind: access_request, resource: stash-listings-api}
+    doc_slugs: [access-policy, git-workflow]
+  - slug: stash-keys
+    stage: week_1
+    title: "Добавь SSH-ключ в Stash и склонируй репозиторий"
+    description: "Без ключа не получится клонировать репозиторий по SSH."
+    category: tools
+    needs_laptop: true
+    doc_slugs: [git-workflow]
+  - slug: avito-cli
+    stage: week_1
+    title: "Настрой avito-cli"
+    description: "Утилита для локального запуска сервисов и работы со стейджингом."
+    category: tools
+    needs_laptop: true
+    doc_slugs: [dev-environment]
+  - slug: dev-principles
+    stage: week_1
+    title: "Изучи принципы разработки (тест)"
+    description: "Короткий документ о том, как у нас пишут код. В конце — мини-тест из двух вопросов."
+    category: learning
+    confirmation: quiz
+    doc_slugs: [dev-principles]
+    quiz:
+      - question: "Что делать с кодом, который сгенерировала LLM?"
+        options: ["Сразу отправлять в PR", "Читать, понимать и покрывать тестами, как свой", "Не использовать никогда"]
+        answer: 1
+      - question: "Когда нужен design review?"
+        options: ["Для любого изменения", "Для изменений контрактов и архитектуры", "Никогда, достаточно код-ревью"]
+        answer: 1
+  - slug: tech-dep-channel
+    stage: week_1
+    title: "Попроси добавить тебя в канал Tech-dep"
+    description: "В канале новости технического департамента."
+    category: team
+    action: {kind: ask_mentor}
+  - slug: goals-1on1
+    stage: week_1
+    title: "Обсуди с руководителем цели и критерии успешной стажировки"
+    description: "Зафиксируй цели на период адаптации и ближайшие OKR команды. Подтверждает наставник."
+    category: development
+    confirmation: mentor
+    doc_slugs: [ipr-and-goals]
+  - slug: learning-platform
+    stage: week_1
+    title: "Прорешай задачи на учебной платформе"
+    description: "Задачи знакомят с внутренними инструментами."
+    category: learning
+  # ---- week 2 ---------------------------------------------------------------------------------
+  - slug: progress-tool
+    stage: week_2
+    title: "Внеси цели, задачи и ожидания в инструмент прогресса"
+    description: "Попроси у куратора доступ к инструменту отслеживания прогресса. Подтверждает наставник."
+    category: development
+    confirmation: mentor
+    doc_slugs: [ipr-and-goals]
+  - slug: team-docs
+    stage: week_2
+    title: "Изучи документы и мануалы команды"
+    description: "Гайд команды, дежурства и релизы, архитектура listings-api."
+    category: team
+    doc_slugs: [team-listings-handbook, team-listings-releases]
+  - slug: access-grafana
+    stage: week_2
+    title: "Получи доступ к дашбордам Grafana команды"
+    description: "Пригодится, чтобы смотреть метрики своих изменений."
+    category: access
+    action: {kind: access_request, resource: grafana-listings}
+  - slug: db-docs
+    stage: week_2
+    title: "Изучи документацию по работе с базами данных"
+    description: "Как мы проектируем схемы и пишем миграции."
+    category: learning
+    doc_slugs: [tools-overview]
+  - slug: first-pr
+    stage: week_2
+    title: "Сделай первый PR и пройди ревью"
+    description: "Небольшая задача от наставника: ветка, PR, ревью, мерж. Подтверждает наставник."
+    category: tasks
+    confirmation: mentor
+    needs_laptop: true
+    doc_slugs: [code-review-policy, team-listings-handbook, git-workflow]
+  # ---- month 1 --------------------------------------------------------------------------------
+  - slug: data-protection
+    stage: month_1
+    title: "Изучи основы защиты персональных данных (тест)"
+    description: "Правила работы с данными пользователей и коллег."
+    category: security
+    confirmation: quiz
+    doc_slugs: [data-protection]
+    quiz:
+      - question: "Можно ли выгрузить данные пользователей в личную таблицу для анализа?"
+        options: ["Да, если таблица закрытая", "Нет, только в согласованных инструментах", "Да, если удалить через неделю"]
+        answer: 1
+      - question: "Куда сообщать о подозрении на утечку?"
+        options: ["В общий чат команды", "В канал безопасности по инструкции", "Никуда, само пройдёт"]
+        answer: 1
+  - slug: microservices-course
+    stage: month_1
+    title: "Пройди курс «Микросервисная архитектура»"
+    description: "И курс про Agile-инструменты, если ещё не проходил."
+    category: learning
+  - slug: staging-access
+    stage: month_1
+    title: "Получи доступ к стейджингу и проверь фичу на dev"
+    description: "Нужен namespace listings-staging и LENS."
+    category: access
+    needs_laptop: true
+    action: {kind: access_request, resource: k8s-listings-staging}
+    doc_slugs: [dev-environment]
+  - slug: zbp-sentry
+    stage: month_1
+    title: "Разберись с Zero Bug Policy и Sentry"
+    description: "Как мы обращаемся с багами и где их видно."
+    category: learning
+    doc_slugs: [tools-overview]
+  - slug: absence-rules
+    stage: month_1
+    title: "Узнай, как оформлять отгулы и отпуска"
+    description: "Правила и сроки подачи. Орби поможет оформить заявку."
+    category: org
+    action: {kind: absence_request}
+    doc_slugs: [absence-policy]
+  # ---- month 2 --------------------------------------------------------------------------------
+  - slug: load-testing
+    stage: month_2
+    title: "Изучи документацию по нагрузочному тестированию"
+    category: learning
+  - slug: practice-memo
+    stage: month_2
+    title: "Изучи памятку о закрытии практики для вуза"
+    category: org
+  # ---- month 3 --------------------------------------------------------------------------------
+  - slug: redash
+    stage: month_3
+    title: "Разберись с Redash"
+    description: "Запроси доступ и построй первый запрос к витрине объявлений."
+    category: access
+    action: {kind: access_request, resource: redash}
+  - slug: communities
+    stage: month_3
+    title: "Найди подходящее сообщество"
+    category: development
+  # ---- after 3 months -------------------------------------------------------------------------
+  - slug: equator
+    stage: after_3_months
+    title: "Подготовься к экваторной встрече"
+    description: "Презентация промежуточных результатов по структуре, согласованная с наставником."
+    category: development
+    confirmation: mentor
+  - slug: survey
+    stage: after_3_months
+    title: "Пройди опрос о том, как прошла стажировка"
+    category: org
+  # ---- mentor's side --------------------------------------------------------------------------
+  - slug: mentor-add-chats
+    stage: week_1
+    audience: mentor
+    title: "Наставник: добавить стажёра во все чаты и каналы"
+    category: team
+  - slug: mentor-check-access
+    stage: week_1
+    audience: mentor
+    title: "Наставник: проверить, что стажёр запросил доступы"
+    category: access
+  - slug: mentor-1on1
+    stage: week_1
+    audience: mentor
+    title: "Наставник: назначить регулярные 1:1"
+    category: team
+  - slug: mentor-equator
+    stage: after_3_months
+    audience: mentor
+    title: "Наставник: подготовить напутственное слово к экватору"
+    category: development

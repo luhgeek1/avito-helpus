@@ -1,0 +1,98 @@
+# Access catalog of the imitated access service. The same slugs live in corp-mock/data/seed.json.
+resources:
+  - slug: stash-listings-api
+    name: "Репозиторий listings-api"
+    system: Stash
+    description: "Основной сервис публикации объявлений (Go). Нужен для первых задач."
+    team: listings
+    default_level: write
+    approver_role: team_lead
+    aliases: [listings-api, листинги, репозиторий объявлений, репо объявлений, bitbucket]
+  - slug: stash-listings-worker
+    name: "Репозиторий listings-worker"
+    system: Stash
+    description: "Фоновые обработчики модерации объявлений."
+    team: listings
+    default_level: write
+    approver_role: team_lead
+    aliases: [listings-worker, воркер]
+  - slug: jira-listings
+    name: "Jira-проект LST"
+    system: Jira
+    description: "Задачи команды «Объявления»."
+    team: listings
+    default_level: write
+    approver_role: team_lead
+    aliases: [jira, джира, задачи, lst]
+  - slug: confluence-listings
+    name: "Пространство «Объявления» в Confluence"
+    system: Confluence
+    description: "Документация команды: архитектура, гайды, решения."
+    team: listings
+    default_level: read
+    approver_role: team_lead
+    aliases: [confluence, конфлюенс, вики, пространство команды]
+  - slug: grafana-listings
+    name: "Дашборды Grafana: Объявления"
+    system: Grafana
+    description: "Метрики и алерты сервисов команды."
+    team: listings
+    default_level: read
+    approver_role: team_lead
+    aliases: [grafana, графана, дашборды, метрики]
+  - slug: sentry-listings
+    name: "Sentry: проект listings"
+    system: Sentry
+    description: "Ошибки сервисов команды."
+    team: listings
+    default_level: read
+    approver_role: team_lead
+    aliases: [sentry, сентри, ошибки]
+  - slug: k8s-listings-staging
+    name: "Kubernetes: namespace listings-staging"
+    system: Kubernetes
+    description: "Стейджинг для проверки фич на dev."
+    team: listings
+    default_level: read
+    approver_role: devops
+    aliases: [kubernetes, k8s, кубер, lens, staging, стейджинг, dev стенд]
+  - slug: redash
+    name: "Redash: аналитика объявлений"
+    system: Redash
+    description: "SQL-запросы к аналитическим витринам."
+    default_level: read
+    approver_role: owner
+    aliases: [redash, редаш, аналитика]
+  - slug: stash-payments-core
+    name: "Репозиторий payments-core"
+    system: Stash
+    description: "Ядро платёжного сервиса."
+    team: payments
+    default_level: write
+    approver_role: team_lead
+    aliases: [payments-core, платежи]
+  - slug: prod-db-listings
+    name: "Продовая БД listings (чтение)"
+    system: PostgreSQL
+    description: "Прямой доступ к продовой базе."
+    team: listings
+    sensitivity: restricted
+    default_level: read
+    approver_role: devops
+    aliases: [прод, продовая база, prod db, база данных]
+  - slug: vault-secrets
+    name: "Vault: секреты сервисов"
+    system: Vault
+    description: "Секреты и ключи сервисов."
+    sensitivity: restricted
+    default_level: read
+    approver_role: devops
+    aliases: [vault, секреты]
+  - slug: hr-compensation-report
+    name: "Отчёт по компенсациям"
+    system: HR
+    description: "Конфиденциальные данные о вознаграждении."
+    sensitivity: confidential
+    default_level: read
+    approver_role: owner
+    aliases: [зарплаты, компенсации]

@@ -1,0 +1,55 @@
+# Where each demo intern is "today", so every screen has something to show.
+interns:
+  anya:
+    done: [meet-team, mentor-add-chats, mentor-1on1]
+    in_progress: [chats-and-notes, laptop]
+  kirill:
+    done:
+      - meet-team
+      - laptop
+      - chats-and-notes
+      - access-jira
+      - access-confluence
+      - access-stash
+      - stash-keys
+      - avito-cli
+      - dev-principles
+      - tech-dep-channel
+      - goals-1on1
+      - learning-platform
+      - progress-tool
+      - mentor-add-chats
+      - mentor-check-access
+      - mentor-1on1
+    in_progress: [db-docs]
+    review: [first-pr]
+    blocked:
+      team-docs: "Не запускается listings-api локально: падает docker compose на миграциях"
+  dana:
+    done:
+      - meet-team
+      - laptop
+      - chats-and-notes
+      - access-jira
+      - access-confluence
+      - stash-keys
+      - avito-cli
+      - dev-principles
+      - goals-1on1
+      - learning-platform
+      - progress-tool
+      - team-docs
+      - first-pr
+      - mentor-add-chats
+      - mentor-check-access
+      - mentor-1on1
+    in_progress: [data-protection, microservices-course]
+
+escalations:
+  - from: kirill
+    kind: question
+    question: "Как правильно называть ветки: feature/<описание> или по ключу задачи LST-…?"
+    hours_ago: 20
+    context:
+      note: "В общем регламенте и в гайде команды написано по-разному"
+      source: chat

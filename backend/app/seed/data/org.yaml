@@ -1,0 +1,116 @@
+# Synthetic demo company. Every person, team and channel here is invented.
+# start_days_ago: the internship started that many days before "today" (keeps the demo fresh).
+password: orbi-demo-2026
+
+teams:
+  - slug: listings
+    name: "Объявления: Backend"
+    description: "Сервисы публикации и модерации объявлений"
+    channel: "#listings-backend"
+  - slug: payments
+    name: "Платежи"
+    description: "Платёжные сервисы и биллинг"
+    channel: "#payments-dev"
+  - slug: platform
+    name: "Платформа и DevOps"
+    description: "Kubernetes, CI/CD, доступы к инфраструктуре"
+    channel: "#platform-help"
+
+people:
+  - key: maria
+    email: maria.lead@buddy.test
+    full_name: "Мария Ким"
+    title: "Engineering Manager"
+    role: lead
+    team: listings
+  - key: ivan
+    email: ivan.mentor@buddy.test
+    full_name: "Иван Петров"
+    title: "Senior Backend Engineer"
+    role: mentor
+    team: listings
+    lead: maria
+  - key: olga
+    email: olga.hrbp@buddy.test
+    full_name: "Ольга Соколова"
+    title: "HR Business Partner"
+    role: hrbp
+  - key: sergey
+    email: sergey.lead@buddy.test
+    full_name: "Сергей Волков"
+    title: "Team Lead"
+    role: lead
+    team: payments
+  - key: pavel
+    email: pavel.mentor@buddy.test
+    full_name: "Павел Иванов"
+    title: "Backend Engineer"
+    role: mentor
+    team: payments
+    lead: sergey
+  - key: alexey
+    email: alexey.devops@buddy.test
+    full_name: "Алексей Ершов"
+    title: "DevOps Lead"
+    role: lead
+    team: platform
+  - key: admin
+    email: admin@buddy.test
+    full_name: "Администратор демо"
+    title: "Администратор"
+    role: admin
+  - key: anya
+    email: anya.intern@buddy.test
+    full_name: "Аня Смирнова"
+    title: "Стажёр-бэкендер"
+    role: intern
+    team: listings
+    track: backend
+    mentor: ivan
+    lead: maria
+    hrbp: olga
+    start_days_ago: 2
+  - key: kirill
+    email: kirill.intern@buddy.test
+    full_name: "Кирилл Орлов"
+    title: "Стажёр-бэкендер"
+    role: intern
+    team: listings
+    track: backend
+    mentor: ivan
+    lead: maria
+    hrbp: olga
+    start_days_ago: 16
+  - key: dana
+    email: dana.intern@buddy.test
+    full_name: "Дана Ли"
+    title: "Стажёр-бэкендер"
+    role: intern
+    team: payments
+    track: backend
+    mentor: pavel
+    lead: sergey
+    hrbp: olga
+    start_days_ago: 40
+
+flags:
+  - key: orbi_assistant
+    enabled: true
+    rollout_percent: 100
+    variants: []
+    description: "Орби в портале. Раскатка по командам для A/B: контроль — команды без помощника."
+  - key: proactive_nudges
+    enabled: true
+    rollout_percent: 100
+    variants: []
+    description: "Напоминания AI-крона о просроченных шагах и заявках."
+  - key: faq_publishing
+    enabled: true
+    rollout_percent: 100
+    variants: []
+    description: "Ответы наставников можно публиковать в FAQ команды."
+  - key: llm_conflict_check
+    enabled: true
+    rollout_percent: 100
+    variants: []
+    description: "Фоновая проверка противоречий в базе знаний моделью (нужен ключ LLM)."
