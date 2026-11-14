@@ -209,10 +209,13 @@ class CorpState:
             self.by_key[key] = ticket.id
             return ticket
 
-    def ticket(self, ticket_id: str) -> Ticket:
+    def ticket(self, ticket_id: str, *, service: str | None = None) -> Ticket:
         if ticket_id not in self.tickets:
             raise Refused(f"unknown request {ticket_id}")
-        return self.tickets[ticket_id]
+        ticket = self.tickets[ticket_id]
+        if service is not None and ticket.service != service:
+            raise Refused("request belongs to another service")
+        return ticket
 
     # ---- access ----------------------------------------------------------------------------
 
@@ -329,8 +332,18 @@ class CorpState:
         return ticket
 
     def post(self, *, channel: str, text: str, author: str, key: str) -> str:
+        with self._lock:
+            return self._post(channel=channel, text=text, author=author, key=key)
+
+    def _post(self, *, channel: str, text: str, author: str, key: str) -> str:
         for message in self.messages:
             if message["key"] == key:
+                if (message["channel"], message["text"], message["author"]) != (
+                    channel,
+                    text,
+                    author,
+                ):
+                    raise Refused("idempotency key reused with a different message")
                 return str(message["id"])
         message_id = f"msg-{len(self.messages) + 1}"
         self.messages.append(

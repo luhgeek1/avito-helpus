@@ -15,7 +15,7 @@ from app.db.uow import UnitOfWork
 from app.domain.corp import CorpRequestError, CorpUnavailableError, EquipmentStatus
 from app.domain.events import NotificationKind
 from app.domain.flags import Flag
-from app.domain.requests import RequestSource
+from app.domain.requests import RequestKind, RequestSource
 from app.domain.users import CurrentUser, Role
 from app.infra.metrics import WORKER_JOB_DURATION, WORKER_JOB_ITEMS, WORKER_JOBS, metric_job
 from app.service.escalations import EscalationService
@@ -157,14 +157,23 @@ class Nudges:
             for request in await uow.requests.past_sla(utcnow()):
                 if not await self._nudges_on(uow, request.user_id):
                     continue
+                can_remind = request.kind is RequestKind.ACCESS
                 sent += await notify(
                     uow,
                     user_id=request.user_id,
                     kind=NotificationKind.NUDGE,
                     title="Заявка дольше обычного на согласовании",
-                    body=f"{request.title} ({request.external_id}). Можно напомнить согласующему.",
+                    body=f"{request.title} ({request.external_id}). "
+                    + (
+                        "Можно напомнить согласующему."
+                        if can_remind
+                        else "Уточни статус у ответственного или попроси помощи у наставника."
+                    ),
                     link=f"/requests/{request.id}",
-                    payload={"request_id": str(request.id), "action": "remind"},
+                    payload={
+                        "request_id": str(request.id),
+                        **({"action": "remind"} if can_remind else {}),
+                    },
                     dedupe_key=f"sla:{request.id}:{today().isoformat()}",
                 )
             return sent

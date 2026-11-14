@@ -223,8 +223,9 @@ async def test_llm_conflict_detection(db: Database) -> None:
         )
         after = await uow.session.scalar(select(func.count()).select_from(KbConflict))
 
-    assert found == 0  # access.process has no team version; code_review.rules is already known
-    assert before == after
+    # The known listings pair must not suppress the still unchecked payments rule.
+    assert found == 1
+    assert after == before + 1
 
 
 def test_generate_keys_once(tmp_path: Path) -> None:

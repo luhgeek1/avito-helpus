@@ -54,13 +54,13 @@ class AbsenceDatesError(DomainError):
     status_code = 422
     error_code = ErrorCode.ABSENCE_INVALID_DATES
     default_detail = (
-        "Check the dates: the absence must start today or later and end after it starts"
+        "Проверь даты: отсутствие начинается не раньше сегодня и заканчивается не раньше начала"
     )
 
 
 class AbsenceBalanceError(ConflictError):
     error_code = ErrorCode.ABSENCE_BALANCE_EXCEEDED
-    default_detail = "Not enough days left for this absence"
+    default_detail = "Не хватает дней для этого отсутствия"
 
 
 def working_days(start: date, end: date) -> int:
@@ -83,9 +83,9 @@ def evaluate_absence(
         raise AbsenceDatesError()
     days = working_days(start, end)
     if days == 0:
-        raise AbsenceDatesError("These dates are a weekend: no absence request is needed")
+        raise AbsenceDatesError("Это выходные: заявка на отсутствие не нужна")
     if days > balance:
-        raise AbsenceBalanceError(f"You have {balance} days left, the request needs {days}")
+        raise AbsenceBalanceError(f"Осталось дней: {balance}, а для заявки нужно {days}")
 
     warnings: list[str] = []
     notice = NOTICE_WORKING_DAYS[type_]
@@ -151,13 +151,16 @@ def _month(word: str) -> int | None:
 
 
 def _future(day: int, month: int, today: date, year: int | None = None) -> date | None:
-    try:
-        candidate = date(year or today.year, month, day)
-    except ValueError:
-        return None
-    if year is None and candidate < today:
-        candidate = candidate.replace(year=today.year + 1)
-    return candidate
+    # A yearless leap day means the next valid occurrence, including century boundaries.
+    years = (year,) if year is not None else range(today.year, min(today.year + 9, 10000))
+    for candidate_year in years:
+        try:
+            candidate = date(candidate_year, month, day)
+        except ValueError:
+            continue
+        if year is not None or candidate >= today:
+            return candidate
+    return None
 
 
 def _explicit_dates(text: str, today: date) -> list[date]:

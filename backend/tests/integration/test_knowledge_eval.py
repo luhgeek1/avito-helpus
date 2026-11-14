@@ -71,6 +71,7 @@ async def test_recall_at_5(client: AsyncClient, anya: Account) -> None:
             misses.append((question, expected))
 
     recall = 1 - len(misses) / len(EVAL)
+    print(f"original n={len(EVAL)}, recall@5={recall:.3f}")  # noqa: T201 - evaluation output
     assert recall >= RECALL_THRESHOLD, f"recall@5 = {recall:.2f}, misses: {misses}"
 
 
@@ -112,3 +113,4 @@ async def test_expanded_retrieval(client: AsyncClient, anya: Account) -> None:
     )
     print(metrics)  # noqa: T201 - reproducible evaluation output
     assert sections / count >= RECALL_THRESHOLD, f"{metrics}; misses={misses}"
+    assert (hits, sections, reciprocal_ranks) == (count, count, float(count)), metrics
