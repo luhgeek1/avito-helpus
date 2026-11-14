@@ -21,7 +21,11 @@ def backend() -> tuple[int, int]:
 
 
 def frontend() -> tuple[int, int]:
-    summary = json.loads((ROOT / "frontend" / "coverage" / "coverage-summary.json").read_text())
+    summary = json.loads(
+        (ROOT / "frontend" / "coverage" / "coverage-summary.json").read_text(
+            encoding="utf-8"
+        )
+    )
     lines = summary["total"]["lines"]
     return int(lines["covered"]), int(lines["total"])
 
@@ -31,7 +35,9 @@ def main() -> int:
     covered = sum(c for c, _ in parts.values())
     total = sum(t for _, t in parts.values())
     combined = 100 * covered / total if total else 0.0
-    rows = [f"| {name} | {c} | {t} | {100 * c / t:.1f}% |" for name, (c, t) in parts.items()]
+    rows = [
+        f"| {name} | {c} | {t} | {100 * c / t:.1f}% |" for name, (c, t) in parts.items()
+    ]
     report = "\n".join(
         [
             "# Покрытие тестами",

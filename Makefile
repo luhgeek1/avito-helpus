@@ -25,8 +25,7 @@ ps: ## Containers and their health
 	docker compose ps
 
 reset-demo: ## Restore the demo company and the corp-mock state
-	docker compose exec api python -m app.cli seed --reset
-	curl -fsS -X POST http://localhost:8090/admin/reset >/dev/null && echo "corp-mock reset"
+	python deploy/reset_demo.py
 
 smoke: ## End-to-end check of a running stack (login, plan, chat, access request)
 	sh deploy/smoke.sh
@@ -90,7 +89,7 @@ coverage: test-deps ## Backend + frontend coverage, then the combined report in 
 	@mkdir -p reports
 	$(UV) pytest -q --cov=app --cov-report=term --cov-report=xml:../reports/backend-coverage.xml --cov-report=lcov:../reports/backend.lcov
 	npm --prefix frontend run coverage
-	python3 deploy/coverage_report.py
+	python deploy/coverage_report.py
 
 check: lint typecheck test ## Everything CI runs for the backend
 
