@@ -27,13 +27,14 @@ class McpCorpServices:
     Tool errors that mean "refused" carry `refused: true`; anything else is treated as transient.
     """
 
-    def __init__(self, url: str, *, timeout_sec: float) -> None:
-        self._url = url
+    def __init__(self, target: Any, *, timeout_sec: float) -> None:
+        # A URL in production; tests pass the corp-mock server object to connect in memory.
+        self._target = target
         self._timeout = timeout_sec
 
     async def _call(self, tool: str, arguments: dict[str, Any]) -> dict[str, Any]:
         try:
-            async with asyncio.timeout(self._timeout), Client(self._url) as client:
+            async with asyncio.timeout(self._timeout), Client(self._target) as client:
                 result = await client.call_tool(tool, arguments)
         except TimeoutError as exc:
             CORP_CALLS.labels(tool=tool, outcome="timeout").inc()

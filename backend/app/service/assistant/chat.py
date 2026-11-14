@@ -13,14 +13,18 @@ from pydantic_ai import (
     FunctionToolCallEvent,
     FunctionToolResultEvent,
     ModelMessagesTypeAdapter,
+    ModelRequest,
     ModelResponse,
     PartDeltaEvent,
     PartEndEvent,
     PartStartEvent,
+    RetryPromptPart,
     TextPart,
     TextPartDelta,
     ToolApproved,
+    ToolCallPart,
     ToolDenied,
+    ToolReturnPart,
     UsageLimits,
 )
 from pydantic_ai.models import Model
@@ -257,6 +261,7 @@ class ChatService:
         yield stream.status("Думаю…", mode=self._rt.mode.value)
         try:
             deps, history = await self._load(actor, conversation_id)
+            deferred = _close_dangling(history, deferred)
             async with self._rt.agent.run_stream_events(
                 prompt,
                 message_history=history,
@@ -429,6 +434,36 @@ class ChatService:
                 )
         except Exception:  # saving the failure is best effort
             logger.warning("could not save a failed turn: %s", error)
+
+
+def _close_dangling(
+    history: list[Any], deferred: DeferredToolResults | None
+) -> DeferredToolResults | None:
+    """
+    Every tool call left open in the history (an expired or superseded card) must get a result,
+    or the next run can't start. Calls without an explicit decision count as declined.
+    """
+    answered = {
+        part.tool_call_id
+        for message in history
+        if isinstance(message, ModelRequest)
+        for part in message.parts
+        if isinstance(part, ToolReturnPart | RetryPromptPart)
+    }
+    called = [
+        part.tool_call_id
+        for message in history
+        if isinstance(message, ModelResponse)
+        for part in message.parts
+        if isinstance(part, ToolCallPart)
+    ]
+    dangling = [call for call in called if call not in answered]
+    if not dangling:
+        return deferred
+    results = deferred or DeferredToolResults()
+    for call in dangling:
+        results.approvals.setdefault(call, ToolDenied(SUPERSEDED))
+    return results
 
 
 def _say(turn: _Turn, text: str) -> list[str]:

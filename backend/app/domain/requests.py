@@ -183,6 +183,7 @@ _WORD = re.compile(r"[a-zа-яё0-9]+")
 _MIN_TOKEN = 3
 _MIN_SCORE = 0.5
 _TIE = 0.05
+_QUERY_WEIGHT = 0.9
 
 
 def _tokens(text: str) -> set[str]:
@@ -195,16 +196,17 @@ def _stem(token: str) -> str:
 
 
 def _score(resource: AccessResource, query_tokens: set[str]) -> float:
+    """How well a resource matches: its name fully mentioned, or a short query fully covered."""
     names = [resource.slug, resource.name, resource.system, *resource.aliases]
-    best = 0.0
     query_stems = {_stem(t) for t in query_tokens}
+    best = 0.0
     for name in names:
-        name_tokens = _tokens(name.replace("-", " ").replace("_", " ")) | _tokens(name)
-        if not name_tokens:
+        words = _tokens(name.replace("-", " ").replace("_", " ")) | _tokens(name)
+        stems = {_stem(word) for word in words}
+        if not stems:
             continue
-        stems = {_stem(t) for t in name_tokens}
-        overlap = len(stems & query_stems) / len(stems)
-        best = max(best, overlap)
+        shared = len(stems & query_stems)
+        best = max(best, shared / len(stems), _QUERY_WEIGHT * shared / len(query_stems))
     return best
 
 

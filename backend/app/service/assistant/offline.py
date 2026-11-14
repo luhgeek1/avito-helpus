@@ -87,7 +87,8 @@ def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads b
     if "request_access" in tools and _has(text, r"доступ"):
         level = "write" if _has(text, r"запис", r"редакт", r"write", r"пуш", r"push") else None
         level = "admin" if _has(text, r"админ") else level
-        resource = _after(prompt, r"(?i)доступ\w*\s+(к|в|на|до)\s+", r"(?i)доступ\w*")
+        target = re.sub(r"(?i)\s*(на|для)\s+(запись|чтение|редактирование|админ\w*)", "", prompt)
+        resource = _after(target, r"(?i)доступ\w*\s+(к|в|на|до)\s+", r"(?i)доступ\w*")
         args: dict[str, Any] = {"resource": resource}
         if level:
             args["level"] = level
@@ -131,7 +132,9 @@ def _intent_plan(text: str, prompt: str, tools: set[str]) -> Intent | None:
     if "update_plan_step" in tools and _has(
         text, r"^отметь", r"\bсделал", r"\bвыполнил", r"закрой шаг"
     ):
-        step = _after(prompt, r"(?i)(отметь|сделал\w*|выполнил\w*|закрой шаг)( как выполненн\w*)?")
+        step = re.sub(
+            r"(?i)\b(отметь|сделал\w*|выполнил\w*|закрой шаг|как выполненн\w*)\b", "", prompt
+        ).strip(" .,:!«»")
         return Intent("update_plan_step", {"step": step, "action": "complete"})
     if "update_plan_step" in tools and _has(text, r"начинаю", r"взял\w* в работу", r"приступаю"):
         step = _after(prompt, r"(?i)(начинаю|взял\w* в работу|приступаю к)")

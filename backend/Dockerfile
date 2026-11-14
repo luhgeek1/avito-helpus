@@ -26,9 +26,12 @@ RUN groupadd --system --gid 999 app \
  && useradd --system --gid 999 --uid 999 --no-create-home app
 
 COPY --from=builder --chown=app:app /app /app
+# JWT keys are generated into a named volume by the migrate step; it inherits this owner.
+RUN mkdir -p /app/secrets && chown app:app /app/secrets
 
 ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PYDANTIC_AI_NO_BANNER=1
 
 WORKDIR /app
 USER app

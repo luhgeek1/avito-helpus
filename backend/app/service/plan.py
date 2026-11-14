@@ -121,6 +121,24 @@ class PlanService:
         )
         await self._uow.flush()
 
+    async def complete_by_system(self, item_id: UUID, *, note: str) -> None:
+        """A step whose outcome the system can see for itself (e.g. access already granted)."""
+        row = await self._uow.plan.get(item_id, for_update=True)
+        if row is None or row[0].status is ItemStatus.DONE:
+            return
+        item, template = row
+        item.status = ItemStatus.DONE
+        item.completed_at = utcnow()
+        item.waiting_reason = None
+        item.review_comment = note
+        self._uow.ops.track(
+            AnalyticsEvent.PLAN_ITEM_DONE, user_id=item.user_id, properties={"slug": template.slug}
+        )
+        push(
+            self._uow, item.user_id, RealtimeEvent.PLAN, {"item_id": str(item.id), "status": "done"}
+        )
+        await self._uow.flush()
+
     async def request_resolved(self, item_id: UUID, *, approved: bool) -> PlanItemView | None:
         """A linked request finished: approval closes the step, anything else reopens it."""
         row = await self._uow.plan.get(item_id, for_update=True)

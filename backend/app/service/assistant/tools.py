@@ -13,7 +13,7 @@ from app.domain.corp import CorpUnavailableError
 from app.domain.escalations import LEVEL_TITLES, Chain, EscalationKind, first_assignment
 from app.domain.events import Topic
 from app.domain.knowledge import SENSITIVE_TITLES, SYNTHETIC_LABEL, coverage, detect_sensitive
-from app.domain.plan import STAGE_TITLES, ItemStatus, Transition
+from app.domain.plan import STAGE_TITLES, ActionKind, ItemStatus, Transition
 from app.domain.requests import LEVEL_TITLES as ACCESS_LEVEL_TITLES
 from app.domain.requests import (
     AccessLevel,
@@ -276,6 +276,11 @@ async def request_access(
     """
     Request access to a resource (repository, Jira project, dashboard...). Checks visibility,
     current access and duplicates, then shows a confirmation card; nothing is sent before approval.
+
+    Args:
+        resource: Resource name, slug or the user's words, e.g. "listings-api".
+        level: Leave empty unless the user asked for a level: the default is what the team has.
+        justification: Why the access is needed, in the user's words; leave empty to propose one.
     """
     deps = ctx.deps
     async with deps.db.unit_of_work() as uow:
@@ -298,6 +303,11 @@ async def request_access(
             return {"message": f"{exc.detail}.", "error": exc.error_code.value}
 
     if not ctx.tool_call_approved:
+        if prep.outcome is AccessOutcome.ALREADY_GRANTED and prep.resource:
+            outcome = _access_outcome(prep)
+            if await _close_access_step(ctx, prep.resource.slug):
+                outcome["message"] += " Отметил шаг плана выполненным."
+            return outcome
         if prep.outcome is AccessOutcome.READY and prep.resource and prep.level:
             raise _card(
                 prep.card(),
@@ -314,6 +324,18 @@ async def request_access(
     view = await _submit_now(ctx, view)
     deps.emit("request", request_part(view))
     return {"message": _request_message(view), "request": request_part(view)}
+
+
+async def _close_access_step(ctx: Ctx, resource: str) -> bool:
+    """The access already exists, so the matching plan step is done: no busywork for the intern."""
+    async with ctx.deps.db.unit_of_work() as uow:
+        item = await uow.plan.find_by_action(
+            ctx.deps.actor.id, kind=ActionKind.ACCESS_REQUEST, resource=resource
+        )
+        if item is None:
+            return False
+        await PlanService(uow).complete_by_system(item.id, note="Доступ уже выдан")
+        return True
 
 
 def _access_outcome(prep: AccessPreparation) -> dict[str, Any]:

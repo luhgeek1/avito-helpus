@@ -23,6 +23,7 @@ from app.domain.corp import (
     CorpRequestError,
     CorpTicket,
     CorpTicketStatus,
+    CorpUnavailableError,
     EquipmentItem,
     EquipmentStatus,
 )
@@ -90,6 +91,7 @@ class AccessPreparation:
     existing: RequestView | None = None
     candidates: list[AccessResource] = field(default_factory=list)
     allowed_levels: tuple[AccessLevel, ...] = ()
+    service_down: bool = False
 
     def card(self) -> ActionCard:
         assert self.resource is not None  # noqa: S101 - only READY preparations have cards
@@ -105,6 +107,11 @@ class AccessPreparation:
                 CardField("justification", "Обоснование", self.justification or "", editable=True),
                 CardField("sla", "Срок согласования", f"до {self.sla_hours:g} ч"),
             ],
+            warnings=(
+                ["Сервис доступов сейчас не отвечает: заявку сохраню и отправлю автоматически."]
+                if self.service_down
+                else []
+            ),
             note=(
                 "После подтверждения заявка уйдёт в сервис доступов, "
                 "статус появится в «Моих заявках»."
@@ -168,7 +175,7 @@ class RequestService:
         matches = [exact] if exact else match_resources(resource, visible)
         if not matches:
             return AccessPreparation(outcome=AccessOutcome.NOT_FOUND)
-        if len(matches) > 1 and not exact and _ambiguous(matches, resource):
+        if len(matches) > 1 and not exact:
             return AccessPreparation(outcome=AccessOutcome.AMBIGUOUS, candidates=matches[:4])
         target = matches[0]
 
@@ -182,7 +189,15 @@ class RequestService:
                 outcome=AccessOutcome.PENDING_EXISTS, resource=target, existing=view
             )
 
-        grant = await self._corp.access_check(employee=user.email, resource=target.slug)
+        try:
+            grant = await self._corp.access_check(employee=user.email, resource=target.slug)
+        except CorpUnavailableError:
+            # Degrade, don't fail: the request is kept and sent when the service is back.
+            logger.warning("access check unavailable for %s", target.slug)
+            grant = AccessGrant(has_access=False)
+            service_down = True
+        else:
+            service_down = False
         if grant.has_access:
             return AccessPreparation(
                 outcome=AccessOutcome.ALREADY_GRANTED, resource=target, grant=grant
@@ -203,6 +218,7 @@ class RequestService:
             plan_item_id=plan_item.id if plan_item else None,
             sla_hours=self._access_sla,
             allowed_levels=allowed_levels(actor.role),
+            service_down=service_down,
         )
 
     async def create_access(
@@ -564,13 +580,6 @@ class RequestService:
         if user is None:
             raise UserNotFoundError()
         return user
-
-
-def _ambiguous(matches: list[AccessResource], query: str) -> bool:
-    """Several systems match and the query names none of them: ask which one."""
-    lowered = query.lower()
-    systems = {m.system for m in matches}
-    return len(systems) > 1 and not any(system.lower() in lowered for system in systems)
 
 
 def _dates(start: date, end: date) -> str:

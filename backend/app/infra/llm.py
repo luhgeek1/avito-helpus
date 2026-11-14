@@ -6,7 +6,12 @@ from pydantic_ai import Agent, Embedder
 from pydantic_ai.embeddings.openai import OpenAIEmbeddingModel
 from pydantic_ai.embeddings.settings import EmbeddingSettings
 from pydantic_ai.models import Model
-from pydantic_ai.models.openai import OpenAIChatModel, OpenAIChatModelSettings
+from pydantic_ai.models.openai import (
+    OpenAIChatModel,
+    OpenAIChatModelSettings,
+    OpenAIResponsesModel,
+    OpenAIResponsesModelSettings,
+)
 from pydantic_ai.providers.openai import OpenAIProvider
 
 from app.core.config import Settings
@@ -21,18 +26,31 @@ def _provider(settings: Settings) -> OpenAIProvider:
 
 
 def chat_model(settings: Settings, *, heavy: bool = False) -> Model | None:
-    """The online model, or None in offline mode (no key, or LLM_MODE=offline)."""
+    """
+    The online model, or None in offline mode (no key, or LLM_MODE=offline).
+    OpenAI's GPT-5 family takes reasoning settings with tools only on the Responses API, so that
+    API is used for OpenAI itself; OpenAI-compatible gateways get plain Chat Completions.
+    """
     if not settings.llm_online:
         return None
     name = settings.llm_heavy_model if heavy else settings.llm_model
+    use_responses = settings.llm_api == "responses" or (
+        settings.llm_api == "auto" and settings.llm_base_url is None
+    )
+    if use_responses:
+        return OpenAIResponsesModel(
+            name,
+            provider=_provider(settings),
+            settings=OpenAIResponsesModelSettings(
+                timeout=settings.llm_timeout_sec,
+                openai_reasoning_effort="low" if heavy else settings.llm_reasoning_effort,
+                max_retries=1,
+            ),
+        )
     return OpenAIChatModel(
         name,
         provider=_provider(settings),
-        settings=OpenAIChatModelSettings(
-            timeout=settings.llm_timeout_sec,
-            openai_reasoning_effort="low",
-            max_retries=1,
-        ),
+        settings=OpenAIChatModelSettings(timeout=settings.llm_timeout_sec, max_retries=1),
     )
 
 

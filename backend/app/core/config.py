@@ -62,6 +62,9 @@ class Settings(BaseSettings):
     llm_model: str = "gpt-5.4-mini"
     llm_heavy_model: str = "gpt-5.4"
     llm_timeout_sec: float = 40.0
+    # "auto": the Responses API for OpenAI itself, Chat Completions for compatible gateways.
+    llm_api: Literal["auto", "responses", "chat"] = "auto"
+    llm_reasoning_effort: Literal["none", "minimal", "low", "medium", "high"] = "none"
     embeddings_model: str = "text-embedding-3-large"
     embeddings_enabled: bool = True
 

@@ -183,13 +183,37 @@ _STOP = frozenset(
         "ли", "на", "в", "и", "по", "с", "к", "о", "у", "а", "не", "the", "how", "what",
     }
 )  # fmt: skip
-_STEM = 5
+_ENDINGS = tuple(
+    sorted(
+        [
+            "иями", "ями", "ами", "ией", "иям", "ием", "иях", "ого", "его", "ому", "ему", "ыми",
+            "ими", "ить", "ять", "ать", "еть", "уть", "ешь", "ишь", "ете", "ите", "ая", "яя", "ое",
+            "ее", "ую", "юю", "ой", "ей", "ий", "ый", "ые", "ие", "ых", "их", "ом", "ем", "ам",
+            "ям", "ах", "ях", "ов", "ев", "ию", "ья", "ье", "ьи", "ет", "ит", "ют", "ут", "ят",
+            "ть", "ы", "и", "а", "я", "о", "е", "у", "ю", "ь", "й",
+        ],
+        key=len,
+        reverse=True,
+    )
+)  # fmt: skip
+_CLOSE_STEMS = 6
+_STEM_SLACK = 3
+_MIN_STEM = 4
 _MIN_TERM = 3
+
+
+def stem_ru(word: str) -> str:
+    """Strip one inflection ending: "репозиторию" and "репозиторий" meet, "команды" and
+    "командировку" don't (a fixed-length prefix would merge them)."""
+    for ending in _ENDINGS:
+        if word.endswith(ending) and len(word) - len(ending) >= _MIN_STEM:
+            return word[: -len(ending)]
+    return word
 
 
 def query_terms(text: str) -> set[str]:
     return {
-        token[:_STEM]
+        stem_ru(token)
         for token in _TERM.findall(text.lower())
         if len(token) >= _MIN_TERM and token not in _STOP
     }
@@ -200,5 +224,19 @@ def coverage(query: str, text: str) -> float:
     terms = query_terms(query)
     if not terms:
         return 0.0
-    found = {token[:_STEM] for token in _TERM.findall(text.lower())}
-    return len(terms & found) / len(terms)
+    found = {stem_ru(token) for token in _TERM.findall(text.lower())}
+    return sum(1 for term in terms if _matches(term, found)) / len(terms)
+
+
+def _matches(term: str, stems: set[str]) -> bool:
+    """Exact stem, or a near one ("отправ" ~ "отправля") without merging different words."""
+    if term in stems:
+        return True
+    if len(term) < _CLOSE_STEMS:
+        return False
+    return any(
+        (stem.startswith(term) or term.startswith(stem))
+        and min(len(stem), len(term)) >= _CLOSE_STEMS
+        and abs(len(stem) - len(term)) <= _STEM_SLACK
+        for stem in stems
+    )

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
 
 from app.api.deps import AnalyticsServiceDep, CurrentUserDep, DatabaseDep, FlagServiceDep, require
 from app.api.schemas.misc import AuditOut, FlagOut, FlagUpdateIn, MetricsOut, UiEventIn
@@ -65,11 +65,14 @@ async def audit(
 
 @router.post(
     path="/admin/demo/reset",
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_202_ACCEPTED,
     summary="Reset the demo company to its initial state (admin only)",
 )
 async def reset_demo(
     _: Annotated[CurrentUser, Depends(require(Permission.DEMO_RESET))],
     db: DatabaseDep,
-) -> None:
-    await seed(db, reset=True)
+    background: BackgroundTasks,
+) -> dict[str, str]:
+    # After the response: this request's own transaction must be closed before TRUNCATE can run.
+    background.add_task(seed, db, reset=True)
+    return {"status": "reset scheduled"}
