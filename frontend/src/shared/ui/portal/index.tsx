@@ -133,9 +133,9 @@ export function Chip({ active, className, type = 'button', ...rest }: ChipProps)
 
 /* ---------- Модалка ---------- */
 
-type ModalProps = { title: string; onClose: () => void; children: ReactNode }
+type ModalProps = { title: string; onClose: () => void; children: ReactNode; wide?: boolean }
 
-export function Modal({ title, onClose, children }: ModalProps) {
+export function Modal({ title, onClose, children, wide }: ModalProps) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
@@ -149,7 +149,7 @@ export function Modal({ title, onClose, children }: ModalProps) {
       className="fixed inset-0 z-100 flex animate-hub-ui-fade items-center justify-center bg-black/40 p-4"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <div
-        className="max-h-[calc(100vh-32px)] w-full max-w-120 animate-hub-ui-rise overflow-auto rounded-3xl bg-white p-6 shadow-pop"
+        className={cx('max-h-[calc(100vh-32px)] w-full animate-hub-ui-rise overflow-auto rounded-3xl bg-white p-6 shadow-pop', wide ? 'max-w-180' : 'max-w-120')}
         role="dialog" aria-modal="true" aria-label={title}>
         <div className="mb-4 flex items-center justify-between gap-4">
           <h3 className={heading.h3}>{title}</h3>
