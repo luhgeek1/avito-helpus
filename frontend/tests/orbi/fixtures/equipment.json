@@ -1,0 +1,42 @@
+{
+ "items": [
+  {
+   "kind": "laptop",
+   "model": "MacBook Pro 14",
+   "status": "in_transit",
+   "status_title": "в пути",
+   "eta": "2026-11-15",
+   "pickup_location": "IT-стойка, 5 этаж",
+   "pickup_hours": "будни 10:00–18:00",
+   "note": null
+  },
+  {
+   "kind": "monitor",
+   "model": "Монитор 27\"",
+   "status": "ready_for_pickup",
+   "status_title": "готов к выдаче",
+   "eta": "2026-11-14",
+   "pickup_location": "IT-стойка, 5 этаж",
+   "pickup_hours": "будни 10:00–18:00",
+   "note": null
+  }
+ ],
+ "meanwhile": [
+  {
+   "id": "e0e19152-eca7-4d33-acc2-029b539192e9",
+   "title": "Получи ноутбук и настрой рабочее место",
+   "due_date": "2026-11-18"
+  },
+  {
+   "id": "20fd30db-2875-4e27-a906-df909d1a48ba",
+   "title": "Проверь каналы и заведи конспект встреч с наставником",
+   "due_date": "2026-11-18"
+  },
+  {
+   "id": "48807ba1-f3be-48b5-a36a-581a9e68cb4a",
+   "title": "Получи доступ к Jira-проекту команды",
+   "due_date": "2026-11-18"
+  }
+ ],
+ "ticket": null
+}

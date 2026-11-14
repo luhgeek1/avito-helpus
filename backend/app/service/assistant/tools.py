@@ -6,13 +6,20 @@ from uuid import UUID
 from pydantic_ai import ApprovalRequired, FunctionToolset, RunContext
 from pydantic_ai.tools import ToolDefinition
 
+from app.core.clock import LOCAL_TZ
 from app.core.errors import DomainError
 from app.domain.absence import ABSENCE_TITLES, AbsenceType
 from app.domain.assistant import ActionCard, CardField
 from app.domain.corp import CorpUnavailableError
 from app.domain.escalations import LEVEL_TITLES, Chain, EscalationKind, first_assignment
 from app.domain.events import Topic
-from app.domain.knowledge import SENSITIVE_TITLES, SYNTHETIC_LABEL, coverage, detect_sensitive
+from app.domain.knowledge import (
+    PRIVATE_TOPICS,
+    SENSITIVE_TITLES,
+    SYNTHETIC_LABEL,
+    coverage,
+    detect_sensitive,
+)
 from app.domain.plan import STAGE_TITLES, ActionKind, ItemStatus, Transition
 from app.domain.requests import LEVEL_TITLES as ACCESS_LEVEL_TITLES
 from app.domain.requests import (
@@ -163,13 +170,27 @@ async def update_plan_step(
 # ---- knowledge ---------------------------------------------------------------------------------
 
 
+def _relevance(deps: AgentDeps, query: str, text: str) -> float:
+    """The model may rewrite or translate the question; the user's words count as well."""
+    return max(coverage(query, text), coverage(deps.user_text, text) if deps.user_text else 0.0)
+
+
 async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
-    """Search company and team documentation the user may read. Returns numbered sources."""
+    """Search company and team documentation the user may read. Returns numbered sources.
+
+    Args:
+        query: What to look for, in Russian and close to the user's own words.
+    """
     if topic := detect_sensitive(query):
+        handoff = (
+            "Про чужие данные я не рассказываю и никому такие вопросы не передаю; "
+            "про своё вознаграждение можно спросить руководителя или HRBP."
+            if topic in PRIVATE_TOPICS
+            else "Могу конфиденциально передать вопрос HRBP."
+        )
         return {
             "message": (
-                f"Это деликатная тема ({SENSITIVE_TITLES[topic]}), её я не обсуждаю. "
-                "Могу конфиденциально передать вопрос HRBP."
+                f"Это деликатная тема ({SENSITIVE_TITLES[topic]}), её я не обсуждаю. {handoff}"
             ),
             "sensitive": topic,
             "sources": [],
@@ -181,7 +202,7 @@ async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
     relevant = [
         h
         for h in result.hits
-        if coverage(query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
+        if _relevance(ctx.deps, query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
     ]
     sources = [
         {
@@ -459,7 +480,7 @@ async def request_absence(
         raise _card(
             card,
             {
-                "type": absence_type.value,
+                "absence_type": absence_type.value,
                 "start_date": start_date.isoformat(),
                 "end_date": end_date.isoformat(),
                 "comment": comment or f"{ABSENCE_TITLES[absence_type]} по личным делам",
@@ -656,7 +677,7 @@ async def ask_mentor(
     )
     return {
         "message": f"Передал вопрос: {view.assignee_name}. Ответ придёт уведомлением, "
-        f"ответить обещают до {view.due_at:%d.%m %H:%M} UTC.",
+        f"ответить обещают до {view.due_at.astimezone(LOCAL_TZ):%d.%m %H:%M} по Москве.",
         "escalation_id": str(view.id),
     }
 

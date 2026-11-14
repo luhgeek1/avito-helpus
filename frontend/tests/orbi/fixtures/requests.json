@@ -1,0 +1,84 @@
+[
+ {
+  "id": "4d671f93-f386-4215-96e2-96607ea5a2fb",
+  "kind": "access",
+  "status": "approved",
+  "status_title": "Одобрено",
+  "title": "Доступ: Репозиторий listings-api (редактирование)",
+  "external_id": "ACC-1043",
+  "payload": {
+   "level": "write",
+   "system": "Stash",
+   "resource": "stash-listings-api",
+   "justification": "Нужен доступ к репозиторию для шага «Получи доступ к репозиторию listings-api»",
+   "resource_name": "Репозиторий listings-api"
+  },
+  "approver": "Мария Ким, руководитель команды",
+  "decision_comment": "Доступ выдан: Репозиторий listings-api",
+  "plan_item_id": "c7861c79-5bc1-4cc2-a7fc-31a34b34a3d7",
+  "sla_due_at": "2026-11-15T08:24:43.428586Z",
+  "created_at": "2026-11-14T08:24:43.410397Z",
+  "updated_at": "2026-11-14T08:24:51.455158Z",
+  "history": [
+   {
+    "status": "submitting",
+    "source": "agent",
+    "note": null,
+    "created_at": "2026-11-14T08:24:43.414363Z"
+   },
+   {
+    "status": "submitted",
+    "source": "worker",
+    "note": "Зарегистрирована: ACC-1043",
+    "created_at": "2026-11-14T08:24:43.441431Z"
+   },
+   {
+    "status": "approved",
+    "source": "webhook",
+    "note": "Доступ выдан: Репозиторий listings-api",
+    "created_at": "2026-11-14T08:24:51.454339Z"
+   }
+  ]
+ },
+ {
+  "id": "928de55e-c627-4e45-908a-23ad28075fa7",
+  "kind": "access",
+  "status": "approved",
+  "status_title": "Одобрено",
+  "title": "Доступ: Пространство «Объявления» в Confluence (чтение)",
+  "external_id": "ACC-1042",
+  "payload": {
+   "level": "read",
+   "system": "Confluence",
+   "resource": "confluence-listings",
+   "justification": "Нужен доступ, чтобы выполнить шаг плана «Запроси доступ в пространство команды в Confluence и изучи его» и изучить документацию команды.",
+   "resource_name": "Пространство «Объявления» в Confluence"
+  },
+  "approver": "Мария Ким, руководитель команды",
+  "decision_comment": "Доступ выдан: Пространство «Объявления» в Confluence",
+  "plan_item_id": "35ea23bf-2041-4ba5-8eba-995bd2ba1ad4",
+  "sla_due_at": "2026-11-15T08:22:31.174183Z",
+  "created_at": "2026-11-14T08:22:31.144251Z",
+  "updated_at": "2026-11-14T08:22:39.272062Z",
+  "history": [
+   {
+    "status": "submitting",
+    "source": "agent",
+    "note": null,
+    "created_at": "2026-11-14T08:22:31.150460Z"
+   },
+   {
+    "status": "submitted",
+    "source": "worker",
+    "note": "Зарегистрирована: ACC-1042",
+    "created_at": "2026-11-14T08:22:31.182398Z"
+   },
+   {
+    "status": "approved",
+    "source": "webhook",
+    "note": "Доступ выдан: Пространство «Объявления» в Confluence",
+    "created_at": "2026-11-14T08:22:39.271657Z"
+   }
+  ]
+ }
+]

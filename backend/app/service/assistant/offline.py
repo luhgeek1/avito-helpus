@@ -19,7 +19,7 @@ from pydantic_ai import (
 from pydantic_ai.models.function import AgentInfo, DeltaToolCall, DeltaToolCalls, FunctionModel
 
 from app.domain.absence import AbsenceType, parse_dates_ru
-from app.domain.knowledge import detect_sensitive
+from app.domain.knowledge import PRIVATE_TOPICS, detect_sensitive
 
 OFFLINE_MODEL_NAME = "orbi-offline"
 _CHUNK = 24
@@ -164,13 +164,29 @@ def _intent_plan(text: str, prompt: str, tools: set[str]) -> Intent | None:
     return None
 
 
+PRIVATE_REFUSAL = (
+    "Про зарплаты и личные данные коллег я не рассказываю и такие вопросы никому не передаю. "
+    "Про своё вознаграждение можно спросить руководителя или HRBP."
+)
+
+
+def _intent_sensitive(text: str, prompt: str, tools: set[str]) -> Intent | None:
+    topic = detect_sensitive(text)
+    if topic is None:
+        return None
+    if topic in PRIVATE_TOPICS:
+        return Intent(text=PRIVATE_REFUSAL)
+    if "ask_mentor" in tools:
+        return Intent("ask_mentor", {"question": prompt, "kind": "sensitive"})
+    return None
+
+
 def route(prompt: str, tools: set[str], today: date) -> Intent:
     """Rule-based intent detection for offline mode: the same tools, no LLM."""
     text = prompt.lower().strip()
-    if detect_sensitive(text) and "ask_mentor" in tools:
-        return Intent("ask_mentor", {"question": prompt, "kind": "sensitive"})
     detected = (
-        _intent_mentor(text, tools)
+        _intent_sensitive(text, prompt, tools)
+        or _intent_mentor(text, tools)
         or _intent_actions(text, prompt, tools, today)
         or _intent_plan(text, prompt, tools)
     )

@@ -25,6 +25,8 @@ class AgentDeps:
     today: date
     stage_title: str
     next_steps: list[PlanItemView]
+    # What the user said last: tools check relevance against it, not only the model's rewrite.
+    user_text: str = ""
     # Data parts tools want to show next to the answer (sources, request cards...).
     parts: list[dict[str, Any]] = field(default_factory=list)
 

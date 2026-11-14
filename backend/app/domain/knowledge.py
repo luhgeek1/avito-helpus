@@ -157,6 +157,9 @@ _SENSITIVE: Mapping[str, tuple[str, ...]] = {
     "dismissal": ("уволят", "увольнен", "уволиться", "уволить"),
 }
 
+# Other people's pay and personal data: refuse and do not route anywhere.
+PRIVATE_TOPICS = frozenset({"compensation", "personal_data"})
+
 SENSITIVE_TITLES: Mapping[str, str] = {
     "compensation": "вознаграждение",
     "personal_data": "персональные данные",
@@ -176,11 +179,14 @@ def detect_sensitive(text: str) -> str | None:
 
 
 _TERM = re.compile(r"[0-9a-zа-яё]+")
+# Words that fit almost any intern question; models add them when rewriting a query.
+_GENERIC = ("авито", "avito", "стажёр", "стажер", "делать", "сделать", "порядок", "процесс")
 _STOP = frozenset(
     {
         "как", "что", "где", "кто", "когда", "куда", "зачем", "почему", "какой", "какая", "какие",
         "мне", "меня", "мой", "моя", "мои", "это", "для", "или", "нужно", "надо", "можно", "есть",
         "ли", "на", "в", "и", "по", "с", "к", "о", "у", "а", "не", "the", "how", "what",
+        "свой", "своя", "своё", "свое", "свои", "свою", "своего", "своей", "если", "чтобы",
     }
 )  # fmt: skip
 _ENDINGS = tuple(
@@ -211,12 +217,16 @@ def stem_ru(word: str) -> str:
     return word
 
 
+_GENERIC_STEMS = frozenset(stem_ru(word) for word in _GENERIC)
+
+
 def query_terms(text: str) -> set[str]:
-    return {
+    stems = {
         stem_ru(token)
         for token in _TERM.findall(text.lower())
         if len(token) >= _MIN_TERM and token not in _STOP
     }
+    return stems - _GENERIC_STEMS
 
 
 def coverage(query: str, text: str) -> float:

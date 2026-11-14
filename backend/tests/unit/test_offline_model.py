@@ -49,9 +49,9 @@ ALL_TOOLS = set(TOOL_PERMISSIONS)
         ("Какие у меня заявки?", "my_requests", {}),
         ("Кто мой наставник?", "who_is_who", {}),
         (
-            "Сколько получает Иван?",
+            "Хочу обсудить конфликт с руководителем",
             "ask_mentor",
-            {"question": "Сколько получает Иван?", "kind": "sensitive"},
+            {"question": "Хочу обсудить конфликт с руководителем", "kind": "sensitive"},
         ),
         (
             "Спроси у наставника: как выкатить ветку",
@@ -104,6 +104,13 @@ def test_text_answers() -> None:
     assert route("спасибо", INTERN_TOOLS, TODAY).text
     assert "даты" in (route("хочу отпуск", INTERN_TOOLS, TODAY).text or "")
     assert route("что-нибудь", set(), TODAY).text
+
+
+def test_colleague_pay_is_refused_without_handoff() -> None:
+    intent = route("Сколько получает Иван?", INTERN_TOOLS, TODAY)
+
+    assert intent.tool is None
+    assert "не передаю" in (intent.text or "")
 
 
 def _info(tools: set[str]) -> AgentInfo:

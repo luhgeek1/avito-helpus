@@ -1,11 +1,14 @@
 import json
 from datetime import date
+from types import SimpleNamespace
+from typing import cast
 from uuid import uuid4
 
 import pytest
 
 from app.core.security import webhooks
 from app.db.repositories.knowledge import or_query
+from app.domain.assistant import EDITABLE_ARGS
 from app.domain.knowledge import (
     DocScope,
     coverage,
@@ -16,6 +19,8 @@ from app.domain.knowledge import (
 )
 from app.domain.users import Role
 from app.service.assistant import stream
+from app.service.assistant.deps import TOOL_PERMISSIONS, AgentDeps
+from app.service.assistant.tools import RELEVANT, _relevance
 
 TEAM = uuid4()
 
@@ -69,6 +74,26 @@ def test_sensitive_topics(text: str, topic: str | None) -> None:
 def test_query_coverage_ignores_stop_words() -> None:
     assert coverage("Куда отправить PR?", "PR отправляют в ветку develop") == 1.0
     assert coverage("как мне", "что угодно") == 0.0
+
+
+def test_generic_words_do_not_dilute_coverage() -> None:
+    section = "Если заболел: больничный. Сообщи руководителю и HR, затем оформи больничный"
+
+    assert coverage("больничный стажёра что делать порядок оформления Авито", section) >= 0.5
+    assert coverage("свой больничный стажёр что делать порядок оформления Авито", section) >= 0.5
+
+
+def test_relevance_counts_the_users_own_words() -> None:
+    deps = cast(AgentDeps, SimpleNamespace(user_text="Куда отправлять PR и кого звать на ревью?"))
+    section = "Кого звать на ревью и куда отправлять PR. У нас PR открывается в ветку develop"
+    english = "pull request review process for the listings team"
+
+    assert coverage(english, section) < RELEVANT
+    assert _relevance(deps, english, section) >= RELEVANT
+
+
+def test_editable_card_fields_belong_to_real_tools() -> None:
+    assert set(EDITABLE_ARGS) <= set(TOOL_PERMISSIONS)
     assert or_query("Как скачать репозиторий?") == "как | скачать | репозиторий"
     assert or_query("?!") is None
 

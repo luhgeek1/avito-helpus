@@ -1,0 +1,26 @@
+data: {"type": "start", "messageId": "6edea3b8c36c41f786bf793906201879", "messageMetadata": {"mode": "online"}}
+
+data: {"type": "data-status", "data": {"text": "Думаю…", "mode": "online"}, "transient": true}
+
+data: {"type": "data-status", "data": {"text": "Ищу ресурс в каталоге доступов"}, "transient": true}
+
+data: {"type": "tool-input-available", "toolCallId": "call_OQPEHIVhGOEQsMH8uZAMNSvd", "toolName": "find_access_resources", "input": {"query": "Grafana dashboards team listings-backend"}}
+
+data: {"type": "tool-output-available", "toolCallId": "call_OQPEHIVhGOEQsMH8uZAMNSvd", "output": {"message": "Подходящие ресурсы: Дашборды Grafana: Объявления (Grafana)."}}
+
+data: {"type": "data-status", "data": {"text": "Готовлю заявку на доступ"}, "transient": true}
+
+data: {"type": "tool-input-available", "toolCallId": "call_Vh6z0D7ucsht3y6QrOBWxCdd", "toolName": "request_access", "input": {"resource": "grafana-listings", "level": "read", "justification": "Нужен доступ к дашбордам Grafana команды, чтобы смотреть метрики и алерты сервисов"}}
+
+data: {"type": "text-start", "id": "6edea3b8c36c41f786bf793906201879-t0"}
+
+data: {"type": "text-delta", "id": "6edea3b8c36c41f786bf793906201879-t0", "delta": "Подготовил — проверь карточку и подтверди. Без подтверждения ничего не отправлю."}
+
+data: {"type": "text-end", "id": "6edea3b8c36c41f786bf793906201879-t0"}
+
+data: {"type": "data-action", "data": {"id": "5aa60b8e-6b0c-4e34-b672-4c9383ea878f", "tool": "request_access", "status": "pending", "card": {"kind": "access_request", "title": "Заявка на доступ: Дашборды Grafana: Объявления", "service": "Сервис доступов", "fields": [{"key": "resource", "label": "Ресурс", "value": "Дашборды Grafana: Объявления (Grafana)", "editable": false}, {"key": "level", "label": "Уровень", "value": "чтение", "editable": true}, {"key": "approver", "label": "Согласует", "value": "Мария Ким, руководитель команды", "editable": false}, {"key": "justification", "label": "Обоснование", "value": "Нужен доступ к дашбордам Grafana команды, чтобы смотреть метрики и алерты сервисов", "editable": true}, {"key": "sla", "label": "Срок согласования", "value": "до 24 ч", "editable": false}], "warnings": [], "note": "После подтверждения заявка уйдёт в сервис доступов, статус появится в «Моих заявках»."}, "expires_at": "2026-11-14T08:34:26.243774+00:00"}}
+
+data: {"type": "finish", "messageMetadata": {"mode": "online", "messageId": "6edea3b8c36c41f786bf793906201879"}}
+
+data: [DONE]
+

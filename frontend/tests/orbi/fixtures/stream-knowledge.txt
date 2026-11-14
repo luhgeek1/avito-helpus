@@ -1,0 +1,270 @@
+data: {"type": "start", "messageId": "1cfffc26e3d74387adb953c1f89d8ab7", "messageMetadata": {"mode": "online"}}
+
+data: {"type": "data-status", "data": {"text": "Думаю…", "mode": "online"}, "transient": true}
+
+data: {"type": "data-status", "data": {"text": "Ищу в базе знаний"}, "transient": true}
+
+data: {"type": "tool-input-available", "toolCallId": "call_B64BLSK20lCnFROaKQaVl43I", "toolName": "search_knowledge", "input": {"query": "куда отправлять pull request PR в команде listings-backend"}}
+
+data: {"type": "tool-output-available", "toolCallId": "call_B64BLSK20lCnFROaKQaVl43I", "output": {"message": "Нашёл в «Команда «Объявления»: как мы работаем», раздел «Кого звать на ревью и куда отправлять PR» [1]:\nУ нас PR открывается в ветку develop, а не в main: main собирается релизным поездом. Нужен\nобязательный аппрув техлида (сейчас это Иван Петров) и ещё один аппрув от любого участника команды.\nРевьюеров отмечай через группу @listings-reviewers. Ревью — в течение 4 рабочих часов.\n\nЕщё по теме: «Код-ревью: общий регламент» [2].\n\nВнимание: общая инструкция и инструкция команды расходятся — общий регламент требует PR в main и два любых аппрува, а гайд команды — PR в develop с обязательным аппрувом техлида. Командное правило обычно точнее, но лучше уточнить у наставника.", "found": true}}
+
+data: {"type": "data-sources", "data": {"query": "куда отправлять pull request PR в команде listings-backend", "sources": [{"n": 1, "document": "team-listings-handbook", "title": "Команда «Объявления»: как мы работаем", "section": "Кого звать на ревью и куда отправлять PR", "excerpt": "У нас PR открывается в ветку develop, а не в main: main собирается релизным поездом. Нужен\nобязательный аппрув техлида (сейчас это Иван Петров) и ещё один аппрув от любого участника команды.\nРевьюеров отмечай через группу @listings-reviewers. Ревью — в течение 4 рабочих часов.", "scope": "team", "team": "Объявления: Backend", "label": "Тестовая инструкция, не регламент Авито", "synthetic": true, "url": null, "updated_at": "2026-11-05", "stale": false}, {"n": 2, "document": "code-review-policy", "title": "Код-ревью: общий регламент", "section": "Куда отправлять PR и сколько нужно аппрувов", "excerpt": "Pull request открывается в ветку main. Для мержа нужно два аппрува от любых участников команды.\nРевьюеров автор выбирает сам из списка участников репозитория.", "scope": "company", "team": null, "label": "Тестовая инструкция, не регламент Авито", "synthetic": true, "url": null, "updated_at": "2026-04-18", "stale": true}], "conflicts": [{"id": "fed93d67-e4b7-4f6c-919a-4ed1b1e59e53", "topic": "code_review.rules", "summary": "общий регламент требует PR в main и два любых аппрува, а гайд команды — PR в develop с обязательным аппрувом техлида.", "company": {"title": "Код-ревью: общий регламент", "section": "Куда отправлять PR и сколько нужно аппрувов", "excerpt": "Pull request открывается в ветку main. Для мержа нужно два аппрува от любых участников команды.\nРевьюеров автор выбирает сам из списка участников репозитория."}, "team": {"title": "Команда «Объявления»: как мы работаем", "section": "Кого звать на ревью и куда отправлять PR", "team": "Объявления: Backend", "excerpt": "У нас PR открывается в ветку develop, а не в main: main собирается релизным поездом. Нужен\nобязательный аппрув техлида (сейчас это Иван Петров) и ещё один аппрув от любого участника команды.\nРевьюеров отмечай через группу @listings-reviewers. Ревью — в течение 4 рабочих часов."}}], "mode": "hybrid"}}
+
+data: {"type": "text-start", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "У"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " нас"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " по"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " ком"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ан"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "де"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " PR"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " отправ"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ляют"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " в"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "вет"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ку"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " `"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "develop"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "`"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "**,"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " не"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " в"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " `"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "main"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "`"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " ["}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "1"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "]."}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "  \n"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "Н"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ужно"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " получить"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "об"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "яз"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ательный"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " апп"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ру"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "в"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " тех"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ли"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "да"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "**"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " и"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " ещё"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "од"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ин"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " апп"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ру"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "в"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " от"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " любого"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " участ"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ника"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " команды"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "**"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": ";"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " рев"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ью"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "еров"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " отмеч"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ай"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " через"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "@"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "list"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ings"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "-review"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ers"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "**"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " ["}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "1"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "]."}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "  \n\n"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "Есть"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " общий"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " рег"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ламент"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " где"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " напис"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ано"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " про"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " `"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "main"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "`"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " и"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " два"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " любых"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " апп"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ру"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ва"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " но"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " для"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " вашей"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " команды"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " точ"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "нее"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " правило"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " из"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " команд"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ного"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " гай"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "да"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " ["}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "2"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "]."}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " Если"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " хоч"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ешь"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " могу"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " помочь"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " сформ"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ули"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "ровать"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " корот"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "кий"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " чек"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "лист"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " перед"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " отправ"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "кой"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": " PR"}
+
+data: {"type": "text-delta", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0", "delta": "."}
+
+data: {"type": "text-end", "id": "1cfffc26e3d74387adb953c1f89d8ab7-t0"}
+
+data: {"type": "error", "errorText": "Орби сейчас не может ответить. Попробуй ещё раз через минуту."}
+
+data: {"type": "finish", "messageMetadata": {"mode": "online", "messageId": "1cfffc26e3d74387adb953c1f89d8ab7"}}
+
+data: [DONE]
+

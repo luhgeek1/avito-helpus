@@ -114,7 +114,7 @@ EDITABLE_ARGS: Mapping[str, frozenset[str]] = {
     "create_it_ticket": frozenset({"description"}),
     "ask_mentor": frozenset({"question"}),
     "post_team_message": frozenset({"text"}),
-    "answer_escalation": frozenset({"answer", "publish_to_faq"}),
+    "answer_question": frozenset({"answer", "publish_to_faq"}),
 }
 
 
