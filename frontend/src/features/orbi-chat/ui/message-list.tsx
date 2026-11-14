@@ -89,7 +89,7 @@ export function OrbiMessageList({ name }: { name: string }) {
     <>
       {messages.map((message, index) => (
         <Bubble key={`${message.id}-${index}`} message={message} name={name} busy={busy}
-          retry={index === messages.length - 1 && message.error && retryText ? () => { void send(retryText); } : undefined} />
+          retry={index === messages.length - 1 && message.error && !message.decisionReply && retryText ? () => { void send(retryText); } : undefined} />
       ))}
     </>
   );

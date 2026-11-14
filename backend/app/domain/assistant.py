@@ -88,22 +88,22 @@ class ChatMessageView:
 
 class ConversationNotFoundError(NotFoundError):
     error_code = ErrorCode.CONVERSATION_NOT_FOUND
-    default_detail = "Conversation not found"
+    default_detail = "Диалог не найден"
 
 
 class ActionNotFoundError(NotFoundError):
     error_code = ErrorCode.ACTION_NOT_FOUND
-    default_detail = "Action not found"
+    default_detail = "Карточка не найдена"
 
 
 class ActionAlreadyDecidedError(ConflictError):
     error_code = ErrorCode.ACTION_ALREADY_DECIDED
-    default_detail = "This action was already confirmed or declined"
+    default_detail = "По этой карточке уже принято решение"
 
 
 class ActionExpiredError(ConflictError):
     error_code = ErrorCode.ACTION_EXPIRED
-    default_detail = "This card has expired; ask Orbi again"
+    default_detail = "Карточка устарела — попроси Орби ещё раз"
     # The card is marked expired in the same transaction; that change must survive the error.
     keep_changes = True
 
@@ -125,5 +125,5 @@ def apply_edits(
     allowed = EDITABLE_ARGS.get(tool_name, frozenset())
     unknown = set(edits) - allowed
     if unknown:
-        raise ConflictError(f"These fields can't be edited: {', '.join(sorted(unknown))}")
+        raise ConflictError(f"Эти поля нельзя менять: {', '.join(sorted(unknown))}")
     return {**args, **edits}

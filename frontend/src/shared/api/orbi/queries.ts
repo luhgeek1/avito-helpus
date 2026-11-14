@@ -164,9 +164,11 @@ export function useReviewItem() {
 }
 
 export function useReportConflict() {
+  const invalidate = useInvalidate();
   return useMutation({
     mutationFn: ({ id, note }: { id: string; note?: string }) =>
       orbiJson(`/knowledge/conflicts/${id}/report`, escalationSchema, { method: "POST", json: { note } }),
+    onSuccess: invalidate,
   });
 }
 

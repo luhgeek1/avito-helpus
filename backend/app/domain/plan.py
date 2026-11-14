@@ -163,22 +163,22 @@ class QuizResult:
 
 class PlanItemNotFoundError(NotFoundError):
     error_code = ErrorCode.PLAN_ITEM_NOT_FOUND
-    default_detail = "Plan item not found"
+    default_detail = "Шаг плана не найден"
 
 
 class PlanTransitionError(ConflictError):
     error_code = ErrorCode.PLAN_TRANSITION_INVALID
-    default_detail = "This step can't change status that way"
+    default_detail = "Шаг нельзя перевести в этот статус"
 
 
 class QuizRequiredError(ConflictError):
     error_code = ErrorCode.PLAN_QUIZ_REQUIRED
-    default_detail = "This step is confirmed by a short quiz"
+    default_detail = "Этот шаг подтверждается коротким тестом"
 
 
 class ReviewRequiredError(ConflictError):
     error_code = ErrorCode.PLAN_REVIEW_REQUIRED
-    default_detail = "This step is confirmed by your mentor: submit it for review"
+    default_detail = "Этот шаг подтверждает наставник: отправь его на проверку"
 
 
 def due_date(start: date, stage: Stage) -> date:
@@ -221,11 +221,11 @@ def next_status(
     """Validate one plan transition and return the new status (raises on anything illegal)."""
     if transition in REVIEWER_TRANSITIONS:
         if not by_reviewer:
-            raise ForbiddenError("Only the mentor confirms this step")
+            raise ForbiddenError("Этот шаг подтверждает только наставник")
         if waiting_reason is not WaitingReason.MENTOR_REVIEW:
             raise PlanTransitionError()
     elif audience is Audience.MENTOR and not by_reviewer:
-        raise ForbiddenError("This step is done by the mentor")
+        raise ForbiddenError("Этот шаг выполняет наставник")
 
     new_status = _TRANSITIONS.get((status, transition))
     if new_status is None:
@@ -237,7 +237,7 @@ def next_status(
         if confirmation is Confirmation.MENTOR:
             raise ReviewRequiredError()
     if transition is Transition.SUBMIT_REVIEW and confirmation is not Confirmation.MENTOR:
-        raise PlanTransitionError("This step doesn't need a mentor review")
+        raise PlanTransitionError("Этому шагу не нужна проверка наставника")
     return new_status
 
 

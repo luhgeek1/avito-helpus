@@ -268,6 +268,11 @@ class RequestService:
 
     # ---- absence -----------------------------------------------------------------------------
 
+    async def absence_balance(self, actor: CurrentUser) -> int:
+        """Days of leave left in the absence service (vacation and days off share one pool)."""
+        user = await self._user(actor.id)
+        return await self._corp.absence_balance(employee=user.email)
+
     async def check_absence(
         self, actor: CurrentUser, *, type_: AbsenceType, start: date, end: date
     ) -> AbsenceCheck:

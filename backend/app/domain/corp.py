@@ -78,4 +78,4 @@ class CorpRequestError(ConflictError):
     """The service understood the request and refused it: retrying will not help."""
 
     error_code = ErrorCode.CONFLICT
-    default_detail = "The corporate service rejected the request"
+    default_detail = "Корпоративный сервис отклонил запрос"

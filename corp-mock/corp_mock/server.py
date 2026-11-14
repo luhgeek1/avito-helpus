@@ -159,14 +159,14 @@ async def access_create_request(
 def access_get_request(request_id: str) -> dict[str, Any]:
     """Current status of an access request."""
     state.check_available()
-    return state.ticket(request_id).as_dict()
+    return state.ticket(request_id, service="access").as_dict()
 
 
 @mcp.tool()
 def access_remind(request_id: str, idempotency_key: str | None = None) -> dict[str, Any]:
     """Send the approver a reminder."""
     state.check_available()
-    ticket = state.ticket(request_id)
+    ticket = state.ticket(request_id, service="access")
     if idempotency_key is None or idempotency_key not in state.reminder_keys:
         ticket.reminders += 1
         if idempotency_key is not None:
@@ -215,7 +215,7 @@ async def absence_create_request(
 def absence_get_request(request_id: str) -> dict[str, Any]:
     """Current status of an absence request."""
     state.check_available()
-    return state.ticket(request_id).as_dict()
+    return state.ticket(request_id, service="absence").as_dict()
 
 
 @mcp.tool()
@@ -254,7 +254,7 @@ async def itsupport_create_ticket(
 def itsupport_get_ticket(ticket_id: str) -> dict[str, Any]:
     """Current status of an IT ticket."""
     state.check_available()
-    return state.ticket(ticket_id).as_dict()
+    return state.ticket(ticket_id, service="itsupport").as_dict()
 
 
 @mcp.tool()

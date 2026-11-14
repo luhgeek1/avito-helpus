@@ -139,17 +139,17 @@ class MemberLinks:
 
 class UserNotFoundError(NotFoundError):
     error_code = ErrorCode.USER_NOT_FOUND
-    default_detail = "User not found"
+    default_detail = "Пользователь не найден"
 
 
 class MenteeNotFoundError(NotFoundError):
     error_code = ErrorCode.MENTEE_NOT_FOUND
-    default_detail = "Mentee not found"
+    default_detail = "Подопечный не найден"
 
 
 class AccountBannedError(ForbiddenError):
     error_code = ErrorCode.ACCOUNT_BANNED
-    default_detail = "Your account is banned"
+    default_detail = "Учётная запись заблокирована"
 
 
 def normalize_email(email: str) -> str:

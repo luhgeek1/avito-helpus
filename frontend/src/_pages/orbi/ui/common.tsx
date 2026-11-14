@@ -77,7 +77,7 @@ export function DueDate({ item }: { item: PlanItem }) {
 export function DocumentBody({ body }: { body: string }) {
   return (
     <div className="space-y-3 text-15 leading-6">
-      {body.split(/\n{2,}/).map((block, index) => {
+      {body.split(/\n{2,}/).flatMap((block) => block.split(/^(#{1,3}\s+[^\n]*)\n?/m)).map((block) => block.trim()).filter(Boolean).map((block, index) => {
         const key = `${index}`;
         if (block.startsWith("<!--")) return null;
         const headingMatch = /^(#{1,3})\s+(.*)$/.exec(block);

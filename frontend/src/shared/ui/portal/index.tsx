@@ -1,6 +1,7 @@
 import { Link } from '@/shared/lib/portal-navigation'
 import { ChevronRight, X } from 'lucide-react'
-import { useEffect, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ComponentProps, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import type { Illustration as IllustrationName, Palette } from '@/shared/api'
 import { initials } from '@/shared/lib/portal-format'
 import { buttonClass, chipClass, cx, heading, paletteClass, type ButtonSize, type ButtonVariant } from './classes'
@@ -136,19 +137,37 @@ export function Chip({ active, className, type = 'button', ...rest }: ChipProps)
 type ModalProps = { title: string; onClose: () => void; children: ReactNode; wide?: boolean }
 
 export function Modal({ title, onClose, children, wide }: ModalProps) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const dialog = useRef<HTMLDivElement>(null)
+  const focusable = () => Array.from(dialog.current?.querySelectorAll<HTMLElement>(':is(button,a[href],input,textarea,select,[tabindex="0"]):not(:disabled):not([hidden])') ?? [])
   useEffect(() => {
+    if (!mounted) return
+    const previous = document.activeElement
+    focusable()[0]?.focus()
+    return () => { if (previous instanceof HTMLElement && previous.isConnected) previous.focus() }
+  }, [mounted])
+  useEffect(() => {
+    if (!mounted) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose() }
+      if (event.key === 'Tab') {
+        const items = focusable(), first = items[0], last = items.at(-1)
+        const outside = !dialog.current?.contains(document.activeElement)
+        if (event.shiftKey && (document.activeElement === first || outside)) { event.preventDefault(); last?.focus() }
+        else if (!event.shiftKey && (document.activeElement === last || outside)) { event.preventDefault(); first?.focus() }
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+    document.addEventListener('keydown', onKey, true)
+    return () => document.removeEventListener('keydown', onKey, true)
+  }, [onClose, mounted])
 
-  return (
+  return mounted ? createPortal(
     <div
-      className="fixed inset-0 z-100 flex animate-hub-ui-fade items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-100 flex animate-hub-ui-fade items-center justify-center bg-black/40 p-4 font-portal text-15 leading-5 text-primary"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <div
+        ref={dialog}
         className={cx('max-h-[calc(100vh-32px)] w-full animate-hub-ui-rise overflow-auto rounded-3xl bg-white p-6 shadow-pop', wide ? 'max-w-180' : 'max-w-120')}
         role="dialog" aria-modal="true" aria-label={title}>
         <div className="mb-4 flex items-center justify-between gap-4">
@@ -159,8 +178,8 @@ export function Modal({ title, onClose, children, wide }: ModalProps) {
         </div>
         {children}
       </div>
-    </div>
-  )
+    </div>, document.body,
+  ) : null
 }
 
 export function IconButton({

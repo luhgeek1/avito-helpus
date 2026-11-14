@@ -62,7 +62,7 @@ def register_exception_handlers(app: FastAPI, *, debug: bool) -> None:
         return problem_response(
             request,
             status=422,
-            detail="Request validation failed",
+            detail="Запрос не прошёл проверку",
             error_code=ErrorCode.REQUEST_VALIDATION_ERROR,
             details=exc.errors(),
         )

@@ -18,7 +18,7 @@ import { useCompanionTour } from "../model/use-companion-tour";
 import { CompanionTourShell } from "./companion-tour";
 import { cx } from "@/shared/lib/cx";
 import { useOrbiChat } from "@/features/orbi-chat";
-import { useOrbiNotice } from "@/shared/api";
+import { useOrbiNotice, useSession } from "@/shared/api";
 export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
@@ -48,6 +48,13 @@ export function PetCompanion() {
   }, [openSignal]); // Only a new signal opens the chat.
   const notice = useOrbiNotice((state) => state.notice);
   const chatOpen = actions.chatOpen;
+  const accountEpoch = useSession((state) => state.epoch);
+  const sessionStatus = useSession((state) => state.status);
+  useEffect(() => {
+    setWidgetReply(null);
+    setWidgetSpeaking(false);
+    actions.dismiss();
+  }, [accountEpoch, sessionStatus, actions.dismiss]);
   useEffect(() => {
     if (!notice || chatOpen || tour.active) return;
     setWidgetReply({ id: notice.id, text: notice.body ? `${notice.title}\n${notice.body}` : notice.title });
@@ -122,7 +129,7 @@ export function PetCompanion() {
           )}
           {!tour.active && <button
             className={cx("absolute top-2 right-0 z-3 grid size-5.5 place-items-center rounded-full border border-[#eee8f3] bg-white",
-              "text-[#a093ac] max-sm:top-px max-sm:-right-px max-sm:size-7", actions.chatOpen && "z-42")}
+              "text-[#a093ac] max-sm:top-px max-sm:-right-px max-sm:size-7", actions.chatOpen && "z-42 max-sm:z-auto [@media(max-height:430px)]:z-auto")}
             onClick={() => setWidgetVisible(false)}
             aria-label="Скрыть спутника"
           >
@@ -132,7 +139,7 @@ export function PetCompanion() {
             className={cx(
               "widget-pet flex w-full touch-none! flex-col items-center bg-transparent p-0 select-none [-webkit-user-select:none]",
               movement.dragging ? "cursor-grabbing" : "cursor-grab",
-              actions.chatOpen && "relative z-41",
+              actions.chatOpen && "relative z-41 max-sm:z-auto [@media(max-height:430px)]:z-auto",
             )}
             onClick={(event) => {
               if (movement.consumeDragClick()) { tour.dragged(); return; }

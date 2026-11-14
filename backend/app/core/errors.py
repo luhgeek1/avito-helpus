@@ -66,7 +66,7 @@ class DomainError(Exception):
 
     status_code: ClassVar[int] = 400
     error_code: ClassVar[ErrorCode] = ErrorCode.BAD_REQUEST
-    default_detail: ClassVar[str] = "Bad request"
+    default_detail: ClassVar[str] = "Некорректный запрос"
     keep_changes: ClassVar[bool] = False
 
     def __init__(self, detail: str | None = None, *, details: Any = None) -> None:
@@ -79,44 +79,44 @@ class DomainError(Exception):
 class UnauthorizedError(DomainError):
     status_code = 401
     error_code = ErrorCode.NOT_AUTHENTICATED
-    default_detail = "Authentication required"
+    default_detail = "Нужно войти в систему"
 
 
 class InvalidTokenError(UnauthorizedError):
     error_code = ErrorCode.INVALID_TOKEN
-    default_detail = "Token is invalid"
+    default_detail = "Токен недействителен — войди заново"
 
 
 class TokenExpiredError(UnauthorizedError):
     error_code = ErrorCode.TOKEN_EXPIRED
-    default_detail = "Token has expired"
+    default_detail = "Сессия истекла — войди заново"
 
 
 class ForbiddenError(DomainError):
     status_code = 403
     error_code = ErrorCode.FORBIDDEN
-    default_detail = "You don't have permission to do this"
+    default_detail = "Недостаточно прав для этого действия"
 
 
 class NotFoundError(DomainError):
     status_code = 404
     error_code = ErrorCode.NOT_FOUND
-    default_detail = "Not found"
+    default_detail = "Не найдено"
 
 
 class ConflictError(DomainError):
     status_code = 409
     error_code = ErrorCode.CONFLICT
-    default_detail = "Conflict"
+    default_detail = "Конфликт: состояние изменилось"
 
 
 class RateLimitedError(DomainError):
     status_code = 429
     error_code = ErrorCode.RATE_LIMITED
-    default_detail = "Too many requests, try again in a minute"
+    default_detail = "Слишком много запросов, попробуй через минуту"
 
 
 class ServiceUnavailableError(DomainError):
     status_code = 503
     error_code = ErrorCode.CORP_SERVICE_UNAVAILABLE
-    default_detail = "A corporate service is temporarily unavailable"
+    default_detail = "Корпоративный сервис временно недоступен"

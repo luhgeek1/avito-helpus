@@ -14,7 +14,7 @@ export function PetPreferencesProvider({ children }: { children: ReactNode }) {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    setChosenId(readChosenPet());
+    setChosenId((current) => readChosenPet() ?? current);
     setFavoriteIds(readFavoritePetIds());
     setHydrated(true);
   }, []);

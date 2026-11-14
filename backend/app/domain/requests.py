@@ -132,34 +132,38 @@ class RequestView:
 
 class RequestNotFoundError(NotFoundError):
     error_code = ErrorCode.REQUEST_NOT_FOUND
-    default_detail = "Request not found"
+    default_detail = "Заявка не найдена"
 
 
 class ResourceNotFoundError(NotFoundError):
     """Also raised for resources the caller may not see: existence itself is not disclosed."""
 
     error_code = ErrorCode.RESOURCE_NOT_FOUND
-    default_detail = "Resource not found or not available for your role"
+    default_detail = "Ресурс не найден или недоступен для твоей роли"
 
 
 class RequestTransitionError(ConflictError):
     error_code = ErrorCode.REQUEST_TRANSITION_INVALID
-    default_detail = "The request can't change status that way"
+    default_detail = "Заявку нельзя перевести в этот статус"
 
 
 class AccessLevelNotAllowedError(ForbiddenError):
     error_code = ErrorCode.ACCESS_LEVEL_NOT_ALLOWED
-    default_detail = "This access level isn't available for your role; ask your mentor"
+    default_detail = (
+        "Этот уровень доступа недоступен для твоей роли — уточни у наставника, какой нужен"
+    )
 
 
 class RemindTooSoonError(ConflictError):
     error_code = ErrorCode.REMIND_TOO_SOON
-    default_detail = "The approver was reminded recently; try again tomorrow"
+    default_detail = "Согласующему уже недавно напоминали — попробуй завтра"
 
 
 def ensure_transition(current: RequestStatus, new: RequestStatus) -> None:
     if new not in _ALLOWED.get(current, frozenset()):
-        raise RequestTransitionError(f"Request is {current.value}, can't become {new.value}")
+        raise RequestTransitionError(
+            f"Заявку в статусе {current.value} нельзя перевести в {new.value}"
+        )
 
 
 def resource_visible(resource: AccessResource, *, role: Role, team_id: UUID | None) -> bool:

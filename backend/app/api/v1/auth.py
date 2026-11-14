@@ -84,7 +84,7 @@ async def refresh(
         return _token_pair(response, tokens, ClientKind.WEB, settings)
 
     if bearer is None:
-        raise UnauthorizedError("Refresh token is missing")
+        raise UnauthorizedError("Нет токена обновления — войди заново")
     tokens = await svc.refresh(bearer.credentials, csrf_token=None)
     return _token_pair(response, tokens, ClientKind.MOBILE, settings)
 

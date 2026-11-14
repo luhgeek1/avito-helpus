@@ -11,3 +11,6 @@ tests
 .coverage*
 .ruff_cache
 .DS_Store
+
+# Temporary pytest directories from sandboxed runs
+test-artifacts/

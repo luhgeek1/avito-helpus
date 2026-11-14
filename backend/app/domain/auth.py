@@ -24,12 +24,12 @@ class IssuedTokens:
 
 class WrongCredentialsError(UnauthorizedError):
     error_code = ErrorCode.WRONG_CREDENTIALS
-    default_detail = "Wrong email or password"
+    default_detail = "Неверная почта или пароль"
 
 
 class SessionRevokedError(UnauthorizedError):
     error_code = ErrorCode.SESSION_REVOKED
-    default_detail = "Session is no longer valid, sign in again"
+    default_detail = "Сессия больше недействительна — войди заново"
 
 
 class RefreshTokenReusedError(SessionRevokedError):
@@ -41,4 +41,4 @@ class RefreshTokenReusedError(SessionRevokedError):
 
 class CsrfError(ForbiddenError):
     error_code = ErrorCode.CSRF_FAILED
-    default_detail = "CSRF token is missing or invalid"
+    default_detail = "CSRF-токен отсутствует или неверен"

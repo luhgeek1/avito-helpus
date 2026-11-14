@@ -27,6 +27,39 @@ CORP_MOCK = Path(__file__).resolve().parents[3] / "corp-mock"
 ANYA = "anya.intern@buddy.test"
 
 
+async def test_message_key_cannot_be_reused_with_different_content(corp_mock: Any) -> None:
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+    args = {
+        "channel": "#test",
+        "text": "Тестовое сообщение",
+        "author": ANYA,
+        "idempotency_key": "message-key",
+    }
+    first = await corp.post_message(**args)
+    assert await corp.post_message(**args) == first
+    for override in (
+        {"author": "other@buddy.test"},
+        {"text": "Другой текст"},
+        {"channel": "#other"},
+    ):
+        with pytest.raises(CorpRequestError, match="idempotency"):
+            await corp.post_message(**(args | override))
+    assert len(corp_mock.state.messages) == 1
+
+
+async def test_service_specific_getters_reject_other_ticket_kinds(corp_mock: Any) -> None:
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+    ticket = await corp.it_ticket_create(
+        employee=ANYA, category="Test", description="Test", idempotency_key="it-kind"
+    )
+    for getter in (corp.access_get, corp.absence_get):
+        with pytest.raises(CorpRequestError, match="service"):
+            await getter(ticket.external_id)
+    with pytest.raises(CorpRequestError, match="service"):
+        await corp.access_remind(ticket.external_id)
+    assert corp_mock.state.ticket(ticket.external_id).reminders == 0
+
+
 @pytest.fixture
 def corp_mock() -> Any:
     """The real corp-mock MCP server, connected in memory (no ports, no Docker)."""
@@ -302,8 +335,13 @@ async def test_mock_decisions_are_idempotent_and_balance_cannot_go_negative(corp
 
 async def test_mock_reminders_dedupe_and_cancel_is_final(corp_mock: Any) -> None:
     corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
-    ticket = await corp.it_ticket_create(
-        employee=ANYA, category="Ноутбук", description="Не включается", idempotency_key="cancel-key"
+    ticket = await corp.access_create(
+        employee=ANYA,
+        resource="stash-listings-api",
+        level="write",
+        justification="Synthetic access request",
+        approver="Synthetic owner",
+        idempotency_key="cancel-key",
     )
     await corp.access_remind(ticket.external_id, idempotency_key="reminder-key")
     await corp.access_remind(ticket.external_id, idempotency_key="reminder-key")
