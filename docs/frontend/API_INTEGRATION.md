@@ -109,4 +109,6 @@ async function* readOrbiStream(response: Response) {
 `GET /events` — SSE с заголовком авторизации (используйте `fetch` со стримингом, `EventSource` не
 умеет заголовки). События: `notification.created`, `request.updated`, `plan.updated`,
 `escalation.updated`. По ним инвалидируем запросы TanStack Query (`plan`, `requests`,
-`notifications`) и показываем тост от Орби.
+`notifications`) и показываем тост от Орби. Когда истекает токен, сервер присылает `auth.required`
+и закрывает поток: клиент обновляет токен через `/auth/refresh`, сразу переподключается и
+перечитывает данные, потому что событие в этот момент могло потеряться.

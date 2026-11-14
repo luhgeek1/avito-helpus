@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { create } from "zustand";
-import { orbiFetch } from "./http";
+import { orbiFetch, refreshSession } from "./http";
 import { orbiKeys } from "./queries";
 import { useSession } from "./session";
 import { readSse } from "./sse";
@@ -31,7 +31,13 @@ export function parseNotice(data: string): OrbiNotice | null {
   }
 }
 
-/** Keeps one SSE connection to /events while signed in and reconnects with a growing pause. */
+const ALL_KEYS = [...new Map(Object.values(INVALIDATES).flat().map((key) => [key.join("/"), key])).values()];
+
+/**
+ * Keeps one SSE connection to /events while signed in and reconnects with a growing pause.
+ * The server closes the stream with `auth.required` once the access token expires; then we refresh
+ * right away, reconnect and refetch everything an event might have changed in between.
+ */
 export function useOrbiRealtime() {
   const client = useQueryClient();
   const authed = useSession((state) => state.status === "authenticated");
@@ -46,12 +52,19 @@ export function useOrbiRealtime() {
           const response = await orbiFetch("/events", { signal: controller.signal, headers: { Accept: "text/event-stream" } });
           if (!response.body) return;
           attempt = 0;
+          let reauth = false;
           for await (const { event, data } of readSse(response.body, controller.signal)) {
+            if (event === "auth.required") { reauth = true; break; }
             for (const key of INVALIDATES[event] ?? []) void client.invalidateQueries({ queryKey: key });
             if (event === "notification.created") {
               const notice = parseNotice(data);
               if (notice) useOrbiNotice.getState().show(notice);
             }
+          }
+          if (reauth) {
+            if (!(await refreshSession())) return;
+            for (const key of ALL_KEYS) void client.invalidateQueries({ queryKey: key });
+            continue;
           }
         } catch {
           if (controller.signal.aborted) return;
