@@ -471,7 +471,7 @@ async def request_absence(
         raise _card(
             card,
             {
-                "type": absence_type.value,
+                "absence_type": absence_type.value,
                 "start_date": start_date.isoformat(),
                 "end_date": end_date.isoformat(),
                 "comment": comment or f"{ABSENCE_TITLES[absence_type]} по личным делам",

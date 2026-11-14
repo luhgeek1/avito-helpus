@@ -226,14 +226,12 @@ async def test_plan_equipment_and_requests_tools(
 
 async def test_absence_request_with_warnings(client: AsyncClient, anya: Account) -> None:
     day = today() + timedelta(days=1)
+    while day.weekday() >= 5:  # a working day, so the card and the approval always run
+        day += timedelta(days=1)
     chat = await Chat(client, anya).start()
     chunks = await chat.say(f"Хочу взять отгул {day:%d.%m}")
-    cards = parts(chunks, "action")
-    if day.weekday() >= 5:
-        assert "выходной" in text_of(chunks) or "weekend" in text_of(chunks)
-        return
 
-    [card] = cards
+    [card] = parts(chunks, "action")
     assert card["card"]["warnings"]  # one day's notice is below the test instruction's two
     approved = parse((await chat.decide(card["id"])).text)
     assert parts(approved, "request")[0]["kind"] == "absence"
