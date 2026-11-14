@@ -12,6 +12,7 @@ from app.domain.users import Role
 
 _WORD = re.compile(r"[0-9a-zа-яё]+", re.IGNORECASE)
 _MIN_WORD = 3
+_MIN_ACRONYM = 2
 _MAX_WORDS = 12
 
 
@@ -30,7 +31,12 @@ class ChunkRow:
 
 def or_query(text: str) -> str | None:
     """Questions are long; OR over the meaningful words lets ranking (not AND) decide relevance."""
-    words = [w.lower() for w in _WORD.findall(text) if len(w) >= _MIN_WORD][:_MAX_WORDS]
+    # Latin acronyms (PR, CI, QA) are short but meaningful; short Russian words are mostly noise.
+    words = [
+        w.lower()
+        for w in _WORD.findall(text)
+        if len(w) >= _MIN_WORD or (len(w) >= _MIN_ACRONYM and w.isascii() and w.isalpha())
+    ][:_MAX_WORDS]
     return " | ".join(dict.fromkeys(words)) if words else None
 
 

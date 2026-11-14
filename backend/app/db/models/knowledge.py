@@ -10,6 +10,10 @@ from app.db.base import Base, TimestampMixin, UuidPkMixin, pg_enum
 from app.domain.knowledge import ConflictStatus, DocKind, DocScope
 
 EMBEDDING_DIM = 1024
+SEARCH_VECTOR_SQL = (
+    "setweight(to_tsvector('russian', heading), 'A') || "
+    "setweight(to_tsvector('russian', content), 'B')"
+)
 
 
 class KbDocument(UuidPkMixin, TimestampMixin, Base):
@@ -41,7 +45,8 @@ class KbChunk(UuidPkMixin, Base):
     topic: Mapped[str | None] = mapped_column(String(100), index=True)
     search_vector: Mapped[str] = mapped_column(
         TSVECTOR,
-        Computed("to_tsvector('russian', heading || ' ' || content)", persisted=True),
+        # Headings weigh more than body text: "Куда отправлять PR" is the answer's address.
+        Computed(SEARCH_VECTOR_SQL, persisted=True),
     )
     embedding: Mapped[list[float] | None] = mapped_column(Vector(EMBEDDING_DIM))
 
