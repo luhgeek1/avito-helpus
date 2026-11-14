@@ -10,7 +10,7 @@ from app.core.errors import DomainError, ErrorCode
 
 class InvalidCursorError(DomainError):
     error_code = ErrorCode.INVALID_CURSOR
-    default_detail = "Invalid cursor"
+    default_detail = "Некорректный курсор страницы"
 
 
 @dataclass(frozen=True, slots=True)

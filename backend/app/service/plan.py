@@ -92,7 +92,7 @@ class PlanService:
         item, template = await self._load_for(actor, item_id)
         view = to_plan_item(item, template)
         if item.user_id != actor.id or not view.quiz or item.status is ItemStatus.DONE:
-            raise ForbiddenError("This step has no quiz for you")
+            raise ForbiddenError("У этого шага нет теста для тебя")
         result = check_quiz(view.quiz, answers)
         if result.passed:
             item.status = ItemStatus.DONE

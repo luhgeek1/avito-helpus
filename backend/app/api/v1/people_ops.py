@@ -157,7 +157,7 @@ async def review(
     await svc.mentee(user, mentee_id)
     view = await plan.transition(user, item_id, payload.transition, comment=payload.comment)
     if view.user_id != mentee_id:
-        raise NotFoundError("Plan item not found")
+        raise NotFoundError("Шаг плана не найден")
     return PlanItemOut.from_domain(view, today())
 
 
@@ -185,7 +185,7 @@ async def notifications(
 )
 async def read_one(notification_id: UUID, user: CurrentUserDep, uow: UowDep) -> None:
     if not await uow.notifications.mark_read(user.id, notification_id, now=utcnow()):
-        raise NotFoundError("Notification not found")
+        raise NotFoundError("Уведомление не найдено")
 
 
 @notifications_router.post(

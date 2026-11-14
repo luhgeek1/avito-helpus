@@ -35,7 +35,7 @@ class FlagDecision:
 
 class FlagNotFoundError(NotFoundError):
     error_code = ErrorCode.FLAG_NOT_FOUND
-    default_detail = "Feature flag not found"
+    default_detail = "Флаг не найден"
 
 
 def bucket(key: str, unit: str) -> int:

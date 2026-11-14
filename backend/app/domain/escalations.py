@@ -83,16 +83,16 @@ class EscalationView:
 
 class EscalationNotFoundError(NotFoundError):
     error_code = ErrorCode.ESCALATION_NOT_FOUND
-    default_detail = "Question not found"
+    default_detail = "Вопрос не найден"
 
 
 class EscalationClosedError(ConflictError):
     error_code = ErrorCode.ESCALATION_CLOSED
-    default_detail = "This question is already answered or closed"
+    default_detail = "На этот вопрос уже ответили или он закрыт"
 
 
 class NoAssigneeError(ConflictError):
-    default_detail = "Nobody can take this question: the intern has no mentor, lead or HRBP"
+    default_detail = "Вопрос некому передать: у стажёра не указаны наставник, руководитель и HRBP"
 
 
 def first_assignment(kind: EscalationKind, chain: Chain) -> Assignment:
@@ -118,4 +118,4 @@ def ensure_can_answer(*, actor_id: UUID, assignee_id: UUID, status: EscalationSt
     if status is not EscalationStatus.OPEN:
         raise EscalationClosedError()
     if actor_id != assignee_id:
-        raise ForbiddenError("Only the person this question is assigned to can answer it")
+        raise ForbiddenError("Ответить может только тот, кому назначен вопрос")
