@@ -95,3 +95,34 @@ async def test_unreachable_service_is_unavailable() -> None:
 
     with pytest.raises(CorpUnavailableError):
         await corp.access_check(employee=ANYA, resource="jira-listings")
+
+
+async def test_state_survives_restart_and_demo_reset(corp_mock: Any, tmp_path: Path) -> None:
+    store = tmp_path / "state.json"
+    first = corp_mock.state.__class__(store=store)
+    ticket = first.access_create(
+        employee=ANYA, resource="stash-listings-api", level="write",
+        justification="Задача LST-1432 про цены", approver="Мария Ким", key="k-1",
+    )  # fmt: skip
+    first.grants[(ANYA, "stash-listings-api")] = {"level": "write", "granted_at": "2026-11-14"}
+    first.save()
+
+    restarted = corp_mock.state.__class__(store=store)
+    second = restarted.access_create(
+        employee=ANYA, resource="stash-listings-api", level="write",
+        justification="Задача LST-1433 про цены", approver="Мария Ким", key="k-2",
+    )  # fmt: skip
+
+    assert restarted.tickets[ticket.id].decision == ticket.decision
+    assert [t.id for t in restarted.pending()] == [ticket.id, second.id]
+    assert second.id == "ACC-1043"  # numbering continues: Orbi already stores ACC-1042
+    assert restarted.access_check(ANYA, "stash-listings-api")["has_access"]
+
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+    await corp.access_create(
+        employee=ANYA, resource="stash-listings-api", level="write",
+        justification="Задача LST-1432 про цены", approver="Мария Ким", idempotency_key="k-3",
+    )  # fmt: skip
+    await corp.reset_demo()
+
+    assert corp_mock.state.tickets == {}

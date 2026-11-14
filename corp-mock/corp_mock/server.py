@@ -11,7 +11,10 @@ import json
 import logging
 import os
 import time
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -27,8 +30,10 @@ logger = logging.getLogger("corp_mock")
 APPROVAL_DELAY_SEC = float(os.environ.get("MOCK_APPROVAL_DELAY_SEC", "20"))
 WEBHOOK_URL = os.environ.get("BUDDY_WEBHOOK_URL", "http://localhost:8080/api/v1/integrations/corp/webhook")
 WEBHOOK_SECRET = os.environ.get("CORP_WEBHOOK_SECRET", "dev-webhook-secret")
+# Where tickets and grants are kept between restarts (a file on a volume); unset = memory only.
+STATE_FILE = os.environ.get("CORP_STATE_FILE")
 
-state = CorpState()
+state = CorpState(store=Path(STATE_FILE) if STATE_FILE else None)
 mcp = MCPServer(
     "corp-mock",
     instructions="Имитация корпоративных сервисов: доступы, отсутствия, календарь, IT, мессенджер.",
@@ -77,6 +82,7 @@ def decide(ticket: Ticket, status: str, comment: str | None) -> None:
         }
     if status == "approved" and ticket.service == "absence":
         state.balances[ticket.employee] -= ticket.payload["days"]
+    state.save()
 
 
 def _schedule(ticket: Ticket) -> None:
@@ -104,6 +110,7 @@ async def access_create_request(employee: str, resource: str, level: str, justif
     state.check_available()
     ticket = state.access_create(employee=employee, resource=resource, level=level,
                                  justification=justification, approver=approver, key=idempotency_key)
+    state.save()
     _schedule(ticket)
     return ticket.as_dict()
 
@@ -121,6 +128,7 @@ def access_remind(request_id: str) -> dict[str, Any]:
     state.check_available()
     ticket = state.ticket(request_id)
     ticket.reminders += 1
+    state.save()
     return {"request_id": ticket.id, "reminders": ticket.reminders}
 
 
@@ -138,6 +146,7 @@ async def absence_create_request(employee: str, type: str, start_date: str, end_
     state.check_available()
     ticket = state.absence_create(employee=employee, type_=type, start=date.fromisoformat(start_date),
                                   end=date.fromisoformat(end_date), comment=comment, key=idempotency_key)
+    state.save()
     _schedule(ticket)
     return ticket.as_dict()
 
@@ -170,6 +179,7 @@ async def itsupport_create_ticket(employee: str, category: str, description: str
     state.check_available()
     ticket = state.it_ticket(employee=employee, category=category, description=description,
                              key=idempotency_key)
+    state.save()
     _schedule(ticket)
     return ticket.as_dict()
 
@@ -185,7 +195,18 @@ def itsupport_get_ticket(ticket_id: str) -> dict[str, Any]:
 def messenger_post(channel: str, text: str, author: str, idempotency_key: str) -> dict[str, Any]:
     """Post a message to a team channel (idempotent by key)."""
     state.check_available()
-    return {"message_id": state.post(channel=channel, text=text, author=author, key=idempotency_key)}
+    message_id = state.post(channel=channel, text=text, author=author, key=idempotency_key)
+    state.save()
+    return {"message_id": message_id}
+
+
+@mcp.tool()
+def demo_reset() -> dict[str, Any]:
+    """Demo control: forget all tickets, grants and messages and return to the seed state."""
+    for task in list(_tasks):
+        task.cancel()
+    state.reset()
+    return {"status": "reset"}
 
 
 # ---- admin routes (demo control, not part of the MCP contract) -----------------------------------
@@ -211,6 +232,7 @@ async def dump(_: Request) -> JSONResponse:
 async def faults(request: Request) -> JSONResponse:
     mode = (await request.json()).get("mode", "ok")
     state.fault_mode = mode if mode in {"ok", "unavailable"} else "ok"
+    state.save()
     return JSONResponse({"fault_mode": state.fault_mode})
 
 
@@ -227,8 +249,7 @@ async def decide_now(request: Request) -> JSONResponse:
 
 @mcp.custom_route("/admin/reset", methods=["POST"])
 async def reset(_: Request) -> JSONResponse:
-    state.reset()
-    return JSONResponse({"status": "reset"})
+    return JSONResponse(demo_reset())
 
 
 app = mcp.streamable_http_app(
@@ -238,3 +259,16 @@ app = mcp.streamable_http_app(
     transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
 )
 
+_serve = app.router.lifespan_context
+
+
+@asynccontextmanager
+async def _lifespan(server: Any) -> AsyncIterator[None]:
+    # Tickets restored from the store still owe Orbi a decision.
+    for ticket in state.pending():
+        _schedule(ticket)
+    async with _serve(server):
+        yield
+
+
+app.router.lifespan_context = _lifespan

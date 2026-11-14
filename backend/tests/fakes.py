@@ -135,6 +135,11 @@ class FakeCorpServices:
         self.messages.append({"channel": channel, "text": text, "author": author})
         return f"msg-{len(self.messages)}"
 
+    async def reset_demo(self) -> None:
+        self._guard("reset_demo")
+        self.tickets.clear()
+        self.by_key.clear()
+
 
 def laptop(status: EquipmentStatus, *, eta_days: int = 1) -> EquipmentItem:
     return EquipmentItem(

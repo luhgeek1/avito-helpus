@@ -1,13 +1,17 @@
-"""In-memory corporate services: access, absence, calendar, IT support, messenger.
+"""Corporate services: access, absence, calendar, IT support, messenger.
 
 Deterministic on purpose: the same request always gets the same decision, so demos and tests
 are reproducible. Decisions arrive after `approval_delay_sec`, like a real approver.
+
+State lives in memory and, when a store file is given, survives restarts: a real corporate
+service does not forget tickets and grants when it is redeployed, and Orbi's database keeps
+the ticket numbers it was given.
 """
 
 import json
-from dataclasses import dataclass, field
+import os
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime, timedelta
-from itertools import count
 from pathlib import Path
 from typing import Any
 
@@ -53,17 +57,24 @@ class Ticket:
         }
 
 
+FIRST_IDS = {"access": 1042, "absence": 2101, "itsupport": 3301}
+
+
 class CorpState:
-    def __init__(self, seed_path: Path = DATA) -> None:
+    def __init__(self, seed_path: Path = DATA, store: Path | None = None) -> None:
         self._seed = json.loads(seed_path.read_text(encoding="utf-8"))
-        self.reset()
+        self._store = store
+        if store is not None and store.exists():
+            self._restore(json.loads(store.read_text(encoding="utf-8")))
+        else:
+            self.reset()
 
     def reset(self) -> None:
         self.fault_mode = "ok"
         self.tickets: dict[str, Ticket] = {}
         self.by_key: dict[str, str] = {}
         self.messages: list[dict[str, Any]] = []
-        self._ids = {"access": count(1042), "absence": count(2101), "itsupport": count(3301)}
+        self._next_ids = dict(FIRST_IDS)
         self.grants: dict[tuple[str, str], dict[str, Any]] = {}
         today = date.today()  # noqa: DTZ011 - the mock lives in local demo time
         for email, employee in self._seed["employees"].items():
@@ -73,6 +84,45 @@ class CorpState:
                     "granted_at": (today - timedelta(days=grant["granted_days_ago"])).isoformat(),
                 }
         self.balances = {e: d.get("absence_days", 0) for e, d in self._seed["employees"].items()}
+        self.save()
+
+    # ---- persistence -----------------------------------------------------------------------
+
+    def save(self) -> None:
+        """Write the whole state atomically; called after every change. No-op without a store."""
+        if self._store is None:
+            return
+        snapshot = {
+            "fault_mode": self.fault_mode,
+            "tickets": [
+                {**asdict(t), "created_at": t.created_at.isoformat()} for t in self.tickets.values()
+            ],
+            "by_key": self.by_key,
+            "messages": self.messages,
+            "next_ids": self._next_ids,
+            "grants": [{"employee": e, "resource": r, **g} for (e, r), g in self.grants.items()],
+            "balances": self.balances,
+        }
+        tmp = self._store.with_suffix(".tmp")
+        tmp.write_text(json.dumps(snapshot, ensure_ascii=False), encoding="utf-8")
+        os.replace(tmp, self._store)
+
+    def _restore(self, data: dict[str, Any]) -> None:
+        self.fault_mode = data["fault_mode"]
+        self.tickets = {}
+        for raw in data["tickets"]:
+            ticket = Ticket(**{**raw, "decision": tuple(raw["decision"]),
+                               "created_at": datetime.fromisoformat(raw["created_at"])})
+            self.tickets[ticket.id] = ticket
+        self.by_key = data["by_key"]
+        self.messages = data["messages"]
+        self._next_ids = {**FIRST_IDS, **data["next_ids"]}
+        self.grants = {(g.pop("employee"), g.pop("resource")): g for g in data["grants"]}
+        self.balances = data["balances"]
+
+    def pending(self) -> list[Ticket]:
+        """Tickets still waiting for a decision (to reschedule after a restart)."""
+        return [t for t in self.tickets.values() if t.status == "pending_approval"]
 
     # ---- helpers ---------------------------------------------------------------------------
 
@@ -83,8 +133,9 @@ class CorpState:
     def _new(self, service: str, prefix: str, employee: str, key: str, payload: dict[str, Any]) -> Ticket:
         if key in self.by_key:
             return self.tickets[self.by_key[key]]
-        ticket = Ticket(id=f"{prefix}-{next(self._ids[service])}", service=service,
-                        employee=employee, payload=payload)
+        number = self._next_ids[service]
+        self._next_ids[service] = number + 1
+        ticket = Ticket(id=f"{prefix}-{number}", service=service, employee=employee, payload=payload)
         self.tickets[ticket.id] = ticket
         self.by_key[key] = ticket.id
         return ticket

@@ -1,11 +1,24 @@
+import logging
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
 
-from app.api.deps import AnalyticsServiceDep, CurrentUserDep, DatabaseDep, FlagServiceDep, require
+from app.api.deps import (
+    AnalyticsServiceDep,
+    CorpDep,
+    CurrentUserDep,
+    DatabaseDep,
+    FlagServiceDep,
+    require,
+)
 from app.api.schemas.misc import AuditOut, FlagOut, FlagUpdateIn, MetricsOut, UiEventIn
+from app.db.database import Database
+from app.domain.corp import CorpUnavailableError
 from app.domain.users import CurrentUser, Permission
 from app.seed.loader import seed
+from app.service.ports import CorpServices
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Analytics & admin"])
 
@@ -71,8 +84,19 @@ async def audit(
 async def reset_demo(
     _: Annotated[CurrentUser, Depends(require(Permission.DEMO_RESET))],
     db: DatabaseDep,
+    corp: CorpDep,
     background: BackgroundTasks,
 ) -> dict[str, str]:
     # After the response: this request's own transaction must be closed before TRUNCATE can run.
-    background.add_task(seed, db, reset=True)
+    background.add_task(_reset_demo, db, corp)
     return {"status": "reset scheduled"}
+
+
+async def _reset_demo(db: Database, corp: CorpServices) -> None:
+    # Both sides start over, or the corporate services would remember grants and ticket numbers
+    # from the previous demo while Orbi's database does not.
+    await seed(db, reset=True)
+    try:
+        await corp.reset_demo()
+    except CorpUnavailableError:
+        logger.warning("demo reset: corporate services unavailable, their state is kept")

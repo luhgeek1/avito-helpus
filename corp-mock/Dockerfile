@@ -12,6 +12,8 @@ COPY . /app
 FROM python:3.13-slim-trixie
 RUN groupadd --system --gid 999 app && useradd --system --gid 999 --uid 999 --no-create-home app
 COPY --from=builder --chown=app:app /app /app
+# Tickets and grants survive restarts in a volume mounted here (it inherits this owner).
+RUN mkdir -p /data && chown app:app /data
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
 WORKDIR /app
 USER app

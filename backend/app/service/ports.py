@@ -60,6 +60,10 @@ class CorpServices(Protocol):
         self, *, channel: str, text: str, author: str, idempotency_key: str
     ) -> str: ...
 
+    async def reset_demo(self) -> None:
+        """Demo control: return the services to their seed state (tickets, grants, balances)."""
+        ...
+
 
 class Embeddings(Protocol):
     async def embed_query(self, text: str) -> Sequence[float]: ...

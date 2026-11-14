@@ -53,7 +53,9 @@ async def test_flags_audit_and_metrics(
     assert (await client.get("/api/v1/analytics/summary", headers=anya.headers)).status_code == 403
 
 
-async def test_demo_reset(client: AsyncClient, admin: Account, anya: Account) -> None:
+async def test_demo_reset(
+    client: AsyncClient, admin: Account, anya: Account, corp: FakeCorpServices
+) -> None:
     await client.post(
         "/api/v1/escalations", json={"question": "Вопрос до сброса"}, headers=anya.headers
     )
@@ -61,6 +63,7 @@ async def test_demo_reset(client: AsyncClient, admin: Account, anya: Account) ->
     reset = await client.post("/api/v1/admin/demo/reset", headers=admin.headers)
 
     assert reset.status_code == 202
+    assert "reset_demo" in corp.calls
     # Old tokens die with the old accounts.
     assert (await client.get("/api/v1/me", headers=anya.headers)).status_code == 401
 

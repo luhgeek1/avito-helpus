@@ -182,6 +182,9 @@ class McpCorpServices:
         )
         return str(data.get("message_id", ""))
 
+    async def reset_demo(self) -> None:
+        await self._call("demo_reset", {})
+
 
 def _structured(content: Any) -> dict[str, Any]:
     if not isinstance(content, dict):

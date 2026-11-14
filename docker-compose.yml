@@ -75,6 +75,9 @@ services:
       MOCK_APPROVAL_DELAY_SEC: ${MOCK_APPROVAL_DELAY_SEC:-20}
       BUDDY_WEBHOOK_URL: http://api:8080/api/v1/integrations/corp/webhook
       CORP_WEBHOOK_SECRET: ${CORP_WEBHOOK_SECRET:-dev-webhook-secret}
+      CORP_STATE_FILE: /data/state.json
+    volumes:
+      - corp_state:/data
     ports:
       - "8090:8090"
     restart: unless-stopped
@@ -129,3 +132,4 @@ services:
 volumes:
   postgres_data:
   jwt_keys:
+  corp_state:
