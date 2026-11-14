@@ -73,7 +73,7 @@ Dev и production-сервер по умолчанию доступны на htt
 
 UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`, `verify-orbit-menu.mjs`, `verify-wardrobe-carousel.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
 
-Общие требования — `../AGENTS.md`, дизайн — `../DESIGN.md`, история — `../CONTEXT.md`.
+Общие требования — `../AGENTS.md`, дизайн — `../DESIGN.md`, статус и решения — `../docs/STATUS.md`, `../docs/DECISIONS.md`.
 
 Гардероб спутника — локальная круговая карусель всех 40 персонажей с пятью видимыми миниатюрами и бесконечным зацикливанием. Колёсико, свайп и стрелки клавиатуры листают без изменения выбора. Клик выбирает пета через общий choosePet и сохраняет buddy-pet; избранное не меняется. Логика и UI находятся внутри widgets/pet-companion, каталог берётся из публичного entities/pet API.
 

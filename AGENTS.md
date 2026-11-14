@@ -1,29 +1,78 @@
-# Работа над проектом
+# Правила работы над проектом
 
-- Общайся с пользователем на русском, если он не просит другое.
-- Перед работой прочитай `TASK.md`, `PRODUCT.md`, `DESIGN.md` и `CONTEXT.md`.
-- `TASK.md` содержит исходное ТЗ хакатона; текущий согласованный объём работы описан в `PRODUCT.md` и последних поручениях пользователя.
-- После значимого этапа и перед завершением работы добавляй в `CONTEXT.md` запись об изменениях, решениях, идеях, проверках и оставшейся работе. Сохраняй чужие записи и обновляй текущее состояние.
-- Для интерфейса придерживайся `DESIGN.md`. Новые маскоты рисуются в `frontend/src/entities/pet/lib/mascot-sprites.ts`, исходная серия и диспетчер — в `frontend/src/entities/pet/lib/sprite.ts`; данные и палитры находятся в `frontend/src/entities/pet/config/mascots.ts` и `frontend/src/entities/pet/config/pets.ts` на целочисленной пиксельной сетке; исходные персонажи — 32×32, детальные вариации Орби — 64×64. Проверяй все кадры и поддержку reduced motion.
-- Перед завершением изменений приложения выполни `npm run build` и проверь изменённые экраны на десктопе и телефоне.
+AI-buddy «Орби» для стажёров Авито, хакатон Hack&Change 2026. Общайся с пользователем на русском.
 
-- Фронтенд находится в `frontend/` и следует FSD: `_app → _pages → widgets → features → entities → shared`. Используй публичные API слайсов (`index.ts`), не допускай импортов вверх и между слайсами одного слоя. Подробности — в `frontend/README.md`.
-- Серверный код размещай в `backend/`. Пока там только описание; реализация API требует отдельной задачи.
-- Фронтенд — самостоятельное приложение. Выполняй `npm ci`, `npm run dev`, `npm run build`, `npm run check:architecture` внутри `frontend/`; его package.json, package-lock.json и node_modules находятся там же. Для вызова из корня можно использовать `npm --prefix frontend run build`. Корневого npm workspace нет. Проверяй архитектуру после изменений структуры или импортов.
+## Ритуал сессии
 
-- Текущий ориентир — Орби (`orbit`): большой одиночный глаз и цветные спутники. Его новые вариации находятся в `frontend/src/entities/pet/config/orbi-family.ts`, рисование — в `frontend/src/entities/pet/lib/orbi-sprites.ts`. У категории `orbi` обязателен `orbiDesign`; сохраняй общие черты семейства и прозрачную рамку всех кадров.
+1. В начале прочитай [docs/STATUS.md](docs/STATUS.md) и [docs/DECISIONS.md](docs/DECISIONS.md),
+   затем документы своей области (карта ниже).
+2. Требования берутся только из кейса: [docs/case/CASE_BRIEF.md](docs/case/CASE_BRIEF.md) (выжимка),
+   [docs/case/TASK.md](docs/case/TASK.md) (полное ТЗ), [docs/case/QA.md](docs/case/QA.md) (ответы Авито).
+   Наши документы — решения команды, а не требования.
+3. В конце значимого этапа перепиши `docs/STATUS.md` (коротко: что готово, что в работе, что дальше)
+   и добавь решения в `docs/DECISIONS.md` (D-xxx: что, почему, что отвергли). Журналы правок не веди.
 
-- Последний выбор направления: Орби — парящий робот без рук, ног и двигателей; частицы должны оставаться отделёнными от корпуса. Не возвращай удалённые конечности у 15 вариаций. Исключение — оригинальный `orbit`: по последней явной правке пользователя он восстановлен в самой первой версии с фиолетовыми боковыми деталями, ножками и розовым шарфом. Избранные реализованы в `features/pet/favorite` и общем состоянии `entities/pet`; сохраняй лайки (`buddy-favorites`) отдельно от выбранного спутника (`buddy-pet`).
+## Карта
 
-- По последней просьбе пользователя основным снова является оригинальный Орби (`orbit`) со скриншота: он первый в своей группе, `defaultPet` для предпросмотра и доступен через `/pets?pet=orbit`. Не подменяй его Нео; лайки и сохранённый выбор не сбрасывай.
+| Где | Что |
+|---|---|
+| [PRODUCT.md](PRODUCT.md) | продукт: проблема, роли, сценарии, принципы, метрики |
+| [DESIGN.md](DESIGN.md) | дизайн-система и история визуальных решений |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | архитектура бэкенда, агента и интеграций |
+| [docs/frontend/COMPANION.md](docs/frontend/COMPANION.md) | согласованное поведение спутника Орби на фронтенде |
+| `specs/` | SDD-спецификации SpecKit по сценариям |
+| `backend/` | FastAPI-монолит (API + воркер) |
+| `corp-mock/` | MCP-имитация корпоративных сервисов Авито |
+| `frontend/` | Next.js-портал «Хаб» и спутник; подробности в `frontend/README.md` |
+| `docs/archive/` | старые журналы, только для справки |
 
-- Все 15 вариаций `orbi-*` получили детальную отрисовку 64×64: `orbi-base.ts` задаёт форму на 32×32, `orbi-sprites.ts`, `orbi-details.ts` и `orbi-detail-painter.ts` добавляют детали. Оригинальный `orbit` по-прежнему рисуется в `mascot-sprites.ts` на 32×32 и не проходит через этот рендерер. При дальнейших изменениях защищай его 4 кадра первой версии.
+## Общие правила
 
-- В корне проекта оставляй только Markdown-документы и папки `frontend/`, `backend/` (служебную `.git/` сохраняй). Все исходники, зависимости и материалы петов, изображения, записи и отчёты размещай в `frontend/`. Общий каталог визуальных материалов — `frontend/design/`, отчёты и скриншоты — `frontend/design/captures/`.
+- Только синтетические данные. Тестовые инструкции помечаются как тестовые и не выдаются за регламенты Авито.
+- Код, комментарии и сообщения коммитов — на английском; интерфейс и документация — на русском.
+- Коммиты: один логический шаг на коммит (обычно до нескольких сотен строк). Каркасы, сгенерированные
+  файлы, lockfile и документация идут целиком. Не коммить секреты (`.env` в `.gitignore`).
+- В корне: документы, `docker-compose*.yml`, `Makefile`, `.github/`, `backend/`, `frontend/`,
+  `corp-mock/`, `deploy/`, `docs/`, `specs/`. Материалы фронтенда (изображения, отчёты) — в `frontend/design/`.
+- Перед завершением: проверки затронутой части (ниже) зелёные; изменённые экраны проверены на десктопе и телефоне.
 
-- Write code comments and Git commit titles/bodies in English. Keep user-facing interface text and project documentation in Russian unless requested otherwise.
+## Бэкенд (`backend/`)
 
-- Keep application-code changes in each commit within 150 added/deleted lines. Configuration, dependency lockfiles, documentation, and verification reports are exempt; commit them as complete logical changes instead of splitting them to meet this limit.
+- Перед изменениями прочитай [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- Слои `api → service → domain`; `db` и `infra` — адаптеры. `domain/` не импортирует FastAPI,
+  SQLAlchemy и Pydantic; `service/` не импортирует FastAPI; `api/` не строит SQL.
+- Одна транзакция на запрос: коммитит только владелец UoW (`UowDep`, воркер, CLI, инструмент агента).
+  Сервисы делают `flush()`.
+- Побочные эффекты (вызовы corp-mock, уведомления, индексация) — через outbox, обработчики идемпотентны.
+- Ожидаемые ошибки — `DomainError` с `ErrorCode`. Права — `require(Permission.X)` и правила в `domain/`.
+- Инструменты агента — тонкие обёртки над сервисами; действие с последствиями только через
+  подтверждение (`ApprovalRequired`) и с повторной проверкой прав.
+- Новые таблицы: модель + миграция с рабочим `downgrade()`.
+- Проверки: `make check` (ruff, mypy --strict, pytest с покрытием).
+- Документация библиотек — через Context7, а не по памяти.
 
-- Frontend stack: Next.js App Router, React, TypeScript, and Tailwind CSS. Keep Next route files in frontend/app and FSD composition/pages in frontend/src/_app and frontend/src/_pages to avoid Next route discovery conflicts.
-- Style components with Tailwind utilities in TSX. Do not add component CSS files, CSS Modules, or CSS-in-JS. frontend/app/globals.css is only the Tailwind entry; theme and keyframes live in frontend/tailwind.config.ts. Put classes on the element itself instead of descendant selectors, pass states as conditional classes through `cx` (`shared/lib/cx`, tailwind-merge) and use theme tokens from the config. Inline styles are reserved for runtime values such as pet palettes, positions, and sprite delays.
+## Фронтенд (`frontend/`)
+
+- Самостоятельное приложение: `npm ci`, `npm run dev`, `npm run build`, `npm test`,
+  `npm run check:architecture` внутри `frontend/`.
+- Стек: Next.js App Router, React, TypeScript, Tailwind CSS. Маршруты — в `frontend/app`,
+  FSD-композиция — в `frontend/src/_app` и `frontend/src/_pages`.
+- FSD: `_app → _pages → widgets → features → entities → shared`, только публичные API слайсов
+  (`index.ts`), без импортов вверх и между слайсами одного слоя.
+- Стили — Tailwind-утилиты в TSX. Без CSS-файлов компонентов, CSS Modules и CSS-in-JS.
+  `frontend/app/globals.css` — только вход Tailwind, тема и keyframes — в `frontend/tailwind.config.ts`.
+  Состояния — через `cx` (`shared/lib/cx`); inline-стили только для runtime-значений.
+- Интерфейс — по [DESIGN.md](DESIGN.md).
+
+### Спутник Орби
+
+- Основной образ — оригинальный Орби (`orbit`): первый в группе, `defaultPet`, доступен по
+  `/pets?pet=orbit`. Это первая версия с фиолетовыми боковыми деталями, ножками и розовым шарфом;
+  защищай его 4 кадра. Не подменяй его другими вариантами.
+- 15 вариаций `orbi-*` — парящие роботы без рук, ног и двигателей; частицы отделены от корпуса.
+  Не возвращай им конечности. Детальная отрисовка 64×64: `orbi-base.ts` (форма 32×32),
+  `orbi-sprites.ts`, `orbi-details.ts`, `orbi-detail-painter.ts`. У категории `orbi` обязателен `orbiDesign`.
+- Новые маскоты — в `frontend/src/entities/pet/lib/mascot-sprites.ts`, исходная серия и диспетчер —
+  в `sprite.ts`, данные и палитры — в `config/mascots.ts`, `config/pets.ts`, `config/orbi-family.ts`,
+  на целочисленной сетке. Проверяй все кадры и reduced motion.
+- Лайки (`buddy-favorites`) хранятся отдельно от выбранного спутника (`buddy-pet`); не сбрасывай их.

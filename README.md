@@ -15,12 +15,13 @@ frontend/          Фронтенд на Next.js + React + TypeScript + Tailwind
   package.json     Команды и зависимости фронтенда
   package-lock.json
   .gitignore
-backend/           Каталог будущей серверной части
-AGENTS.md          Инструкции для агентов
-TASK.md            Исходное ТЗ хакатона
-PRODUCT.md         Согласованный объём продукта
+backend/           FastAPI-монолит: API, воркер, агент Орби
+corp-mock/         MCP-имитация корпоративных сервисов
+docs/              Статус, решения, архитектура, материалы кейса (docs/case/)
+specs/             SDD-спецификации сценариев (SpecKit)
+AGENTS.md          Инструкции для агентов (CLAUDE.md подключает их)
+PRODUCT.md         Продукт: роли, сценарии, принципы, метрики
 DESIGN.md          Дизайн и анимации
-CONTEXT.md         Общий журнал работы
 README.md          Этот файл
 ```
 
@@ -72,7 +73,7 @@ npm run start
 
 Это интерактивный прототип с локальными моками API портала и подготовленными ответами пета. AI, корпоративные интеграции, авторизация и другие сценарии полного ТЗ ещё не реализованы. Тестовые учётные данные и ключи API не нужны. Golos Text и пиксельный Press Start 2P подключены локально через next/font/local, без запросов к Google Fonts при запуске или сборке.
 
-Все материалы петов и визуальных проверок: [`frontend/design/`](frontend/design/). Решения по интерфейсу: [`frontend/design/decisions.md`](frontend/design/decisions.md). Текущий контекст: [`CONTEXT.md`](CONTEXT.md).
+Все материалы петов и визуальных проверок: [`frontend/design/`](frontend/design/). Решения по интерфейсу: [`frontend/design/decisions.md`](frontend/design/decisions.md). Текущее состояние: [`docs/STATUS.md`](docs/STATUS.md).
 
 ## Стек и стили
 
