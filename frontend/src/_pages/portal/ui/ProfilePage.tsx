@@ -10,7 +10,7 @@ import {
   Phone,
   Video,
 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ApiError } from '@/shared/api'
 import { useCalendar, useMe, usePerson } from '@/shared/api'
 import type { Person, PersonShort } from '@/shared/api'
@@ -34,13 +34,21 @@ const muted = 'text-13 text-secondary'
 
 function CopyButton({ value, label }: { value: string; label: string }) {
   const [copied, setCopied] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const active = useRef(true)
+  useEffect(() => {
+    active.current = true
+    return () => { active.current = false; clearTimeout(timer.current) }
+  }, [])
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(value)
+      if (!active.current) return
       setCopied(true)
-      window.setTimeout(() => setCopied(false), 1500)
+      clearTimeout(timer.current)
+      timer.current = setTimeout(() => setCopied(false), 1500)
     } catch {
-      setCopied(false)
+      if (active.current) setCopied(false)
     }
   }
   return (

@@ -45,6 +45,8 @@ export function useOrbiRealtime() {
   useEffect(() => {
     if (!authed) return;
     const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let wake: (() => void) | undefined;
     let attempt = 0;
     void (async () => {
       while (!controller.signal.aborted) {
@@ -54,6 +56,7 @@ export function useOrbiRealtime() {
           attempt = 0;
           let reauth = false;
           for await (const { event, data } of readSse(response.body, controller.signal)) {
+            if (controller.signal.aborted) return;
             if (event === "auth.required") { reauth = true; break; }
             for (const key of INVALIDATES[event] ?? []) void client.invalidateQueries({ queryKey: key });
             if (event === "notification.created") {
@@ -62,17 +65,25 @@ export function useOrbiRealtime() {
             }
           }
           if (reauth) {
-            if (!(await refreshSession())) return;
-            for (const key of ALL_KEYS) void client.invalidateQueries({ queryKey: key });
-            continue;
+            const fresh = await refreshSession();
+            if (controller.signal.aborted || useSession.getState().status !== "authenticated") return;
+            if (fresh) {
+              for (const key of ALL_KEYS) void client.invalidateQueries({ queryKey: key });
+              continue;
+            }
           }
+          if (!controller.signal.aborted) for (const key of ALL_KEYS) void client.invalidateQueries({ queryKey: key });
         } catch {
           if (controller.signal.aborted) return;
         }
         attempt += 1;
-        await new Promise((resolve) => setTimeout(resolve, Math.min(30_000, 1000 * 2 ** attempt)));
+        if (controller.signal.aborted) return;
+        await new Promise<void>((resolve) => {
+          wake = resolve;
+          timer = setTimeout(resolve, Math.min(30_000, 1000 * 2 ** attempt));
+        });
       }
     })();
-    return () => controller.abort();
+    return () => { controller.abort(); clearTimeout(timer); wake?.(); };
   }, [authed, epoch, client]);
 }

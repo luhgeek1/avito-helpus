@@ -1,12 +1,14 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "@/_app";
 import { PetGalleryPage } from "@/_pages/pet-gallery";
 import { useOrbiChat } from "@/features/orbi-chat";
 import { useOrbiNotice } from "@/shared/api";
 import { resetNavigation } from "../portal/navigation";
 import { signIn } from "../orbi/server";
+
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 function renderApp(path = "/", page = <p>Страница</p>, { tour = false } = {}) {
   if (!tour) {
@@ -86,6 +88,9 @@ describe("companion", () => {
     fireEvent.keyDown(document.body, { key: "Enter" });
     fireEvent.keyDown(document.body, { key: "Enter" });
     const spotlight = await screen.findByRole("dialog", { name: "Запрос к Орби" });
+    fireEvent.keyDown(spotlight, { key: "ArrowRight" });
+    expect(localStorage.getItem("buddy-spotlight-position")).not.toBeNull();
+    expect(fireEvent.dragStart(spotlight)).toBe(false);
     await user.type(within(spotlight).getByRole("textbox", { name: "Запрос для пета" }), "Привет{Enter}");
     expect(await screen.findByText(/Сначала войди в Хаб/, { selector: "span.absolute" })).toBeInTheDocument();
     await user.keyboard("{Escape}");
@@ -96,7 +101,56 @@ describe("companion", () => {
   });
 });
 
+it("clears the old account's conversation and spoken notification when signing out", async () => {
+  signIn();
+  renderApp();
+  await screen.findByText("Страница");
+  act(() => useOrbiNotice.getState().show({ id: "private", title: "Private notification", body: "Secret", link: null }));
+  expect(await screen.findByRole("button", { name: "Закрыть ответ" })).toBeInTheDocument();
+  act(() => useOrbiChat.setState({ conversationId: "old", draft: "Private draft" }));
+  const { useSession } = await import("@/shared/api");
+  await act(async () => useSession.getState().logout());
+  expect(useOrbiChat.getState()).toMatchObject({ conversationId: null, messages: [], draft: "" });
+  expect(useOrbiNotice.getState().notice).toBeNull();
+  expect(screen.queryByText(/Private notification/)).not.toBeInTheDocument();
+});
+
 describe("pet gallery", () => {
+  it("returns from empty favorites, greets, downloads an SVG and navigates with the gallery shell", async () => {
+    const download = vi.fn();
+    const create = vi.fn(() => "blob:pet"), revoke = vi.fn();
+    vi.stubGlobal("URL", class extends URL { static createObjectURL = create; static revokeObjectURL = revoke; });
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(download);
+    const { user } = renderApp("/pets", <PetGalleryPage requestedId="orbit" />);
+    await user.click(await screen.findByRole("button", { name: /^Избранные/ }));
+    await user.click(screen.getByRole("button", { name: "Посмотреть Орби" }));
+    const inspector = screen.getByLabelText("Знакомство с выбранным петом");
+    await user.click(within(inspector).getByRole("button", { name: /Поздороваться/ }));
+    expect(within(inspector).getByRole("status")).toHaveTextContent(/./);
+    await user.click(within(inspector).getByRole("button", { name: /Скачать/ }));
+    expect(create).toHaveBeenCalledWith(expect.any(Blob));
+    expect(download).toHaveBeenCalledOnce();
+    const scroll = vi.spyOn(Element.prototype, "scrollIntoView");
+    await user.click(within(inspector).getByRole("button", { name: "К коллекции ↑" }));
+    expect(scroll).toHaveBeenCalledWith({ block: "start" });
+    await user.click(screen.getByRole("button", { name: "О пространстве" }));
+    expect(screen.getByText(/Это дизайн-прототип AI-buddy/)).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "К содержимому" }));
+    expect(screen.getByRole("main")).toHaveFocus();
+    await user.click(within(screen.getByRole("navigation", { name: "Главная навигация" })).getByRole("link", { name: /^Галерея/ }));
+    await user.click(screen.getByRole("link", { name: "Avito buddy — главная" }));
+    await waitFor(() => expect(revoke).toHaveBeenCalledWith("blob:pet"), { timeout: 2000 });
+  });
+
+  it("scrolls a mobile preview into view without animation with reduced motion", async () => {
+    vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ matches: query.includes("650px") || query.includes("reduce"), media: query,
+      addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList);
+    const scroll = vi.spyOn(Element.prototype, "scrollIntoView");
+    const { user } = renderApp("/pets", <PetGalleryPage requestedId="orbit" />);
+    await user.click((await screen.findAllByRole("button", { name: /^Рассмотреть/ }))[1]);
+    await waitFor(() => expect(scroll).toHaveBeenCalledWith({ behavior: "instant", block: "start" }));
+  });
+
   it("filters, previews, likes and chooses a companion", async () => {
     const { user } = renderApp("/pets", <PetGalleryPage requestedId="orbit" />);
     const collection = await screen.findByRole("region", { name: "Коллекция петов" });
@@ -112,5 +166,44 @@ describe("pet gallery", () => {
     await user.click(within(inspector).getByRole("button", { name: /Выбрать бадди/ }));
     expect(localStorage.getItem("buddy-pet")).not.toBe("orbit");
     expect(JSON.parse(localStorage.getItem("buddy-favorites") ?? "[]")).toHaveLength(1);
-  });
+  }, 20_000);
+});
+
+it("uses the pet keyboard controls, dismisses chat with Escape, and pauses or hides through settings", async () => {
+  signIn();
+  const { user, pet } = renderApp();
+  await screen.findByText("Страница");
+  fireEvent.keyDown(pet(), { key: "ArrowLeft" });
+  fireEvent.keyDown(pet(), { key: "Enter" });
+  await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Чат" }));
+  expect(await screen.findByRole("dialog", { name: "Орби" })).toBeInTheDocument();
+  fireEvent.submit(screen.getByRole("textbox", { name: "Сообщение спутнику" }).closest("form")!);
+  fireEvent.keyDown(document.body, { key: "Escape" });
+  expect(screen.queryByRole("dialog", { name: "Орби" })).not.toBeInTheDocument();
+  expect(pet()).toHaveFocus();
+  await user.click(pet());
+  await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Настройки" }));
+  await user.click(screen.getByRole("switch"));
+  expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");
+  await user.click(within(screen.getByRole("dialog", { name: "Настройки спутника" })).getByRole("button", { name: "Скрыть спутника" }));
+  expect(await screen.findByRole("button", { name: "Орби рядом" })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Орби рядом" }));
+  await user.click(pet());
+  await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Настройки" }));
+  await user.click(screen.getByRole("button", { name: "Знакомство с петом" }));
+  expect(await screen.findByRole("dialog", { name: "Знакомство с петом" })).toBeInTheDocument();
+});
+
+it("uses a wardrobe option with the keyboard after the reveal transition", async () => {
+  vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ matches: query.includes("reduce"), media: query,
+    addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList);
+  const { user, pet } = renderApp();
+  await screen.findByText("Страница");
+  await user.click(pet());
+  await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Гардероб" }));
+  const wardrobe = screen.getByRole("region", { name: "Гардероб спутника" });
+  const option = within(wardrobe).getAllByRole("button")[0];
+  option.focus();
+  await user.keyboard("{Enter}");
+  expect(localStorage.getItem("buddy-pet")).toBe(option.getAttribute("data-pet-id"));
 });

@@ -22,12 +22,14 @@ type Listener = (token: string | null) => void;
 
 /** The access token lives in memory only; the refresh token is an httpOnly cookie. */
 let accessToken: string | null = null;
+let tokenVersion = 0;
 const listeners = new Set<Listener>();
 let refreshing: Promise<string | null> | null = null;
 
 export const tokens = {
   get: () => accessToken,
   set(token: string | null) {
+    tokenVersion += 1;
     accessToken = token;
     for (const listener of listeners) listener(token);
   },
@@ -48,7 +50,10 @@ export function readCookie(name: string): string | null {
 
 async function problem(response: Response): Promise<OrbiError> {
   let body: { error_code?: unknown; detail?: unknown; title?: unknown } = {};
-  try { body = await response.json() as typeof body; } catch { /* not JSON: keep the status */ }
+  try {
+    const value: unknown = await response.json();
+    if (value && typeof value === "object") body = value;
+  } catch { /* not JSON: keep the status */ }
   const code = typeof body.error_code === "string" ? body.error_code : `HTTP_${response.status}`;
   const detail = typeof body.detail === "string" ? body.detail
     : typeof body.title === "string" ? body.title : `Ошибка сервера (${response.status})`;
@@ -57,6 +62,7 @@ async function problem(response: Response): Promise<OrbiError> {
 
 /** One refresh at a time: parallel 401s wait for the same rotation. */
 export function refreshSession(): Promise<string | null> {
+  const version = tokenVersion;
   refreshing ??= (async () => {
     try {
       const csrf = readCookie("csrf_token");
@@ -64,12 +70,15 @@ export function refreshSession(): Promise<string | null> {
         method: "POST", credentials: "include",
         headers: csrf ? { "X-CSRF-Token": csrf } : undefined,
       });
+      if (version !== tokenVersion) return accessToken;
       if (!response.ok) { tokens.set(null); return null; }
-      const { access_token } = await response.json() as { access_token: string };
+      const { access_token } = await response.json() as { access_token?: unknown };
+      if (version !== tokenVersion) return accessToken;
+      if (typeof access_token !== "string" || !access_token) { tokens.set(null); return null; }
       tokens.set(access_token);
       return access_token;
     } catch {
-      return accessToken;
+      return null;
     } finally {
       refreshing = null;
     }
@@ -109,8 +118,11 @@ export async function orbiFetch(path: string, init: OrbiInit = {}): Promise<Resp
 /** JSON call validated by a Zod schema, so a contract drift surfaces at the boundary. */
 export async function orbiJson<S extends z.ZodType>(path: string, schema: S, init?: OrbiInit): Promise<z.infer<S>> {
   const response = await orbiFetch(path, init);
-  if (response.status === 204 || response.status === 202) return schema.parse(undefined);
-  const parsed = schema.safeParse(await response.json());
+  const text = await response.text();
+  let value: unknown;
+  try { value = text ? JSON.parse(text) : undefined; }
+  catch { throw new OrbiError(response.status, "BAD_RESPONSE", "Сервер вернул данные в неожиданном формате"); }
+  const parsed = schema.safeParse(value);
   if (!parsed.success) throw new OrbiError(response.status, "BAD_RESPONSE", "Сервер вернул данные в неожиданном формате");
   return parsed.data;
 }

@@ -4,7 +4,7 @@ export type CardField = { key: string; label: string; value: string; editable: b
 export type ActionCard = {
   kind: string; title: string; service: string; fields: CardField[]; warnings: string[]; note?: string | null;
 };
-export type ActionStatus = "pending" | "approved" | "rejected" | "expired";
+export type ActionStatus = "pending" | "approved" | "rejected" | "expired" | "decided";
 export type ActionData = { id: string; tool: string; status: ActionStatus; card: ActionCard; expires_at: string };
 
 export type SourceRef = {
@@ -51,6 +51,8 @@ export type OrbiMessage = {
   error?: string;
   mode?: string;
   feedback?: "up" | "down" | null;
+  /** Decision failures are retried from their card, never by sending another user request. */
+  decisionReply?: boolean;
 };
 
 const DATA_TYPES = new Set(["sources", "action", "request", "escalation", "plan", "equipment"]);

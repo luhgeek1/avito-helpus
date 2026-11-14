@@ -4,21 +4,17 @@ import { useReportConflict } from "@/shared/api";
 import { Link } from "@/shared/lib/portal-navigation";
 import { cx } from "@/shared/lib/cx";
 import { formatDay, formatMoment } from "@/shared/lib/orbi-format";
-import type { ActionData, EquipmentData, EscalationData, PlanData, RequestData, SourcesData } from "../model/message";
+import type { ActionData, ConflictRef, EquipmentData, EscalationData, PlanData, RequestData, SourcesData } from "../model/message";
 
 const card = "rounded-xl border border-[#cbd3df] bg-white p-3 text-12 leading-[1.5] text-ink";
 const smallButton = "inline-flex h-9 items-center justify-center gap-1.5 rounded-lg px-3 text-12 font-semibold transition-colors duration-150 disabled:cursor-default disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-dark";
 
 /* ---------- sources and conflicts ---------- */
 
-export function SourcesBlock({ data }: { data: SourcesData }) {
-  const [open, setOpen] = useState<number | null>(null);
+function ConflictCard({ conflict }: { conflict: ConflictRef }) {
   const report = useReportConflict();
-  if (!data.sources.length && !data.conflicts.length) return null;
   return (
-    <div className="space-y-2">
-      {data.conflicts.map((conflict) => (
-        <div key={conflict.id} className="rounded-xl border border-orange/40 bg-orange-soft/60 p-3 text-12 leading-[1.5]" role="note">
+        <div className="rounded-xl border border-orange/40 bg-orange-soft/60 p-3 text-12 leading-[1.5]" role="note">
           <p className="mb-1.5 flex items-center gap-1.5 font-semibold text-ink"><AlertTriangle size={14} className="text-orange" aria-hidden /> Инструкции расходятся</p>
           <p className="mb-2 text-[#4b4b55]">{conflict.summary}</p>
           <div className="grid gap-1.5">
@@ -30,8 +26,17 @@ export function SourcesBlock({ data }: { data: SourcesData }) {
             <UserRound size={14} aria-hidden />
             {report.isSuccess ? `Вопрос передан: ${report.data.assignee_name}` : "Уточнить у наставника"}
           </button>
+          {report.isError && <p role="alert" className="mt-2 text-red-text">Не удалось передать вопрос. Попробуй ещё раз.</p>}
         </div>
-      ))}
+  );
+}
+
+export function SourcesBlock({ data }: { data: SourcesData }) {
+  const [open, setOpen] = useState<number | null>(null);
+  if (!data.sources.length && !data.conflicts.length) return null;
+  return (
+    <div className="space-y-2">
+      {data.conflicts.map((conflict) => <ConflictCard key={conflict.id} conflict={conflict} />)}
       {data.sources.length > 0 && (
         <div className={card}>
           <p className="mb-1.5 flex items-center gap-1.5 font-semibold"><BookOpen size={14} aria-hidden /> Источники</p>
@@ -71,6 +76,7 @@ const STATUS_NOTE: Record<string, { text: string; icon: typeof CheckCircle2; ton
   approved: { text: "Подтверждено", icon: CheckCircle2, tone: "text-green-text" },
   rejected: { text: "Отменено", icon: XCircle, tone: "text-secondary" },
   expired: { text: "Карточка устарела — попроси Орби подготовить новую", icon: Clock3, tone: "text-secondary" },
+  decided: { text: "Решение уже принято — проверь результат в заявках", icon: CheckCircle2, tone: "text-secondary" },
 };
 
 export function ActionCardView({ data, busy, onDecide }: {

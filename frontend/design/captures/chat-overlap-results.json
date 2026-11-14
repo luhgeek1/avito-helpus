@@ -1,0 +1,65 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "hit_targets": "desktop layer preserved",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 320,
+    "height": 812,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 390,
+    "height": 812,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 430,
+    "height": 812,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 812,
+    "height": 320,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 812,
+    "height": 375,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 812,
+    "height": 390,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  },
+  {
+    "width": 812,
+    "height": 430,
+    "hit_targets": "passed",
+    "decision_count": 1,
+    "modal_keyboard": "passed"
+  }
+]

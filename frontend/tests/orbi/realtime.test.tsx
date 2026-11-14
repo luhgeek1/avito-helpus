@@ -1,15 +1,45 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, waitFor } from "@testing-library/react";
-import { http } from "msw";
-import { describe, expect, it, vi } from "vitest";
+import { http, HttpResponse } from "msw";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPortalQueryClient } from "@/_app/model/portal-provider";
 import { tokens, useOrbiNotice, useOrbiRealtime } from "@/shared/api";
 import { server } from "../portal/setup";
 import { signIn, sseResponse, url } from "./server";
 
 function Live() { useOrbiRealtime(); return null; }
+afterEach(() => vi.restoreAllMocks());
 
 describe("realtime events", () => {
+  it("backs off when refreshing a server-expired stream fails offline instead of spinning", async () => {
+    signIn();
+    let connections = 0, refreshes = 0;
+    server.use(
+      http.get(url("/events"), () => { connections += 1; return sseResponse("event: auth.required\ndata: {}\n\n"); }),
+      http.post(url("/auth/refresh"), () => { refreshes += 1; return HttpResponse.error(); }),
+    );
+    const { unmount } = render(<QueryClientProvider client={createPortalQueryClient()}><Live /></QueryClientProvider>);
+    await waitFor(() => expect(refreshes).toBe(1));
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(connections).toBe(1);
+    expect(tokens.get()).not.toBeNull();
+    unmount();
+  });
+  it("reconnects after a dropped stream and stops its backoff when unmounted", async () => {
+    signIn();
+    const schedule = vi.spyOn(globalThis, "setTimeout"), cancel = vi.spyOn(globalThis, "clearTimeout");
+    let connections = 0;
+    server.use(http.get(url("/events"), () => { connections += 1; return connections === 1 ? HttpResponse.error() : sseResponse(": connection closed\n\n"); }));
+    const { unmount } = render(<QueryClientProvider client={createPortalQueryClient()}><Live /></QueryClientProvider>);
+    await waitFor(() => expect(connections).toBe(2), { timeout: 3500 });
+    await waitFor(() => expect(schedule.mock.calls.filter((args) => args[1] === 2000)).toHaveLength(2));
+    const index = schedule.mock.calls.reduce((latest, args, index) => args[1] === 2000 ? index : latest, -1);
+    const timer = schedule.mock.results[index].value;
+    unmount();
+    expect(cancel).toHaveBeenCalledWith(timer);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(connections).toBe(2);
+  });
   it("passes notifications to the companion and refreshes affected data", async () => {
     signIn();
     const client = createPortalQueryClient();

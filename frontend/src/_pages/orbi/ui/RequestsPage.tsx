@@ -58,7 +58,7 @@ function RequestCard({ request, selected }: { request: ServiceRequest; selected:
           </ol>
           {active && (
             <div className="flex flex-wrap gap-2">
-              {request.status === "submitted" && request.approver && (
+              {request.kind === "access" && request.status === "submitted" && request.approver && (
                 <button type="button" className={cx(action, actionTone.white)} disabled={mutation.isPending}
                   onClick={() => mutation.mutate({ id: request.id, action: "remind" })}>
                   <Bell size={15} aria-hidden /> Напомнить согласующему

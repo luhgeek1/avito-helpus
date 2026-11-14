@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/reac
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useOrbiChat } from "@/features/orbi-chat";
-import { onAccountChange, orbiKeys, startPortalMocks, useOrbiRealtime, useSession } from "@/shared/api";
+import { onAccountChange, orbiKeys, startPortalMocks, useOrbiNotice, useOrbiRealtime, useSession } from "@/shared/api";
 
 export function createPortalQueryClient() {
   return new QueryClient({ defaultOptions: { queries: {
@@ -16,8 +16,11 @@ function OrbiSession() {
   useEffect(() => { void useSession.getState().boot(); }, []);
   useEffect(() => onAccountChange(() => {
     useOrbiChat.getState().clear();
+    useOrbiNotice.getState().show(null);
+    void client.cancelQueries({ queryKey: orbiKeys.all });
     client.removeQueries({ queryKey: orbiKeys.all });
   }), [client]);
+  useEffect(() => () => { useOrbiChat.getState().clear(); }, []);
   // Agent tools change plans, requests and questions: refresh them when a turn ends.
   useEffect(() => useOrbiChat.subscribe((state, previous) => {
     if (previous.busy && !state.busy) void client.invalidateQueries({ queryKey: orbiKeys.all });

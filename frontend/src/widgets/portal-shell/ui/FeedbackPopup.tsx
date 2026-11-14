@@ -25,8 +25,7 @@ export function FeedbackPopup() {
   }
 
   const answer = (value: 'like' | 'dislike') => {
-    send.mutate(value)
-    answerFeedback()
+    send.mutate(value, { onSuccess: answerFeedback })
   }
 
   return (
@@ -36,13 +35,14 @@ export function FeedbackPopup() {
       </IconButton>
       <p className="mx-5 mb-3.5 font-bold">Что думаешь про новый портал?</p>
       <div className="flex justify-center gap-3">
-        <button type="button" className={cx(thumb, 'bg-red-soft text-red-text hover:bg-red-soft-hover')} aria-label="Не нравится" onClick={() => answer('dislike')}>
+        <button type="button" disabled={send.isPending} className={cx(thumb, 'bg-red-soft text-red-text hover:bg-red-soft-hover')} aria-label="Не нравится" onClick={() => answer('dislike')}>
           <ThumbsDown size={22} />
         </button>
-        <button type="button" className={cx(thumb, 'bg-green-soft text-green-text hover:bg-green-soft-hover')} aria-label="Нравится" onClick={() => answer('like')}>
+        <button type="button" disabled={send.isPending} className={cx(thumb, 'bg-green-soft text-green-text hover:bg-green-soft-hover')} aria-label="Нравится" onClick={() => answer('like')}>
           <ThumbsUp size={22} />
         </button>
       </div>
+      {send.isError && <p role="alert" className="mt-3 text-13 text-red-text">Не удалось отправить ответ. Попробуйте ещё раз.</p>}
     </div>
   )
 }

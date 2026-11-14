@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
@@ -7,7 +7,7 @@ import { createPortalQueryClient } from "@/_app/model/portal-provider";
 import { LoginPage, MentorPage, PlanPage, RequestsPage, orbiPhrase } from "@/_pages/orbi";
 import { useOrbiChat } from "@/features/orbi-chat";
 import { useSession } from "@/shared/api";
-import type { PlanItem, ServiceRequest } from "@/shared/api";
+import type { PlanItem, ServiceRequest, MenteeDetail } from "@/shared/api";
 import { PortalShell } from "@/widgets/portal-shell";
 import { server } from "../portal/setup";
 import { history, resetNavigation, useLocation } from "../portal/navigation";
@@ -318,5 +318,115 @@ describe("portal header with a session", () => {
     expect(await screen.findByRole("link", { name: "Стажёры" })).toHaveAttribute("href", "/mentor");
     await user.click(screen.getByRole("button", { name: "Уведомления" }));
     expect(screen.getByText(/Новых уведомлений нет/)).toBeInTheDocument();
+  });
+});
+
+describe("recovery and remaining screen interactions", () => {
+  it.each([
+    ["/plan", "/plan"], ["/requests", "/requests"], ["/questions", "/escalations"],
+    ["/mentor", "/mentees"], ["/mentor", "/escalations"], ["/mentor/mentees/kirill", "/mentees/kirill"],
+  ])("retries a failed %s request to %s", async (path, endpoint) => {
+    signIn(path.startsWith("/mentor") ? "ivan.mentor@buddy.test" : undefined);
+    server.use(http.get(url(endpoint), () => problem(500, "INTERNAL_ERROR"), { once: true }));
+    const { user } = renderAt(path);
+    const alert = await screen.findByRole("alert");
+    await user.click(within(alert).getByRole("button", { name: "Повторить" }));
+    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
+  });
+
+  it("submits a step for review, removes a blocker, and lets the intern cancel reporting one", async () => {
+    signIn();
+    const data = fixture<import("@/shared/api").Plan>("plan.json");
+    const first = { ...data.next_steps[0], id: "review", title: "Review me", confirmation: "mentor" as const, status: "in_progress" as const };
+    const blocked = { ...first, id: "blocked", title: "Unblock me", status: "blocked" as const, blocked_reason: "Waiting" };
+    server.use(http.get(url("/plan"), () => HttpResponse.json({ ...data, stages: [], next_steps: [first, blocked] })));
+    const calls: string[] = [];
+    server.use(http.post(url("/plan/items/:id/transitions"), async ({ request }) => {
+      calls.push((await request.json() as { transition: string }).transition);
+      return HttpResponse.json(first);
+    }));
+    const { user } = renderAt("/plan");
+    await user.click(await screen.findByRole("button", { name: "На проверку наставнику" }));
+    await user.click(screen.getByRole("button", { name: "Блокер снят" }));
+    await user.click(screen.getByRole("button", { name: "Есть блокер" }));
+    await user.click(screen.getByRole("button", { name: "Отмена" }));
+    expect(screen.queryByRole("textbox", { name: "Что мешает" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Чем заняться пока" }));
+    expect(useOrbiChat.getState().openSignal).toBe(1);
+    await user.click(screen.getByRole("button", { name: "Спросить через Орби" }));
+    expect(useOrbiChat.getState().openSignal).toBe(2);
+    await waitFor(() => expect(calls).toEqual(["submit_review", "unblock"]));
+  });
+
+  it("does not offer an unsupported reminder for an absence request", async () => {
+    signIn();
+    const request = { ...fixture<ServiceRequest[]>("requests.json")[0], kind: "absence", status: "submitted", status_title: "На согласовании" };
+    server.use(http.get(url("/requests"), () => HttpResponse.json([request])));
+    const { user } = renderAt("/requests");
+    await user.click(await screen.findByRole("button", { name: /ACC-1043/ }));
+    expect(screen.getByRole("button", { name: "Отменить заявку" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Напомнить согласующему" })).not.toBeInTheDocument();
+  });
+
+  it("lets the mentor submit a review form without navigating and opt out of FAQ publishing", async () => {
+    signIn("ivan.mentor@buddy.test");
+    const detail = fixture<MenteeDetail>("mentee-kirill.json");
+    const { user } = renderAt(`/mentor/mentees/${detail.summary.person.id}`);
+    const comment = await screen.findByRole("textbox", { name: /Комментарий к шагу/ });
+    fireEvent.submit(comment.closest("form")!);
+    const checkbox = await screen.findByRole("checkbox");
+    await user.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+  });
+
+  it("shows an empty mentee review and omits a closed question without an answer", async () => {
+    signIn("ivan.mentor@buddy.test");
+    const detail = fixture<MenteeDetail>("mentee-kirill.json");
+    detail.summary.awaiting_review = []; detail.summary.blocked = []; detail.plan.stages = [];
+    server.use(
+      http.get(url("/mentees/:id"), () => HttpResponse.json(detail)),
+      http.get(url("/escalations"), () => HttpResponse.json([{ ...fixture<object[]>("escalations-assigned.json")[0], status: "closed", answer: null }])),
+    );
+    renderAt(`/mentor/mentees/${detail.summary.person.id}`);
+    expect(await screen.findByText("Ничего не ждёт твоего решения")).toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: /Ответ на вопрос/ })).not.toBeInTheDocument();
+  });
+
+  it("falls back to the path when the profile cannot be loaded after sign-in", async () => {
+    server.use(http.get(url("/me"), () => problem(500, "INTERNAL_ERROR")));
+    const { user } = renderAt("/login");
+    await user.click(screen.getByRole("button", { name: /Аня Смирнова/ }));
+    await waitFor(() => expect(history.location.pathname).toBe("/plan"));
+  });
+
+  it("shows an ordinary sign-in failure", async () => {
+    server.use(http.post(url("/auth/login"), () => problem(503, "UNAVAILABLE")));
+    const { user } = renderAt("/login");
+    await user.click(screen.getByRole("button", { name: /Аня Смирнова/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Не удалось войти");
+  });
+
+  it("closes account and notification panels by keyboard and click, and follows account links", async () => {
+    signIn();
+    const { user } = renderAt("/");
+    const account = await screen.findByRole("button", { name: /Аккаунт:/ });
+    await user.click(account);
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    await user.click(account);
+    await user.click(document.body);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    await user.click(account);
+    await user.click(screen.getByRole("menuitem", { name: "Профиль на портале" }));
+    expect(history.location.pathname).toBe("/profile");
+    await user.click(account);
+    await user.click(screen.getByRole("menuitem", { name: "Сменить учётку" }));
+    expect(history.location.pathname).toBe("/login");
+    await user.click(screen.getByRole("button", { name: /Уведомления:/ }));
+    const panel = screen.getByRole("dialog", { name: "Уведомления" });
+    await user.keyboard("{Escape}");
+    fireEvent.animationEnd(panel);
+    fireEvent(panel, new Event("webkitAnimationEnd", { bubbles: true }));
+    expect(document.contains(panel)).toBe(false);
   });
 });

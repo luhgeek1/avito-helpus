@@ -10,11 +10,14 @@ import type { ChatMessage } from "../model/chat-messages";
 export function CompanionSpotlight({ pet, chat, onClose, onReply, onOpenChat }: {
   pet: Pet; chat: CompanionChatModel; onClose: () => void; onReply: (reply: ChatMessage) => void; onOpenChat: () => void;
 }) {
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   async function submit() {
-    if (!chat.draft.trim()) return;
+    if (!chat.draft.trim() || chat.busy) return;
     if (!chat.authenticated) { onReply(SIGN_IN_REPLY); return; }
     onReply({ id: `thinking-${Date.now()}`, text: "Думаю…" });
     const { reply, openChat } = dialogueReply(await chat.send());
+    if (!mounted.current) return;
     if (openChat) onOpenChat(); else onReply(reply);
   }
   const movement = useSpotlightPosition();

@@ -6,6 +6,7 @@ export async function* readSse(body: ReadableStream<Uint8Array>, signal?: AbortS
   const decoder = new TextDecoder();
   const abort = () => { void reader.cancel().catch(() => undefined); };
   signal?.addEventListener("abort", abort, { once: true });
+  if (signal?.aborted) abort();
   let buffer = "";
   try {
     for (;;) {
@@ -25,6 +26,7 @@ export async function* readSse(body: ReadableStream<Uint8Array>, signal?: AbortS
     if (tail) yield tail;
   } finally {
     signal?.removeEventListener("abort", abort);
+    await reader.cancel().catch(() => undefined);
     reader.releaseLock();
   }
 }
