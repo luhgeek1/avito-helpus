@@ -13,7 +13,7 @@ import os
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -23,12 +23,14 @@ from mcp.server.transport_security import TransportSecuritySettings
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from corp_mock.state import CorpState, Ticket
+from corp_mock.state import LOCAL_TZ, CorpState, Refused, Ticket
 
 logger = logging.getLogger("corp_mock")
 
 APPROVAL_DELAY_SEC = float(os.environ.get("MOCK_APPROVAL_DELAY_SEC", "20"))
-WEBHOOK_URL = os.environ.get("BUDDY_WEBHOOK_URL", "http://localhost:8080/api/v1/integrations/corp/webhook")
+WEBHOOK_URL = os.environ.get(
+    "BUDDY_WEBHOOK_URL", "http://localhost:8080/api/v1/integrations/corp/webhook"
+)
 WEBHOOK_SECRET = os.environ.get("CORP_WEBHOOK_SECRET", "dev-webhook-secret")
 # Where tickets and grants are kept between restarts (a file on a volume); unset = memory only.
 STATE_FILE = os.environ.get("CORP_STATE_FILE")
@@ -47,13 +49,24 @@ def _sign(timestamp: str, body: bytes) -> str:
 
 
 async def _deliver(ticket: Ticket) -> None:
-    body = json.dumps({"event": "request.status_changed", "service": ticket.service,
-                       "request_id": ticket.id, "status": ticket.status,
-                       "comment": ticket.comment}, ensure_ascii=False).encode()
+    body = json.dumps(
+        {
+            "event": "request.status_changed",
+            "service": ticket.service,
+            "request_id": ticket.id,
+            "status": ticket.status,
+            "comment": ticket.comment,
+            "idempotency_key": ticket.idempotency_key,
+        },
+        ensure_ascii=False,
+    ).encode()
     for attempt in range(5):
         timestamp = str(int(time.time()))
-        headers = {"Content-Type": "application/json", "X-Corp-Timestamp": timestamp,
-                   "X-Corp-Signature": _sign(timestamp, body)}
+        headers = {
+            "Content-Type": "application/json",
+            "X-Corp-Timestamp": timestamp,
+            "X-Corp-Signature": _sign(timestamp, body),
+        }
         try:
             async with httpx.AsyncClient(timeout=5) as client:
                 response = await client.post(WEBHOOK_URL, content=body, headers=headers)
@@ -62,23 +75,36 @@ async def _deliver(ticket: Ticket) -> None:
                 return
         except httpx.HTTPError as exc:
             logger.warning("webhook %s failed: %r", ticket.id, exc)
-        await asyncio.sleep(2 ** attempt)
+        await asyncio.sleep(2**attempt)
 
 
 async def _decide_later(ticket: Ticket, delay: float) -> None:
     await asyncio.sleep(delay)
-    if ticket.status != "pending_approval":
+    if ticket.status != "pending_approval" or state.tickets.get(ticket.id) is not ticket:
         return
     decide(ticket, *ticket.decision)
     await _deliver(ticket)
 
 
 def decide(ticket: Ticket, status: str, comment: str | None) -> None:
+    if status not in {"approved", "rejected", "cancelled"}:
+        raise Refused("invalid decision status")
+    if ticket.status == status:
+        return
+    if ticket.status != "pending_approval":
+        raise Refused("a terminal decision cannot be changed")
+    if (
+        status == "approved"
+        and ticket.service == "absence"
+        and ticket.payload["days"] > state.balances.get(ticket.employee, 0)
+    ):
+        status, comment = "rejected", "Недостаточно дней на момент согласования"
     ticket.status = status
     ticket.comment = comment
     if status == "approved" and ticket.service == "access":
         state.grants[(ticket.employee, ticket.payload["resource"])] = {
-            "level": ticket.payload["level"], "granted_at": date.today().isoformat(),  # noqa: DTZ011
+            "level": ticket.payload["level"],
+            "granted_at": datetime.now(LOCAL_TZ).date().isoformat(),
         }
     if status == "approved" and ticket.service == "absence":
         state.balances[ticket.employee] -= ticket.payload["days"]
@@ -88,7 +114,9 @@ def decide(ticket: Ticket, status: str, comment: str | None) -> None:
 def _schedule(ticket: Ticket) -> None:
     if ticket.status != "pending_approval" or any(t.get_name() == ticket.id for t in _tasks):
         return
-    task = asyncio.get_running_loop().create_task(_decide_later(ticket, APPROVAL_DELAY_SEC), name=ticket.id)
+    task = asyncio.get_running_loop().create_task(
+        _decide_later(ticket, APPROVAL_DELAY_SEC), name=ticket.id
+    )
     _tasks.add(task)
     task.add_done_callback(_tasks.discard)
 
@@ -104,12 +132,24 @@ def access_check(employee: str, resource: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def access_create_request(employee: str, resource: str, level: str, justification: str,
-                                approver: str, idempotency_key: str) -> dict[str, Any]:
+async def access_create_request(
+    employee: str,
+    resource: str,
+    level: str,
+    justification: str,
+    approver: str,
+    idempotency_key: str,
+) -> dict[str, Any]:
     """Register an access request (idempotent by key). The decision comes later via webhook."""
     state.check_available()
-    ticket = state.access_create(employee=employee, resource=resource, level=level,
-                                 justification=justification, approver=approver, key=idempotency_key)
+    ticket = state.access_create(
+        employee=employee,
+        resource=resource,
+        level=level,
+        justification=justification,
+        approver=approver,
+        key=idempotency_key,
+    )
     state.save()
     _schedule(ticket)
     return ticket.as_dict()
@@ -123,13 +163,26 @@ def access_get_request(request_id: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-def access_remind(request_id: str) -> dict[str, Any]:
+def access_remind(request_id: str, idempotency_key: str | None = None) -> dict[str, Any]:
     """Send the approver a reminder."""
     state.check_available()
     ticket = state.ticket(request_id)
-    ticket.reminders += 1
+    if idempotency_key is None or idempotency_key not in state.reminder_keys:
+        ticket.reminders += 1
+        if idempotency_key is not None:
+            state.reminder_keys.add(idempotency_key)
     state.save()
     return {"request_id": ticket.id, "reminders": ticket.reminders}
+
+
+@mcp.tool()
+def request_cancel(request_id: str) -> dict[str, Any]:
+    """Cancel a pending request; a raced terminal decision is returned unchanged."""
+    state.check_available()
+    ticket = state.ticket(request_id)
+    if ticket.status == "pending_approval":
+        decide(ticket, "cancelled", "Отменено сотрудником")
+    return ticket.as_dict()
 
 
 @mcp.tool()
@@ -140,12 +193,19 @@ def absence_balance(employee: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def absence_create_request(employee: str, type: str, start_date: str, end_date: str,  # noqa: A002
-                                 comment: str, idempotency_key: str) -> dict[str, Any]:
+async def absence_create_request(
+    employee: str, type: str, start_date: str, end_date: str, comment: str, idempotency_key: str
+) -> dict[str, Any]:
     """Register a day off or vacation request (idempotent by key)."""
     state.check_available()
-    ticket = state.absence_create(employee=employee, type_=type, start=date.fromisoformat(start_date),
-                                  end=date.fromisoformat(end_date), comment=comment, key=idempotency_key)
+    ticket = state.absence_create(
+        employee=employee,
+        type_=type,
+        start=date.fromisoformat(start_date),
+        end=date.fromisoformat(end_date),
+        comment=comment,
+        key=idempotency_key,
+    )
     state.save()
     _schedule(ticket)
     return ticket.as_dict()
@@ -162,7 +222,11 @@ def absence_get_request(request_id: str) -> dict[str, Any]:
 def calendar_events(employee: str, date_from: str, date_to: str) -> dict[str, Any]:
     """Employee's calendar events between two dates (inclusive)."""
     state.check_available()
-    return {"events": state.calendar(employee, date.fromisoformat(date_from), date.fromisoformat(date_to))}
+    return {
+        "events": state.calendar(
+            employee, date.fromisoformat(date_from), date.fromisoformat(date_to)
+        )
+    }
 
 
 @mcp.tool()
@@ -173,12 +237,14 @@ def itsupport_equipment(employee: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-async def itsupport_create_ticket(employee: str, category: str, description: str,
-                                  idempotency_key: str) -> dict[str, Any]:
+async def itsupport_create_ticket(
+    employee: str, category: str, description: str, idempotency_key: str
+) -> dict[str, Any]:
     """Open an IT support ticket (idempotent by key)."""
     state.check_available()
-    ticket = state.it_ticket(employee=employee, category=category, description=description,
-                             key=idempotency_key)
+    ticket = state.it_ticket(
+        employee=employee, category=category, description=description, key=idempotency_key
+    )
     state.save()
     _schedule(ticket)
     return ticket.as_dict()
@@ -201,11 +267,12 @@ def messenger_post(channel: str, text: str, author: str, idempotency_key: str) -
 
 
 @mcp.tool()
-def demo_reset() -> dict[str, Any]:
-    """Demo control: forget all tickets, grants and messages and return to the seed state."""
+def demo_reset(reset_sequence: bool = False) -> dict[str, Any]:
+    """Clear business state; reset_sequence is only for a coordinated reset of both systems."""
     for task in list(_tasks):
         task.cancel()
-    state.reset()
+    _tasks.clear()
+    state.reset(reset_sequence=reset_sequence)
     return {"status": "reset"}
 
 
@@ -219,13 +286,17 @@ async def health(_: Request) -> JSONResponse:
 
 @mcp.custom_route("/admin/state", methods=["GET"])
 async def dump(_: Request) -> JSONResponse:
-    return JSONResponse({
-        "fault_mode": state.fault_mode,
-        "tickets": [{**t.as_dict(), "service": t.service, "employee": t.employee, "payload": t.payload}
-                    for t in state.tickets.values()],
-        "messages": state.messages,
-        "grants": [{"employee": e, "resource": r, **g} for (e, r), g in state.grants.items()],
-    })
+    return JSONResponse(
+        {
+            "fault_mode": state.fault_mode,
+            "tickets": [
+                {**t.as_dict(), "service": t.service, "employee": t.employee, "payload": t.payload}
+                for t in state.tickets.values()
+            ],
+            "messages": state.messages,
+            "grants": [{"employee": e, "resource": r, **g} for (e, r), g in state.grants.items()],
+        }
+    )
 
 
 @mcp.custom_route("/admin/faults", methods=["POST"])
@@ -240,16 +311,24 @@ async def faults(request: Request) -> JSONResponse:
 async def decide_now(request: Request) -> JSONResponse:
     """Force a decision right away (handy for live demos)."""
     payload = await request.json()
+    if payload.get("request_id") not in state.tickets:
+        return JSONResponse({"detail": "unknown request"}, status_code=404)
     ticket = state.ticket(payload["request_id"])
     status = payload.get("status") or ticket.decision[0]
-    decide(ticket, status, payload.get("comment") or ticket.decision[1])
+    try:
+        decide(ticket, status, payload.get("comment") or ticket.decision[1])
+    except Refused:
+        return JSONResponse({"detail": "invalid or conflicting decision"}, status_code=409)
     await _deliver(ticket)
     return JSONResponse(ticket.as_dict())
 
 
 @mcp.custom_route("/admin/reset", methods=["POST"])
-async def reset(_: Request) -> JSONResponse:
-    return JSONResponse(demo_reset())
+async def reset(request: Request) -> JSONResponse:
+    value = request.query_params.get("reset_sequence", "false")
+    if value not in {"true", "false"}:
+        return JSONResponse({"detail": "reset_sequence must be true or false"}, status_code=400)
+    return JSONResponse(demo_reset(reset_sequence=value == "true"))
 
 
 app = mcp.streamable_http_app(

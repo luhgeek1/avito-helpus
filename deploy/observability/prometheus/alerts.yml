@@ -1,0 +1,65 @@
+groups:
+  - name: orbi
+    rules:
+      - alert: OrbiOfflineFallbacks
+        expr: sum(rate(buddy_llm_fallbacks_total{job="api"}[5m])) / clamp_min(sum(rate(buddy_chat_turns_total{job="api"}[5m])), 0.001) > 0.1
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: Более 10% ходов переключаются в офлайн-режим
+      - alert: OrbiToolErrors
+        # Existing assistant telemetry reports both error payloads and non-dict
+        # informational results as "info". Keep the signal conservative and explicit.
+        expr: sum(rate(buddy_tool_calls_total{outcome=~"error|info"}[5m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: Ошибки или диагностические результаты инструментов агента
+      - alert: OrbiCorpErrors
+        expr: sum(rate(buddy_corp_calls_total{outcome=~"error|timeout|unavailable"}[5m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: Ошибки корпоративных сервисов
+      - alert: OrbiOutboxOld
+        expr: max by (topic) (buddy_outbox_oldest_seconds{job="worker"}) > 300
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: Невыполненное событие outbox старше пяти минут
+      - alert: OrbiOutboxFailed
+        expr: sum by (topic) (increase(buddy_outbox_events_total{outcome="dead"}[10m])) > 0
+        labels: {severity: critical}
+        annotations:
+          summary: Новые события outbox исчерпали повторы
+      - alert: OrbiOutboxDeadBacklog
+        expr: buddy_outbox_backlog{job="worker",state="failed"} > 0
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: В outbox есть события, требующие разбора
+      - alert: OrbiClickstreamRetries
+        expr: sum(increase(buddy_outbox_events_total{topic="analytics.publish",outcome="retry"}[10m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: Kafka недоступна или отклоняет продуктовые события
+      - alert: OrbiHttpSlow
+        # SSE and external/LLM operations do not have the local-operation 1s target.
+        expr: histogram_quantile(0.95, sum by (le, route) (rate(buddy_http_request_seconds_bucket{job="api",route!~"/api/v1/chat/.*|/api/v1/events|/api/v1/knowledge/search|/api/v1/requests/(access|absence|it-ticket)(/.*)?|/api/v1/requests/.*/remind|/api/v1/equipment|/api/v1/admin/demo/reset|/api/ready"}[5m]))) > 1
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: p95 локальной HTTP-операции превышает секунду
+      - alert: OrbiMetricsUnavailable
+        expr: up{job=~"api|worker"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: Не удаётся собрать метрики процесса
+      - alert: OrbiOutboxMetricsStale
+        expr: time() - buddy_outbox_snapshot_timestamp_seconds{job="worker"} > 60
+        for: 1m
+        labels: {severity: warning}
+        annotations:
+          summary: Снимок outbox не обновлялся более минуты

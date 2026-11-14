@@ -19,7 +19,7 @@ class UnitOfWork:
     commits.
     """
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, *, export_key: bytes | None = None) -> None:
         self.session = session
         self.people = PeopleRepository(session)
         self.sessions = SessionRepository(session)
@@ -30,7 +30,7 @@ class UnitOfWork:
         self.escalations = EscalationRepository(session)
         self.notifications = NotificationRepository(session)
         self.assistant = AssistantRepository(session)
-        self.ops = OpsRepository(session)
+        self.ops = OpsRepository(session, export_key=export_key)
 
     async def flush(self) -> None:
         await self.session.flush()

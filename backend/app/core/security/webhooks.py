@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import math
 
 SIGNATURE_PREFIX = "sha256="
 
@@ -25,6 +26,6 @@ def verify(
         sent_at = float(timestamp)
     except ValueError:
         return False
-    if abs(now - sent_at) > tolerance_sec:
+    if not math.isfinite(sent_at) or abs(now - sent_at) > tolerance_sec:
         return False
-    return hmac.compare_digest(sign(secret, timestamp, body), signature)
+    return hmac.compare_digest(sign(secret, timestamp, body).encode(), signature.encode())

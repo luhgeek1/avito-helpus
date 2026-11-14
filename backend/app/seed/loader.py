@@ -8,7 +8,7 @@ from zlib import crc32
 import yaml
 from sqlalchemy import func, select, text
 
-from app.core.clock import today, utcnow
+from app.core.clock import LOCAL_TZ, today, utcnow
 from app.core.security.passwords import hash_password
 from app.db.base import Base
 from app.db.database import Database
@@ -228,7 +228,7 @@ async def _plans(
 
 async def _apply_state(uow: UnitOfWork, user: User, state: dict[str, Any], *, on: date) -> None:
     rows = {template.slug: item for item, template in await uow.plan.items(user.id)}
-    start = datetime.combine(user.start_date or on, datetime.min.time()).astimezone()
+    start = datetime.combine(user.start_date or on, datetime.min.time(), tzinfo=LOCAL_TZ)
     for offset, slug in enumerate(state.get("done", [])):
         item = rows[slug]
         item.status = ItemStatus.DONE

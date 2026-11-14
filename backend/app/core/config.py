@@ -2,12 +2,13 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal, Self
 
-from pydantic import SecretStr, field_validator, model_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 DEV_CSRF_KEY = "change-me"
+MIN_HMAC_KEY_LENGTH = 32
 DEV_WEBHOOK_SECRET = "dev-webhook-secret"  # noqa: S105 - refused in prod by the validator below
 
 
@@ -85,6 +86,42 @@ class Settings(BaseSettings):
     outbox_poll_interval_sec: float = 1.0
     outbox_max_attempts: int = 6
     scheduler_interval_sec: float = 30.0
+    worker_metrics_enabled: bool = True
+    worker_metrics_host: str = "0.0.0.0"  # noqa: S104 - internal container network only
+    worker_metrics_port: int = Field(default=9100, ge=1, le=65535)
+
+    # Optional synthetic analytics export. No network I/O on the business write path.
+    clickstream_enabled: bool = False
+    clickstream_hmac_key: SecretStr | None = None
+    clickstream_hmac_key_path: Path | None = None
+    kafka_bootstrap_servers: str = "kafka:9092"
+    kafka_analytics_topic: str = "buddy.analytics.v1"
+    kafka_timeout_sec: float = Field(default=5.0, gt=0)
+    kafka_consumer_group: str = "orbi-clickstream-example-v1"
+    clickstream_sink_path: Path = Path("/data/clickstream.sqlite3")
+
+    @property
+    def analytics_export_key(self) -> bytes | None:
+        if not self.clickstream_enabled or self.clickstream_hmac_key is None:
+            return None
+        return self.clickstream_hmac_key.get_secret_value().encode()
+
+    @model_validator(mode="after")
+    def _validate_clickstream(self) -> Self:
+        if not self.clickstream_enabled:
+            return self
+        if self.clickstream_hmac_key is None and self.clickstream_hmac_key_path is not None:
+            self.clickstream_hmac_key = SecretStr(
+                _resolve(self.clickstream_hmac_key_path).read_text().strip()
+            )
+        if (
+            self.clickstream_hmac_key is None
+            or len(self.clickstream_hmac_key.get_secret_value()) < MIN_HMAC_KEY_LENGTH
+        ):
+            raise ValueError(
+                "CLICKSTREAM_HMAC_KEY must contain at least 32 characters when enabled"
+            )
+        return self
 
     @property
     def show_api_docs(self) -> bool:

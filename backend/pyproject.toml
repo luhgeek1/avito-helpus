@@ -21,6 +21,8 @@ dependencies = [
     "pgvector>=0.4",
     "prometheus-client>=0.22",
     "pyyaml>=6.0",
+    "aiokafka>=0.15.0",
+    "tzdata ; sys_platform == 'win32'",
 ]
 
 [dependency-groups]
@@ -71,6 +73,7 @@ python_version = "3.13"
 strict = true
 plugins = ["pydantic.mypy"]
 files = ["app", "migrations/env.py"]
+mypy_path = "typings"
 
 [[tool.mypy.overrides]]
 module = ["boto3.*", "botocore.*"]
@@ -81,8 +84,11 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-ra --strict-markers"
-markers = ["integration: needs Postgres, Redis and S3 (RustFS) from docker-compose.test.yml"]
+addopts = "-ra --strict-markers -m 'not broker'"
+markers = [
+    "integration: needs Postgres and Redis from docker-compose.test.yml",
+    "broker: optional real Kafka test using testcontainers and Docker",
+]
 filterwarnings = ["error::DeprecationWarning:app.*"]
 
 [tool.coverage.run]

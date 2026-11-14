@@ -1,18 +1,20 @@
 import logging
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from enum import StrEnum
 from typing import Any
 from uuid import UUID
 
-from app.core.clock import today, utcnow
+from app.core.clock import LOCAL_TZ, today, utcnow
 from app.core.config import Settings
+from app.core.errors import ConflictError
 from app.db.database import Database
 from app.db.models import ServiceRequest, User
 from app.db.uow import UnitOfWork
 from app.domain.absence import (
     ABSENCE_TITLES,
     AbsenceCheck,
+    AbsenceDatesError,
     AbsenceType,
     CalendarEvent,
     evaluate_absence,
@@ -53,6 +55,7 @@ from app.domain.requests import (
 from app.domain.users import CurrentUser, UserNotFoundError
 from app.service.mappers import to_plan_item, to_request, to_resource
 from app.service.notify import notify, push
+from app.service.people import PeopleService
 from app.service.plan import PlanService
 from app.service.ports import CorpServices
 
@@ -62,6 +65,7 @@ ACCESS_SERVICE = "Сервис доступов"
 ABSENCE_SERVICE = "Сервис отсутствий"
 IT_SERVICE = "IT-поддержка"
 REMIND_COOLDOWN = timedelta(hours=20)
+MAX_ABSENCE_SPAN_DAYS = 366
 _SLA_HOURS = {RequestKind.ACCESS: 24.0, RequestKind.ABSENCE: 24.0, RequestKind.EQUIPMENT: 8.0}
 _CORP_TO_STATUS = {
     CorpTicketStatus.APPROVED: RequestStatus.APPROVED,
@@ -144,6 +148,8 @@ class RequestService:
         status: RequestStatus | None = None,
         user_id: UUID | None = None,
     ) -> list[RequestView]:
+        if user_id is not None and user_id != actor.id:
+            await PeopleService(self._uow).member(actor, user_id)
         rows = await self._uow.requests.for_user(user_id or actor.id, kind=kind, status=status)
         events = await self._uow.requests.events([r.id for r in rows])
         return [to_request(row, events) for row in rows]
@@ -232,7 +238,9 @@ class RequestService:
         source: RequestSource,
     ) -> tuple[AccessPreparation, RequestView | None]:
         """Re-checks everything (the card may be stale) and records the request for submission."""
-        if (existing := await self._uow.requests.by_idempotency_key(idempotency_key)) is not None:
+        if (
+            existing := await self._existing(actor, idempotency_key, RequestKind.ACCESS)
+        ) is not None:
             prep = AccessPreparation(outcome=AccessOutcome.READY)
             return prep, to_request(existing, await self._uow.requests.events([existing.id]))
         prep = await self.prepare_access(
@@ -263,6 +271,8 @@ class RequestService:
     async def check_absence(
         self, actor: CurrentUser, *, type_: AbsenceType, start: date, end: date
     ) -> AbsenceCheck:
+        if start < today() or end < start or (end - start).days > MAX_ABSENCE_SPAN_DAYS:
+            raise AbsenceDatesError()
         user = await self._user(actor.id)
         balance = await self._corp.absence_balance(employee=user.email)
         events = await self._corp.calendar_events(employee=user.email, start=start, end=end)
@@ -273,7 +283,7 @@ class RequestService:
             today=today(),
             internship_start=user.start_date,
             balance=balance,
-            events=[CalendarEvent(e.title, e.starts_at, e.important) for e in events],
+            events=[CalendarEvent(e.title, _local_time(e.starts_at), e.important) for e in events],
         )
 
     async def absence_card(
@@ -308,7 +318,9 @@ class RequestService:
         idempotency_key: str,
         source: RequestSource,
     ) -> RequestView:
-        if (existing := await self._uow.requests.by_idempotency_key(idempotency_key)) is not None:
+        if (
+            existing := await self._existing(actor, idempotency_key, RequestKind.ABSENCE)
+        ) is not None:
             return to_request(existing)
         check = await self.check_absence(actor, type_=type_, start=start, end=end)
         user = await self._user(actor.id)
@@ -362,7 +374,9 @@ class RequestService:
         idempotency_key: str,
         source: RequestSource,
     ) -> RequestView:
-        if (existing := await self._uow.requests.by_idempotency_key(idempotency_key)) is not None:
+        if (
+            existing := await self._existing(actor, idempotency_key, RequestKind.EQUIPMENT)
+        ) is not None:
             return to_request(existing)
         plan_item = await self._uow.plan.find_by_action(actor.id, kind=ActionKind.EQUIPMENT)
         return await self._create(
@@ -382,6 +396,19 @@ class RequestService:
         request = await self._uow.requests.get(request_id, for_update=True)
         if request is None or request.user_id != actor.id:
             raise RequestNotFoundError()
+        if request.status is RequestStatus.SUBMITTED:
+            if not request.payload.get("cancel_requested"):
+                request.payload = {**request.payload, "cancel_requested": True}
+                request.decision_comment = "Отмена запрошена; ожидаем ответ корпоративного сервиса."
+                self._uow.outbox.add(Topic.REQUEST_CANCEL, {"request_id": str(request.id)})
+                self._uow.ops.audit(
+                    AuditAction.REQUEST_CANCELLED,
+                    actor_id=actor.id,
+                    target_type="request",
+                    target_id=str(request.id),
+                )
+                await self._uow.flush()
+            return to_request(request, await self._uow.requests.events([request.id]))
         await self._set_status(
             request, RequestStatus.CANCELLED, RequestSource.USER, "Отменено сотрудником"
         )
@@ -398,21 +425,31 @@ class RequestService:
         request = await self._uow.requests.get(request_id, for_update=True)
         if request is None or request.user_id != actor.id:
             raise RequestNotFoundError()
-        if request.status is not RequestStatus.SUBMITTED or request.external_id is None:
+        if (
+            request.status is not RequestStatus.SUBMITTED
+            or request.external_id is None
+            or request.kind is not RequestKind.ACCESS
+        ):
             raise RequestTransitionError(
-                "Only a request waiting for approval can be reminded about"
+                "Only an access request waiting for approval can be reminded about"
             )
         now = utcnow()
         if request.last_reminded_at and now - request.last_reminded_at < REMIND_COOLDOWN:
             raise RemindTooSoonError()
         if request.kind is RequestKind.ACCESS:
-            await self._corp.access_remind(request.external_id)
+            self._uow.outbox.add(
+                Topic.REQUEST_REMIND,
+                {
+                    "request_id": str(request.id),
+                    "idempotency_key": f"remind:{request.id}:{now.isoformat()}",
+                },
+            )
         request.last_reminded_at = now
         self._uow.requests.add_event(
             request,
             status=request.status,
             source=RequestSource.USER,
-            note="Согласующему отправлено напоминание",
+            note="Напоминание поставлено в очередь отправки",
         )
         await self._uow.flush()
         return to_request(request, await self._uow.requests.events([request.id]))
@@ -424,11 +461,23 @@ class RequestService:
         status: CorpTicketStatus,
         comment: str | None,
         source: RequestSource,
+        service: str | None = None,
+        idempotency_key: str | None = None,
     ) -> RequestView | None:
         """A service decided (webhook or reconciliation). Repeated delivery is a no-op."""
         request = await self._uow.requests.by_external_id(external_id)
         if request is None:
             logger.warning("decision for unknown request %s", external_id)
+            return None
+        expected_service = {
+            RequestKind.ACCESS: "access",
+            RequestKind.ABSENCE: "absence",
+            RequestKind.EQUIPMENT: "itsupport",
+        }[request.kind]
+        if (service is not None and service != expected_service) or (
+            idempotency_key is not None and idempotency_key != request.idempotency_key
+        ):
+            logger.warning("ignoring mismatched decision for %s", external_id)
             return None
         new_status = _CORP_TO_STATUS.get(status)
         if new_status is None or request.status is new_status:
@@ -458,12 +507,25 @@ class RequestService:
             await self._set_status(request, decided, RequestSource.WORKER, ticket.comment)
 
     async def mark_failed(self, request: ServiceRequest, reason: str) -> None:
-        if request.status is not RequestStatus.SUBMITTING:
+        if request.status not in OPEN_STATUSES:
             return
         request.decision_comment = reason
         await self._set_status(request, RequestStatus.FAILED, RequestSource.WORKER, reason)
 
     # ---- internals ---------------------------------------------------------------------------
+
+    async def _existing(
+        self,
+        actor: CurrentUser,
+        key: str,
+        kind: RequestKind,
+    ) -> ServiceRequest | None:
+        # Serialize duplicate checks and inserts per employee, including different keys/resources.
+        await self._uow.people.get(actor.id, for_update=True)
+        existing = await self._uow.requests.by_idempotency_key(key)
+        if existing is not None and (existing.user_id != actor.id or existing.kind is not kind):
+            raise ConflictError("Ключ идемпотентности уже использован для другой заявки")
+        return existing
 
     async def _create(
         self,
@@ -547,7 +609,9 @@ class RequestService:
         next_step: PlanItemView | None = None
         if request.plan_item_id is not None:
             await PlanService(self._uow).request_resolved(
-                request.plan_item_id, approved=new_status is RequestStatus.APPROVED
+                request.plan_item_id,
+                approved=new_status is RequestStatus.APPROVED,
+                request_id=request.id,
             )
             overview = await PlanService(self._uow).overview(request.user_id)
             next_step = overview.next_steps[0] if overview.next_steps else None
@@ -607,9 +671,8 @@ def _status_body(request: ServiceRequest) -> str:
             reason = request.decision_comment or "причина не указана"
             return f"Причина: {reason}. Орби поможет переписать обоснование и подать снова."
         case RequestStatus.FAILED:
-            return (
-                "Сервис не ответил после нескольких попыток. "
-                "Попробуй позже или напиши в IT-поддержку."
+            return (request.decision_comment or "Сервис не ответил после нескольких попыток.") + (
+                " Попробуй позже или напиши в IT-поддержку."
             )
         case _:
             return ""
@@ -628,16 +691,58 @@ async def submit_request(
         if request is None or request.status is not RequestStatus.SUBMITTING:
             return request.status if request else None
         user = await uow.people.get(request.user_id)
-        if user is None:
-            return None
         service = RequestService(uow, corp, access_sla_hours=settings.access_sla_hours)
+        if reason := await _submission_problem(uow, request, user):
+            await service.mark_failed(request, reason)
+            return request.status
+        assert user is not None  # noqa: S101 - checked by _submission_problem
         try:
             ticket = await _send(corp, request, user)
         except CorpRequestError as exc:
             await service.mark_failed(request, exc.detail)
             return request.status
+        if ticket.idempotency_key is not None and ticket.idempotency_key != request.idempotency_key:
+            await service.mark_failed(
+                request, "Сервис вернул результат другой заявки. Обратись в IT-поддержку."
+            )
+            return request.status
+        if await uow.requests.external_id_in_use(ticket.external_id):
+            previous = await uow.requests.by_external_id(ticket.external_id)
+            if previous is not None and previous.status in OPEN_STATUSES:
+                await service.mark_failed(
+                    previous,
+                    (
+                        "Корпоративный сервис повторно использовал номер заявки. "
+                        "Её результат больше нельзя надёжно сверить; обратись в IT-поддержку."
+                    ),
+                )
+            await service.mark_failed(
+                request,
+                (
+                    "Сервис повторно выдал номер существующей заявки. "
+                    "Состояния демо рассинхронизированы; нужен согласованный сброс обеих систем."
+                ),
+            )
+            return request.status
         await service.mark_submitted(request, ticket)
         return request.status
+
+
+async def _submission_problem(
+    uow: UnitOfWork, request: ServiceRequest, user: User | None
+) -> str | None:
+    if user is None or user.banned_at is not None:
+        return "Учётная запись недоступна: заявка не отправлена."
+    if request.kind is not RequestKind.ACCESS:
+        return None
+    resource = await uow.requests.resource_by_slug(request.payload["resource"])
+    if (
+        resource is None
+        or not resource_visible(to_resource(resource), role=user.role, team_id=user.team_id)
+        or AccessLevel(request.payload["level"]) not in allowed_levels(user.role)
+    ):
+        return "Права изменились: этот доступ больше недоступен. Уточни у наставника."
+    return None
 
 
 async def _send(corp: CorpServices, request: ServiceRequest, user: User) -> CorpTicket:
@@ -681,17 +786,89 @@ async def fail_request(
             await service.mark_failed(request, "Сервис недоступен: попытки отправки исчерпаны")
 
 
+async def deliver_control(
+    db: Database,
+    corp: CorpServices,
+    settings: Settings,
+    request_id: UUID,
+    *,
+    cancel: bool,
+    idempotency_key: str | None = None,
+) -> None:
+    async with db.unit_of_work() as uow:
+        request = await uow.requests.get(request_id, for_update=True)
+        if (
+            request is None
+            or request.status is not RequestStatus.SUBMITTED
+            or request.external_id is None
+        ):
+            return
+        current = await reconcile_ticket(corp, request)
+        service = RequestService(uow, corp, access_sla_hours=settings.access_sla_hours)
+        if current is not None and current.status in _CORP_TO_STATUS:
+            await service.apply_decision(
+                external_id=request.external_id,
+                status=current.status,
+                comment=current.comment,
+                source=RequestSource.WORKER,
+                idempotency_key=current.idempotency_key,
+            )
+            return
+        if not cancel:
+            await corp.access_remind(request.external_id, idempotency_key=idempotency_key)
+            return
+        ticket = await corp.cancel_request(request.external_id)
+        await service.apply_decision(
+            external_id=request.external_id,
+            status=ticket.status,
+            comment=ticket.comment,
+            source=RequestSource.WORKER,
+            idempotency_key=ticket.idempotency_key,
+        )
+
+
+async def fail_control(db: Database, request_id: UUID) -> None:
+    async with db.unit_of_work() as uow:
+        request = await uow.requests.get(request_id, for_update=True)
+        if request is None or request.status is not RequestStatus.SUBMITTED:
+            return
+        request.payload = {k: v for k, v in request.payload.items() if k != "cancel_requested"}
+        request.decision_comment = (
+            "Сервис не подтвердил отмену или напоминание. "
+            "Повтори позже или обратись в IT-поддержку."
+        )
+        await notify(
+            uow,
+            user_id=request.user_id,
+            kind=NotificationKind.REQUEST_UPDATED,
+            title="Не удалось передать действие корпоративному сервису",
+            body=(
+                "Отмена или напоминание не подтверждены. Повтори позже или обратись в IT-поддержку."
+            ),
+            link=f"/requests/{request.id}",
+        )
+
+
 async def reconcile_ticket(corp: CorpServices, request: ServiceRequest) -> CorpTicket | None:
     """Ask the service directly about a request whose webhook may have been lost."""
     if request.external_id is None:
         return None
     match request.kind:
         case RequestKind.ACCESS:
-            return await corp.access_get(request.external_id)
+            ticket = await corp.access_get(request.external_id)
         case RequestKind.ABSENCE:
-            return await corp.absence_get(request.external_id)
+            ticket = await corp.absence_get(request.external_id)
         case RequestKind.EQUIPMENT:
-            return await corp.it_ticket_get(request.external_id)
+            ticket = await corp.it_ticket_get(request.external_id)
+    if ticket.idempotency_key is not None and ticket.idempotency_key != request.idempotency_key:
+        raise CorpRequestError(
+            "Сервис вернул другую заявку после сброса демо. Обратись в IT-поддержку."
+        )
+    return ticket
+
+
+def _local_time(value: datetime) -> datetime:
+    return value.replace(tzinfo=LOCAL_TZ) if value.tzinfo is None else value.astimezone(LOCAL_TZ)
 
 
 def equipment_is_late(item: EquipmentItem, on: date) -> bool:

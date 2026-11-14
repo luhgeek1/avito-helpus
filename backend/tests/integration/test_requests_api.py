@@ -241,9 +241,12 @@ async def test_cancel_and_remind(
     )
 
     assert reminded.status_code == 200
+    assert corp.reminders == []  # no external side effect before outbox delivery
+    await run_outbox()
     assert corp.reminders == ["ACC-1042"]
     assert too_soon.json()["error_code"] == "REMIND_TOO_SOON"
-    assert cancelled.json()["status"] == "cancelled"
+    assert cancelled.json()["status"] == "submitted"
+    await run_outbox()
     listed = (await client.get("/api/v1/requests?status=cancelled", headers=anya.headers)).json()
     assert len(listed) == 1
 
@@ -281,6 +284,12 @@ async def test_absence_check_and_request(
     assert (await client.get("/api/v1/requests?kind=absence", headers=anya.headers)).json()[0][
         "status"
     ] == "submitted"
+    # Absence service has no reminder operation; do not falsely report a queued reminder.
+    reminder = await client.post(
+        f"/api/v1/requests/{created.json()['id']}/remind",
+        headers=anya.headers,
+    )
+    assert reminder.status_code == 409
 
 
 async def test_equipment_and_it_ticket(

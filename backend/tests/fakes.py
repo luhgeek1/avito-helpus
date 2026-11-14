@@ -83,11 +83,19 @@ class FakeCorpServices:
 
     async def access_get(self, external_id: str) -> CorpTicket:
         self._guard("access_get")
+        if external_id not in self.tickets:
+            raise CorpRequestError("unknown request")
         return self.tickets[external_id]
 
-    async def access_remind(self, external_id: str) -> None:
+    async def access_remind(self, external_id: str, *, idempotency_key: str | None = None) -> None:
         self._guard("access_remind")
         self.reminders.append(external_id)
+
+    async def cancel_request(self, external_id: str) -> CorpTicket:
+        self._guard("cancel_request")
+        if self.tickets[external_id].status is CorpTicketStatus.PENDING_APPROVAL:
+            self.decide(external_id, CorpTicketStatus.CANCELLED, "Отменено сотрудником")
+        return self.tickets[external_id]
 
     async def absence_balance(self, *, employee: str) -> int:
         self._guard("absence_balance")

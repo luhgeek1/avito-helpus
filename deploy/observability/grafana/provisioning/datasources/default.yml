@@ -1,0 +1,26 @@
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: orbi-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+  - name: Продуктовые события
+    uid: orbi-postgres
+    type: postgres
+    access: proxy
+    url: db:5432
+    user: orbi_grafana
+    secureJsonData:
+      password: $GRAFANA_DB_PASSWORD
+    jsonData:
+      database: buddy
+      sslmode: disable
+      postgresVersion: 1700
+      maxOpenConns: 3
+      maxIdleConns: 1
+      connMaxLifetime: 14400
+      timescaledb: false
+    editable: false

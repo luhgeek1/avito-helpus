@@ -11,6 +11,8 @@
 | Агент | Pydantic AI v2 (`Agent`, deferred tools, `FallbackModel`, `FunctionModel`, `Embedder`) |
 | LLM | OpenAI `gpt-5.4-mini` (диалог), `gpt-5.4` (сводки, противоречия), `text-embedding-3-large` (1024) |
 | Интеграции | MCP (streamable HTTP) к `corp-mock`, веб-хуки с HMAC |
+| Наблюдаемость | профиль observability: Prometheus API/воркера, Grafana, безопасные SQL-представления и отдельная роль |
+| Аналитический поток | профиль clickstream: Apache Kafka KRaft, порт AnalyticsPublisher, outbox, HMAC-envelope v1, дедупликация потребителя |
 | Хранилища | PostgreSQL 17 + pgvector, Redis 8 (pub/sub для SSE, лимиты) |
 | Фронтенд | Next.js 16, React 19, TanStack Query, Zustand, Zod (существующий портал) |
 | Тесты | pytest, pytest-asyncio, pytest-cov; настоящие Postgres и Redis из `docker-compose.test.yml` |
@@ -107,3 +109,11 @@ start → data-status("Думаю…") → [tool-input-available → data-status
   `FakeCorpServices` вместо MCP; отдельный тест MCP-адаптера против настоящего `corp-mock` в памяти.
 - eval: набор вопросов к базе знаний с ожидаемыми документами и закрытыми документами.
 - Покрытие: `make coverage` → Cobertura/LCOV бэкенда и фронтенда, общий процент — `make coverage-report`.
+
+## Наблюдаемость и Clickstream
+
+Командные решения для инфраструктурных рекомендаций кейса (§06), подробные критерии приёмки —
+[observability.md](observability.md). Базовый запуск без профилей сохраняется. Ни брокер, ни сборщики
+метрик не участвуют в бизнес-транзакциях. Подтверждения, агент, его промпты и корпоративные адаптеры
+не меняются. Источники/формулы сводки совпадают с `/analytics/summary?days=30`; ни дашборды, ни
+экспорт не раскрывают id сотрудников или свободный текст. Метрики ограничены фиксированными labels.

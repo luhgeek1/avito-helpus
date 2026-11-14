@@ -2,7 +2,16 @@ from collections.abc import Sequence
 from datetime import date
 from typing import Any, Protocol
 
+from app.domain.clickstream import AnalyticsEnvelope
 from app.domain.corp import AccessGrant, CorpEvent, CorpTicket, EquipmentItem
+
+
+class AnalyticsPublisher(Protocol):
+    """Deliver an immutable envelope; retries keep its original event_id."""
+
+    async def publish(self, event: AnalyticsEnvelope) -> None: ...
+
+    async def close(self) -> None: ...
 
 
 class CorpServices(Protocol):
@@ -27,7 +36,11 @@ class CorpServices(Protocol):
 
     async def access_get(self, external_id: str) -> CorpTicket: ...
 
-    async def access_remind(self, external_id: str) -> None: ...
+    async def access_remind(
+        self, external_id: str, *, idempotency_key: str | None = None
+    ) -> None: ...
+
+    async def cancel_request(self, external_id: str) -> CorpTicket: ...
 
     async def absence_balance(self, *, employee: str) -> int: ...
 

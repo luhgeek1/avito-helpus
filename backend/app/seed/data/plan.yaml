@@ -113,7 +113,7 @@ items:
     title: "Изучи документацию по работе с базами данных"
     description: "Как мы проектируем схемы и пишем миграции."
     category: learning
-    doc_slugs: [tools-overview]
+    doc_slugs: [database-guide]
   - slug: first-pr
     stage: week_2
     title: "Сделай первый PR и пройди ревью"

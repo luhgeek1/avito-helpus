@@ -139,12 +139,20 @@ class PlanService:
         )
         await self._uow.flush()
 
-    async def request_resolved(self, item_id: UUID, *, approved: bool) -> PlanItemView | None:
+    async def request_resolved(
+        self,
+        item_id: UUID,
+        *,
+        approved: bool,
+        request_id: UUID | None = None,
+    ) -> PlanItemView | None:
         """A linked request finished: approval closes the step, anything else reopens it."""
         row = await self._uow.plan.get(item_id, for_update=True)
         if row is None:
             return None
         item, template = row
+        if request_id is not None and item.request_id != request_id:
+            return to_plan_item(item, template)
         if (
             item.status is not ItemStatus.WAITING
             or item.waiting_reason is not WaitingReason.REQUEST

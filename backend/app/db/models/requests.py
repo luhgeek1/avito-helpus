@@ -67,7 +67,7 @@ class ServiceRequest(UuidPkMixin, TimestampMixin, Base):
     plan_item_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("plan_items.id", ondelete="SET NULL")
     )
-    idempotency_key: Mapped[str] = mapped_column(String(128), unique=True)
+    idempotency_key: Mapped[str] = mapped_column(String(256), unique=True)
     sla_due_at: Mapped[datetime | None]
     last_reminded_at: Mapped[datetime | None]
     resolved_at: Mapped[datetime | None]

@@ -1,7 +1,9 @@
 import asyncio
+import os
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+from cryptography.hazmat.primitives import serialization
 from httpx import AsyncClient
 from redis.asyncio import Redis
 from sqlalchemy import func, select
@@ -70,6 +72,16 @@ async def test_demo_reset(
 
 async def test_seed_is_idempotent(db: Database) -> None:
     assert await seed(db) == {}
+
+
+async def test_flag_variant_length_is_validated(client: AsyncClient, admin: Account) -> None:
+    response = await client.put(
+        "/api/v1/admin/flags/proactive_nudges",
+        headers=admin.headers,
+        json={"enabled": True, "rollout_percent": 50, "variants": ["x" * 33]},
+    )
+    assert response.status_code == 422
+    assert response.json()["error_code"] == "REQUEST_VALIDATION_ERROR"
 
 
 async def test_notifications(client: AsyncClient, anya: Account) -> None:
@@ -218,4 +230,12 @@ async def test_llm_conflict_detection(db: Database) -> None:
 def test_generate_keys_once(tmp_path: Path) -> None:
     assert "generated" in generate_keys(tmp_path)
     assert "already exist" in generate_keys(tmp_path)
-    assert (tmp_path / "jwt_private_key.pem").stat().st_mode & 0o777 == 0o600
+    if os.name == "posix":
+        assert (tmp_path / "jwt_private_key.pem").stat().st_mode & 0o777 == 0o600
+    # On Windows verify the usable pair and preservation; NTFS has no POSIX permission bits.
+    private_bytes = (tmp_path / "jwt_private_key.pem").read_bytes()
+    private = serialization.load_pem_private_key(private_bytes, password=None)
+    public = serialization.load_pem_public_key((tmp_path / "jwt_public_key.pem").read_bytes())
+    assert private.public_key().public_numbers() == public.public_numbers()
+    generate_keys(tmp_path)
+    assert (tmp_path / "jwt_private_key.pem").read_bytes() == private_bytes

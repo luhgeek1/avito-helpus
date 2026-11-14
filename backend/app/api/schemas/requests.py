@@ -1,10 +1,10 @@
-from datetime import date, datetime
+from datetime import date
 from typing import Any, Self
 from uuid import UUID
 
 from pydantic import Field
 
-from app.api.schemas.base import RequestModel, ResponseModel
+from app.api.schemas.base import MoscowDateTime, RequestModel, ResponseModel
 from app.domain.absence import AbsenceCheck, AbsenceType
 from app.domain.corp import EquipmentStatus
 from app.domain.requests import (
@@ -22,7 +22,7 @@ class RequestEventOut(ResponseModel):
     status: RequestStatus
     source: RequestSource
     note: str | None
-    created_at: datetime
+    created_at: MoscowDateTime
 
 
 class RequestOut(ResponseModel):
@@ -36,9 +36,9 @@ class RequestOut(ResponseModel):
     approver: str | None
     decision_comment: str | None
     plan_item_id: UUID | None
-    sla_due_at: datetime | None
-    created_at: datetime
-    updated_at: datetime
+    sla_due_at: MoscowDateTime | None
+    created_at: MoscowDateTime
+    updated_at: MoscowDateTime
     history: list[RequestEventOut]
 
     @classmethod
@@ -120,7 +120,7 @@ class AbsenceCreateIn(AbsenceIn):
 
 class CalendarConflictOut(ResponseModel):
     title: str
-    starts_at: datetime
+    starts_at: MoscowDateTime
 
 
 class AbsenceCheckOut(ResponseModel):

@@ -42,7 +42,12 @@ _ALLOWED: Mapping[RequestStatus, frozenset[RequestStatus]] = {
         {RequestStatus.SUBMITTED, RequestStatus.FAILED, RequestStatus.CANCELLED}
     ),
     RequestStatus.SUBMITTED: frozenset(
-        {RequestStatus.APPROVED, RequestStatus.REJECTED, RequestStatus.CANCELLED}
+        {
+            RequestStatus.APPROVED,
+            RequestStatus.REJECTED,
+            RequestStatus.CANCELLED,
+            RequestStatus.FAILED,
+        }
     ),
 }
 

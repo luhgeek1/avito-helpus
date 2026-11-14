@@ -1,4 +1,16 @@
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, PlainSerializer
+
+from app.core.clock import LOCAL_TZ
+
+
+def _moscow_datetime(value: datetime) -> datetime:
+    return value.replace(tzinfo=LOCAL_TZ) if value.tzinfo is None else value.astimezone(LOCAL_TZ)
+
+
+MoscowDateTime = Annotated[datetime, PlainSerializer(_moscow_datetime, when_used="json")]
 
 
 class RequestModel(BaseModel):

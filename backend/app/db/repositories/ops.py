@@ -1,20 +1,24 @@
 from collections.abc import Sequence
 from datetime import datetime
 from typing import Any
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from sqlalchemy import Float, cast, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.clock import utcnow
 from app.db.models import (
     AnalyticsEventRow,
     AuditLog,
     Escalation,
     FeatureFlagRow,
+    OutboxEvent,
     PlanItem,
     ServiceRequest,
 )
+from app.domain.clickstream import envelope
 from app.domain.escalations import EscalationStatus
+from app.domain.events import Topic
 from app.domain.plan import ItemStatus
 from app.domain.requests import RequestKind, RequestStatus
 
@@ -22,8 +26,9 @@ from app.domain.requests import RequestKind, RequestStatus
 class OpsRepository:
     """Analytics, audit and feature flags: write-mostly tables for operating the product."""
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, *, export_key: bytes | None = None) -> None:
         self._session = session
+        self._export_key = export_key
 
     def track(
         self,
@@ -33,11 +38,25 @@ class OpsRepository:
         properties: dict[str, Any] | None = None,
         variant: str | None = None,
     ) -> None:
-        self._session.add(
-            AnalyticsEventRow(
-                user_id=user_id, name=name, properties=properties or {}, variant=variant
-            )
+        event = AnalyticsEventRow(
+            id=uuid4(),
+            created_at=utcnow(),
+            user_id=user_id,
+            name=name,
+            properties=properties or {},
+            variant=variant,
         )
+        self._session.add(event)
+        if self._export_key is not None:
+            wire_event = envelope(
+                event_id=event.id,
+                name=name,
+                occurred_at=event.created_at,
+                user_id=user_id,
+                properties=event.properties,
+                secret=self._export_key,
+            )
+            self._session.add(OutboxEvent(topic=Topic.ANALYTICS_PUBLISH, payload=dict(wire_event)))
 
     def audit(
         self,

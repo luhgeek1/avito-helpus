@@ -4,7 +4,7 @@ from uuid import UUID
 from app.core.clock import today
 from app.db.models import User
 from app.db.uow import UnitOfWork
-from app.domain.escalations import EscalationView
+from app.domain.escalations import EscalationKind, EscalationView
 from app.domain.plan import (
     STAGE_TITLES,
     Audience,
@@ -15,7 +15,7 @@ from app.domain.plan import (
     build_overview,
 )
 from app.domain.requests import RequestView
-from app.domain.users import CurrentUser, Person
+from app.domain.users import CurrentUser, Person, Role
 from app.service.mappers import to_escalation, to_person, to_plan_item, to_request
 from app.service.people import PeopleService
 
@@ -60,14 +60,18 @@ class MentorService:
 
     async def mentees(self, actor: CurrentUser) -> list[MenteeSummary]:
         interns = list(await self._uow.people.interns_visible_to(actor.id, actor.role))
-        return [summary for summary, _ in await self._summaries(interns)]
+        return [summary for summary, _ in await self._summaries(interns, actor)]
 
     async def mentee(self, actor: CurrentUser, mentee_id: UUID) -> MenteeDetail:
         user, _ = await PeopleService(self._uow).member(actor, mentee_id)
-        ((summary, plan),) = await self._summaries([user])
+        ((summary, plan),) = await self._summaries([user], actor)
         rows = await self._uow.requests.for_user(user.id)
         events = await self._uow.requests.events([r.id for r in rows])
-        questions = await self._uow.escalations.asked_by(user.id)
+        questions = [
+            q
+            for q in await self._uow.escalations.asked_by(user.id)
+            if _question_visible(q.kind, q.user_id, q.assignee_id, actor)
+        ]
         people = await self._uow.people.get_many(
             [q.user_id for q in questions]
             + [q.assignee_id for q in questions]
@@ -80,11 +84,17 @@ class MentorService:
             questions=[to_escalation(q, people) for q in questions],
         )
 
-    async def _summaries(self, interns: list[User]) -> list[tuple[MenteeSummary, PlanOverview]]:
+    async def _summaries(
+        self, interns: list[User], actor: CurrentUser
+    ) -> list[tuple[MenteeSummary, PlanOverview]]:
         ids = [u.id for u in interns]
         rows = await self._uow.plan.items_for_users(ids)
         requests = await self._uow.requests.open_for_users(ids)
-        questions = await self._uow.escalations.open_for_users(ids)
+        questions = [
+            q
+            for q in await self._uow.escalations.open_for_users(ids)
+            if _question_visible(q.kind, q.user_id, q.assignee_id, actor)
+        ]
         teams = await self._uow.people.teams([u.team_id for u in interns])
         people = await self._uow.people.get_many(
             [u.mentor_id for u in interns]
@@ -126,3 +136,13 @@ class MentorService:
             )
             result.append((summary, plan))
         return result
+
+
+def _question_visible(
+    kind: EscalationKind, user_id: UUID, assignee_id: UUID, actor: CurrentUser
+) -> bool:
+    return (
+        kind is not EscalationKind.SENSITIVE
+        or actor.role is Role.ADMIN
+        or actor.id in {user_id, assignee_id}
+    )

@@ -38,6 +38,7 @@ class CorpTicket:
     comment: str | None = None
     sla_hours: float | None = None
     approver: str | None = None
+    idempotency_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

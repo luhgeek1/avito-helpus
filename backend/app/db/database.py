@@ -23,10 +23,13 @@ class DatabaseSettings(Protocol):
     def db_pool_size(self) -> int: ...
     @property
     def db_max_overflow(self) -> int: ...
+    @property
+    def analytics_export_key(self) -> bytes | None: ...
 
 
 class Database:
     def __init__(self, settings: DatabaseSettings) -> None:
+        self._export_key = settings.analytics_export_key
         self.engine: AsyncEngine = create_async_engine(
             settings.database_url,
             echo=settings.sql_echo,
@@ -41,7 +44,7 @@ class Database:
         """Commit on success, roll back on any error (unless the error says to keep changes)."""
         async with self._sessions() as session:
             try:
-                yield UnitOfWork(session)
+                yield UnitOfWork(session, export_key=self._export_key)
             except DomainError as exc:
                 if exc.keep_changes:
                     await session.commit()

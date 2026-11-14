@@ -19,7 +19,13 @@ from app.domain.escalations import (
     next_assignment,
 )
 from app.domain.events import AnalyticsEvent, AuditAction, NotificationKind, RealtimeEvent
-from app.domain.knowledge import ConflictNotFoundError, ConflictStatus, DocKind, DocScope
+from app.domain.knowledge import (
+    ConflictNotFoundError,
+    ConflictStatus,
+    DocKind,
+    DocScope,
+    doc_visible,
+)
 from app.domain.users import CurrentUser, Permission, Role, UserNotFoundError
 from app.service.knowledge import KnowledgeService
 from app.service.mappers import to_escalation
@@ -97,6 +103,15 @@ class EscalationService:
         company, team = rows.get(conflict.company_chunk_id), rows.get(conflict.team_chunk_id)
         if company is None or team is None or team.document.team_id != actor.team_id:
             raise ConflictNotFoundError()
+        for row in (company, team):
+            if not doc_visible(
+                scope=row.document.scope,
+                team_id=row.document.team_id,
+                roles=row.document.roles,
+                viewer_role=actor.role,
+                viewer_team_id=actor.team_id,
+            ):
+                raise ConflictNotFoundError()
         conflict.status = ConflictStatus.REPORTED
         question = note or (
             f"Общая инструкция и инструкция команды расходятся ({conflict.summary}). Как правильно?"
