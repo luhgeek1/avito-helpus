@@ -26,7 +26,7 @@ export function SearchPage() {
         </p>
       </div>
       <div className="flex max-w-205 flex-col gap-1">
-        {isFetching && !data && <Skeleton height={200} />}
+        {isFetching && !data && <Skeleton className="h-50" />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {data?.length === 0 && <EmptyState>Ничего не нашлось. Попробуйте другой запрос</EmptyState>}
         {data?.map((result) => (

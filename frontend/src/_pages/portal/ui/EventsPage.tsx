@@ -45,7 +45,7 @@ function RegisterButton({ event, size = 'm', className }: { event: CompanyEvent;
 function FeaturedEvents() {
   const { data, isPending } = useEvents({})
   const featured = data?.filter((event) => event.featured) ?? []
-  if (isPending) return <Skeleton height={300} />
+  if (isPending) return <Skeleton className="h-75" />
   if (!featured.length) return null
   return (
     <section aria-label="Интересное">
@@ -200,7 +200,7 @@ export function EventsPage() {
 
       <section aria-label="Ближайшие события" aria-busy={isFetching}>
         <h2 className={sectionTitle}>Ближайшие события</h2>
-        {isPending && <Skeleton height={300} />}
+        {isPending && <Skeleton className="h-75" />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {data && data.length === 0 && <EmptyState>Ничего не нашли — попробуйте изменить фильтры</EmptyState>}
         <div className="flex flex-col">

@@ -49,7 +49,7 @@ function HeroCarousel() {
   const [index, setIndex] = useState(0)
   const count = data?.length ?? 0
 
-  if (isPending) return <Skeleton height={240} radius={24} />
+  if (isPending) return <Skeleton className="h-60 rounded-3xl" />
   if (isError) return <ErrorState onRetry={() => refetch()} />
   if (!count) return null
 
@@ -175,7 +175,7 @@ function QuickActions() {
           </span>
         </button>
       </div>
-      {isPending && <Skeleton height={88} />}
+      {isPending && <Skeleton className="h-22" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       <div
         className={cx(
@@ -203,7 +203,7 @@ function Birthdays() {
       <div className={panelHead}>
         <h3 className={heading.h3}>Дни рождения</h3>
       </div>
-      {isPending && <Skeleton height={88} />}
+      {isPending && <Skeleton className="h-22" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       <div className="flex justify-between gap-2">
         {data?.map(({ person, date }) => (
@@ -231,7 +231,7 @@ function Services() {
   return (
     <section aria-label="Сервисы">
       <SectionHead title="Сервисы" href="/services" linkText="Все сервисы" />
-      {isPending && <Skeleton height={212} radius={24} />}
+      {isPending && <Skeleton className="h-53 rounded-3xl" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {data && (
         <div className="grid grid-cols-[minmax(0,1fr)_368px] items-stretch gap-4 hub-max-1100:grid-cols-1">
@@ -305,7 +305,7 @@ function Plus() {
   return (
     <section aria-label="Плюсы">
       <SectionHead title="Плюсы" href="/benefits/savings" linkText="Подробнее о Плюсах" />
-      {isPending && <Skeleton height={336} radius={24} />}
+      {isPending && <Skeleton className="h-84 rounded-3xl" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       <div className="grid grid-cols-12 gap-4">
         {data?.map((category) => (
@@ -337,7 +337,7 @@ function Feed() {
       <SectionHead title="Это что-то новенькое" href="/feed" linkText="Перейти в ленту" />
       <div className={withAside}>
         <div>
-          {isPending && <Skeleton height={360} />}
+          {isPending && <Skeleton className="h-90" />}
           {isError && <ErrorState onRetry={() => refetch()} />}
           <div className={postGridClass}>
             {data?.slice(0, 6).map((post) => <PostCard key={post.id} post={post} />)}

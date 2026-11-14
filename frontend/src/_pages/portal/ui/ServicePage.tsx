@@ -20,7 +20,7 @@ export function ServicePage() {
   return (
     <div className={container}>
       <BackButton />
-      {isPending && <Skeleton height={300} radius={24} />}
+      {isPending && <Skeleton className="h-75 rounded-3xl" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {data && (
         <section className="relative flex min-h-75 flex-col items-start gap-3 overflow-hidden rounded-3xl bg-fill p-10 hub-max-720:p-6">

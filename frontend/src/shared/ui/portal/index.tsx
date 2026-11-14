@@ -57,25 +57,24 @@ export function Avatar({ firstName, lastName, palette, size = 40, className }: A
 type CoverProps = {
   illustration: IllustrationName
   palette: Palette
-  ratio?: string
   badge?: ReactNode
+  /** Square by default; pass an aspect-* utility (e.g. aspect-video) to change the ratio. */
   className?: string
 }
 
 /** Обложка карточки: светлый фон палитры и крупная иллюстрация на 84 % высоты, как фото товара на Авито. */
-export function Cover({ illustration, palette, ratio = '1 / 1', badge, className }: CoverProps) {
+export function Cover({ illustration, palette, badge, className }: CoverProps) {
   return (
     <div className={cx(
-        'relative flex items-center justify-center overflow-hidden rounded-2xl bg-tone-soft',
+        'relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-tone-soft',
         paletteClass[palette],
         className,
-      )}
-       style={{ aspectRatio: ratio }}>
+      )}>
       <Illustration
         name={illustration}
         size={480}
         // With a badge the art drops lower so the top-left label never covers it.
-        style={badge ? { height: '78%', width: 'auto', marginTop: '18%' } : { height: '84%', width: 'auto' }}
+        className={badge ? 'mt-[18%] h-[78%] w-auto' : 'h-[84%] w-auto'}
       />
       {badge && <span className="absolute top-2.5 left-2.5 inline-flex h-6 items-center gap-1.5 rounded-md bg-black/44 px-2 text-13 leading-4 text-white">{badge}</span>}
     </div>
@@ -100,10 +99,11 @@ export function SectionHead({ title, href, linkText }: { title: ReactNode; href?
 
 /* ---------- Состояния ---------- */
 
-export function Skeleton({ height, width = '100%', radius }: { height: number; width?: number | string; radius?: number }) {
+/** Loading placeholder: full width and 16px corners by default; size it with h-*, w-* and rounded-* utilities. */
+export function Skeleton({ className }: { className: string }) {
   return <div
-      className="animate-hub-ui-shimmer rounded-2xl bg-[linear-gradient(90deg,#f2f2f2_0%,#f9f9f9_50%,#f2f2f2_100%)] bg-size-[200%_100%]"
-      style={{ height, width, borderRadius: radius }} aria-hidden />
+      className={cx('w-full animate-hub-ui-shimmer rounded-2xl bg-[linear-gradient(90deg,#f2f2f2_0%,#f9f9f9_50%,#f2f2f2_100%)] bg-size-[200%_100%]', className)}
+      aria-hidden />
 }
 
 export function ErrorState({ message, onRetry }: { message?: string; onRetry?: () => void }) {

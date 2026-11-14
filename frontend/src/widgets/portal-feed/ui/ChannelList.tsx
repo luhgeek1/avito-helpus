@@ -32,7 +32,7 @@ export function ChannelList({ title = 'Будь в курсе' }: { title?: stri
   return (
     <aside className="rounded-3xl bg-fill p-5" aria-label={title}>
       <h3 className={cx(heading.h3, 'mb-3')}>{title}</h3>
-      {isPending && <Skeleton height={180} />}
+      {isPending && <Skeleton className="h-45" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {data?.map((channel) => (
         <div key={channel.id} className="flex items-center gap-3 py-2">

@@ -37,7 +37,7 @@ export function ServicesPage() {
         <p className={subtitle}>Документы, офис, развитие и забота — всё, что нужно для работы</p>
       </div>
       <div>
-        {isPending && <Skeleton height={400} />}
+        {isPending && <Skeleton className="h-100" />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {groups.map(([category, services]) => (
           <section key={category} className="not-first:mt-8" aria-label={category}>

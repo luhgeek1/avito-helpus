@@ -171,7 +171,7 @@ export function CalendarWidget() {
         <div className="mb-2 text-center text-13 font-bold">
           {formatDayMonth(date.toISOString())}, {formatWeekday(date)}
         </div>
-        {isPending && <Skeleton height={120} />}
+        {isPending && <Skeleton className="h-30" />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {data?.map((item) => (
           <div
@@ -425,7 +425,7 @@ export function ProfilePage({ personId }: { personId: string }) {
 
   return (
     <div className={container}>
-      {query.isPending && <Skeleton height={480} />}
+      {query.isPending && <Skeleton className="h-120" />}
       {query.isError && <ErrorState onRetry={() => query.refetch()} />}
       {person && (
         <div className="grid grid-cols-[320px_minmax(0,1fr)] items-start gap-10 hub-max-900:grid-cols-1">

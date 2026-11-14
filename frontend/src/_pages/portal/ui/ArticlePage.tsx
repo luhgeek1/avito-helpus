@@ -110,13 +110,13 @@ export function ArticlePage() {
           </>
         )}
       </nav>
-      {isPending && <Skeleton height={520} radius={24} />}
+      {isPending && <Skeleton className="h-130 rounded-3xl" />}
       {isError && <ErrorState onRetry={() => refetch()} />}
       {post && (
         <div className="grid grid-cols-[minmax(0,1fr)_380px] items-start gap-12 hub-max-900:grid-cols-1 hub-max-900:gap-8">
           <article>
             <h1 className={cx(heading.h1, 'mb-5')}>{post.title}</h1>
-            <Cover illustration={post.illustration} palette={post.palette} ratio="16 / 9" className="mb-6 rounded-3xl" />
+            <Cover illustration={post.illustration} palette={post.palette} className="mb-6 aspect-video rounded-3xl" />
             {post.summary && <Summary text={post.summary} />}
             <h2 className={cx(heading.h2, 'mb-3')}>Описание</h2>
             <div className="flex flex-col gap-3.5 text-16 leading-6">

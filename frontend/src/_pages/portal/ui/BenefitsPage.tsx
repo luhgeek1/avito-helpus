@@ -21,7 +21,7 @@ export function BenefitsPage() {
     <div className={cx(container, page)}>
       <div>
         <BackButton />
-        {isPending && <Skeleton height={38} width={320} />}
+        {isPending && <Skeleton className="h-9.5 w-80" />}
         {isError && <ErrorState onRetry={() => refetch()} />}
         {data && (
           <>

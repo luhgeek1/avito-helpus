@@ -33,7 +33,7 @@ export function FeedPage() {
               </Chip>
             ))}
           </div>
-          {isPending && <Skeleton height={360} />}
+          {isPending && <Skeleton className="h-90" />}
           {isError && <ErrorState onRetry={() => refetch()} />}
           {data?.length === 0 && <EmptyState>В этом канале пока нет постов</EmptyState>}
           <div className={postGridClass}>
