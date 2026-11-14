@@ -16,7 +16,8 @@
   `deploy/smoke.sh` проходит флагманский сценарий.
 - **Качество**: 179 тестов бэкенда, покрытие строк 95%, ruff и mypy --strict чистые.
 - **Документы**: README для жюри, ARCHITECTURE, DECISIONS D-001…D-009, SpecKit-спецификации и CJM.
-- **Фронтенд**: портал «Хаб» и спутник Орби на моках, деплой на `avito.prooood.ru`.
+- **Фронтенд**: портал «Хаб» и спутник Орби на моках.
+- **Деплой**: весь стек (портал, API, воркер, corp-mock, Postgres, Redis) на `avito.prooood.ru`, автодеплой из `main`, см. [deploy/home/README.md](../deploy/home/README.md) и D-012.
 
 ## В работе / дальше
 

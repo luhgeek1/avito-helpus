@@ -1,0 +1,175 @@
+# Orbi on the home server (Coolify Service, raw compose). Public: https://avito.prooood.ru
+# `web` is the public service (nginx edge on 3000: the domain was created for it by sara-onboard);
+# `site` is the Next.js portal. Images are built by .github/workflows/deploy-home.yml.
+x-backend: &backend
+  image: ghcr.io/luhgeek1/avito-api:${IMAGE_TAG:-latest}
+  restart: unless-stopped
+  security_opt:
+    - no-new-privileges:true
+  environment: &backend-env
+    APP_STAGE: prod
+    LOG_LEVEL: INFO
+    DATABASE_URL: postgresql+asyncpg://postgres:${SERVICE_PASSWORD_POSTGRES}@db:5432/buddy
+    REDIS_URL: redis://redis:6379/0
+    JWT_PRIVATE_KEY_PATH: /app/secrets/jwt_private_key.pem
+    JWT_PUBLIC_KEY_PATH: /app/secrets/jwt_public_key.pem
+    COOKIE_SECURE: "true"
+    CSRF_HMAC_KEY: ${SERVICE_PASSWORD_64_CSRF}
+    CORP_MCP_URL: http://corp-mock:8090/mcp
+    CORP_WEBHOOK_SECRET: ${SERVICE_PASSWORD_64_WEBHOOK}
+    LLM_MODE: ${LLM_MODE:-auto}
+    LLM_API_KEY: ${LLM_API_KEY:-}
+    LLM_BASE_URL: ${LLM_BASE_URL:-}
+    LLM_MODEL: ${LLM_MODEL:-gpt-5.4-mini}
+    LLM_REASONING_EFFORT: ${LLM_REASONING_EFFORT:-none}
+    LLM_HEAVY_MODEL: ${LLM_HEAVY_MODEL:-gpt-5.4}
+    EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-text-embedding-3-large}
+    ACCESS_SLA_HOURS: ${ACCESS_SLA_HOURS:-24}
+    ESCALATION_SLA_HOURS: ${ESCALATION_SLA_HOURS:-24}
+    SCHEDULER_INTERVAL_SEC: ${SCHEDULER_INTERVAL_SEC:-15}
+  volumes:
+    - jwt_keys:/app/secrets
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.1-pg17
+    restart: unless-stopped
+    mem_limit: 320m
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      POSTGRES_DB: buddy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d buddy"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    mem_limit: 64m
+    command: ["redis-server", "--maxmemory", "48mb", "--maxmemory-policy", "allkeys-lru", "--save", ""]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    <<: *backend
+    mem_limit: 256m
+    # JWT keys (first run only), schema, then the demo company (idempotent).
+    command: ["sh", "-c", "python -m app.cli keys --dir /app/secrets && alembic upgrade head && python -m app.cli seed"]
+    restart: "no"
+    exclude_from_hc: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    <<: *backend
+    mem_limit: 384m
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      corp-mock:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  worker:
+    <<: *backend
+    mem_limit: 256m
+    command: ["python", "-m", "app.worker"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      corp-mock:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  corp-mock:
+    image: ghcr.io/luhgeek1/avito-corpmock:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 128m
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MOCK_APPROVAL_DELAY_SEC: ${MOCK_APPROVAL_DELAY_SEC:-20}
+      BUDDY_WEBHOOK_URL: http://api:8080/api/v1/integrations/corp/webhook
+      CORP_WEBHOOK_SECRET: ${SERVICE_PASSWORD_64_WEBHOOK}
+
+  site:
+    image: ghcr.io/luhgeek1/avito-web:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 256m
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/healthz').then(async r => { if (!r.ok || (await r.json()).status !== 'ok') process.exit(1); }).catch(() => process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  web:
+    image: ghcr.io/luhgeek1/avito-edge:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 48m
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - SERVICE_FQDN_WEB_3000
+    depends_on:
+      api:
+        condition: service_healthy
+      site:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/edge-health >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Daily pg_dump into /srv/projects/avito/backups on the server.
+  db-backup:
+    image: prodrigestivill/postgres-backup-local:17-alpine
+    restart: unless-stopped
+    mem_limit: 64m
+    exclude_from_hc: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: buddy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 3
+    volumes:
+      - /srv/projects/avito/backups:/backups
+    healthcheck:
+      disable: true
+
+volumes:
+  postgres_data:
+  jwt_keys:
