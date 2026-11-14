@@ -1,0 +1,154 @@
+{
+  "base_url": "http://127.0.0.1:62950",
+  "users": 20,
+  "accounts": 10,
+  "active_accounts": 3,
+  "duration_requested_sec": 60.0,
+  "duration_actual_sec": 60.03,
+  "seed": 2026,
+  "latency": "full response including SSE; milliseconds; nearest rank",
+  "operations": {
+    "GET /knowledge/search": {
+      "n": 2709,
+      "successful": 2709,
+      "codes": {
+        "200": 2709
+      },
+      "rate_limited": 0,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 74.9,
+        "p95": 140.02,
+        "p99": 205.72,
+        "max": 367.7458999445662
+      },
+      "all_ms": {
+        "p50": 74.9,
+        "p95": 140.02,
+        "p99": 205.72,
+        "max": 367.7458999445662
+      }
+    },
+    "GET /me": {
+      "n": 2587,
+      "successful": 2587,
+      "codes": {
+        "200": 2587
+      },
+      "rate_limited": 0,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 78.17,
+        "p95": 120.53,
+        "p99": 179.02,
+        "max": 349.0446999203414
+      },
+      "all_ms": {
+        "p50": 78.17,
+        "p95": 120.53,
+        "p99": 179.02,
+        "max": 349.0446999203414
+      }
+    },
+    "GET /notifications": {
+      "n": 2601,
+      "successful": 2601,
+      "codes": {
+        "200": 2601
+      },
+      "rate_limited": 0,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 52.69,
+        "p95": 88.26,
+        "p99": 138.11,
+        "max": 316.13809999544173
+      },
+      "all_ms": {
+        "p50": 52.69,
+        "p95": 88.26,
+        "p99": 138.11,
+        "max": 316.13809999544173
+      }
+    },
+    "GET /plan": {
+      "n": 2595,
+      "successful": 2595,
+      "codes": {
+        "200": 2595
+      },
+      "rate_limited": 0,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 60.39,
+        "p95": 97.66,
+        "p99": 145.35,
+        "max": 320.3322000335902
+      },
+      "all_ms": {
+        "p50": 60.39,
+        "p95": 97.66,
+        "p99": 145.35,
+        "max": 320.3322000335902
+      }
+    },
+    "GET /requests": {
+      "n": 2597,
+      "successful": 2597,
+      "codes": {
+        "200": 2597
+      },
+      "rate_limited": 0,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 67.13,
+        "p95": 114.22,
+        "p99": 165.28,
+        "max": 328.4775000065565
+      },
+      "all_ms": {
+        "p50": 67.13,
+        "p95": 114.22,
+        "p99": 165.28,
+        "max": 328.4775000065565
+      }
+    },
+    "POST chat message": {
+      "n": 2622,
+      "successful": 120,
+      "codes": {
+        "200": 120,
+        "429": 2502
+      },
+      "rate_limited": 2502,
+      "error_types": {},
+      "errors": 0,
+      "success_ms": {
+        "p50": 629.35,
+        "p95": 813.17,
+        "p99": 868.06,
+        "max": 905.1168999867514
+      },
+      "all_ms": {
+        "p50": 63.16,
+        "p95": 193.03,
+        "p99": 728.53,
+        "max": 905.1168999867514
+      }
+    }
+  },
+  "conditions": {
+    "date": "2026-11-14",
+    "host": "Windows, Python 3.13.7",
+    "server": "single local Uvicorn, direct HTTP, no nginx or Docker rebuild",
+    "database": "real PostgreSQL 5439 and Redis 6380, synthetic seeded test data",
+    "assistant": "offline model, no LLM provider; FakeCorpServices for integrations",
+    "client": "deploy/loadtest.py, standard library, persistent per-thread connections",
+    "comparison": "different topology from the team reference; not evidence of a backend speedup"
+  }
+}

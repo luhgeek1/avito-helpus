@@ -641,7 +641,7 @@
         "tags": [
           "Requests"
         ],
-        "summary": "Remind the approver (once a day)",
+        "summary": "Remind the access approver (once a day)",
         "operationId": "remind_api_v1_requests__request_id__remind_post",
         "security": [
           {
@@ -2060,6 +2060,80 @@
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
                 }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "description": "Decision pushed by a corporate service (signed with HMAC, see X-Corp-Signature).",
+                "properties": {
+                  "event": {
+                    "const": "request.status_changed",
+                    "title": "Event",
+                    "type": "string"
+                  },
+                  "service": {
+                    "enum": [
+                      "access",
+                      "absence",
+                      "itsupport"
+                    ],
+                    "title": "Service",
+                    "type": "string"
+                  },
+                  "request_id": {
+                    "maxLength": 64,
+                    "title": "Request Id",
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "approved",
+                      "rejected",
+                      "cancelled",
+                      "pending_approval"
+                    ],
+                    "title": "Status",
+                    "type": "string"
+                  },
+                  "comment": {
+                    "anyOf": [
+                      {
+                        "maxLength": 2000,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Comment"
+                  },
+                  "idempotency_key": {
+                    "anyOf": [
+                      {
+                        "maxLength": 256,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Idempotency Key"
+                  }
+                },
+                "required": [
+                  "event",
+                  "service",
+                  "request_id",
+                  "status"
+                ],
+                "title": "CorpWebhookIn",
+                "type": "object"
               }
             }
           }
@@ -3484,7 +3558,9 @@
           },
           "variants": {
             "items": {
-              "type": "string"
+              "type": "string",
+              "maxLength": 32,
+              "minLength": 1
             },
             "type": "array",
             "maxItems": 4,
@@ -5022,7 +5098,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 1000
+                "maxLength": 500
               },
               {
                 "type": "null"
