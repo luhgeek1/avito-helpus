@@ -170,8 +170,17 @@ async def update_plan_step(
 # ---- knowledge ---------------------------------------------------------------------------------
 
 
+def _relevance(deps: AgentDeps, query: str, text: str) -> float:
+    """The model may rewrite or translate the question; the user's words count as well."""
+    return max(coverage(query, text), coverage(deps.user_text, text) if deps.user_text else 0.0)
+
+
 async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
-    """Search company and team documentation the user may read. Returns numbered sources."""
+    """Search company and team documentation the user may read. Returns numbered sources.
+
+    Args:
+        query: What to look for, in Russian and close to the user's own words.
+    """
     if topic := detect_sensitive(query):
         handoff = (
             "Про чужие данные я не рассказываю и никому такие вопросы не передаю; "
@@ -193,7 +202,7 @@ async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
     relevant = [
         h
         for h in result.hits
-        if coverage(query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
+        if _relevance(ctx.deps, query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
     ]
     sources = [
         {

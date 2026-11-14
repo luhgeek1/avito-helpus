@@ -26,6 +26,7 @@ from pydantic_ai import (
     ToolDenied,
     ToolReturnPart,
     UsageLimits,
+    UserPromptPart,
 )
 from pydantic_ai.models import Model
 from pydantic_core import to_jsonable_python
@@ -261,6 +262,7 @@ class ChatService:
         yield stream.status("Думаю…", mode=self._rt.mode.value)
         try:
             deps, history = await self._load(actor, conversation_id)
+            deps.user_text = prompt or _last_user_text(history)
             deferred = _close_dangling(history, deferred)
             async with self._rt.agent.run_stream_events(
                 prompt,
@@ -535,3 +537,12 @@ def _public_output(content: Any) -> Any:
             if k in {"message", "found", "outcome", "error", "status"}
         }
     return {"message": str(content)[:500]}
+
+
+def _last_user_text(history: list[Any]) -> str:
+    for message in reversed(history):
+        if isinstance(message, ModelRequest):
+            for part in message.parts:
+                if isinstance(part, UserPromptPart) and isinstance(part.content, str):
+                    return part.content
+    return ""

@@ -1,5 +1,7 @@
 import json
 from datetime import date
+from types import SimpleNamespace
+from typing import cast
 from uuid import uuid4
 
 import pytest
@@ -17,7 +19,8 @@ from app.domain.knowledge import (
 )
 from app.domain.users import Role
 from app.service.assistant import stream
-from app.service.assistant.deps import TOOL_PERMISSIONS
+from app.service.assistant.deps import TOOL_PERMISSIONS, AgentDeps
+from app.service.assistant.tools import RELEVANT, _relevance
 
 TEAM = uuid4()
 
@@ -78,6 +81,15 @@ def test_generic_words_do_not_dilute_coverage() -> None:
 
     assert coverage("больничный стажёра что делать порядок оформления Авито", section) >= 0.5
     assert coverage("свой больничный стажёр что делать порядок оформления Авито", section) >= 0.5
+
+
+def test_relevance_counts_the_users_own_words() -> None:
+    deps = cast(AgentDeps, SimpleNamespace(user_text="Куда отправлять PR и кого звать на ревью?"))
+    section = "Кого звать на ревью и куда отправлять PR. У нас PR открывается в ветку develop"
+    english = "pull request review process for the listings team"
+
+    assert coverage(english, section) < RELEVANT
+    assert _relevance(deps, english, section) >= RELEVANT
 
 
 def test_editable_card_fields_belong_to_real_tools() -> None:
