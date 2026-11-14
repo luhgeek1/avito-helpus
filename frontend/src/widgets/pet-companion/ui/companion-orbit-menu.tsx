@@ -1,4 +1,5 @@
 import type { CSSProperties, RefObject } from "react";
+import { cx } from "@/shared/lib/cx";
 import { useOrbitPlacement } from "../model/use-orbit-placement";
 import { useRadialTransition } from "../model/use-radial-transition";
 import { PixelActionIcon } from "./pixel-action-icon";
@@ -25,11 +26,10 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
       {orbit && actions.map((action, index) => (
         <button key={action.id} type="button" aria-label={action.label} onClick={() => onAction(action.id)}
           onTransitionEnd={index === actions.length - 1 ? onTransitionEnd : undefined}
-          className={`fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]
+          className={cx(`fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]
             outline-none [will-change:transform,opacity] [transition:transform_240ms_cubic-bezier(.22,1,.36,1),opacity_160ms_ease-out]
-            motion-reduce:transition-none
-            group
-            ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            motion-reduce:transition-none group`,
+            open ? "opacity-100" : "pointer-events-none opacity-0")}
           style={{ left: orbit.origin.x - 4, top: orbit.origin.y - 4, width: orbit.size + 8, height: orbit.size + 8,
             transform: open ? `translate3d(${orbit.offsets[index].x}px, ${orbit.offsets[index].y}px, 0) scale(1)` : "translate3d(0, 0, 0) scale(.45)",
             transitionDelay: open ? `${index * 16}ms` : "0ms",

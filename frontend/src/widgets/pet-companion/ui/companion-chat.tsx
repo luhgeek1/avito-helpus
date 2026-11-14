@@ -56,8 +56,8 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
         <p className="mb-4 text-center text-10 text-[#687181]">Начало диалога</p>
         {chat.messages.map((message) => (
           <article key={message.id} data-role={message.role}
-            className={`w-fit max-w-[90%] rounded-xl px-3.5 py-3 ${message.role === "user"
-              ? "ml-auto bg-blue-soft" : "bg-control"}`}>
+            className={cx("w-fit max-w-[90%] rounded-xl px-3.5 py-3",
+              message.role === "user" ? "ml-auto bg-blue-soft" : "bg-control")}>
             <p className="mb-1 text-10 font-semibold text-dark">{message.role === "user" ? "Ты" : name}</p>
             <p className="whitespace-pre-wrap break-words text-13 leading-[1.55] [overflow-wrap:anywhere]">{message.text}</p>
             <p className="mt-1 text-right text-9 tabular-nums text-[#687181]">{message.time}</p>

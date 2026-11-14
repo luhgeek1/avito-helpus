@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { usePetPreferences } from "@/entities/pet";
+import { cx } from "@/shared/lib/cx";
 import { useTypewriter } from "../model/use-typewriter";
 import type { CompanionTour } from "../model/use-companion-tour";
 
@@ -20,8 +21,9 @@ function Narration({ tour, hidden }: { tour: CompanionTour; hidden: boolean }) {
   const style: CSSProperties = { width, left, top, bottom: below ? 16 : undefined };
   if (hidden) return null;
   return <div ref={ref} tabIndex={-1} style={style} aria-label="Подсказка пета"
-    className={`transition-opacity group-data-[tour-closing=true]/tour:opacity-0 duration-200 pointer-events-auto cursor-pointer fixed z-60 rounded-none border-4 border-[#eef4fa] bg-white px-5 py-4 font-pixel text-18 leading-[1.75] text-[#33333d] shadow-[0_0_0_3px_#383c62,6px_6px_0_3px_#383c6226] outline-none max-sm:px-3 max-sm:py-3 max-sm:text-12
-      after:absolute after:h-4 after:w-2 after:shadow-[3px_3px_#383c62] after:bg-white ${!stacked ? "after:-left-3 after:top-1/2" : below ? "after:-top-3 after:left-1/2" : "after:-bottom-3 after:left-1/2"}`}>
+    className={cx(`transition-opacity group-data-[tour-closing=true]/tour:opacity-0 duration-200 pointer-events-auto cursor-pointer fixed z-60 rounded-none border-4 border-[#eef4fa] bg-white px-5 py-4 font-pixel text-18 leading-[1.75] text-[#33333d] shadow-[0_0_0_3px_#383c62,6px_6px_0_3px_#383c6226] outline-none max-sm:px-3 max-sm:py-3 max-sm:text-12
+      after:absolute after:h-4 after:w-2 after:shadow-[3px_3px_#383c62] after:bg-white`,
+      !stacked ? "after:-left-3 after:top-1/2" : below ? "after:-top-3 after:left-1/2" : "after:-bottom-3 after:left-1/2")}>
     <p className="sr-only" role="status">{tour.text}</p>
     <div className="grid" aria-hidden="true"><span className="invisible col-start-1 row-start-1">{tour.text}</span><span className="col-start-1 row-start-1">{copy.displayed}</span></div>
   </div>;
@@ -38,10 +40,11 @@ export function CompanionTourShell({ tour, hideCopy, children }: { tour: Compani
     const dialog = ref.current;
     if (!tour.active || !dialog) return;
     dialog.showModal();
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // Scroll lock through the Tailwind utility; keep it if something else already locked the page.
+    const locked = document.body.classList.contains("overflow-hidden");
+    document.body.classList.add("overflow-hidden");
     return () => {
-      dialog.close(); document.body.style.overflow = overflow;
+      dialog.close(); if (!locked) document.body.classList.remove("overflow-hidden");
       document.querySelector<HTMLButtonElement>(".widget-pet")?.blur();
     };
   }, [tour.active]);

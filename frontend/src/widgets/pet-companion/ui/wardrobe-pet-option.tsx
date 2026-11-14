@@ -1,6 +1,7 @@
 import { memo } from "react";
 import type { TransitionEventHandler } from "react";
 import { PixelPet } from "@/entities/pet";
+import { cx } from "@/shared/lib/cx";
 import type { Pet } from "@/entities/pet";
 import type { WardrobePlacement } from "../model/use-wardrobe-placement";
 
@@ -23,10 +24,10 @@ export function WardrobePetOption({ pet, layout, offset, slot, revealed, interac
       data-pet-id={pet.id} data-center={slot === 0} aria-hidden={!visible}
       disabled={!visible || !interactive} tabIndex={visible ? 0 : -1}
       onClick={(event) => onChoose(event.detail === 0)}
-      className={`pointer-events-auto fixed grid touch-none select-none place-items-center bg-transparent p-0
+      className={cx(`pointer-events-auto fixed grid touch-none select-none place-items-center bg-transparent p-0
         [will-change:transform,opacity] [transition:opacity_160ms_ease-out]
-        motion-reduce:transition-none group
-        ${revealed && visible ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        motion-reduce:transition-none group`,
+        revealed && visible ? "opacity-100" : "pointer-events-none opacity-0")}
       style={{ left: layout.cx - (layout.size + 8) / 2, top: layout.cy - (layout.size + 8) / 2,
         width: layout.size + 8, height: layout.size + 8,
         transform: `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`,
