@@ -1,6 +1,12 @@
 # Подключение фронтенда к API Орби
 
-Гайд для фронтендеров: что вызывать на каждом экране и как читать поток чата. Полная схема —
+Гайд для фронтендеров: что вызывать на каждом экране и как читать поток чата.
+
+**Уже реализовано** (ветка `feat/frontend-integration`): клиент и хуки — `frontend/src/shared/api/orbi`,
+чат и карточки — `frontend/src/features/orbi-chat`, вход — `features/orbi-auth`, экраны —
+`frontend/src/_pages/orbi` (`/login`, `/plan`, `/requests`, `/questions`, `/mentor`). Новые экраны
+строятся на хуках из `@/shared/api` (`usePlan`, `useRequests`, `useMentees`…) и `useOrbiChat().ask(…)`
+для кнопок «Сделать с Орби». Тесты с фикстурами реального API — `frontend/tests/orbi`. Полная схема —
 [docs/api/openapi.json](../api/openapi.json) или Swagger UI на `http://localhost/api/docs`.
 Типы можно сгенерировать: `npx openapi-typescript docs/api/openapi.json -o frontend/src/shared/api/orbi/schema.d.ts`.
 
