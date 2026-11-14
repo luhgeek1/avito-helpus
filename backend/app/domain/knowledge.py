@@ -80,12 +80,12 @@ class SearchResult:
 
 class DocumentNotFoundError(NotFoundError):
     error_code = ErrorCode.DOCUMENT_NOT_FOUND
-    default_detail = "Document not found"
+    default_detail = "Документ не найден"
 
 
 class ConflictNotFoundError(NotFoundError):
     error_code = ErrorCode.CONFLICT_NOT_FOUND
-    default_detail = "Conflict not found"
+    default_detail = "Противоречие не найдено"
 
 
 def doc_visible(
@@ -180,7 +180,10 @@ def detect_sensitive(text: str) -> str | None:
 
 _TERM = re.compile(r"[0-9a-zа-яё]+")
 # Words that fit almost any intern question; models add them when rewriting a query.
-_GENERIC = ("авито", "avito", "стажёр", "стажер", "делать", "сделать", "порядок", "процесс")
+_GENERIC = (
+    "авито", "avito", "стажёр", "стажер", "делать", "сделать", "порядок", "процесс",
+    "оформить", "оформлять", "оформление", "оформления",
+)  # fmt: skip
 _STOP = frozenset(
     {
         "как", "что", "где", "кто", "когда", "куда", "зачем", "почему", "какой", "какая", "какие",

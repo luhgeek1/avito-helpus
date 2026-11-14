@@ -30,6 +30,7 @@ from app.domain.requests import (
     match_resources,
 )
 from app.service.assistant.deps import TOOL_PERMISSIONS, AgentDeps
+from app.service.assistant.offline import PRIVATE_REFUSAL
 from app.service.escalations import KIND_TITLES, EscalationService
 from app.service.knowledge import KnowledgeService, viewer_of
 from app.service.mappers import to_request
@@ -170,6 +171,33 @@ async def update_plan_step(
 # ---- knowledge ---------------------------------------------------------------------------------
 
 
+def answer_first(hits: list[Any]) -> list[Any]:
+    """A document's introduction (heading == title) only describes it: a content section of the
+    same document answers instead, and an introduction that is only the test-data label goes last.
+    Otherwise the introduction keeps its place — it still points to the right document."""
+    ordered = list(hits)
+    for hit in list(ordered):
+        if hit.heading != hit.document_title:
+            continue
+        current = ordered.index(hit)
+        section = next(
+            (
+                other
+                for other in ordered[current + 1 :]
+                if other.document_slug == hit.document_slug
+                and other.heading != other.document_title
+            ),
+            None,
+        )
+        if section is not None:
+            ordered.remove(section)
+            ordered.insert(current, section)
+    return sorted(
+        ordered,
+        key=lambda h: h.heading == h.document_title and h.content.startswith(SYNTHETIC_LABEL),
+    )
+
+
 def _relevance(deps: AgentDeps, query: str, text: str) -> float:
     """The model may rewrite or translate the question; the user's words count as well."""
     return max(coverage(query, text), coverage(deps.user_text, text) if deps.user_text else 0.0)
@@ -204,6 +232,7 @@ async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
         for h in result.hits
         if _relevance(ctx.deps, query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
     ]
+    relevant = answer_first(relevant)
     sources = [
         {
             "n": n,
@@ -417,6 +446,34 @@ async def my_requests(ctx: Ctx, status: RequestStatus | None = None) -> dict[str
 # ---- absence -----------------------------------------------------------------------------------
 
 
+def days_ru(count: int) -> str:
+    """1 день, 2 дня, 5 дней, 11 дней, 21 день."""
+    tail = count % 100
+    if 11 <= tail <= 14:  # noqa: PLR2004 - Russian plural rule
+        return f"{count} дней"
+    return f"{count} " + {1: "день", 2: "дня", 3: "дня", 4: "дня"}.get(count % 10, "дней")
+
+
+async def absence_balance(ctx: Ctx) -> dict[str, Any]:
+    """How many days of vacation and days off the user has left. No dates needed."""
+    deps = ctx.deps
+    async with deps.db.unit_of_work() as uow:
+        service = RequestService(uow, deps.corp, access_sla_hours=deps.settings.access_sla_hours)
+        try:
+            balance = await service.absence_balance(deps.actor)
+        except CorpUnavailableError:
+            return {
+                "message": "Сервис отсутствий сейчас не отвечает, остаток не узнать. "
+                "Попробуй чуть позже.",
+                "error": "unavailable",
+            }
+    return {
+        "message": f"У тебя осталось {days_ru(balance)} отпуска и отгулов. "
+        "Скажи даты — проверю правила и встречи и подготовлю заявку.",
+        "days_left": balance,
+    }
+
+
 async def check_absence(
     ctx: Ctx, absence_type: AbsenceType, start_date: date, end_date: date
 ) -> dict[str, Any]:
@@ -624,6 +681,8 @@ async def ask_mentor(
     (kind="sensitive" goes straight to HRBP). Shows a confirmation card first.
     """
     deps = ctx.deps
+    if any(detect_sensitive(text) in PRIVATE_TOPICS for text in (question, deps.user_text)):
+        return {"message": PRIVATE_REFUSAL}
     escalation_kind = EscalationKind(kind)
     if not ctx.tool_call_approved:
         async with deps.db.unit_of_work() as uow:
@@ -809,6 +868,7 @@ TOOL_FUNCTIONS = (
     find_access_resources,
     request_access,
     my_requests,
+    absence_balance,
     check_absence,
     request_absence,
     equipment_status,

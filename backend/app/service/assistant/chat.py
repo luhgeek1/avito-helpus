@@ -55,7 +55,7 @@ from app.infra.metrics import ACTIONS, CHAT_FIRST_TOKEN, CHAT_TURNS, LLM_FALLBAC
 from app.service.assistant import stream
 from app.service.assistant.agent import OrbiAgent
 from app.service.assistant.deps import TOOL_LABELS, AgentDeps
-from app.service.assistant.offline import OFFLINE_MODEL_NAME
+from app.service.assistant.offline import OFFLINE_MODEL_NAME, SUPERSEDED
 from app.service.people import PeopleService
 from app.service.plan import PlanService
 from app.service.ports import CorpServices, Embeddings
@@ -66,7 +66,6 @@ TITLE_MAX = 60
 LIMITS = UsageLimits(request_limit=8, tool_calls_limit=8)
 DENIED = "Пользователь отклонил действие — ничего не отправлено."
 CONFIRM_PROMPT = "Подготовил — проверь карточку и подтверди. Без подтверждения ничего не отправлю."
-SUPERSEDED = "Пользователь не подтвердил карточку и продолжил разговор — действие не выполнено."
 
 
 @dataclass(frozen=True, slots=True)
@@ -96,6 +95,7 @@ class _Turn:
     parts: list[dict[str, Any]]
     first_token_at: float | None = None
     fell_back: bool = False
+    history_len: int = 0  # model messages loaded at the start, to detect a concurrent turn
 
 
 class ChatService:
@@ -140,7 +140,7 @@ class ChatService:
         async with self._rt.db.unit_of_work() as uow:
             message = await uow.assistant.message_for_user(message_id, actor.id)
             if message is None or message.role != "assistant":
-                raise ConversationNotFoundError("Message not found")
+                raise ConversationNotFoundError("Сообщение не найдено")
             message.feedback = rating
             message.feedback_comment = comment
             uow.ops.track(
@@ -262,6 +262,7 @@ class ChatService:
         yield stream.status("Думаю…", mode=self._rt.mode.value)
         try:
             deps, history = await self._load(actor, conversation_id)
+            turn.history_len = len(history)
             deps.user_text = prompt or _last_user_text(history)
             deferred = _close_dangling(history, deferred)
             async with self._rt.agent.run_stream_events(
@@ -378,12 +379,13 @@ class ChatService:
             LLM_FALLBACKS.inc()
             yield stream.status("Работаю в офлайн-режиме: модель недоступна", mode="offline")
         output = result.output
+        # Cards reach the client only after the commit: an immediate «Подтвердить» must find them.
+        after_commit: list[str] = []
         async with self._rt.db.unit_of_work() as uow:
-            conversation = await _conversation(uow, actor, conversation_id)
+            conversation = await _conversation_locked(uow, actor, conversation_id)
             if isinstance(output, DeferredToolRequests):
                 if not any(text.strip() for text in turn.texts):
-                    for chunk in _say(turn, CONFIRM_PROMPT):
-                        yield chunk
+                    after_commit.extend(_say(turn, CONFIRM_PROMPT))
                 for call in output.approvals:
                     meta = output.metadata.get(call.tool_call_id, {})
                     action = PendingAction(
@@ -404,8 +406,15 @@ class ChatService:
                         user_id=actor.id,
                         properties={"tool": call.tool_name},
                     )
-                    yield stream.data(part["type"], part["data"])
-            conversation.model_history = to_jsonable_python(result.all_messages())
+                    after_commit.append(stream.data(part["type"], part["data"]))
+            stored = ModelMessagesTypeAdapter.validate_python(conversation.model_history)
+            # Another turn finished meanwhile: append ours instead of overwriting its messages.
+            messages = (
+                result.all_messages()
+                if len(stored) == turn.history_len
+                else [*stored, *result.new_messages()]
+            )
+            conversation.model_history = to_jsonable_python(messages)
             conversation.updated_at = utcnow()
             uow.assistant.add_message(
                 ChatMessage(
@@ -422,6 +431,8 @@ class ChatService:
             )
             if turn.fell_back:
                 uow.ops.track(AnalyticsEvent.CHAT_FALLBACK, user_id=actor.id)
+        for chunk in after_commit:
+            yield chunk
         CHAT_TURNS.labels(mode=self._rt.mode.value, outcome="ok").inc()
 
     async def _save_failure(self, conversation_id: UUID, turn: _Turn, error: str) -> None:
@@ -486,6 +497,16 @@ def _summary(conversation: Conversation) -> ConversationSummary:
 
 async def _conversation(uow: UnitOfWork, actor: CurrentUser, conversation_id: UUID) -> Conversation:
     conversation = await uow.assistant.conversation(conversation_id, actor.id)
+    if conversation is None:
+        raise ConversationNotFoundError()
+    return conversation
+
+
+async def _conversation_locked(
+    uow: UnitOfWork, actor: CurrentUser, conversation_id: UUID
+) -> Conversation:
+    """The row lock serialises the end of concurrent turns in one conversation."""
+    conversation = await uow.assistant.conversation(conversation_id, actor.id, for_update=True)
     if conversation is None:
         raise ConversationNotFoundError()
     return conversation

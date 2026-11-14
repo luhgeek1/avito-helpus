@@ -43,6 +43,7 @@ _ENUMS: dict[str, frozenset[str]] = {
             "request_access",
             "request_absence",
             "my_requests",
+            "absence_balance",
             "check_absence",
             "equipment_status",
             "create_it_ticket",

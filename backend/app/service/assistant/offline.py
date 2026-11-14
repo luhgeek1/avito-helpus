@@ -69,6 +69,58 @@ def _intent_mentor(text: str, tools: set[str]) -> Intent | None:
     return None
 
 
+BYPASS_REFUSAL = (
+    "Не могу выдать доступ в обход правил и без подтверждения: любое действие идёт через "
+    "карточку, а права проверяются заново на сервере. Назови конкретный ресурс — подготовлю "
+    "заявку, и она уйдёт только после твоего подтверждения."
+)
+# The denial a new message gives every card still waiting for a decision (see chat.py).
+SUPERSEDED = "Пользователь не подтвердил карточку и продолжил разговор — действие не выполнено."
+NOTHING_PENDING = (
+    "Сейчас нет карточки, которую нужно подтвердить. Напиши, что сделать, — подготовлю."
+)
+# Phrases that only agree with what Orbi already proposed; they must not start a new action.
+_AGREE = frozenset(
+    {
+        "да", "ага", "угу", "ок", "окей", "ok", "давай", "давайте", "конечно", "хорошо",
+        "согласен", "согласна", "подтверждаю", "оформляй", "оформи", "оформляйте", "отправляй",
+        "отправь", "спроси", "задай", "пожалуйста", "плиз", "его", "её", "ее", "это", "так",
+        "у", "наставника", "наставнику", "вопрос",
+    }
+)  # fmt: skip
+_AGREE_CORE = frozenset(
+    {"да", "ага", "угу", "ок", "окей", "ok", "давай", "давайте", "конечно", "хорошо",
+     "согласен", "согласна", "подтверждаю", "оформляй", "оформи", "оформляйте", "отправляй"}
+)  # fmt: skip
+CARD_TOOLS = frozenset(
+    {"request_access", "request_absence", "ask_mentor", "create_it_ticket", "post_team_message"}
+)
+# "Access to the system" names no resource: explain the procedure instead of a lookup miss.
+_GENERIC_RESOURCE = re.compile(
+    r"^(какой-?нибудь |нужн\w* |рабоч\w* |все\w* )?"
+    r"(систем\w*|сервис\w*|ресурс\w*|инструмент\w*|программ\w*|всему|всем|туда|куда-?нибудь)$"
+)
+
+
+def is_agreement(prompt: str) -> bool:
+    """«Да», «Да, оформляй», «Да, спроси наставника» — consent to an already shown card."""
+    words = re.findall(r"[a-zа-яё]+", prompt.lower())
+    return bool(words) and set(words) <= _AGREE and bool(set(words) & _AGREE_CORE)
+
+
+def _intent_bypass(text: str) -> Intent | None:
+    if _has(
+        text,
+        r"игнорир\w*.{0,20}правил",
+        r"забудь.{0,20}(правил|инструкц)",
+        r"без подтвержден",
+        r"в обход",
+        r"ко всем (репозитор|ресурс|систем|доступ)",
+    ):
+        return Intent(text=BYPASS_REFUSAL)
+    return None
+
+
 def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads best
     text: str, prompt: str, tools: set[str], today: date
 ) -> Intent | None:
@@ -86,13 +138,23 @@ def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads b
         return Intent("ask_mentor", {"question": prompt, "kind": "blocker"})
     if "request_access" in tools and _has(text, r"доступ"):
         level = "write" if _has(text, r"запис", r"редакт", r"write", r"пуш", r"push") else None
-        level = "admin" if _has(text, r"админ") else level
+        level = "admin" if _has(text, r"админ", r"admin") else level
         target = re.sub(r"(?i)\s*(на|для)\s+(запись|чтение|редактирование|админ\w*)", "", prompt)
         resource = _after(target, r"(?i)доступ\w*\s+(к|в|на|до)\s+", r"(?i)доступ\w*")
+        if "search_knowledge" in tools and _GENERIC_RESOURCE.match(resource.lower()):
+            return Intent("search_knowledge", {"query": "как получить доступ подать заявку"})
         args: dict[str, Any] = {"resource": resource}
         if level:
             args["level"] = level
         return Intent("request_access", args)
+    if "absence_balance" in tools and _has(
+        text,
+        r"сколько.{0,30}(отгул|отпуск|дн[еяи])",
+        r"остат\w*.{0,20}(отгул|отпуск|дн[еяи])",
+        r"(отгул|отпуск|дн[еяи]).{0,20}остал",
+        r"остал\w*.{0,20}(отгул|отпуск|дн[еяи])",
+    ):
+        return Intent("absence_balance")
     if "request_absence" in tools and _has(
         text, r"отгул", r"отпуск", r"выходн\w* за свой", r"day ?off"
     ):
@@ -142,7 +204,10 @@ def _intent_plan(text: str, prompt: str, tools: set[str]) -> Intent | None:
     if "get_my_plan" in tools and _has(
         text,
         r"план",
-        r"что (мне )?делать",
+        # «Что мне делать дальше?» is about the plan; «что делать, если упал пайплайн» is not.
+        r"^(а |и |так )?что (же )?(мне )?(теперь |сейчас )?(дальше )?делать"
+        r"( дальше| сейчас| теперь| сегодня)?[\s?!.]*$",
+        r"что (мне )?делать дальше",
         r"следующ\w* шаг",
         r"чек-?лист",
         r"с чего начать",
@@ -186,6 +251,7 @@ def route(prompt: str, tools: set[str], today: date) -> Intent:
     text = prompt.lower().strip()
     detected = (
         _intent_sensitive(text, prompt, tools)
+        or _intent_bypass(text)
         or _intent_mentor(text, tools)
         or _intent_actions(text, prompt, tools, today)
         or _intent_plan(text, prompt, tools)
@@ -259,9 +325,40 @@ def respond(
                 parts=[TextPart("Не получилось разобрать запрос — уточни, пожалуйста, детали.")],
                 model_name=OFFLINE_MODEL_NAME,
             )
-    intent = route(_user_prompt(messages), tools, today_fn())
+    prompt = _user_prompt(messages)
+    if is_agreement(prompt):
+        agreed = _agreement(messages)
+        if agreed is not None:
+            return ModelResponse(parts=[agreed], model_name=OFFLINE_MODEL_NAME)
+    intent = route(prompt, tools, today_fn())
     part = _tool_call(intent.tool, intent.args) if intent.tool else TextPart(intent.text or "")
     return ModelResponse(parts=[part], model_name=OFFLINE_MODEL_NAME)
+
+
+def _agreement(messages: Sequence[ModelMessage]) -> ToolCallPart | TextPart | None:
+    """«Да, оформляй» while a card was open: the new message closed it, so show the same card
+    again (same fields) instead of starting anything new. Agreeing to nothing starts nothing."""
+    last = messages[-1] if messages else None
+    closed = (
+        [
+            p.tool_call_id
+            for p in last.parts
+            if isinstance(p, ToolReturnPart) and p.content == SUPERSEDED
+        ]
+        if isinstance(last, ModelRequest)
+        else []
+    )
+    calls = {
+        part.tool_call_id: part
+        for message in messages
+        if isinstance(message, ModelResponse)
+        for part in message.parts
+        if isinstance(part, ToolCallPart) and part.tool_name in CARD_TOOLS
+    }
+    for call_id in reversed(closed):
+        if call_id in calls:
+            return _tool_call(calls[call_id].tool_name, calls[call_id].args_as_dict())
+    return TextPart(NOTHING_PENDING) if calls else None
 
 
 def _follow_up(
@@ -273,6 +370,8 @@ def _follow_up(
     for part in returns:
         content = part.content if isinstance(part.content, dict) else {}
         if part.tool_name == "search_knowledge" and content.get("sensitive"):
+            if content["sensitive"] in PRIVATE_TOPICS:
+                continue
             return _tool_call(
                 "ask_mentor", {"question": _user_prompt(messages), "kind": "sensitive"}
             )
