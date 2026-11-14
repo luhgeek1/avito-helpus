@@ -6,8 +6,11 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from app.core.config import BASE_DIR
+from app.core.config import BASE_DIR, get_settings
+from app.core.logging import configure_logging
 from app.db.database import Database
+from app.infra.clickstream import consume
+from app.infra.observability import ensure_secret, provision_grafana
 from app.seed.loader import seed
 
 
@@ -20,6 +23,10 @@ class _SeedSettings(BaseSettings):
     db_pool_size: int = 2
     db_max_overflow: int = 0
     sql_echo: bool = False
+
+    @property
+    def analytics_export_key(self) -> bytes | None:
+        return None
 
 
 def generate_keys(directory: Path) -> str:
@@ -55,6 +62,14 @@ async def run_seed(*, reset: bool) -> str:
     return f"seeded: {counts}" if counts else "already seeded (use --reset to start over)"
 
 
+async def run_observability(directory: Path) -> None:
+    db = Database(_SeedSettings())
+    try:
+        await provision_grafana(db, directory)
+    finally:
+        await db.dispose()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -62,12 +77,31 @@ def main() -> None:
     keys.add_argument("--dir", type=Path, default=BASE_DIR / "secrets")
     seed_cmd = commands.add_parser("seed", help="load the demo company (idempotent)")
     seed_cmd.add_argument("--reset", action="store_true", help="wipe all data first")
+    telemetry = commands.add_parser(
+        "telemetry-keys", help="generate a persistent analytics HMAC key"
+    )
+    telemetry.add_argument("--dir", type=Path, default=BASE_DIR / "secrets")
+    monitoring = commands.add_parser(
+        "observability-init", help="provision local Grafana credentials"
+    )
+    monitoring.add_argument("--dir", type=Path, default=Path("/run/observability"))
+    commands.add_parser(
+        "clickstream-consume", help="synthetic Clickstream example with durable deduplication"
+    )
     args = parser.parse_args()
 
     if args.command == "keys":
         print(generate_keys(args.dir))  # noqa: T201 - CLI output
     elif args.command == "seed":
         print(asyncio.run(run_seed(reset=args.reset)))  # noqa: T201 - CLI output
+    elif args.command == "telemetry-keys":
+        ensure_secret(args.dir / "clickstream_hmac_key")
+    elif args.command == "observability-init":
+        asyncio.run(run_observability(args.dir))
+    elif args.command == "clickstream-consume":
+        settings = get_settings()
+        configure_logging(settings.log_level, as_json=settings.log_json)
+        asyncio.run(consume(settings))
 
 
 if __name__ == "__main__":

@@ -9,12 +9,16 @@ from redis.asyncio import Redis
 from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
 from app.db.database import Database
+from app.domain.events import Topic
 from app.infra.bus import RedisPublisher
+from app.infra.clickstream import KafkaAnalyticsPublisher
 from app.infra.corp_mcp import McpCorpServices
 from app.infra.llm import embeddings as build_embeddings
 from app.infra.llm import text_generator
+from app.infra.metrics import worker_metrics_server
 from app.service.knowledge import KnowledgeService
 from app.service.nudges import Nudges, ScheduledJob, run_due
+from app.service.observability import refresh_outbox_metrics
 from app.service.outbox import OutboxDispatcher, build_handlers
 
 logger = logging.getLogger("app.worker")
@@ -59,12 +63,14 @@ async def run_worker(settings: Settings) -> None:
     db = Database(settings)
     redis = Redis.from_url(settings.redis_url, decode_responses=True)
     corp = McpCorpServices(settings.corp_mcp_url, timeout_sec=settings.corp_timeout_sec)
+    analytics = KafkaAnalyticsPublisher(settings) if settings.clickstream_enabled else None
     handlers, dead = build_handlers(
         db=db,
         corp=corp,
         publisher=RedisPublisher(redis),
         embeddings=build_embeddings(settings),
         settings=settings,
+        analytics=analytics,
     )
     dispatcher = OutboxDispatcher(
         db,
@@ -72,33 +78,77 @@ async def run_worker(settings: Settings) -> None:
         dead_handlers=dead,
         batch_size=settings.outbox_batch_size,
         max_attempts=settings.outbox_max_attempts,
+        deferred_topics=(Topic.ANALYTICS_PUBLISH,),
     )
+
+    async def update_metrics() -> int:
+        return await refresh_outbox_metrics(db, datetime.now(UTC))
+
     jobs = [
         *Nudges(db, corp, settings, generator=text_generator(settings)).jobs(),
         *maintenance_jobs(db, settings),
+        ScheduledJob("outbox-metrics", timedelta(seconds=10), update_metrics),
     ]
-    next_runs: dict[str, datetime] = {}
-
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, stop.set)
+        try:
+            loop.add_signal_handler(sig, stop.set)
+        except NotImplementedError:
+            # Windows event loops do not implement add_signal_handler.
+            signal.signal(sig, lambda *_: loop.call_soon_threadsafe(stop.set))
 
-    logger.info("worker started")
+    analytics_task: asyncio.Task[None] | None = None
+    try:
+        with worker_metrics_server(
+            enabled=settings.worker_metrics_enabled,
+            host=settings.worker_metrics_host,
+            port=settings.worker_metrics_port,
+        ):
+            logger.info("worker started")
+            if analytics is not None:
+                # Kafka outages must not delay corporate actions, AI-cron or metrics.
+                export_dispatcher = OutboxDispatcher(
+                    db,
+                    handlers,
+                    batch_size=1,
+                    max_attempts=settings.outbox_max_attempts,
+                    only_topics=(Topic.ANALYTICS_PUBLISH,),
+                )
+                analytics_task = asyncio.create_task(
+                    poll_outbox(export_dispatcher, stop, settings.outbox_poll_interval_sec)
+                )
+            await poll_outbox(dispatcher, stop, settings.outbox_poll_interval_sec, jobs=jobs)
+    finally:
+        if analytics_task is not None:
+            analytics_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await analytics_task
+        if analytics is not None:
+            await analytics.close()
+        await redis.aclose()
+        await db.dispose()
+        logger.info("worker stopped")
+
+
+async def poll_outbox(
+    dispatcher: OutboxDispatcher,
+    stop: asyncio.Event,
+    interval: float,
+    *,
+    jobs: list[ScheduledJob] | None = None,
+) -> None:
+    next_runs: dict[str, datetime] = {}
     while not stop.is_set():
         processed = 0
         try:
             processed = await dispatcher.run_once()
-            await run_due(jobs, next_runs, datetime.now(UTC))
-        except Exception:  # a DB blip must not kill the worker; log and keep polling
+            await run_due(jobs or [], next_runs, datetime.now(UTC))
+        except Exception:  # a DB blip must not kill either independent polling loop
             logger.exception("worker iteration failed")
         if processed == 0:
             with suppress(TimeoutError):
-                await asyncio.wait_for(stop.wait(), timeout=settings.outbox_poll_interval_sec)
-
-    await redis.aclose()
-    await db.dispose()
-    logger.info("worker stopped")
+                await asyncio.wait_for(stop.wait(), timeout=interval)
 
 
 def main() -> None:

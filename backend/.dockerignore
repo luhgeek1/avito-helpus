@@ -6,5 +6,8 @@ tests
 **/*.py[cod]
 .mypy_cache
 .pytest_cache
+.pytest-*
+.uv-cache
+.coverage*
 .ruff_cache
 .DS_Store

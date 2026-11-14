@@ -27,7 +27,8 @@ RUN groupadd --system --gid 999 app \
 
 COPY --from=builder --chown=app:app /app /app
 # JWT keys are generated into a named volume by the migrate step; it inherits this owner.
-RUN mkdir -p /app/secrets && chown app:app /app/secrets
+RUN mkdir -p /app/secrets /run/observability /data \
+ && chown app:app /app/secrets /run/observability /data
 
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \

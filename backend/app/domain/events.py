@@ -5,9 +5,12 @@ class Topic(StrEnum):
     """Outbox topics: side effects that must happen only after the transaction commits."""
 
     REQUEST_SUBMIT = "request.submit"
+    REQUEST_CANCEL = "request.cancel"
+    REQUEST_REMIND = "request.remind"
     REALTIME_PUBLISH = "realtime.publish"
     KB_EMBED = "kb.embed"
     MESSENGER_POST = "messenger.post"
+    ANALYTICS_PUBLISH = "analytics.publish"
 
 
 class OutboxStatus(StrEnum):

@@ -26,6 +26,10 @@ x-backend: &backend
     ACCESS_SLA_HOURS: ${ACCESS_SLA_HOURS:-24}
     ESCALATION_SLA_HOURS: ${ESCALATION_SLA_HOURS:-24}
     SCHEDULER_INTERVAL_SEC: ${SCHEDULER_INTERVAL_SEC:-15}
+    CLICKSTREAM_ENABLED: ${CLICKSTREAM_ENABLED:-false}
+    CLICKSTREAM_HMAC_KEY_PATH: /app/secrets/clickstream_hmac_key
+    KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    WORKER_METRICS_PORT: "9100"
   volumes:
     - jwt_keys:/app/secrets
   restart: unless-stopped
@@ -34,7 +38,7 @@ services:
   migrate:
     <<: *backend
     # Keys (first run only), schema, then the demo company (idempotent).
-    command: ["sh", "-c", "python -m app.cli keys --dir /app/secrets && alembic upgrade head && python -m app.cli seed"]
+    command: ["sh", "-c", "python -m app.cli keys --dir /app/secrets && python -m app.cli telemetry-keys --dir /app/secrets && alembic upgrade head && python -m app.cli seed"]
     restart: "no"
     depends_on:
       db:
@@ -60,6 +64,8 @@ services:
   worker:
     <<: *backend
     command: ["python", "-m", "app.worker"]
+    expose:
+      - "9100"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -129,7 +135,122 @@ services:
       retries: 20
     restart: unless-stopped
 
+  observability-init:
+    <<: *backend
+    profiles: [observability]
+    command: ["python", "-m", "app.cli", "observability-init"]
+    volumes:
+      - observability_credentials:/run/observability
+    restart: "no"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  prometheus:
+    image: prom/prometheus:v3.16.0
+    profiles: [observability]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    volumes:
+      - ./deploy/observability/prometheus:/etc/prometheus:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:9095:9090"
+    depends_on:
+      api:
+        condition: service_healthy
+      worker:
+        condition: service_started
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:13.3.0
+    profiles: [observability]
+    # Anonymous Viewer is for local synthetic demos only. Admin credentials are generated.
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/observability/admin_password
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - 'export GRAFANA_DB_PASSWORD="$$(cat /run/observability/db_password)"; exec /run.sh'
+    volumes:
+      - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - observability_credentials:/run/observability:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3005:3000"
+    depends_on:
+      observability-init:
+        condition: service_completed_successfully
+      prometheus:
+        condition: service_started
+    restart: unless-stopped
+
+  kafka:
+    image: apache/kafka:4.4.0
+    profiles: [clickstream]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_HEAP_OPTS: -Xms256m -Xmx512m
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+    restart: unless-stopped
+
+  kafka-init:
+    image: apache/kafka:4.4.0
+    profiles: [clickstream]
+    entrypoint: ["/opt/kafka/bin/kafka-topics.sh"]
+    command: ["--bootstrap-server", "kafka:9092", "--create", "--if-not-exists", "--topic", "buddy.analytics.v1", "--partitions", "3", "--replication-factor", "1", "--config", "retention.ms=604800000"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: "no"
+
+  clickstream:
+    <<: *backend
+    profiles: [clickstream]
+    command: ["python", "-m", "app.cli", "clickstream-consume"]
+    volumes:
+      - jwt_keys:/app/secrets:ro
+      - clickstream_data:/data
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      kafka-init:
+        condition: service_completed_successfully
+
 volumes:
   postgres_data:
   jwt_keys:
   corp_state:
+  observability_credentials:
+  prometheus_data:
+  grafana_data:
+  kafka_data:
+  clickstream_data:

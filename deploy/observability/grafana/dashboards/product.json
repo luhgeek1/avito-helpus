@@ -1,0 +1,526 @@
+{
+  "title": "Орби — польза",
+  "uid": "orbi-product",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "tags": [
+    "orbi",
+    "synthetic"
+  ],
+  "timezone": "browser",
+  "refresh": "15s",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Синтетические данные, не доказательство пользы",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 4
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Синтетические данные, не доказательство пользы. Счётчики — выбранный интервал; сводка — 30 дней. Вопрос = поиск знаний. Формулы и ограничения — в описаниях панелей и README."
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Вопросы: поиски знаний за интервал",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count(*) AS \"Вопросы\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='knowledge.search'",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Количество knowledge.search за выбранный интервал, как questions_total в /analytics/summary. Это поиски, а не уникальные сообщения или люди."
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Доля без наставника: 30 дней",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT resolved_without_mentor_share AS \"Доля\" FROM analytics_dashboard_summary",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Последние 30 дней независимо от выбранного интервала: round(1 − текущие эскалации / knowledge.search, 3). Та же формула, что /analytics/summary?days=30; может быть отрицательной, NULL без поисков. Оценка, не доказанный эффект."
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Решения по карточкам",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 11,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT decision AS \"Решение\", count(*) AS \"Количество\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='action.decided' GROUP BY decision",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События action.decided за выбранный интервал: approve — подтверждение, reject — отказ."
+    },
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Созданные заявки",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 11,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT kind AS \"Тип\", count(*) AS \"Создано\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='request.created' GROUP BY kind",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События request.created за выбранный интервал по типам: access/absence/equipment."
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Результаты заявок",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT kind AS \"Тип\", status AS \"Результат\", count(*) AS \"Решено\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='request.resolved' GROUP BY kind,status",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События request.resolved за выбранный интервал по типу и конечному статусу. Исторические события не равны текущему состоянию всех заявок."
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Эскалации: создано и отвечено",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 18,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT name AS \"Событие\", count(*) AS \"Количество\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name IN ('escalation.created','escalation.answered') GROUP BY name",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События escalation.created/escalation.answered за интервал. Текущие закрытые эскалации, включая сид, показаны отдельно в сводке за 30 дней."
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "Оценки ответов: 👍 / 👎",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT rating AS \"Оценка\", count(*) AS \"Количество\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='answer.feedback' GROUP BY rating",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События answer.feedback за выбранный интервал: up — 👍, down — 👎. Как feedback_up/down в API."
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "Выполненные шаги плана",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 25,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count(*) AS \"Выполнено\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='plan.item_done'",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "События plan.item_done за выбранный интервал. При повторном прохождении одного шага событие считается снова; это не число уникальных шагов."
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Доля шагов в срок: текущий план",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT plan_on_time_share AS \"Доля\" FROM analytics_dashboard_summary",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Весь текущий план, независимо от выбранного интервала: выполненные до due_date / (выполненные либо просроченные). Как plan_on_time_share в API. NULL без знаменателя."
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Среднее время до доступа: 30 дней",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT access_hours_avg AS \"Часы\" FROM analytics_dashboard_summary",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "h"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Заявки access со статусом approved, созданные за последние 30 дней; среднее (resolved_at − created_at) в часах. Как access_hours_avg в API."
+    },
+    {
+      "id": 12,
+      "type": "table",
+      "title": "Эскалации: сводка за 30 дней",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 39,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT escalations_total AS \"Всего\", escalations_resolved AS \"Закрыто\", escalation_hours_avg AS \"Среднее время, ч\" FROM analytics_dashboard_summary",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Текущее состояние эскалаций, созданных за последние 30 дней, включая сид. Закрыто = status != open; среднее время ответа в часах. Как в API."
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "Ходы чата по варианту эксперимента",
+      "datasource": {
+        "type": "postgres",
+        "uid": "orbi-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 39,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT coalesce(variant,'none') AS \"Вариант\", count(*) AS \"Ходы\" FROM analytics_dashboard_events WHERE $__timeFilter(created_at) AND name='chat.message' GROUP BY variant",
+          "format": "table",
+          "rawQuery": true,
+          "editorMode": "code"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showHeader": true
+      },
+      "description": "Ходы chat.message за выбранный интервал. Разрешены a/b/control/treatment; остальные значения скрываются в none для защиты от свободного текста."
+    }
+  ]
+}

@@ -7,7 +7,7 @@ from starlette.datastructures import Headers, MutableHeaders
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app.core.logging import request_id_var
-from app.infra.metrics import HTTP_LATENCY
+from app.infra.metrics import HTTP_LATENCY, SSE_ACTIVE
 
 logger = logging.getLogger("app.access")
 
@@ -36,12 +36,17 @@ class RequestContextMiddleware:
         token = request_id_var.set(request_id)
         started = time.perf_counter()
         status_code = 500
+        sse_route: str | None = None
 
         async def send_with_headers(message: Message) -> None:
-            nonlocal status_code
+            nonlocal status_code, sse_route
             if message["type"] == "http.response.start":
                 status_code = message["status"]
                 headers = MutableHeaders(scope=message)
+                route = getattr(scope.get("route"), "path", "unmatched")
+                if headers.get("content-type", "").startswith("text/event-stream"):
+                    sse_route = route
+                    SSE_ACTIVE.labels(route=route).inc()
                 headers["X-Request-ID"] = request_id
                 headers["X-Process-Time-Ms"] = f"{(time.perf_counter() - started) * 1000:.1f}"
             await send(message)
@@ -50,6 +55,8 @@ class RequestContextMiddleware:
             await self.app(scope, receive, send_with_headers)
         finally:
             elapsed = time.perf_counter() - started
+            if sse_route is not None:
+                SSE_ACTIVE.labels(route=sse_route).dec()
             route = getattr(scope.get("route"), "path", "unmatched")
             HTTP_LATENCY.labels(
                 method=scope["method"], route=route, status=str(status_code)
