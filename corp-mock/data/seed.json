@@ -1,0 +1,59 @@
+{
+  "resources": {
+    "stash-listings-api": "Репозиторий listings-api",
+    "stash-listings-worker": "Репозиторий listings-worker",
+    "jira-listings": "Jira-проект LST",
+    "confluence-listings": "Пространство «Объявления» в Confluence",
+    "grafana-listings": "Дашборды Grafana: Объявления",
+    "sentry-listings": "Sentry: проект listings",
+    "k8s-listings-staging": "Kubernetes: namespace listings-staging",
+    "redash": "Redash: аналитика объявлений",
+    "stash-payments-core": "Репозиторий payments-core",
+    "prod-db-listings": "Продовая БД listings (чтение)",
+    "vault-secrets": "Vault: секреты сервисов",
+    "hr-compensation-report": "Отчёт по компенсациям"
+  },
+  "calendar": {
+    "intern": [
+      {"title": "Стендап команды", "weekday": "daily", "time": "11:00", "important": false},
+      {"title": "Планирование спринта", "weekday": 0, "time": "12:00", "important": false},
+      {"title": "Демо команды", "weekday": 3, "time": "16:00", "important": true},
+      {"title": "1:1 с наставником", "weekday": 4, "time": "15:00", "important": true}
+    ]
+  },
+  "employees": {
+    "anya.intern@buddy.test": {
+      "absence_days": 5,
+      "calendar": "intern",
+      "equipment": [
+        {"kind": "laptop", "model": "MacBook Pro 14", "status": "in_transit", "eta_days": 1,
+         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"},
+        {"kind": "monitor", "model": "Монитор 27\"", "status": "ready_for_pickup", "eta_days": 0,
+         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+      ],
+      "grants": [{"resource": "jira-listings", "level": "write", "granted_days_ago": 1}]
+    },
+    "kirill.intern@buddy.test": {
+      "absence_days": 4,
+      "calendar": "intern",
+      "equipment": [
+        {"kind": "laptop", "model": "MacBook Pro 14", "status": "issued", "eta_days": -14,
+         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+      ],
+      "grants": [
+        {"resource": "jira-listings", "level": "write", "granted_days_ago": 15},
+        {"resource": "confluence-listings", "level": "read", "granted_days_ago": 15},
+        {"resource": "stash-listings-api", "level": "write", "granted_days_ago": 14}
+      ]
+    },
+    "dana.intern@buddy.test": {
+      "absence_days": 3,
+      "calendar": "intern",
+      "equipment": [
+        {"kind": "laptop", "model": "ThinkPad X1", "status": "issued", "eta_days": -38,
+         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+      ],
+      "grants": [{"resource": "stash-payments-core", "level": "write", "granted_days_ago": 35}]
+    }
+  }
+}
