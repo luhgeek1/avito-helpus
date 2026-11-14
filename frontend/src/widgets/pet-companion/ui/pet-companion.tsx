@@ -17,6 +17,8 @@ import type { ChatMessage } from "../model/chat-messages";
 import { useCompanionTour } from "../model/use-companion-tour";
 import { CompanionTourShell } from "./companion-tour";
 import { cx } from "@/shared/lib/cx";
+import { useOrbiChat } from "@/features/orbi-chat";
+import { useOrbiNotice } from "@/shared/api";
 export function PetCompanion() {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
@@ -37,6 +39,21 @@ export function PetCompanion() {
       actions.dismiss();
     }
   }, [selectionVersion, actions.dismiss]);
+  const openSignal = useOrbiChat((state) => state.openSignal);
+  const openChat = actions.chat;
+  useEffect(() => {
+    if (!openSignal) return;
+    setWidgetVisible(true);
+    openChat();
+  }, [openSignal]); // Only a new signal opens the chat.
+  const notice = useOrbiNotice((state) => state.notice);
+  const chatOpen = actions.chatOpen;
+  useEffect(() => {
+    if (!notice || chatOpen || tour.active) return;
+    setWidgetReply({ id: notice.id, text: notice.body ? `${notice.title}\n${notice.body}` : notice.title });
+    setWidgetVisible(true);
+    setWidgetSpeaking(true);
+  }, [notice]); // Speak once per new notification.
   const dialogueText = widgetReply?.text ?? chosenPet?.greeting ?? "";
   const dialogue = useTypewriter(dialogueText, widgetSpeaking && widgetVisible, paused, widgetReply?.id);
   const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
@@ -44,7 +61,8 @@ export function PetCompanion() {
   return (
     <CompanionTourShell tour={tour} hideCopy={widgetSpeaking || actions.chatOpen}>
       {chosenPet && spotlight.open && <CompanionSpotlight pet={chosenPet} chat={chat} onClose={spotlight.close}
-        onReply={reply => { actions.dismiss(); setWidgetReply(reply); setWidgetVisible(true); setWidgetSpeaking(true); }} />}
+        onReply={reply => { actions.dismiss(); setWidgetReply(reply); setWidgetVisible(true); setWidgetSpeaking(true); }}
+        onOpenChat={() => { spotlight.close(); setWidgetVisible(true); actions.chat(); }} />}
       {chosenPet && widgetVisible && (
         <div
           ref={movement.ref}

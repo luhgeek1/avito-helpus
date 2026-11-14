@@ -7,7 +7,7 @@ import { PetCompanion } from "@/widgets/pet-companion";
 import { WorkspaceShell } from "@/widgets/workspace-shell";
 import { useRoute } from "./router/use-route";
 import { PortalShell } from "@/widgets/portal-shell";
-import { PortalProvider } from "./model/portal-provider";
+import { AppQueryProvider, PortalProvider } from "./model/portal-provider";
 import { PetOnboardingProvider, usePetOnboarding } from "@/features/pet/onboarding";
 
 function AppContent({ children }: { children: ReactNode }) {
@@ -25,5 +25,9 @@ function AppContent({ children }: { children: ReactNode }) {
 }
 
 export function App({ children }: { children: ReactNode }) {
-  return <PetPreferencesProvider><PetOnboardingProvider><AppContent>{children}</AppContent></PetOnboardingProvider></PetPreferencesProvider>;
+  return (
+    <AppQueryProvider>
+      <PetPreferencesProvider><PetOnboardingProvider><AppContent>{children}</AppContent></PetOnboardingProvider></PetPreferencesProvider>
+    </AppQueryProvider>
+  );
 }

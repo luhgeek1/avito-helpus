@@ -1,45 +1,23 @@
-import { useEffect, useState } from "react";
-import { mockMessages, mockReply } from "./chat-messages";
-import type { ChatMessage } from "./chat-messages";
+import { useCallback } from "react";
+import { useOrbiChat } from "@/features/orbi-chat";
+import type { OrbiMessage } from "@/features/orbi-chat";
+import { useSession } from "@/shared/api";
 
-const storageKey = "buddy-chat";
-function isMessage(value: unknown): value is ChatMessage {
-  if (!value || typeof value !== "object") return false;
-  const message = value as Partial<ChatMessage>;
-  return typeof message.id === "string" && typeof message.text === "string" && typeof message.time === "string"
-    && (message.role === "assistant" || message.role === "user");
-}
-
+/** The companion's view of the Orbi conversation: real agent behind a session. */
 export function useCompanionChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
-  const [draft, setDraft] = useState("");
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    try {
-      const saved: unknown = JSON.parse(localStorage.getItem(storageKey) ?? "null");
-      if (Array.isArray(saved) && saved.length && saved.every(isMessage)) setMessages(saved);
-    } catch {
-      // Keep the demo conversation available when storage cannot be read.
-    }
-    setReady(true);
-  }, []);
-  useEffect(() => {
-    if (!ready) return;
-    try { localStorage.setItem(storageKey, JSON.stringify(messages)); } catch {
-      // The conversation still works in memory when storage is unavailable.
-    }
-  }, [messages, ready]);
-  function send() {
-    const text = draft.trim();
-    if (!text || !ready) return;
-    const time = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date());
-    const reply: ChatMessage = { id: crypto.randomUUID(), role: "assistant", text: mockReply(text), time };
-    setMessages((current) => [...current,
-      { id: crypto.randomUUID(), role: "user", text, time },
-      reply,
-    ]);
-    setDraft("");
-    return reply;
-  }
-  return { messages, draft, setDraft, send, ready };
+  const status = useSession((state) => state.status);
+  const draft = useOrbiChat((state) => state.draft);
+  const setDraft = useOrbiChat((state) => state.setDraft);
+  const busy = useOrbiChat((state) => state.busy);
+  const messages = useOrbiChat((state) => state.messages);
+  const load = useOrbiChat((state) => state.load);
+  const sendMessage = useOrbiChat((state) => state.send);
+  const authenticated = status === "authenticated";
+  const send = useCallback((): Promise<OrbiMessage | undefined> => {
+    if (!authenticated) return Promise.resolve(undefined);
+    return sendMessage();
+  }, [authenticated, sendMessage]);
+  return { messages, draft, setDraft, send, load, busy, authenticated, status, ready: authenticated && !busy };
 }
+
+export type CompanionChatModel = ReturnType<typeof useCompanionChat>;
