@@ -1,0 +1,23 @@
+[
+ {
+  "id": "0651052a-60c8-4b6a-b50a-3ae38b2fb04f",
+  "user_id": "4f108de8-5901-4ec7-bbfa-d2f240675168",
+  "user_name": "Кирилл Орлов",
+  "assignee_id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+  "assignee_name": "Иван Петров",
+  "level": "mentor",
+  "kind": "question",
+  "status": "open",
+  "question": "Как правильно называть ветки: feature/<описание> или по ключу задачи LST-…?",
+  "context": {
+   "note": "В общем регламенте и в гайде команды написано по-разному",
+   "source": "chat"
+  },
+  "answer": null,
+  "answered_by_name": null,
+  "answered_at": null,
+  "due_at": "2026-11-14T12:21:06.934672Z",
+  "faq_document_slug": null,
+  "created_at": "2026-11-13T12:21:06.934672Z"
+ }
+]

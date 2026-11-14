@@ -1,0 +1,206 @@
+data: {"type": "start", "messageId": "e23dfac270484f239a7c0624457920b5", "messageMetadata": {"mode": "online"}}
+
+data: {"type": "data-status", "data": {"text": "Думаю…", "mode": "online"}, "transient": true}
+
+data: {"type": "data-status", "data": {"text": "Готовлю заявку на доступ"}, "transient": true}
+
+data: {"type": "tool-input-available", "toolCallId": "call_Vh6z0D7ucsht3y6QrOBWxCdd", "toolName": "request_access", "input": {"resource": "grafana-listings", "level": "read", "justification": "Нужен доступ к дашбордам Grafana команды, чтобы смотреть метрики и алерты сервисов"}}
+
+data: {"type": "tool-output-available", "toolCallId": "call_Vh6z0D7ucsht3y6QrOBWxCdd", "output": {"message": "Готово: заявка ACC-1043 отправлена, согласует Мария Ким, руководитель команды. Сообщу, как только будет решение — статус виден в «Моих заявках»."}}
+
+data: {"type": "data-request", "data": {"id": "58e3c917-e6c3-4a54-a3fe-efdbaa2d21b4", "kind": "access", "title": "Доступ: Дашборды Grafana: Объявления (чтение)", "status": "submitted", "status_title": "На согласовании", "external_id": "ACC-1043", "approver": "Мария Ким, руководитель команды", "decision_comment": null, "sla_due_at": "2026-11-15T08:04:26.357566+00:00"}}
+
+data: {"type": "text-start", "id": "e23dfac270484f239a7c0624457920b5-t0"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "З"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "аяв"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ку"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " на"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " доступ"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " к"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " Graf"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ana"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " уже"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " отправ"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ил"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ":"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " читать"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " д"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "аш"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "бор"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ды"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "«"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "Д"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "аш"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "бор"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ды"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " Graf"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ana"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ":"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " Об"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ъяв"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ления"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "»"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "**"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "."}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " Она"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " на"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " соглас"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "овании"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " у"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " Мар"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ии"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " К"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "им"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " номер"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " **"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ACC"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "-"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "104"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "3"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "**"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ";"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " статус"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " потом"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " можно"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " смотреть"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " в"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " «"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "М"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "о"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "их"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " заяв"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ках"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "».\n\n"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "След"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ующий"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " шаг"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ":"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " пока"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " ж"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ди"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " решение"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " а"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " если"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " хоч"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ешь"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " —"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " могу"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " ещё"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " помочь"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " найти"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": ","}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " какие"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " именно"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " д"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "аш"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "бор"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "ды"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " тебе"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " нужны"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " для"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": " стар"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "та"}
+
+data: {"type": "text-delta", "id": "e23dfac270484f239a7c0624457920b5-t0", "delta": "."}
+
+data: {"type": "text-end", "id": "e23dfac270484f239a7c0624457920b5-t0"}
+
+data: {"type": "finish", "messageMetadata": {"mode": "online", "messageId": "e23dfac270484f239a7c0624457920b5"}}
+
+data: [DONE]
+

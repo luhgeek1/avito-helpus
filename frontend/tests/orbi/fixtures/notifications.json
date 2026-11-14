@@ -1,0 +1,83 @@
+{
+ "unread": 5,
+ "items": [
+  {
+   "id": "4879a792-173d-44b6-997d-97d57a36d7d7",
+   "kind": "request_updated",
+   "title": "Доступ: Репозиторий listings-api (редактирование): одобрено",
+   "body": "Готово. Доступ выдан: Репозиторий listings-api. Следующий шаг: «Получи ноутбук и настрой рабочее место».",
+   "link": "/requests/4d671f93-f386-4215-96e2-96607ea5a2fb",
+   "payload": {
+    "kind": "access",
+    "title": "Доступ: Репозиторий listings-api (редактирование)",
+    "status": "approved",
+    "next_step": "e0e19152-eca7-4d33-acc2-029b539192e9",
+    "request_id": "4d671f93-f386-4215-96e2-96607ea5a2fb",
+    "external_id": "ACC-1043"
+   },
+   "read_at": null,
+   "created_at": "2026-11-14T08:24:51.459179Z"
+  },
+  {
+   "id": "ffab064d-e507-49c9-b08e-2b13be8b7771",
+   "kind": "request_updated",
+   "title": "Доступ: Репозиторий listings-api (редактирование): на согласовании",
+   "body": "Номер ACC-1043. Согласует: Мария Ким, руководитель команды.",
+   "link": "/requests/4d671f93-f386-4215-96e2-96607ea5a2fb",
+   "payload": {
+    "kind": "access",
+    "title": "Доступ: Репозиторий listings-api (редактирование)",
+    "status": "submitted",
+    "request_id": "4d671f93-f386-4215-96e2-96607ea5a2fb",
+    "external_id": "ACC-1043"
+   },
+   "read_at": null,
+   "created_at": "2026-11-14T08:24:43.428656Z"
+  },
+  {
+   "id": "d4cab9b1-3610-4fc4-b8d2-0c3c8ffa8ddc",
+   "kind": "request_updated",
+   "title": "Доступ: Пространство «Объявления» в Confluence (чтение): одобрено",
+   "body": "Готово. Доступ выдан: Пространство «Объявления» в Confluence. Следующий шаг: «Получи ноутбук и настрой рабочее место».",
+   "link": "/requests/928de55e-c627-4e45-908a-23ad28075fa7",
+   "payload": {
+    "kind": "access",
+    "title": "Доступ: Пространство «Объявления» в Confluence (чтение)",
+    "status": "approved",
+    "next_step": "e0e19152-eca7-4d33-acc2-029b539192e9",
+    "request_id": "928de55e-c627-4e45-908a-23ad28075fa7",
+    "external_id": "ACC-1042"
+   },
+   "read_at": null,
+   "created_at": "2026-11-14T08:22:39.274136Z"
+  },
+  {
+   "id": "977799ba-8490-48fe-b3eb-d1a5c0e0d4fd",
+   "kind": "request_updated",
+   "title": "Доступ: Пространство «Объявления» в Confluence (чтение): на согласовании",
+   "body": "Номер ACC-1042. Согласует: Мария Ким, руководитель команды.",
+   "link": "/requests/928de55e-c627-4e45-908a-23ad28075fa7",
+   "payload": {
+    "kind": "access",
+    "title": "Доступ: Пространство «Объявления» в Confluence (чтение)",
+    "status": "submitted",
+    "request_id": "928de55e-c627-4e45-908a-23ad28075fa7",
+    "external_id": "ACC-1042"
+   },
+   "read_at": null,
+   "created_at": "2026-11-14T08:22:31.174265Z"
+  },
+  {
+   "id": "5f828af2-50cd-4ef3-9faf-f2d3fab8c9c0",
+   "kind": "nudge",
+   "title": "Монитор 27\" готов к выдаче",
+   "body": "Забрать: IT-стойка, 5 этаж, будни 10:00–18:00.",
+   "link": "/plan",
+   "payload": {
+    "equipment": "monitor"
+   },
+   "read_at": null,
+   "created_at": "2026-11-14T08:21:21.076449Z"
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "id": "4daec648-2100-4fc8-8aa3-9ac7e6740093",
+ "email": "anya.intern@buddy.test",
+ "full_name": "Аня Смирнова",
+ "title": "Стажёр-бэкендер",
+ "role": "intern",
+ "role_title": "Стажёр",
+ "track": "backend",
+ "start_date": "2026-11-12",
+ "team": {
+  "id": "490d65a0-b55d-4383-ae41-3349867b75ae",
+  "slug": "listings",
+  "name": "Объявления: Backend",
+  "channel": "#listings-backend"
+ },
+ "mentor": {
+  "id": "ed493406-b94a-4c46-91e8-99da6b28e923",
+  "full_name": "Иван Петров",
+  "title": "Senior Backend Engineer",
+  "email": "ivan.mentor@buddy.test"
+ },
+ "lead": {
+  "id": "f6a19376-988c-4f34-8b85-bdf9dc35b638",
+  "full_name": "Мария Ким",
+  "title": "Engineering Manager",
+  "email": "maria.lead@buddy.test"
+ },
+ "hrbp": {
+  "id": "6277e5f3-1f51-46a1-a4c3-50ecb57f21f8",
+  "full_name": "Ольга Соколова",
+  "title": "HR Business Partner",
+  "email": "olga.hrbp@buddy.test"
+ },
+ "internship_day": 3,
+ "permissions": [
+  "assistant:use",
+  "escalations:create",
+  "knowledge:read",
+  "plan:own",
+  "requests:own"
+ ],
+ "flags": {
+  "faq_publishing": {
+   "key": "faq_publishing",
+   "enabled": true,
+   "variant": null
+  },
+  "llm_conflict_check": {
+   "key": "llm_conflict_check",
+   "enabled": true,
+   "variant": null
+  },
+  "orbi_assistant": {
+   "key": "orbi_assistant",
+   "enabled": true,
+   "variant": null
+  },
+  "proactive_nudges": {
+   "key": "proactive_nudges",
+   "enabled": true,
+   "variant": null
+  }
+ },
+ "assistant_mode": "online"
+}

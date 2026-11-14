@@ -6,6 +6,10 @@ export default defineConfig({
   test: {
     environment: "jsdom", environmentOptions: { jsdom: { url: "http://localhost:5173" } },
     setupFiles: ["./tests/portal/setup.ts"], include: ["tests/**/*.test.{ts,tsx}"],
-    coverage: { provider: "v8", reporter: ["text", "html", "json-summary"] },
+    coverage: {
+      provider: "v8", reporter: ["text", "html", "json-summary"],
+      // Every source file counts, including ones no test imports.
+      include: ["src/**/*.{ts,tsx}"],
+    },
   },
 });
