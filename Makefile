@@ -5,6 +5,8 @@
 BACKEND := backend
 UV := cd $(BACKEND) && uv run
 TEST_COMPOSE := docker compose -p buddy-test -f docker-compose.test.yml
+# Host interpreter for the stdlib-only scripts in deploy/: python3 on macOS/Linux, python on Windows.
+PYTHON ?= $(shell command -v python3 2>/dev/null || echo python)
 
 help: ## Show this help
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "} {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -25,7 +27,7 @@ ps: ## Containers and their health
 	docker compose ps
 
 reset-demo: ## Restore the demo company and the corp-mock state
-	python deploy/reset_demo.py
+	$(PYTHON) deploy/reset_demo.py
 
 smoke: ## End-to-end check of a running stack (login, plan, chat, access request)
 	sh deploy/smoke.sh
@@ -89,7 +91,7 @@ coverage: test-deps ## Backend + frontend coverage, then the combined report in 
 	@mkdir -p reports
 	$(UV) pytest -q --cov=app --cov-report=term --cov-report=xml:../reports/backend-coverage.xml --cov-report=lcov:../reports/backend.lcov
 	npm --prefix frontend run coverage
-	python deploy/coverage_report.py
+	$(PYTHON) deploy/coverage_report.py
 
 check: lint typecheck test ## Everything CI runs for the backend
 
