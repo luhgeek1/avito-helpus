@@ -11,8 +11,8 @@ import { z } from "zod";
 afterEach(() => vi.restoreAllMocks());
 
 it.each([
-  ["/", "/api/quick-actions"], ["/", "/api/birthdays"], ["/", "/api/services"],
-  ["/", "/api/benefits"], ["/", "/api/posts"], ["/", "/api/channels"],
+  ["/demo", "/api/quick-actions"], ["/demo", "/api/birthdays"], ["/demo", "/api/services"],
+  ["/demo", "/api/benefits"], ["/demo", "/api/posts"], ["/demo", "/api/channels"],
   ["/events", "/api/events"], ["/feed", "/api/posts"], ["/feed/post-1", "/api/posts/post-1"],
   ["/benefits/savings", "/api/benefits/savings"], ["/services", "/api/services"], ["/services/it", "/api/services/it"],
   ["/search?q=Авито", "/api/search"], ["/profile", "/api/me"], ["/profile", "/api/calendar"],
@@ -34,7 +34,7 @@ it("likes a feed card and updates the cached list", async () => {
 });
 
 it("subscribes to the digest and can undo the subscription", async () => {
-  const { user } = renderApp("/");
+  const { user } = renderApp("/demo");
   await user.click(await screen.findByRole("button", { name: "Подписаться на дайджест" }));
   expect(screen.getByRole("button", { name: "Отписаться от дайджеста" })).toHaveAttribute("aria-pressed", "true");
   await user.click(screen.getByRole("button", { name: "Отписаться от дайджеста" }));
@@ -42,14 +42,14 @@ it("subscribes to the digest and can undo the subscription", async () => {
 });
 
 it("records a negative portal feedback answer", async () => {
-  const { user } = renderApp("/");
+  const { user } = renderApp("/demo");
   await user.click(await screen.findByRole("button", { name: "Не нравится" }));
   expect(await screen.findByText("Спасибо! Учтём ваш ответ")).toBeInTheDocument();
 });
 
 it("retries failed portal feedback", async () => {
   server.use(http.post("/api/feedback", () => new HttpResponse(null, { status: 500 }), { once: true }));
-  const { user } = renderApp("/");
+  const { user } = renderApp("/demo");
   const dialog = await screen.findByRole("dialog", { name: "Опрос о портале" });
   await user.click(within(dialog).getByRole("button", { name: "Нравится" }));
   await waitFor(() => expect(within(dialog).getByRole("button", { name: "Нравится" })).toBeEnabled());

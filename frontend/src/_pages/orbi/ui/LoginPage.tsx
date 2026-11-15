@@ -19,7 +19,7 @@ export function LoginPage({ next }: { next?: string }) {
     if (target) { navigate({ to: target }); return; }
     try {
       const me = await client.fetchQuery(meQuery);
-      navigate({ to: STAFF.has(me.role) ? "/mentor" : me.role === "admin" ? "/" : "/plan" });
+      navigate({ to: STAFF.has(me.role) ? "/mentor" : me.role === "admin" ? "/demo" : "/plan" });
     } catch {
       navigate({ to: "/plan" });
     }

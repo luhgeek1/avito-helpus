@@ -9,7 +9,7 @@ import { useLocation, resetNavigation, history } from "./navigation";
 function TestPages() {
   const { pathname } = useLocation();
   let page;
-  if (pathname === "/") page = <HomePage />;
+  if (pathname === "/demo") page = <HomePage />;
   else if (pathname === "/profile") page = <ProfilePage personId="me" />;
   else if (pathname.startsWith("/people/")) page = <ProfilePage personId={pathname.split("/")[2]} />;
   else if (pathname === "/services") page = <ServicesPage />;
@@ -23,7 +23,7 @@ function TestPages() {
   else page = <NotFoundPage />;
   return <PortalShell>{page}</PortalShell>;
 }
-export function renderApp(path = "/") {
+export function renderApp(path = "/demo") {
   resetNavigation(path);
   const queryClient = createPortalQueryClient(), user = userEvent.setup();
   return { ...render(<QueryClientProvider client={queryClient}><TestPages /></QueryClientProvider>), user, history, queryClient };

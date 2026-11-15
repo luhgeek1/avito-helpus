@@ -9,7 +9,7 @@ export function NotFoundPage() {
       </span>
       <h1 className={heading.h1}>Такой страницы нет</h1>
       <p className="mb-3 text-secondary">Возможно, ссылка устарела или страницу перенесли</p>
-      <Link to="/" className={buttonClass('primary', 'l')}>
+      <Link to="/demo" className={buttonClass('primary', 'l')}>
         На главную
       </Link>
     </div>

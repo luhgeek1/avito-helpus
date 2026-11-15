@@ -7,7 +7,7 @@ import { usePreferences } from '@/entities/portal'
 
 describe('Главная', () => {
   it('показывает приветствие и все блоки', async () => {
-    renderApp('/')
+    renderApp('/demo')
     expect(await screen.findByRole('heading', { name: /Привет, Даниил/ })).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: 'Добро пожаловать в Авито' })).toBeInTheDocument()
     expect(await screen.findByText('Юлия')).toBeInTheDocument()
@@ -19,7 +19,7 @@ describe('Главная', () => {
   })
 
   it('листает карусель стрелками и точками', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     await screen.findByRole('heading', { name: 'Добро пожаловать в Авито' })
     await user.click(screen.getByRole('button', { name: 'Следующий слайд' }))
     expect(screen.getByRole('heading', { name: 'Новогодний вечер для своих' })).toBeInTheDocument()
@@ -31,7 +31,7 @@ describe('Главная', () => {
   })
 
   it('настраивает подборку быстрых действий', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     const section = await screen.findByRole('region', { name: 'Быстрые действия' })
     await within(section).findByRole('link', { name: /В отпуск/ })
     await user.click(within(section).getByRole('button', { name: /Настроить подборку/ }))
@@ -53,14 +53,14 @@ describe('Главная', () => {
 
   it('показывает ошибку и даёт повторить запрос', async () => {
     server.use(http.get('/api/banners', () => HttpResponse.json({}, { status: 500 }), { once: true }))
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     const alerts = await screen.findAllByRole('alert')
     await user.click(within(alerts[0]).getByRole('button', { name: 'Повторить' }))
     expect(await screen.findByRole('heading', { name: 'Добро пожаловать в Авито' })).toBeInTheDocument()
   })
 
   it('подписывается на канал', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     const aside = await screen.findByRole('complementary', { name: 'Будь в курсе' })
     const row = (await within(aside).findByText('Дайджест Тех')).closest('div')!.parentElement!
     await user.click(within(row).getByRole('button', { name: 'Подписаться' }))
@@ -71,7 +71,7 @@ describe('Главная', () => {
 
 describe('Шапка и общие элементы', () => {
   it('показывает уведомления и отмечает их прочитанными', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     const bell = await screen.findByRole('button', { name: 'Уведомления: 3 новых' })
     await user.click(bell)
     const panel = screen.getByRole('dialog', { name: 'Уведомления' })
@@ -86,7 +86,7 @@ describe('Шапка и общие элементы', () => {
   })
 
   it('ищет по порталу', async () => {
-    const { user, history } = renderApp('/')
+    const { user, history } = renderApp('/demo')
     await user.type(await screen.findByRole('searchbox', { name: 'Поиск по порталу' }), 'Белов{Enter}')
     await waitFor(() => expect(history.location.pathname).toBe('/search'))
     const result = await screen.findByRole('link', { name: /Сотрудник\s*Артём Белов/ })
@@ -106,7 +106,7 @@ describe('Шапка и общие элементы', () => {
   })
 
   it('принимает ответ в опросе о портале', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     const popup = await screen.findByRole('dialog', { name: 'Опрос о портале' })
     await user.click(within(popup).getByRole('button', { name: 'Нравится' }))
     expect(await screen.findByText('Спасибо! Учтём ваш ответ')).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe('Шапка и общие элементы', () => {
   })
 
   it('скрывает опрос без ответа', async () => {
-    const { user } = renderApp('/')
+    const { user } = renderApp('/demo')
     await user.click(await screen.findByRole('button', { name: 'Закрыть опрос' }))
     expect(screen.queryByRole('dialog', { name: 'Опрос о портале' })).not.toBeInTheDocument()
     expect(usePreferences.getState().feedbackHidden).toBe(true)

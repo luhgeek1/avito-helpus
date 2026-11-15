@@ -31,7 +31,7 @@ export function ServicePage() {
             <Link to="/services" className={buttonClass('primary', 'l')}>
               Все сервисы
             </Link>
-            <Link to="/" className={buttonClass('white', 'l')}>
+            <Link to="/demo" className={buttonClass('white', 'l')}>
               На главную
             </Link>
           </div>

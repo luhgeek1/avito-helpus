@@ -10,7 +10,7 @@ import { signIn } from "../orbi/server";
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
-function renderApp(path = "/", page = <p>Страница</p>, { tour = false } = {}) {
+function renderApp(path = "/demo", page = <p>Страница</p>, { tour = false } = {}) {
   if (!tour) {
     localStorage.setItem("buddy-onboarding-v1", "done");
     localStorage.setItem("buddy-pet", "orbit");
@@ -23,7 +23,7 @@ function renderApp(path = "/", page = <p>Страница</p>, { tour = false } 
 
 describe("companion", () => {
   it("introduces itself on the first visit and can be skipped", async () => {
-    const { user } = renderApp("/", <p>Страница</p>, { tour: true });
+    const { user } = renderApp("/demo", <p>Страница</p>, { tour: true });
     const tour = await screen.findByRole("dialog", { name: "Знакомство с петом" });
     expect(within(tour).getAllByText(/Привет! Я Орби/).length).toBeGreaterThan(0);
     await user.click(within(tour).getByRole("button", { name: "Пропустить" }));

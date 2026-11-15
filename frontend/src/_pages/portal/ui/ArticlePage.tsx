@@ -94,7 +94,7 @@ export function ArticlePage() {
   return (
     <div className={container}>
       <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-secondary" aria-label="Хлебные крошки">
-        <Link to="/" className="hover:text-link-hover">
+        <Link to="/demo" className="hover:text-link-hover">
           Главная
         </Link>
         <ChevronRight size={14} aria-hidden />
