@@ -11,7 +11,7 @@ export function Link({ to, children, onClick, ...rest }: AnchorHTMLAttributes<HT
   const guide = props.mode === "guide" && to.startsWith("/#");
   if (!guide && !props.onNavigate && !props.portalUrl && to !== "/login") return null;
   const href = props.portalUrl ? new URL(to, props.portalUrl).href : guide
-    ? "https://github.com/luhgeek1/avito-helpus/blob/feat/orbi-react-sdk/frontend/packages/react/README.md" : "#orbi";
+    ? "https://github.com/luhgeek1/avito-helpus/blob/main/frontend/packages/react/README.md" : "#orbi";
   return <a {...rest} href={href} onClick={(event) => {
     onClick?.(event);
     if (event.defaultPrevented || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;

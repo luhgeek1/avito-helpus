@@ -5,7 +5,7 @@
 Стили и шрифты включены и изолированы через Shadow DOM. Tailwind, Next.js и копирование исходников
 приложению не нужны. React и React DOM **19.1+** устанавливаются в приложении отдельно.
 
-**Статус:** ветка `feat/orbi-react-sdk`, пакет ещё не опубликован в npm.
+**Статус:** пакет в `main`, ещё не опубликован в npm.
 `@orbi-companion/react` — рабочее имя; владение этим npm scope не подтверждено.
 Для рабочего агента нужен сервер Орби. Пакет не содержит сервер, ключ модели и MCP-секреты.
 
@@ -100,7 +100,7 @@ Vite-пример использует `ORBI_BACKEND_URL` (по умолчани
 
 ## Контекст и MCP
 
-[Настройка сервера и импорт знаний](https://github.com/luhgeek1/avito-helpus/blob/feat/orbi-react-sdk/docs/integration/SDK_SERVER.md).
+[Настройка сервера и импорт знаний](https://github.com/luhgeek1/avito-helpus/blob/main/docs/integration/SDK_SERVER.md).
 Оператор загружает Markdown с ролями/областью видимости:
 `python -m app.cli knowledge-import /path/to/markdown` (`--check` для проверки, `--replace` для обновления).
 MCP подключается серверным `CORP_MCP_URL` через контракт `CorpServices`. Произвольный сервер
