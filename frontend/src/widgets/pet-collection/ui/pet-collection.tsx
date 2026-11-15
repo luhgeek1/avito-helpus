@@ -30,10 +30,10 @@ export function PetCollection({
   const [filter, setFilter] = useState<Filter>("orbi");
   const { chosenPet, paused, favoriteIds } = usePetPreferences();
   const filters: { value: Filter; label: string }[] = [
-    { value: "orbi", label: `Орби · ${orbiPets.length}` },
-    { value: "previous", label: `Раньше · ${previousCount}` },
-    { value: "all", label: `Все · ${pets.length}` },
-    { value: "favorites", label: `Избранные · ${favoriteIds.length}` },
+    { value: "orbi", label: `Орби ${orbiPets.length}` },
+    { value: "previous", label: `Раньше ${previousCount}` },
+    { value: "all", label: `Все ${pets.length}` },
+    { value: "favorites", label: `Избранные ${favoriteIds.length}` },
   ];
   const list = (filter === "orbi" ? orbiPets : pets).filter((pet) => {
     if (filter === "favorites") return favoriteIds.includes(pet.id);

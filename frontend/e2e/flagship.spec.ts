@@ -4,7 +4,7 @@ const stepTitle = "Получи доступ к репозиторию listings-
 
 test("access approval completes the plan step and appears in notifications and requests", async ({ page }) => {
   await loginAsAnya(page);
-  await expect(page.getByText(/День 3 стажировки · этап/)).toBeVisible();
+  await expect(page.getByText(/День 3 стажировки, этап/)).toBeVisible();
   const progress = page.getByRole("progressbar", { name: "Прогресс плана адаптации" });
   await expect(progress).toHaveAttribute("aria-valuenow", /\d+/);
   const before = Number(await progress.getAttribute("aria-valuenow"));

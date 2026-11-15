@@ -214,7 +214,7 @@ function Account() {
         <div role="menu" aria-label="Аккаунт" className="absolute top-[calc(100%+8px)] right-0 z-60 w-70 animate-hub-layout-drop rounded-3xl bg-white p-2 shadow-pop">
           <div className="px-3 pt-2.5 pb-2">
             <p className="font-bold">{me.full_name}</p>
-            <p className="text-13 text-secondary">{me.role_title}{me.team ? ` · ${me.team.name}` : ''}</p>
+            <p className="text-13 text-secondary">{me.role_title}{me.team ? `, ${me.team.name}` : ''}</p>
           </div>
           <Link to="/profile" role="menuitem" className="block rounded-2xl px-3 py-2.5 hover:bg-fill" onClick={() => setOpen(false)}>Профиль на портале</Link>
           <Link to="/login" role="menuitem" className="block rounded-2xl px-3 py-2.5 hover:bg-fill" onClick={() => setOpen(false)}>Сменить учётку</Link>

@@ -171,7 +171,7 @@ describe("pet gallery", () => {
     const collection = await screen.findByRole("region", { name: "Коллекция петов" });
     for (const label of [/^Раньше/, /^Все/, /^Орби/]) await user.click(within(collection).getByRole("button", { name: label }));
     await user.click(within(collection).getAllByRole("button", { name: /^В избранное/ })[0]);
-    await user.click(within(collection).getByRole("button", { name: /^Избранные · 1/ }));
+    await user.click(within(collection).getByRole("button", { name: /^Избранные 1/ }));
     await user.click(within(collection).getByRole("button", { name: "Приостановить анимацию" }));
     await user.click(within(collection).getByRole("button", { name: "Включить анимацию" }));
     await user.click(within(collection).getByRole("button", { name: /^Все/ }));

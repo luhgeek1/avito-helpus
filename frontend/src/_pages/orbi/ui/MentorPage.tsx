@@ -19,7 +19,7 @@ function MenteeCard({ mentee, selected }: { mentee: Mentee; selected: boolean })
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-blue-soft font-bold text-blue-text" aria-hidden>{initialsOf(mentee.person.full_name)}</span>
           <span className="min-w-0 flex-1">
             <span className="block text-16 font-bold">{mentee.person.full_name}</span>
-            <span className={muted}>{mentee.internship_day ? `День ${mentee.internship_day}` : "Стажёр"} · {mentee.stage_title}{mentee.person.team ? ` · ${mentee.person.team.name}` : ""}</span>
+            <span className={muted}>{mentee.internship_day ? `День ${mentee.internship_day}` : "Стажёр"}, {mentee.stage_title}{mentee.person.team ? `, ${mentee.person.team.name}` : ""}</span>
           </span>
           {mentee.needs_attention && <span className="inline-flex h-6 items-center rounded-lg bg-red-soft px-2 text-12 font-bold text-red-text">нужно внимание</span>}
         </span>
@@ -90,7 +90,7 @@ function MenteeDetail({ id }: { id: string }) {
     <div className="space-y-6">
       <div className={cx(card, "space-y-3")}>
         <h2 className={heading.h2}>{summary.person.full_name}</h2>
-        <p className={muted}>{summary.person.title} · {summary.person.email} · стажировка с {formatDay(summary.person.start_date)}</p>
+        <p className={muted}>{summary.person.title}, {summary.person.email}, стажировка с {formatDay(summary.person.start_date)}</p>
         <div className="flex items-center gap-3">
           <span className="flex-1"><Progress percent={summary.percent} label="Прогресс плана" /></span>
           <span className="font-bold tabular-nums">{summary.done} из {summary.total}</span>
@@ -163,14 +163,14 @@ function Questions({ selected }: { selected?: string }) {
   const open = data.filter((question) => question.status === "open");
   return (
     <section aria-labelledby="questions" className="space-y-3">
-      <h2 id="questions" className={cx(heading.h2, "flex items-center gap-2")}><CircleHelp size={24} aria-hidden /> Вопросы стажёров{open.length ? ` · ${open.length}` : ""}</h2>
+      <h2 id="questions" className={cx(heading.h2, "flex items-center gap-2")}><CircleHelp size={24} aria-hidden /> Вопросы стажёров{open.length ? `, ${open.length}` : ""}</h2>
       {data.length === 0 ? <EmptyState>Новых вопросов нет</EmptyState> : (
         <ul className="space-y-3">
           {data.map((question) => (
             <li key={question.id} id={`question-${question.id}`} className={cx(card, "space-y-3", question.id === selected && "ring-2 ring-blue")}>
               <div className="flex flex-wrap items-center gap-2">
                 <StatusPill status={question.status === "open" ? "submitted" : "approved"}>{question.status === "open" ? "Ждёт ответа" : "Отвечен"}</StatusPill>
-                <span className={muted}><UserRound size={13} className="mr-1 inline align-[-2px]" aria-hidden />{question.user_name} · {formatMoment(question.created_at)}</span>
+                <span className={muted}><UserRound size={13} className="mr-1 inline align-[-2px]" aria-hidden />{question.user_name}, {formatMoment(question.created_at)}</span>
                 {question.status === "open" && <span className={cx("text-13", new Date(question.due_at) < new Date() ? "font-bold text-red-text" : "text-secondary")}>ответить до {formatMoment(question.due_at)}</span>}
               </div>
               <p className="text-16 font-bold leading-5.5">{question.question}</p>

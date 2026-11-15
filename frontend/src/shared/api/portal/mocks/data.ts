@@ -131,7 +131,7 @@ export const me: Person = {
   mentor: short(artem),
   hrbp: short(ksenia),
   tenure: '3 недели',
-  organization: 'Авито · Стажёр-разработчик',
+  organization: 'Авито, Стажёр-разработчик',
   email: 'd.orlov@hub.example',
   birthday: '9 апреля',
   followers: 0,

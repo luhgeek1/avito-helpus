@@ -57,7 +57,7 @@ export function IntegrationLayout({ children }: { children: ReactNode }) {
               <p className="mt-2 text-11 leading-5 text-[#777e8c]">Орби знает это руководство и поможет с установкой.</p>
               <button type="button" onClick={() => ask("Помоги начать установку Орби")} className="mt-2 flex min-h-11 items-center gap-2 text-12 font-medium text-[#6a55a4]">Спросить Орби<ArrowUpRight size={14} aria-hidden /></button>
             </div>
-            <p className="mt-5 text-10 leading-5 text-[#898e99]">Hack&Change 2026<br />Прототип · синтетические данные</p>
+            <p className="mt-5 text-10 leading-5 text-[#898e99]">Hack&Change 2026<br />Прототип, синтетические данные</p>
           </div>
         </div>
       </aside>

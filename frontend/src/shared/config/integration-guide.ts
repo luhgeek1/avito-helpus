@@ -69,19 +69,19 @@ export const guideTopics: readonly GuideTopic[] = [
     id: "start", title: "Запуск проекта", section: "quickstart",
     terms: ["установ", "запуст", "начать", "старт", "docker", "докер", "compose", "скачать", "репозитор", "команд", "локальн"],
     answer: "Открой свежий клон репозитория. Нужен Docker с Compose v2. В корне скопируй .env.example в .env и запусти контейнеры командами ниже. Если .env уже есть, сохрани свои настройки. Затем открой http://localhost — руководство, http://localhost/demo — портал. Ключ LLM для первого запуска не нужен. Для разработки фронтенда отдельно: Node.js 20.9+, npm ci и npm run dev в frontend/; адрес http://localhost:5173.",
-    code: { language: "bash", title: "Терминал · корень проекта", value: integrationSnippets.start },
+    code: { language: "bash", title: "Терминал, корень проекта", value: integrationSnippets.start },
   },
   {
     id: "react", title: "Встраивание в React / Next.js", section: "react",
     terms: ["библиотек", "установить библиотеку", "встро", "интегр", "react", "next", "компонент", "layout", "импорт", "исходник", "npm", "sdk", "пакет", "платформ", "перенес", "перенос", "alias", "алиас", "модул"],
     answer: "Библиотека @orbi-companion/react готова к установке из архива; в публичном npm она ещё не опубликована. В frontend выполни npm ci и npm run sdk:pack, затем установи полученный packages/react/dist/orbi-companion-react-0.1.0.tgz в своё React-приложение через npm install /путь/к/архиву. Нужны React и React DOM 19. Добавь один OrbiCompanion рядом с приложением и передай apiUrl. Tailwind, стили, шрифты, Next.js и копирование исходников не нужны. Виджет сам изолирует оформление, содержит вход, персонажей, гардероб, чат, Spotlight и карточки. В Next.js можно импортировать его прямо в серверный layout; callback-функции передаются из клиентской оболочки. Подробности — frontend/packages/react/README.md.",
-    code: { language: "tsx", title: "app/layout.tsx · внутри body", value: integrationSnippets.component },
+    code: { language: "tsx", title: "app/layout.tsx, внутри body", value: integrationSnippets.component },
   },
   {
     id: "api", title: "API и поток ответов", section: "api",
     terms: ["api", "бэкенд", "backend", "прокс", "rewrite", "sse", "стрим", "поток", "буфер", "502", "504", "8080", "ответ не приход", "не отвечает", "связ", "cors"],
     answer: "Клиент обращается к /api/v1 на домене платформы. В Next.js настрой rewrites на ORBI_BACKEND_URL (по умолчанию http://localhost:8080). В Docker этот маршрут обслуживает nginx. API, worker, Postgres и Redis нужны для полного сценария. Ответы чата и уведомления идут через SSE: отключи сжатие в Next.js (compress: false) и буферизацию потока на своём прокси. При 502 проверь, что api запущен и адрес доступен именно из окружения Next.js: localhost в контейнере означает этот контейнер. Swagger — /api/docs на полном Docker-стеке.",
-    code: { language: "ts", title: "next.config.ts · объединить со своим конфигом", value: integrationSnippets.proxy },
+    code: { language: "ts", title: "next.config.ts, объединить со своим конфигом", value: integrationSnippets.proxy },
   },
   {
     id: "auth", title: "Вход, SSO и права", section: "auth",
@@ -92,7 +92,7 @@ export const guideTopics: readonly GuideTopic[] = [
     id: "llm", title: "Подключение языковой модели", section: "api",
     terms: ["llm", "модел", "ключ", "openai", "провайдер", "офлайн", "offline", "нейросет", "env", "ии", "интеллект"],
     answer: "Без LLM_API_KEY основной Орби работает в офлайн-режиме: инструменты и сценарии доступны, ответы строятся правилами. Для языковой модели укажи LLM_API_KEY в корневом .env; LLM_MODEL задаёт модель диалога, LLM_BASE_URL — совместимый шлюз. После изменения выполни docker compose up -d api worker. Ключ остаётся на сервере; не используй NEXT_PUBLIC_ для секретов. При ошибке провайдера агент переключается на офлайн-режим. Текущий режим покажет GET /api/v1/assistant/status. Здесь, в руководстве, я отвечаю локально по разделам установки, без внешней LLM.",
-    code: { language: "dotenv", title: ".env · только на сервере", value: integrationSnippets.environment },
+    code: { language: "dotenv", title: ".env, только на сервере", value: integrationSnippets.environment },
   },
   {
     id: "services", title: "Корпоративные сервисы и знания", section: "services",
@@ -108,6 +108,6 @@ export const guideTopics: readonly GuideTopic[] = [
     id: "check", title: "Проверка и диагностика", section: "check",
     terms: ["провери", "проверить", "проверк", "ошиб", "не работа", "не запуска", "лог", "диагност", "готов", "smoke", "тест", "порт", "здоров", "health"],
     answer: "Сначала проверь контейнеры и логи командами ниже. Если порт 80 занят, освободи его или измени порт nginx в docker-compose.yml. Открой /demo, войди Аней и попроси доступ к listings-api: должна появиться карточка, после подтверждения — заявка, затем результат и уведомление. Сценарий также проверяет sh deploy/smoke.sh (или python deploy/smoke.py). Для фронтенда в frontend/: npm run typecheck, npm test, npm run check:architecture и npm run build. Если нужна помощь, напиши точный текст ошибки и на каком шаге она возникла; не отправляй пароли или ключи.",
-    code: { language: "bash", title: "Терминал · диагностика", value: integrationSnippets.diagnostics },
+    code: { language: "bash", title: "Терминал, диагностика", value: integrationSnippets.diagnostics },
   },
 ];
