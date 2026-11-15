@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { RotateCcw } from "lucide-react";
 import { OrbiError, orbiFetch, useSession } from "@/shared/api";
 import { cx } from "@/shared/lib/cx";
-import { buttonClass } from "@/shared/ui/portal";
 
 type Step = "idle" | "confirm" | "pending" | "failed";
 const labels: Record<Step, string> = {
@@ -45,11 +44,9 @@ export function DemoResetButton() {
   return <>
     <button type="button" onClick={() => void reset()} disabled={step === "pending"}
       title={step === "failed" ? error : "Вернуть демо-компанию в исходное состояние для всех"}
-      className={cx(buttonClass(step === "confirm" ? "primary" : "secondary", "s"),
-        "relative shrink-0 font-portal motion-reduce:transition-none max-sm:w-9 max-sm:px-0",
-        // A transparent rim widens the 36px button to a 44px touch target.
-        "after:absolute after:-inset-1 after:rounded-2xl after:content-['']", step === "failed" && "text-red-text")}>
-      <RotateCcw size={16} aria-hidden className={cx(step === "pending" && "motion-safe:animate-spin")} />
+      className={cx("flex min-h-12.5 shrink-0 items-center gap-2 rounded-xl border border-line bg-white px-3 text-12 font-medium text-[#676c7b] transition-colors hover:text-ink disabled:cursor-default motion-reduce:transition-none max-sm:px-4",
+        step === "confirm" && "border-red bg-red-soft text-red-text hover:text-red-text", step === "failed" && "text-red-text")}>
+      <RotateCcw size={14} aria-hidden className={cx(step === "pending" && "motion-safe:animate-spin")} />
       <span className="max-sm:sr-only">{labels[step]}</span>
     </button>
     <span role="status" className="sr-only">{step === "failed" ? error : step === "pending" ? "Сбрасываю демо" : ""}</span>
