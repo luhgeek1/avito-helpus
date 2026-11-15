@@ -20,9 +20,9 @@ def backend() -> tuple[int, int]:
     return int(root.attrib["lines-covered"]), int(root.attrib["lines-valid"])
 
 
-def frontend() -> tuple[int, int]:
+def frontend(part: str = "") -> tuple[int, int]:
     summary = json.loads(
-        (ROOT / "frontend" / "coverage" / "coverage-summary.json").read_text(
+        (ROOT / "frontend" / "coverage" / part / "coverage-summary.json").read_text(
             encoding="utf-8"
         )
     )
@@ -31,7 +31,8 @@ def frontend() -> tuple[int, int]:
 
 
 def main() -> int:
-    parts = {"Бэкенд (backend/app)": backend(), "Фронтенд (frontend/src)": frontend()}
+    parts = {"Бэкенд (backend/app)": backend(), "Фронтенд (frontend/src)": frontend(),
+             "React SDK (frontend/packages/react/src)": frontend("sdk")}
     covered = sum(c for c, _ in parts.values())
     total = sum(t for _, t in parts.values())
     combined = 100 * covered / total if total else 0.0

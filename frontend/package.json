@@ -9,10 +9,15 @@
     "start": "next start --hostname 127.0.0.1 --port 5173",
     "typecheck": "tsc --noEmit",
     "check:architecture": "steiger ./src",
-    "test": "vitest run",
+    "test": "vitest run && npm run sdk:test",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage",
-    "e2e": "playwright test"
+    "coverage": "vitest run --coverage && npm run sdk:coverage",
+    "e2e": "playwright test",
+    "sdk:build": "npm --prefix packages/react run build",
+    "sdk:pack": "cd packages/react && npm pack --pack-destination dist",
+    "sdk:test": "vitest run --config vitest.sdk.config.ts",
+    "sdk:coverage": "vitest run --config vitest.sdk.config.ts --coverage",
+    "sdk:verify": "npm run sdk:pack && node packages/react/scripts/prepare-examples.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.107.1",
@@ -35,6 +40,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitest/coverage-v8": "^5.1.0",
+    "esbuild": "^0.27.7",
     "jsdom": "^29.1.1",
     "playwright": "1.64.0",
     "postcss": "^8.5.32",

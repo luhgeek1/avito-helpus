@@ -89,6 +89,8 @@ jobs:
       - run: npm run check:architecture
       - run: npm run coverage
       - run: npm run build
+      - name: Build tarball and independent React and Next.js consumers
+        run: npm run sdk:verify
       - uses: actions/upload-artifact@v4.6.2
         if: always()
         with:

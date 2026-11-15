@@ -40,12 +40,12 @@ export function CompanionTourShell({ tour, hideCopy, children }: { tour: Compani
     const dialog = ref.current;
     if (!tour.active || !dialog) return;
     dialog.showModal();
-    // Scroll lock through the Tailwind utility; keep it if something else already locked the page.
-    const locked = document.body.classList.contains("overflow-hidden");
-    document.body.classList.add("overflow-hidden");
+    // The npm host does not need Tailwind; restore its original inline scroll state.
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      dialog.close(); if (!locked) document.body.classList.remove("overflow-hidden");
-      document.querySelector<HTMLButtonElement>(".widget-pet")?.blur();
+      dialog.close(); document.body.style.overflow = overflow;
+      (dialog.getRootNode() as Document | ShadowRoot).querySelector<HTMLButtonElement>(".widget-pet")?.blur();
     };
   }, [tour.active]);
   return <dialog ref={ref} role={tour.active ? "dialog" : "presentation"} aria-label={tour.active ? "Знакомство с петом" : undefined}

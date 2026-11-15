@@ -1,0 +1,48 @@
+{
+  "results": [
+    {
+      "app": "vite",
+      "width": 1440,
+      "chatToggle": true,
+      "spotlight": true,
+      "wardrobe": true,
+      "settings": true,
+      "errors": []
+    },
+    {
+      "app": "vite",
+      "width": 390,
+      "chatToggle": true,
+      "spotlight": true,
+      "wardrobe": true,
+      "settings": true,
+      "errors": []
+    },
+    {
+      "app": "next",
+      "width": 1440,
+      "chatToggle": true,
+      "spotlight": true,
+      "wardrobe": true,
+      "settings": true,
+      "errors": []
+    },
+    {
+      "app": "next",
+      "width": 390,
+      "chatToggle": true,
+      "spotlight": true,
+      "wardrobe": true,
+      "settings": true,
+      "errors": []
+    },
+    {
+      "liveBackend": true,
+      "knowledgeImport": true,
+      "mcpConfirmation": true,
+      "terminalApproved": true,
+      "sseNotification": true,
+      "tour": true
+    }
+  ]
+}

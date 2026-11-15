@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
+import * as z from "zod";
 import { orbiJson } from "./http";
 import {
   documentSchema, equipmentSchema, escalationSchema, meSchema, menteeDetailSchema, menteeSchema, nothingSchema,
