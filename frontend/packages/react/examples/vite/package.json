@@ -1,0 +1,6 @@
+{
+  "name": "orbi-vite-example", "private": true, "type": "module",
+  "scripts": { "dev": "vite --host 127.0.0.1 --port 5184", "build": "tsc --noEmit && vite build", "start": "vite preview --host 127.0.0.1 --port 5184" },
+  "dependencies": { "@orbi-companion/react": "file:../../dist/orbi-companion-react-0.1.0.tgz", "react": "^19.3.1", "react-dom": "^19.3.1" },
+  "devDependencies": { "vite": "^8.0.0", "typescript": "~5.9.3", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0" }
+}
