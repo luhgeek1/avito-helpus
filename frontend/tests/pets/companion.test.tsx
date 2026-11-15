@@ -58,6 +58,8 @@ describe("companion", () => {
     await user.click(options[2]);
     fireEvent.keyDown(wardrobe, { key: "ArrowRight" });
     fireEvent.wheel(wardrobe, { deltaY: 120 });
+    // Let the spring run at least one frame; fast machines would otherwise finish the test first.
+    await act(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
     await user.click(pet());
     await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Настройки" }));
     const settings = screen.getByRole("dialog", { name: "Настройки спутника" });
