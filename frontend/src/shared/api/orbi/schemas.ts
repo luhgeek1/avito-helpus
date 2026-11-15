@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 
 const id = z.string();
 const nullableString = z.string().nullable();

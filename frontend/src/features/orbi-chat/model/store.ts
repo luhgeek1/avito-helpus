@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { conversationSchema, historySchema, OrbiError, orbiFetch, orbiJson, readUiStream } from "@/shared/api";
-import { z } from "zod";
+import * as z from "zod";
 import { applyChunk, fromHistory } from "./message";
 import type { ActionStatus, OrbiMessage } from "./message";
 
