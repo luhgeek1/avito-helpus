@@ -9,12 +9,9 @@ from app.api.deps import (
     CurrentUserDep,
     DatabaseDep,
     FlagServiceDep,
-    SettingsDep,
-    rate_limit,
     require,
 )
 from app.api.schemas.misc import AuditOut, FlagOut, FlagUpdateIn, MetricsOut, UiEventIn
-from app.core.errors import NotFoundError
 from app.db.database import Database
 from app.domain.corp import CorpUnavailableError
 from app.domain.users import CurrentUser, Permission
@@ -93,22 +90,6 @@ async def reset_demo(
     # After the response: this request's own transaction must be closed before TRUNCATE can run.
     background.add_task(_reset_demo, db, corp)
     return {"status": "reset scheduled"}
-
-
-@router.post(
-    path="/demo/reset",
-    summary="Reset the demo from the portal button (only when DEMO_PUBLIC_RESET is on)",
-    dependencies=[Depends(rate_limit("demo-reset"))],
-)
-async def reset_demo_public(
-    settings: SettingsDep, db: DatabaseDep, corp: CorpDep
-) -> dict[str, str]:
-    if not settings.demo_public_reset:
-        raise NotFoundError()
-    # No account and no open transaction here, so the reset can finish before the answer:
-    # the button signs everyone in again only once the demo company exists.
-    await _reset_demo(db, corp)
-    return {"status": "reset"}
 
 
 async def _reset_demo(db: Database, corp: CorpServices) -> None:

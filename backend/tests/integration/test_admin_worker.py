@@ -21,7 +21,7 @@ from app.service.knowledge import KnowledgeService
 from app.service.nudges import Nudges, ScheduledJob, run_due
 from app.worker import maintenance_jobs
 from tests.fakes import FakeCorpServices, FakeEmbeddings, FakeGenerator, RecordingPublisher, laptop
-from tests.integration.conftest import ANYA, Account, AppFactory, login
+from tests.integration.conftest import ANYA, Account
 
 
 async def test_flags_audit_and_metrics(
@@ -69,26 +69,6 @@ async def test_demo_reset(
     assert "reset_demo" in corp.calls
     # Old tokens die with the old accounts.
     assert (await client.get("/api/v1/me", headers=anya.headers)).status_code == 401
-
-
-async def test_public_demo_reset_is_off_by_default(client: AsyncClient, anya: Account) -> None:
-    response = await client.post("/api/v1/demo/reset")
-
-    assert response.status_code == 404
-    assert (await client.get("/api/v1/me", headers=anya.headers)).status_code == 200
-
-
-async def test_public_demo_reset_restores_the_company(app_factory: AppFactory) -> None:
-    async with app_factory(demo_public_reset=True) as (_, client):
-        anya = await login(client, ANYA)
-
-        reset = await client.post("/api/v1/demo/reset")
-
-        assert reset.status_code == 200
-        assert reset.json() == {"status": "reset"}
-        # The reset is done when the answer arrives: old accounts are gone, the seed is back.
-        assert (await client.get("/api/v1/me", headers=anya.headers)).status_code == 401
-        assert (await login(client, ANYA)).headers
 
 
 async def test_seed_is_idempotent(db: Database) -> None:
