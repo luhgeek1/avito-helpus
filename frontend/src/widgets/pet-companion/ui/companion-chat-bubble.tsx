@@ -16,7 +16,7 @@ export function CompanionChatBubble({ placement, dock, menuOpen, open, onOpen }:
   const transform = menuOpen
     ? `translate3d(${dock.x - left - centerX}px, ${dock.y - top - centerY}px, 0) scale(${dock.size / (size * 56 / 72)})`
     : "translate3d(0, 0, 0) scale(1)";
-  return <button type="button" aria-label="Чат" title="Открыть чат" aria-expanded={open}
+  return <button type="button" aria-label="Чат" title={open ? "Закрыть чат" : "Открыть чат"} aria-expanded={open}
     aria-controls="companion-chat" onClick={onOpen} data-docked={menuOpen}
     style={{ left, top, width: size, height: size, transform, transformOrigin: `${centerX}px ${centerY}px` }}
     className={cx("companion-chat-bubble fixed z-38 cursor-pointer bg-transparent p-0 outline-none group",

@@ -161,7 +161,11 @@ export function PetCompanion() {
             />
           </button>
           <CompanionOrbitMenu anchor={movement.ref} position={movement.style} open={actions.menuOpen}
-            chatOpen={actions.chatOpen} onChat={() => { if (tour.active) tour.visit("chat"); else actions.chat(); }}
+            chatOpen={actions.chatOpen} onChat={() => {
+              if (actions.chatOpen) actions.dismiss();
+              else if (tour.active && tour.scene !== "chat") tour.visit("chat");
+              else actions.chat();
+            }}
             onAction={(action) => {
               if (action === "hide") {
                 actions.dismiss();

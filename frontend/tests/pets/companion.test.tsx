@@ -44,7 +44,14 @@ describe("companion", () => {
     await user.click(screen.getByRole("button", { name: "Чат" }));
     const chat = await screen.findByRole("dialog", { name: "Орби" });
     expect(await within(chat).findByRole("group", { name: "Готовые вопросы" })).toBeInTheDocument();
-    await user.click(within(chat).getByRole("button", { name: "Назад к меню пета" }));
+    await user.type(within(chat).getByRole("textbox", { name: "Сообщение спутнику" }), "Draft to keep");
+    await user.click(screen.getByRole("button", { name: "Чат" }));
+    expect(screen.queryByRole("dialog", { name: "Орби" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Чат" })).toHaveAttribute("aria-expanded", "false");
+    await user.click(screen.getByRole("button", { name: "Чат" }));
+    expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Draft to keep");
+    const reopened = screen.getByRole("dialog", { name: "Орби" });
+    await user.click(within(reopened).getByRole("button", { name: "Назад к меню пета" }));
     await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Гардероб" }));
     const wardrobe = screen.getByRole("region", { name: "Гардероб спутника" });
     const options = within(wardrobe).getAllByRole("button", { name: /Выбрать персонажа/ });
