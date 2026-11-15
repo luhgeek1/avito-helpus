@@ -1,0 +1,320 @@
+{
+ "total": {
+  "lines": {
+   "total": 138,
+   "covered": 138,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 207,
+   "covered": 205,
+   "skipped": 0,
+   "pct": 99.03
+  },
+  "functions": {
+   "total": 54,
+   "covered": 54,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 100,
+   "covered": 93,
+   "skipped": 0,
+   "pct": 93
+  },
+  "branchesTrue": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": "Unknown"
+  }
+ },
+ "frontend/packages/react/src/content.tsx": {
+  "lines": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 22,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/controls.ts": {
+  "lines": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 21,
+   "covered": 21,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/http.ts": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/index.tsx": {
+  "lines": {
+   "total": 23,
+   "covered": 23,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 12,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 91.66
+  }
+ },
+ "frontend/packages/react/src/login-dialog.tsx": {
+  "lines": {
+   "total": 16,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 26,
+   "covered": 26,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/navigation.tsx": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 18,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 94.44
+  },
+  "branches": {
+   "total": 26,
+   "covered": 24,
+   "skipped": 0,
+   "pct": 92.3
+  }
+ },
+ "frontend/packages/react/src/runtime.ts": {
+  "lines": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 19,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 94.73
+  }
+ },
+ "frontend/packages/react/src/session.ts": {
+  "lines": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 43,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 97.67
+  },
+  "branches": {
+   "total": 14,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 78.57
+  }
+ },
+ "frontend/packages/react/src/shadow.ts": {
+  "lines": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/styles.d.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/packages/react/src/types.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ }
+}
