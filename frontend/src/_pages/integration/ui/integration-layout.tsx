@@ -6,7 +6,7 @@ import { PixelPet, defaultPet } from "@/entities/pet";
 import { useIntegrationAssistant } from "@/features/integration-assistant";
 import { integrationSections } from "@/shared/config";
 import { cx } from "@/shared/lib/cx";
-import { ExperienceSwitcher } from "@/shared/ui/experience-switcher";
+import { ExperienceBar } from "@/shared/ui/experience-switcher";
 
 export function IntegrationLayout({ children }: { children: ReactNode }) {
   const [active, setActive] = useState("overview");
@@ -23,13 +23,12 @@ export function IntegrationLayout({ children }: { children: ReactNode }) {
   return <div className="min-h-screen bg-white text-ink">
     <a href="#integration-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-xl focus:bg-white focus:p-4">К содержимому</a>
     <header className="sticky top-0 z-30 border-b border-line bg-white">
-      <div className="mx-auto flex min-h-20 max-w-340 items-center justify-between gap-3 px-5 sm:px-9 lg:px-12">
+      <ExperienceBar>
         <Link href="/" aria-label="Орби — руководство по интеграции" className="flex items-center gap-2.5">
           <span className="grid size-10 place-items-center rounded-xl bg-[#f1edf8]"><PixelPet pet={defaultPet} size={32} paused /></span>
           <span className="text-22 font-semibold tracking-[-0.7px]">Орби<span className="ml-3 hidden border-l border-line pl-3 text-12 font-normal tracking-normal text-[#747986] sm:inline">для разработчиков</span></span>
         </Link>
-        <ExperienceSwitcher />
-      </div>
+      </ExperienceBar>
     </header>
 
     <div className="mx-auto grid max-w-340 md:grid-cols-[212px_minmax(0,1fr)] lg:grid-cols-[244px_minmax(0,1fr)]">
