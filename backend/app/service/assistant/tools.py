@@ -19,6 +19,7 @@ from app.domain.knowledge import (
     SYNTHETIC_LABEL,
     coverage,
     detect_sensitive,
+    query_terms,
 )
 from app.domain.plan import STAGE_TITLES, ActionKind, ItemStatus, Transition
 from app.domain.requests import LEVEL_TITLES as ACCESS_LEVEL_TITLES
@@ -32,7 +33,7 @@ from app.domain.requests import (
 from app.service.assistant.deps import TOOL_PERMISSIONS, AgentDeps
 from app.service.assistant.offline import PRIVATE_REFUSAL
 from app.service.escalations import KIND_TITLES, EscalationService
-from app.service.knowledge import KnowledgeService, viewer_of
+from app.service.knowledge import CANDIDATES, KnowledgeService, viewer_of
 from app.service.mappers import to_request
 from app.service.mentor import MentorService
 from app.service.plan import PlanService
@@ -49,6 +50,7 @@ logger = logging.getLogger(__name__)
 
 Ctx = RunContext[AgentDeps]
 RELEVANT = 0.34
+TITLE_MIN_TERMS = 2
 EXCERPT = 600
 
 
@@ -198,9 +200,22 @@ def answer_first(hits: list[Any]) -> list[Any]:
     )
 
 
-def _relevance(deps: AgentDeps, query: str, text: str) -> float:
+def _title_match(query: str, title: str) -> bool:
+    """A named document remains relevant in a long, compound question.
+
+    Require multiple meaningful terms and the whole title, so a generic word alone cannot
+    promote an unrelated document.
+    """
+    return len(query_terms(title)) >= TITLE_MIN_TERMS and coverage(title, query) == 1.0
+
+
+def _relevance(deps: AgentDeps, query: str, text: str, title: str = "") -> float:
     """The model may rewrite or translate the question; the user's words count as well."""
-    return max(coverage(query, text), coverage(deps.user_text, text) if deps.user_text else 0.0)
+    return max(
+        coverage(query, text),
+        coverage(deps.user_text, text) if deps.user_text else 0.0,
+        float(_title_match(query, title) or _title_match(deps.user_text, title)),
+    )
 
 
 async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
@@ -225,14 +240,25 @@ async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
         }
     async with ctx.deps.db.unit_of_work() as uow:
         result = await KnowledgeService(uow, ctx.deps.embeddings).search(
-            viewer_of(ctx.deps.actor), query, user_id=ctx.deps.actor.id
+            viewer_of(ctx.deps.actor), query, limit=CANDIDATES, user_id=ctx.deps.actor.id
         )
     relevant = [
         h
         for h in result.hits
-        if _relevance(ctx.deps, query, f"{h.heading} {h.content} {h.document_title}") >= RELEVANT
+        if _relevance(
+            ctx.deps, query, f"{h.heading} {h.content} {h.document_title}", h.document_title
+        )
+        >= RELEVANT
     ]
-    relevant = answer_first(relevant)
+    relevant.sort(
+        key=lambda h: (
+            not (
+                _title_match(query, h.document_title)
+                or _title_match(ctx.deps.user_text, h.document_title)
+            )
+        )
+    )
+    relevant = answer_first(relevant)[:5]
     sources = [
         {
             "n": n,
@@ -268,7 +294,20 @@ async def search_knowledge(ctx: Ctx, query: str) -> dict[str, Any]:
             },
         }
         for c in result.conflicts
-        if any(s["section"] in {c.company.heading, c.team.heading} for s in sources)
+        # The conflicting section is a source and the question is about its topic (the section
+        # headings), or the question names a conflicting document by its title.
+        if (
+            any(h.heading in {c.company.heading, c.team.heading} for h in relevant)
+            and _relevance(ctx.deps, query, f"{c.company.heading} {c.team.heading}") >= RELEVANT
+        )
+        or any(
+            h.document_id in {c.company.document_id, c.team.document_id}
+            and (
+                _title_match(query, h.document_title)
+                or _title_match(ctx.deps.user_text, h.document_title)
+            )
+            for h in relevant
+        )
     ]
     ctx.deps.emit(
         "sources", {"query": query, "sources": sources, "conflicts": conflicts, "mode": result.mode}

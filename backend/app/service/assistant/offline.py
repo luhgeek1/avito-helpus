@@ -141,6 +141,10 @@ def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads b
         level = "admin" if _has(text, r"админ", r"admin") else level
         target = re.sub(r"(?i)\s*(на|для)\s+(запись|чтение|редактирование|админ\w*)", "", prompt)
         resource = _after(target, r"(?i)доступ\w*\s+(к|в|на|до)\s+", r"(?i)доступ\w*")
+        # The plan step button names the exact catalogue entry in parentheses (resource slug).
+        named = re.search(r"\(ресурс ([a-z0-9][a-z0-9_.-]*)\)", prompt)
+        if named:
+            resource = named.group(1)
         if "search_knowledge" in tools and _GENERIC_RESOURCE.match(resource.lower()):
             return Intent("search_knowledge", {"query": "как получить доступ подать заявку"})
         args: dict[str, Any] = {"resource": resource}
