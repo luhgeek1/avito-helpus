@@ -1,5 +1,6 @@
 import asyncio
 import os
+from contextlib import aclosing
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -117,17 +118,21 @@ async def test_realtime_publish_and_subscribe(settings: Settings) -> None:
     received: list[dict[str, object]] = []
 
     async def listen() -> None:
-        async for message in subscribe(redis, "user-1"):
-            received.append(message)
-            return
+        # Close the generator here, not when it is garbage collected, so its cleanup always runs.
+        async with aclosing(subscribe(redis, "user-1")) as messages:
+            async for message in messages:
+                received.append(message)
+                return
 
     task = asyncio.create_task(listen())
     await asyncio.sleep(0.2)
     await RedisPublisher(redis).publish("user-1", "plan.updated", {"x": 1})
     await asyncio.wait_for(task, timeout=3)
+    subscribers = await redis.pubsub_numsub("buddy:user:user-1")
     await redis.aclose()
 
     assert received == [{"event": "plan.updated", "data": {"x": 1}}]
+    assert subscribers == [("buddy:user:user-1", 0)]
 
 
 async def test_outbox_delivers_realtime_events(
