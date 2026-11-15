@@ -72,7 +72,7 @@ function IdentityCard({ person, isMe }: { person: Person; isMe: boolean }) {
         {person.middleName ? ` ${person.middleName}` : ''}
       </div>
       <div className="text-secondary">
-        {person.position} ·{' '}
+        {person.position},{' '}
         <Link to="/feed" search={{ channel: 'platform' }} className={link}>
           {person.team}
         </Link>
@@ -269,7 +269,7 @@ function WorkTab({ person, isMe }: { person: Person; isMe: boolean }) {
             </Field>
           )}
           <Field label="Офис и режим работы">
-            {person.office} · {person.workMode}
+            {person.office}, {person.workMode}
           </Field>
           <Field label="В Авито">{person.tenure}</Field>
           <Field label="Организация и должность">{person.organization}</Field>
@@ -357,7 +357,7 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
               <div key={doc.id} className={tableRow}>
                 <span>
                   {doc.title}
-                  <span className={muted}> · {formatDayMonth(doc.date)}</span>
+                  <span className={muted}>, {formatDayMonth(doc.date)}</span>
                 </span>
                 <span
                   className={cx(
@@ -392,9 +392,9 @@ function TabContent({ tab, person, isMe }: { tab: TabId; person: Person; isMe: b
                   {course.title}
                   <span className={muted}>
                     {course.progress === 100
-                      ? ' · пройден'
+                      ? ', пройден'
                       : course.deadline
-                        ? ` · до ${formatDayMonth(course.deadline)}`
+                        ? `, до ${formatDayMonth(course.deadline)}`
                         : ''}
                   </span>
                 </span>

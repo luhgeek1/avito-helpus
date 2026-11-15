@@ -19,7 +19,7 @@ export function IntegrationPage() {
           <button type="button" onClick={() => ask("С чего начать установку Орби?")} className={cx(action, "shrink-0 bg-white text-[#6a55a4] hover:bg-[#eae3f3]")}>Спросить Орби<MessageCircle size={16} aria-hidden /></button>
         </div>
         <footer className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-11 text-[#9296a1]">
-          <span>Орби · Hack&Change 2026</span><Link href="/demo" className="inline-flex min-h-11 items-center gap-2 text-[#786a8e]">Перейти в демо<ArrowRight size={14} aria-hidden /></Link>
+          <span>Орби, Hack&Change 2026</span><Link href="/demo" className="inline-flex min-h-11 items-center gap-2 text-[#786a8e]">Перейти в демо<ArrowRight size={14} aria-hidden /></Link>
         </footer>
   </IntegrationLayout>;
 }

@@ -73,7 +73,7 @@ export function PetGalleryPage({ requestedId }: { requestedId?: string }) {
       <div className="mt-9 flex items-center gap-1.5 border-t border-line pt-5 text-9 text-[#8b7e96] max-sm:mt-6.5
             max-sm:flex-wrap max-sm:gap-1 max-sm:pt-4.25 max-sm:pb-3.5 max-sm:text-8">
         <span className="text-13 text-[#b8a6d1]">♥</span>Сделаны с заботой. Пиксель за
-        пикселем.<span className="ml-auto text-8 text-[#8b7e96] max-sm:text-7">Avito buddy · 2026</span>
+        пикселем.<span className="ml-auto text-8 text-[#8b7e96] max-sm:text-7">Avito buddy, 2026</span>
       </div>
     </main>
   );

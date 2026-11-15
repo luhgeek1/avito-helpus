@@ -10,7 +10,7 @@ export function IntegrationOverview() {
         <section id="overview" className="scroll-mt-28 pb-10 pt-9 sm:pb-12 sm:pt-12">
           <div className="mb-6 flex flex-wrap items-center gap-2 text-11 text-[#72798a]">
             <span className="flex items-center gap-1.5 rounded-full border border-[#e6dfef] bg-[#f7f3fc] px-2.5 py-1 text-[#705a9e]"><span className="size-1.5 rounded-full bg-[#8d77b4]" />React-библиотека</span>
-            <span>React / Next.js</span><span aria-hidden>·</span><span>REST + SSE</span>
+            <span>React / Next.js</span><span>REST + SSE</span>
           </div>
           <h1 className="max-w-180 text-35 font-semibold leading-[1.13] tracking-[-1.4px] sm:text-42 lg:text-[52px]">Ваша платформа.<br />Напарник — Орби.</h1>
           <p className="mt-5 max-w-155 text-15 leading-7 text-[#6b7282] sm:text-16">Поселите AI-спутника в своём интерфейсе. Он поможет новичкам освоиться, найдёт ответы и доведёт заявку до результата.</p>

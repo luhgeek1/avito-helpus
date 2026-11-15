@@ -58,6 +58,8 @@ describe("companion", () => {
     await user.click(options[2]);
     fireEvent.keyDown(wardrobe, { key: "ArrowRight" });
     fireEvent.wheel(wardrobe, { deltaY: 120 });
+    // Let the spring run at least one frame; fast machines would otherwise finish the test first.
+    await act(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
     await user.click(pet());
     await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Настройки" }));
     const settings = screen.getByRole("dialog", { name: "Настройки спутника" });
@@ -169,7 +171,7 @@ describe("pet gallery", () => {
     const collection = await screen.findByRole("region", { name: "Коллекция петов" });
     for (const label of [/^Раньше/, /^Все/, /^Орби/]) await user.click(within(collection).getByRole("button", { name: label }));
     await user.click(within(collection).getAllByRole("button", { name: /^В избранное/ })[0]);
-    await user.click(within(collection).getByRole("button", { name: /^Избранные · 1/ }));
+    await user.click(within(collection).getByRole("button", { name: /^Избранные 1/ }));
     await user.click(within(collection).getByRole("button", { name: "Приостановить анимацию" }));
     await user.click(within(collection).getByRole("button", { name: "Включить анимацию" }));
     await user.click(within(collection).getByRole("button", { name: /^Все/ }));

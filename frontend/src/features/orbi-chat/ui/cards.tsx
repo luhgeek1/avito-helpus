@@ -19,7 +19,7 @@ function ConflictCard({ conflict }: { conflict: ConflictRef }) {
           <p className="mb-2 text-[#4b4b55]">{conflict.summary}</p>
           <div className="grid gap-1.5">
             <blockquote className="rounded-lg bg-white/80 p-2"><span className="block text-10 font-semibold uppercase tracking-wide text-muted">Общий регламент</span>{conflict.company.excerpt}</blockquote>
-            <blockquote className="rounded-lg bg-white/80 p-2"><span className="block text-10 font-semibold uppercase tracking-wide text-muted">Команда{conflict.team.team ? ` · ${conflict.team.team}` : ""}</span>{conflict.team.excerpt}</blockquote>
+            <blockquote className="rounded-lg bg-white/80 p-2"><span className="block text-10 font-semibold uppercase tracking-wide text-muted">Команда{conflict.team.team ? `, ${conflict.team.team}` : ""}</span>{conflict.team.excerpt}</blockquote>
           </div>
           <button type="button" className={cx(smallButton, "mt-2 bg-white text-ink hover:bg-control")} disabled={report.isPending || report.isSuccess}
             onClick={() => report.mutate({ id: conflict.id })}>
@@ -49,7 +49,7 @@ export function SourcesBlock({ data }: { data: SourcesData }) {
                   <span className="min-w-0">
                     <span className="block font-semibold">{source.title}</span>
                     <span className="block text-11 text-[#687181]">
-                      {source.section} · обновлено {formatDay(source.updated_at)}
+                      {source.section}, обновлено {formatDay(source.updated_at)}
                       {source.stale && <span className="ml-1 rounded bg-orange-soft px-1 text-[#9a5d00]">может устареть</span>}
                     </span>
                   </span>

@@ -5,7 +5,7 @@ import { useEquipment, useOrbiMe, usePlan, usePlanTransition, useSubmitQuiz } fr
 import type { Plan, PlanItem } from "@/shared/api";
 import { cx } from "@/shared/lib/cx";
 import { formatDay, plural } from "@/shared/lib/orbi-format";
-import { container, heading, Modal, Skeleton } from "@/shared/ui/portal";
+import { buttonClass, container, heading, Modal, Skeleton } from "@/shared/ui/portal";
 import { action, actionTone, card, DocumentModal, DueDate, errorText, ItemStatusPill, LoadError, muted, Progress, RequireSession } from "./common";
 
 /** The phrase "Сделать с Орби" sends: the agent resolves the rest with its tools. */
@@ -146,7 +146,7 @@ function Stage({ stage, current, highlight, onDoc }: { stage: Plan["stages"][num
       <button type="button" className="flex w-full items-center gap-4 text-left" aria-expanded={open} onClick={() => setOpen(!open)}>
         <div className="min-w-0 flex-1">
           <h3 id={`stage-${stage.stage}`} className={heading.h3}>{stage.title}{current && <span className="ml-2 align-middle text-13 font-bold text-blue-text">сейчас</span>}</h3>
-          <p className={cx(muted, "mt-1")}>{stage.done} из {stage.total} · до {formatDay(stage.due_date)}</p>
+          <p className={cx(muted, "mt-1")}>{stage.done} из {stage.total}, до {formatDay(stage.due_date)}</p>
         </div>
         <span className="w-24 shrink-0 hub-max-720:w-16"><Progress percent={stage.percent} label={`Этап «${stage.title}»`} /></span>
         <ChevronDown size={20} aria-hidden className={cx("shrink-0 transition-transform duration-200 motion-reduce:transition-none", open && "rotate-180")} />
@@ -197,13 +197,13 @@ function PlanContent({ highlight }: { highlight?: string }) {
     <div className={cx(container, "flex flex-col gap-8")}>
       <section className="grid grid-cols-[minmax(0,1fr)_320px] gap-6 rounded-3xl bg-dark px-8 py-8 text-white hub-max-900:grid-cols-1 hub-max-720:px-5 hub-max-720:py-6">
         <div>
-          <p className="mb-2 text-15 text-white/70">{me?.internship_day ? `День ${me.internship_day} стажировки` : "Стажировка"} · этап «{plan.current_stage_title}»</p>
+          <p className="mb-2 text-15 text-white/70">{me?.internship_day ? `День ${me.internship_day} стажировки` : "Стажировка"}, этап «{plan.current_stage_title}»</p>
           <h1 className={cx(heading.h1, "mb-5")}>Мой путь</h1>
           <div className="mb-2 flex items-baseline justify-between gap-4">
             <span className="text-15 text-white/80">Выполнено {plan.done} из {plan.total}</span>
             <span className="text-26 font-bold tabular-nums">{plan.percent}%</span>
           </div>
-          <Progress percent={plan.percent} label="Прогресс плана адаптации" />
+          <Progress percent={plan.percent} label="Прогресс плана адаптации" track="bg-white/20" />
           {plan.overdue > 0 && <p className="mt-3 inline-flex items-center gap-2 rounded-xl bg-red/20 px-3 py-1.5 text-14"><AlertTriangle size={16} aria-hidden /> Просрочено: {plural(plan.overdue, ["шаг", "шага", "шагов"])}</p>}
         </div>
         {me?.mentor && (
@@ -213,7 +213,7 @@ function PlanContent({ highlight }: { highlight?: string }) {
               <p className="text-18 font-bold">{me.mentor.full_name}</p>
               <p className="text-14 text-white/70">{me.mentor.title}</p>
             </div>
-            <button type="button" onClick={() => ask("Хочу задать вопрос наставнику")} className={cx(action, "bg-white text-primary hover:bg-white/90")}>
+            <button type="button" onClick={() => ask("Хочу задать вопрос наставнику")} className={cx(buttonClass("white", "m"), "w-full")}>
               <MessageCircle size={16} aria-hidden /> Спросить через Орби
             </button>
           </div>

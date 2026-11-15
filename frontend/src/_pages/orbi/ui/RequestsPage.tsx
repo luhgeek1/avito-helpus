@@ -39,7 +39,7 @@ function RequestCard({ request, selected }: { request: ServiceRequest; selected:
           <span className="mt-1 block text-16 font-bold leading-5.5">{request.title}</span>
           <span className={cx(muted, "mt-0.5 block")}>
             {request.approver ? `Согласует: ${request.approver}` : "Согласующий не нужен"}
-            {request.sla_due_at && request.status === "submitted" ? ` · ответ до ${formatMoment(request.sla_due_at)}` : ""}
+            {request.sla_due_at && request.status === "submitted" ? `, ответ до ${formatMoment(request.sla_due_at)}` : ""}
           </span>
         </span>
         <ChevronDown size={20} aria-hidden className={cx("mt-2 shrink-0 transition-transform duration-200 motion-reduce:transition-none", open && "rotate-180")} />
@@ -51,8 +51,8 @@ function RequestCard({ request, selected }: { request: ServiceRequest; selected:
             {request.history.map((event, index) => (
               <li key={`${event.created_at}-${index}`} className="relative">
                 <span className="absolute top-1.5 -left-[21px] size-2 rounded-full bg-dark" aria-hidden />
-                <p className="text-14"><strong className="font-bold">{STATUS_NOTE[event.status] ?? event.status}</strong> · {SOURCE[event.source] ?? event.source}</p>
-                <p className={muted}>{formatMoment(event.created_at)}{event.note ? ` · ${event.note}` : ""}</p>
+                <p className="text-14"><strong className="font-bold">{STATUS_NOTE[event.status] ?? event.status}</strong>, {SOURCE[event.source] ?? event.source}</p>
+                <p className={muted}>{formatMoment(event.created_at)}{event.note ? `, ${event.note}` : ""}</p>
               </li>
             ))}
           </ol>
@@ -115,7 +115,7 @@ function QuestionCard({ question, selected }: { question: Escalation; selected: 
     <li className={cx(card, "space-y-3", selected && "ring-2 ring-blue")} id={`question-${question.id}`}>
       <div className="flex flex-wrap items-center gap-2">
         <StatusPill status={status.status}>{status.title}</StatusPill>
-        <span className={muted}>{question.assignee_name} ({LEVEL[question.level] ?? question.level}) · {formatMoment(question.created_at)}</span>
+        <span className={muted}>{question.assignee_name} ({LEVEL[question.level] ?? question.level}), {formatMoment(question.created_at)}</span>
       </div>
       <p className="text-16 font-bold leading-5.5">{question.question}</p>
       {question.answer ? (

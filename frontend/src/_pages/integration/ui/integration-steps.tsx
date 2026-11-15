@@ -11,7 +11,7 @@ export function IntegrationSteps() {
   return <>
         <Section id="quickstart" step="01" title="Сначала запустим проект" description="Самый короткий путь — поднять весь стенд в Docker.">
           <p className={paragraph}>Нужны репозиторий проекта и <strong className="font-medium text-ink">Docker с Compose v2</strong>. В свежем клоне выполните команды из корня. Если <InlineCode>.env</InlineCode> уже существует, сохраните свои настройки.</p>
-          <CodeBlock code={integrationSnippets.start} language="bash" title="Терминал · корень проекта" />
+          <CodeBlock code={integrationSnippets.start} language="bash" title="Терминал, корень проекта" />
           <div className="divide-y divide-line rounded-xl border border-line text-13">
             {[{ url: "http://localhost", text: "Это руководство и помощь с установкой" }, { url: "http://localhost/demo", text: "Портал «Хаб» с рабочим спутником" }, { url: "http://localhost/api/docs", text: "Swagger UI бэкенда" }].map(({ url, text }) => <div key={url} className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-4"><code className="break-all font-mono text-12 text-[#6a55a4]">{url}</code><span className="text-[#72798a]">{text}</span></div>)}
           </div>
@@ -19,7 +19,7 @@ export function IntegrationSteps() {
           <details className="rounded-xl border border-line px-4">
             <summary className="flex min-h-13 cursor-pointer list-none items-center justify-between gap-3 text-13 font-medium">Хочу разрабатывать фронтенд отдельно<ChevronDown size={16} aria-hidden /></summary>
             <p className={cx(paragraph, "mb-4")}>Нужен Node.js 20.9+. Бэкенд запустится в Docker, Next.js — на <InlineCode>http://localhost:5173</InlineCode>.</p>
-            <CodeBlock code={integrationSnippets.development} language="bash" title="Терминал · разработка" className="mb-4" />
+            <CodeBlock code={integrationSnippets.development} language="bash" title="Терминал, разработка" className="mb-4" />
           </details>
         </Section>
 
@@ -34,12 +34,12 @@ export function IntegrationSteps() {
 
         <Section id="api" step="03" title="Соедините спутника с API" description="Один домен для интерфейса, сессии и потока ответов.">
           <p className={paragraph}>Клиент уже использует <InlineCode>/api/v1</InlineCode>. Направьте этот префикс на FastAPI. В Docker это делает nginx, при локальной разработке — Next.js. Адрес API задаётся серверной переменной <InlineCode>ORBI_BACKEND_URL</InlineCode>.</p>
-          <CodeBlock code={integrationSnippets.proxy} language="ts" title="next.config.ts · объединить со своим конфигом" />
+          <CodeBlock code={integrationSnippets.proxy} language="ts" title="next.config.ts, объединить со своим конфигом" />
           <p className={paragraph}>Чат и уведомления приходят через SSE. Оставьте <InlineCode>compress: false</InlineCode> и отключите буферизацию на своём прокси, чтобы ответ появлялся по мере генерации. Для полной работы нужны API, worker, Postgres и Redis.</p>
           <details className="rounded-xl border border-line px-4">
             <summary className="flex min-h-13 cursor-pointer list-none items-center justify-between gap-3 text-13 font-medium">Подключить языковую модель<ChevronDown size={16} aria-hidden /></summary>
             <p className={cx(paragraph, "mb-4")}>Добавьте настройки в корневой <InlineCode>.env</InlineCode> и выполните <InlineCode>docker compose up -d api worker</InlineCode>. Ключ хранится только на сервере. Поддерживается OpenAI-совместимый шлюз.</p>
-            <CodeBlock code={integrationSnippets.environment} language="dotenv" title=".env · только на сервере" className="mb-4" />
+            <CodeBlock code={integrationSnippets.environment} language="dotenv" title=".env, только на сервере" className="mb-4" />
           </details>
         </Section>
 
@@ -66,7 +66,7 @@ export function IntegrationSteps() {
           <ul className="space-y-3 text-13 leading-6 text-[#646b7a]">
             {["Откройте демо и войдите под тестовой учёткой Ани.", "Попросите доступ к listings-api: Орби должен показать карточку.", "Подтвердите её: появится заявка, затем результат и уведомление.", "Проверьте чат и меню на телефоне, перетаскивание и паузу анимаций."].map((text) => <li key={text} className="flex gap-3"><Check size={16} className="mt-1 shrink-0 text-[#7c9c89]" aria-hidden />{text}</li>)}
           </ul>
-          <CodeBlock code={integrationSnippets.diagnostics} language="bash" title="Терминал · диагностика" />
+          <CodeBlock code={integrationSnippets.diagnostics} language="bash" title="Терминал, диагностика" />
           <p className={paragraph}>Сквозная проверка: <InlineCode>sh deploy/smoke.sh</InlineCode> или <InlineCode>python deploy/smoke.py</InlineCode>. Если что-то не так, спросите Орби и укажите текст ошибки.</p>
           <div className="divide-y divide-line border-y border-line">
             {[{ title: "API возвращает 502", question: "API возвращает 502 — что проверить?" }, { title: "Чат просит войти / ошибка 401", question: "Чат возвращает 401. Как настроить авторизацию?" }, { title: "Ответ появляется только целиком", question: "SSE буферизуется, ответ приходит целиком. Что делать?" }].map(({ title, question }) => <button type="button" key={title} onClick={() => ask(question)}

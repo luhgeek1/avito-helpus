@@ -41,16 +41,16 @@ export function LoadError({ error, onRetry }: { error: unknown; onRetry: () => v
   return <ErrorState message={message} onRetry={onRetry} />;
 }
 
-export function Progress({ percent, label, tone = "bg-green" }: { percent: number; label: string; tone?: string }) {
+export function Progress({ percent, label, tone = "bg-green", track = "bg-white" }: { percent: number; label: string; tone?: string; track?: string }) {
   return (
-    <div className="h-2 overflow-hidden rounded-full bg-white" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
+    <div className={cx("h-2 overflow-hidden rounded-full", track)} role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
       <div className={cx("h-full rounded-full transition-[width] duration-500 motion-reduce:transition-none", tone)} style={{ width: `${Math.max(percent, percent > 0 ? 3 : 0)}%` }} />
     </div>
   );
 }
 
 const STATUS: Record<PlanItem["status"], { title: string; tone: string }> = {
-  todo: { title: "Нужно сделать", tone: "bg-white text-secondary" },
+  todo: { title: "Нужно сделать", tone: "bg-white px-0 text-secondary" },
   in_progress: { title: "В работе", tone: "bg-blue-soft text-blue-text" },
   waiting: { title: "Ждёт", tone: "bg-purple-soft text-purple-text" },
   blocked: { title: "Блокер", tone: "bg-red-soft text-red-text" },
@@ -98,7 +98,7 @@ export function DocumentModal({ slug, onClose }: { slug: string; onClose: () => 
     <Modal title={data?.title ?? "Инструкция"} onClose={onClose} wide>
       {isPending ? <Skeleton className="h-50" /> : isError ? <ErrorState onRetry={() => { void refetch(); }} /> : (
         <div className="space-y-4">
-          <p className={muted}>{data.source_label} · {data.team_name ?? "вся компания"} · обновлено {formatDay(data.updated_at)}</p>
+          <p className={muted}>{data.source_label}, {data.team_name ?? "вся компания"}, обновлено {formatDay(data.updated_at)}</p>
           <DocumentBody body={data.body} />
         </div>
       )}

@@ -55,7 +55,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
         </button>
         <div className="min-w-0 flex-1">
           <h2 id="companion-chat-title" className="truncate font-sans text-14 font-semibold leading-5 text-dark">{name}</h2>
-          <p className="text-11 text-[#687181]">{chat.kind === "guide" ? "Помощь с интеграцией · по руководству" : me ? `${me.full_name} · ${me.role_title}` : "Перетащи за шапку"}</p>
+          <p className="text-11 text-[#687181]">{chat.kind === "guide" ? "Помощь с интеграцией, по руководству" : me ? `${me.full_name}, ${me.role_title}` : "Перетащи за шапку"}</p>
         </div>
         {authenticated && chat.messages.length > 0 && (
           <button type="button" onClick={startOver} aria-label="Новый диалог" title="Новый диалог" disabled={chat.busy}
