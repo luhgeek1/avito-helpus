@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "height": 900,
+      "directChat": true,
+      "menuHide": true,
+      "restore": true,
+      "dragCorners": true,
+      "reload": true,
+      "keyboard": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "directChat": true,
+      "menuHide": true,
+      "restore": true,
+      "dragCorners": true,
+      "reload": true,
+      "keyboard": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "directChat": true,
+      "menuHide": true,
+      "restore": true,
+      "dragCorners": true,
+      "reload": true,
+      "keyboard": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "directChat": true,
+      "menuHide": true,
+      "restore": true,
+      "dragCorners": true,
+      "reload": true,
+      "keyboard": true,
+      "reducedMotion": true
+    }
+  ],
+  "errors": []
+}

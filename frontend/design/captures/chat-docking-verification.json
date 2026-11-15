@@ -1,0 +1,67 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "height": 900,
+      "intermediatePositions": true,
+      "arc": [
+        {
+          "label": "Скрыть спутника",
+          "diameter": 44,
+          "radius": 152
+        },
+        {
+          "label": "Чат",
+          "diameter": 44,
+          "radius": 152.00000249638563
+        },
+        {
+          "label": "Гардероб",
+          "diameter": 44,
+          "radius": 152.00000249638563
+        },
+        {
+          "label": "Настройки",
+          "diameter": 44,
+          "radius": 152
+        }
+      ],
+      "sameNode": true,
+      "interruptedReturn": true,
+      "dockedChat": true,
+      "reducedMotion": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "intermediatePositions": true,
+      "arc": [
+        {
+          "label": "Скрыть спутника",
+          "diameter": 40,
+          "radius": 140
+        },
+        {
+          "label": "Чат",
+          "diameter": 40,
+          "radius": 140.00000369030246
+        },
+        {
+          "label": "Гардероб",
+          "diameter": 40,
+          "radius": 139.99997726130516
+        },
+        {
+          "label": "Настройки",
+          "diameter": 40,
+          "radius": 140
+        }
+      ],
+      "sameNode": true,
+      "interruptedReturn": true,
+      "dockedChat": true,
+      "reducedMotion": true
+    }
+  ],
+  "errors": []
+}
