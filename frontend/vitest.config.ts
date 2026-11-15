@@ -11,6 +11,7 @@ export default defineConfig({
       provider: "v8", reporter: ["text", "html", "json-summary"],
       // Every source file counts, including ones no test imports.
       include: ["src/**/*.{ts,tsx}"],
+      thresholds: { lines: 100 },
     },
   },
 });

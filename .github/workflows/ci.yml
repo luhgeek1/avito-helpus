@@ -1,0 +1,173 @@
+name: Pull request checks
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.1-pg17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: buddy_test
+        ports: ['5439:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d buddy_test"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+      redis:
+        image: redis:8.0.2-alpine
+        ports: ['6380:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:secret@localhost:5439/buddy_test
+      TEST_REDIS_URL: redis://localhost:6380/0
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: astral-sh/setup-uv@v7.0.0
+        with:
+          version: '0.9.5'
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - run: uv sync --locked
+      - name: Lint, format and strict types
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy
+      - name: Tests and 100 percent coverage gate
+        run: |
+          mkdir -p ../reports
+          uv run pytest -q --cov=app --cov-fail-under=100 --cov-report=term --cov-report=xml:../reports/backend-coverage.xml --cov-report=lcov:../reports/backend.lcov
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: backend-coverage
+          path: reports/backend*
+          if-no-files-found: warn
+          retention-days: 14
+
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Generate route types and check TypeScript
+        run: |
+          npx next typegen
+          npx tsc --noEmit
+      - run: npm run check:architecture
+      - run: npm run coverage
+      - run: npm run build
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+          if-no-files-found: warn
+          retention-days: 14
+
+  coverage:
+    needs: [backend, frontend]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4.3.0
+        with:
+          name: backend-coverage
+          path: reports/
+      - uses: actions/download-artifact@v4.3.0
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+      - name: Combined coverage report
+        run: |
+          python deploy/coverage_report.py
+          cat reports/coverage-summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: combined-coverage
+          path: reports/coverage-summary.md
+          if-no-files-found: error
+          retention-days: 14
+
+  e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      LLM_MODE: offline
+      LLM_API_KEY: ''
+      # Leave time to observe "На согласовании" before the real mock webhook.
+      MOCK_APPROVAL_DELAY_SEC: '15'
+      SCHEDULER_INTERVAL_SEC: '1'
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Build the complete offline stack and wait for health
+        run: docker compose up -d --build --wait --wait-timeout 300
+      - name: Reset demo before each test and run browser scenarios through nginx
+        run: npm run e2e
+        working-directory: frontend
+      - name: Capture stack diagnostics
+        if: always()
+        run: |
+          mkdir -p frontend/test-results
+          docker compose ps -a > frontend/test-results/compose-ps.txt
+          docker compose logs --no-color > frontend/test-results/compose.log 2>&1
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: playwright-results
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove disposable stack
+        if: always()
+        run: docker compose down -v --remove-orphans
