@@ -22,9 +22,9 @@ export async function styles(frontend) {
   });
   const css = `*,::before,::after{${defaults.join(';')}}` + root.toString() + `\n:host{all:initial;display:block;position:fixed;top:0;left:0;width:0;height:0;direction:ltr;color-scheme:light;--font-golos:OrbiSDKGolos;--font-pixel:OrbiSDKPixel;--font-portal:OrbiSDKGolos}.orbi-surface{font-synthesis:none;text-rendering:optimizeLegibility}`;
   let fonts = '';
-  for (const [family, file, weight] of [['OrbiSDKGolos', 'golos-text.ttf', '400 900'], ['OrbiSDKPixel', 'press-start-2p.ttf', '400']]) {
+  for (const [family, file, weight] of [['OrbiSDKGolos', 'golos-text.woff2', '400 900'], ['OrbiSDKPixel', 'press-start-2p.woff2', '400']]) {
     const data = (await readFile(path.join(frontend, 'public/fonts', file))).toString('base64');
-    fonts += `@font-face{font-family:${family};src:url(data:font/ttf;base64,${data}) format("truetype");font-weight:${weight};font-display:swap}`;
+    fonts += `@font-face{font-family:${family};src:url(data:font/woff2;base64,${data}) format("woff2");font-weight:${weight};font-display:swap}`;
   }
   return { css, fonts };
 }

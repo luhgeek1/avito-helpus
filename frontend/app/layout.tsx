@@ -3,8 +3,8 @@ import localFont from "next/font/local";
 import { App } from "@/_app";
 import "./globals.css";
 
-const golos = localFont({ src: "../public/fonts/golos-text.ttf", variable: "--font-golos", weight: "400 900", display: "swap" });
-const pixel = localFont({ src: "../public/fonts/press-start-2p.ttf", variable: "--font-pixel", display: "swap" });
+const golos = localFont({ src: "../public/fonts/golos-text.woff2", variable: "--font-golos", weight: "400 900", display: "swap" });
+const pixel = localFont({ src: "../public/fonts/press-start-2p.woff2", variable: "--font-pixel", display: "swap" });
 const portal = localFont({ src: [
   { path: "../public/portal/fonts/inter-regular.ttf", weight: "400" },
   { path: "../public/portal/fonts/inter-bold.ttf", weight: "700" },
