@@ -1,6 +1,7 @@
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { guideTopics } from "@/shared/config";
 import { CodeBlock } from "@/shared/ui/code-block";
+import { Link } from "@/shared/lib/portal-navigation";
 import { cx } from "@/shared/lib/cx";
 import { useIntegrationAssistant } from "../model/store";
 
@@ -25,9 +26,9 @@ export function GuideMessages({ name }: { name: string }) {
       const topic = guideTopics.find((item) => item.id === id)!;
       return <div key={id} className="mt-3 space-y-2">
         {topic.code && <CodeBlock code={topic.code.value} language={topic.code.language} title={topic.code.title} />}
-        <a href={`/#${topic.section}`} className="inline-flex min-h-11 items-center gap-1 text-12 font-medium text-[#5e4b9b] underline decoration-[#cbbce7] underline-offset-4">
+        <Link to={`/#${topic.section}`} className="inline-flex min-h-11 items-center gap-1 text-12 font-medium text-[#5e4b9b] underline decoration-[#cbbce7] underline-offset-4">
           В руководстве: {topic.title}<ArrowUpRight size={13} aria-hidden />
-        </a>
+        </Link>
       </div>;
     })}
   </article>)}</div>;

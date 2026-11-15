@@ -23,15 +23,12 @@ export function IntegrationSteps() {
           </details>
         </Section>
 
-        <Section id="react" step="02" title="Добавьте Орби в свой интерфейс" description="Готовая клиентская оболочка для Next.js App Router.">
-          <p className={paragraph}>Спутник поставляется в исходниках: отдельный npm-пакет пока не опубликован. <InlineCode>OrbiCompanion</InlineCode> уже объединяет провайдеры, сессию, живые уведомления и виджет. Подключите его один раз в постоянном layout.</p>
-          <ol className="space-y-4 text-13 leading-7 text-[#646b7a]">
-            <li className="flex gap-3"><span className="font-mono text-[#9b91a9]">1.</span><span>Перенесите <InlineCode>frontend/src</InlineCode>, зависимости из <InlineCode>package.json</InlineCode> и сохраните alias <InlineCode>@/* → ./src/*</InlineCode>.</span></li>
-            <li className="flex gap-3"><span className="font-mono text-[#9b91a9]">2.</span><span>Подключите Tailwind с темой <InlineCode>tailwind.config.ts</InlineCode>, <InlineCode>app/globals.css</InlineCode>, PostCSS и локальные шрифты из <InlineCode>public/fonts</InlineCode> и <InlineCode>app/layout.tsx</InlineCode>.</span></li>
-            <li className="flex gap-3"><span className="font-mono text-[#9b91a9]">3.</span><span>Оберните содержимое <InlineCode>body</InlineCode> компонентом ниже. Сохраните маршруты <InlineCode>/login</InlineCode>, <InlineCode>/pets</InlineCode>, <InlineCode>/plan</InlineCode>, <InlineCode>/requests</InlineCode>, <InlineCode>/questions</InlineCode> и <InlineCode>/mentor</InlineCode> либо адаптируйте ссылки под свою платформу.</span></li>
-          </ol>
-          <CodeBlock code={integrationSnippets.component} language="tsx" title="app/layout.tsx · внутри body" />
-          <p className={paragraph}>Спутнику нужен layout без <InlineCode>transform</InlineCode> и обрезки <InlineCode>overflow</InlineCode>. Для другого React-роутера замените адаптеры <InlineCode>next/link</InlineCode> и <InlineCode>next/navigation</InlineCode>. Самостоятельный script-виджет для произвольного сайта пока не поставляется.</p>
+        <Section id="react" step="02" title="Добавьте Орби в свой интерфейс" description="Один React-компонент со стилями, шрифтами и всем интерфейсом спутника.">
+          <p className={paragraph}>Библиотека <InlineCode>@orbi-companion/react</InlineCode> готова к установке из архива. В публичном npm она ещё не опубликована. Соберите пакет в репозитории и установите его в приложение с React 19.</p>
+          <CodeBlock code={integrationSnippets.package} language="bash" title="Сборка и установка npm-пакета" />
+          <p className={paragraph}>Добавьте один <InlineCode>OrbiCompanion</InlineCode> рядом с приложением. Стили и шрифты уже внутри; Tailwind и Next.js не нужны. В Next.js подключите компонент в постоянном layout.</p>
+          <CodeBlock code={integrationSnippets.component} language="tsx" title="Компонент вашей платформы" />
+          <p className={paragraph}>Виджет изолирует стили через Shadow DOM, содержит форму входа и сохраняет предпочтения. Для авторизации вашей платформы передайте <InlineCode>getToken</InlineCode> и меняйте <InlineCode>sessionKey</InlineCode> при смене пользователя. Переходы к плану и заявкам настраиваются через <InlineCode>onNavigate</InlineCode> или <InlineCode>portalUrl</InlineCode>.</p>
           <HelpLink question="Как перенести Орби в свой Next.js проект?">Разобрать встраивание с Орби</HelpLink>
         </Section>
 
@@ -60,7 +57,7 @@ export function IntegrationSteps() {
             <div className="grid grid-cols-2 gap-4 bg-canvas px-4 py-3 font-medium"><span>На стенде</span><span>В вашей платформе</span></div>
             {[ ["Синтетические документы и команды", "Свои знания с ACL и оргструктура"], ["corp-mock по MCP", "Адаптеры к доступам, IT и отсутствиям"], ["Демо-пользователи", "Корпоративный SSO"], ["OpenAI / офлайн-режим", "Ваша модель или совместимый шлюз"] ].map(([before, after]) => <div key={before} className="grid grid-cols-2 gap-4 border-t border-line px-4 py-3 leading-6"><span className="text-[#7a8090]">{before}</span><span>{after}</span></div>)}
           </div>
-          <p className={paragraph}>Подключайте сервисы через порт <InlineCode>CorpServices</InlineCode> и адаптеры в <InlineCode>backend/app/infra</InlineCode>. Сохраните outbox, идемпотентность и проверку подписи веб-хуков. Документы загружайте через серверный слой знаний с правами доступа.</p>
+          <p className={paragraph}>Подключайте сервисы через порт <InlineCode>CorpServices</InlineCode> и адаптеры в <InlineCode>backend/app/infra</InlineCode>. Сохраните outbox, идемпотентность и проверку подписи веб-хуков. Документы загружайте командой python -m app.cli knowledge-import /path/to/documents. Флаг --check проверяет файлы без записи, --replace разрешает обновление. Роли и область видимости обязательны.</p>
           <p className={paragraph}>Автоматических коннекторов к реальной Jira и Confluence пока нет. Текущие данные и инструкции — тестовые, они не являются регламентами Авито.</p>
           <HelpLink question="Как подключить свои корпоративные сервисы и документы?">Что заменить при внедрении</HelpLink>
         </Section>
