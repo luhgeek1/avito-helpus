@@ -1,0 +1,20 @@
+{
+  "name": "@orbi-companion/react",
+  "version": "0.1.0",
+  "description": "React companion with animated pets, streaming chat and confirmed actions",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "files": ["dist", "README.md", "THIRD_PARTY_NOTICES.md"],
+  "sideEffects": false,
+  "peerDependencies": { "react": "^19.1.0", "react-dom": "^19.1.0" },
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/luhgeek1/avito-helpus.git", "directory": "frontend/packages/react" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
+    "prepublishOnly": "node scripts/check-release.mjs"
+  }
+}
