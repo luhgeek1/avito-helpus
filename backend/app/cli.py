@@ -11,6 +11,7 @@ from app.core.logging import configure_logging
 from app.db.database import Database
 from app.infra.clickstream import consume
 from app.infra.observability import ensure_secret, provision_grafana
+from app.knowledge_import import import_knowledge, read_knowledge
 from app.seed.loader import seed
 
 
@@ -70,6 +71,18 @@ async def run_observability(directory: Path) -> None:
         await db.dispose()
 
 
+async def run_knowledge(directory: Path, *, replace: bool, check: bool) -> str:
+    documents = read_knowledge(directory)
+    if check:
+        return f"validated {len(documents)} documents (no database writes)"
+    db = Database(_SeedSettings())
+    try:
+        count = await import_knowledge(db, documents, replace=replace)
+    finally:
+        await db.dispose()
+    return f"imported {count} documents; embeddings queued in outbox"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -88,12 +101,20 @@ def main() -> None:
     commands.add_parser(
         "clickstream-consume", help="synthetic Clickstream example with durable deduplication"
     )
+    knowledge = commands.add_parser("knowledge-import", help="import synthetic Markdown knowledge")
+    knowledge.add_argument("directory", type=Path)
+    knowledge.add_argument("--replace", action="store_true", help="allow replacing matching slugs")
+    knowledge.add_argument("--check", action="store_true", help="validate files without a database")
     args = parser.parse_args()
 
     if args.command == "keys":
         print(generate_keys(args.dir))  # noqa: T201 - CLI output
     elif args.command == "seed":
         print(asyncio.run(run_seed(reset=args.reset)))  # noqa: T201 - CLI output
+    elif args.command == "knowledge-import":
+        print(  # noqa: T201 - CLI output
+            asyncio.run(run_knowledge(args.directory, replace=args.replace, check=args.check))
+        )
     elif args.command == "telemetry-keys":
         ensure_secret(args.dir / "clickstream_hmac_key")
     elif args.command == "observability-init":
