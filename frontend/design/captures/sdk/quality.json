@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "12ab387c985b36b12dc3d9c0b94c32651a739ae3",
+  "backend": {
+    "tests": 432,
+    "linesCovered": 6376,
+    "linesTotal": 6376,
+    "makeCheck": true
+  },
+  "frontend": {
+    "tests": 220,
+    "linesCovered": 3738,
+    "linesTotal": 3738
+  },
+  "sdk": {
+    "tests": 8,
+    "linesCovered": 133,
+    "linesTotal": 133
+  },
+  "checks": [
+    "TypeScript",
+    "Steiger: 0 errors, 8 existing warnings",
+    "Next.js production build",
+    "tarball install and build in clean Vite and Next.js consumers"
+  ],
+  "additionalCompatibility": "React 19.1 verified in Vite; React 19.3 verified in Next.js",
+  "package": {
+    "file": "orbi-companion-react-0.1.0.tgz",
+    "sha256": "c28df3f82d9c9d8fb6dc90290b07ce74ed9b69258e29df2d31b07cc6e28b9dc4",
+    "published": false
+  }
+}
