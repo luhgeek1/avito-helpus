@@ -7,22 +7,22 @@ import { defaultPet, pets, usePetPreferences } from "@/entities/pet";
 const key = "buddy-onboarding-v1";
 const Context = createContext({ active: true, ready: false, start() {}, finish() {} });
 
-export function PetOnboardingProvider({ children }: { children: ReactNode }) {
-  const [active, setActive] = useState(true);
+export function PetOnboardingProvider({ children, autoStart = true }: { children: ReactNode; autoStart?: boolean }) {
+  const [active, setActive] = useState(autoStart);
   const [ready, setReady] = useState(false);
   const { choosePet } = usePetPreferences();
   useEffect(() => {
     let completed = false;
     try {
       completed = localStorage.getItem(key) === "done";
-      if (!completed && !pets.some(pet => pet.id === localStorage.getItem("buddy-pet"))) choosePet(defaultPet);
+      if (!pets.some(pet => pet.id === localStorage.getItem("buddy-pet"))) choosePet(defaultPet);
     } catch {
       // A blocked storage still allows completing the tour for this session.
       choosePet(defaultPet);
     }
-    setActive(!completed);
+    setActive(!completed && autoStart);
     setReady(true);
-  }, [choosePet]);
+  }, [choosePet, autoStart]);
   function finish() {
     try { localStorage.setItem(key, "done"); } catch { /* Keep the in-memory completion. */ }
     setActive(false);

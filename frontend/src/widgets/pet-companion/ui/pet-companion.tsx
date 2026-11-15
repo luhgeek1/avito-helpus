@@ -17,9 +17,8 @@ import type { ChatMessage } from "../model/chat-messages";
 import { useCompanionTour } from "../model/use-companion-tour";
 import { CompanionTourShell } from "./companion-tour";
 import { cx } from "@/shared/lib/cx";
-import { useOrbiChat } from "@/features/orbi-chat";
 import { useOrbiNotice, useSession } from "@/shared/api";
-export function PetCompanion() {
+export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
   const { chosenPet, paused, selectionVersion } = usePetPreferences();
   const [widgetVisible, setWidgetVisible] = useState(true);
   const [widgetSpeaking, setWidgetSpeaking] = useState(false);
@@ -27,7 +26,7 @@ export function PetCompanion() {
   const showGreeting = useCallback((open: boolean) => { setWidgetReply(null); setWidgetSpeaking(open); }, []);
   const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible);
   const actions = useCompanionActions(movement.ref, showGreeting, movement.dragging, widgetVisible);
-  const chat = useCompanionChat();
+  const chat = useCompanionChat(guideMode);
   const openSpotlight = useCallback(() => { actions.dismiss(); setWidgetSpeaking(false); }, [actions.dismiss]);
   const spotlight = useSpotlightShortcut(Boolean(chosenPet), openSpotlight);
   const tour = useCompanionTour({ movement, actions, spotlight, draft: chat.draft,
@@ -39,7 +38,7 @@ export function PetCompanion() {
       actions.dismiss();
     }
   }, [selectionVersion, actions.dismiss]);
-  const openSignal = useOrbiChat((state) => state.openSignal);
+  const openSignal = chat.openSignal;
   const openChat = actions.chat;
   useEffect(() => {
     if (!openSignal) return;
@@ -51,12 +50,19 @@ export function PetCompanion() {
   const accountEpoch = useSession((state) => state.epoch);
   const sessionStatus = useSession((state) => state.status);
   useEffect(() => {
+    if (guideMode) return;
     setWidgetReply(null);
     setWidgetSpeaking(false);
     actions.dismiss();
-  }, [accountEpoch, sessionStatus, actions.dismiss]);
+  }, [accountEpoch, sessionStatus, guideMode, actions.dismiss]);
   useEffect(() => {
-    if (!notice || chatOpen || tour.active) return;
+    setWidgetReply(null);
+    setWidgetSpeaking(false);
+    actions.dismiss();
+    spotlight.close();
+  }, [guideMode, actions.dismiss]);
+  useEffect(() => {
+    if (guideMode || !notice || chatOpen || tour.active) return;
     setWidgetReply({ id: notice.id, text: notice.body ? `${notice.title}\n${notice.body}` : notice.title });
     setWidgetVisible(true);
     setWidgetSpeaking(true);
@@ -67,7 +73,7 @@ export function PetCompanion() {
     movement.style.left, movement.style.top);
   return (
     <CompanionTourShell tour={tour} hideCopy={widgetSpeaking || actions.chatOpen}>
-      {chosenPet && spotlight.open && <CompanionSpotlight pet={chosenPet} chat={chat} onClose={spotlight.close}
+      {chosenPet && spotlight.open && <CompanionSpotlight key={guideMode ? "guide" : "workspace"} pet={chosenPet} chat={chat} onClose={spotlight.close}
         onReply={reply => { actions.dismiss(); setWidgetReply(reply); setWidgetVisible(true); setWidgetSpeaking(true); }}
         onOpenChat={() => { spotlight.close(); setWidgetVisible(true); actions.chat(); }} />}
       {chosenPet && widgetVisible && (
