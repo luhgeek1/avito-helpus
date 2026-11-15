@@ -197,12 +197,27 @@ await conflict.waitFor();
 await center(conflict);
 await caption("Гайд команды расходится с общим регламентом — Орби показывает обе цитаты и предлагает уточнить у наставника", 6000);
 
-// 6. Rights: hidden resources are never disclosed.
+// 6. No instruction: Orbi hands the question to the mentor instead of guessing.
+await caption("Инструкции нет — Орби не выдумывает ответ, а предлагает спросить наставника", 600);
+await ask(chat, "Как оформить командировку?");
+const handoff = chat.getByRole("region", { name: /Вопрос: наставник/ }).last();
+if (!(await handoff.waitFor({ timeout: 20_000 }).then(() => true).catch(() => false))) {
+  // A live model first asks whether to pass the question on.
+  await ask(chat, "Да, передай наставнику");
+  await handoff.waitFor({ timeout: 60_000 });
+}
+await point(handoff);
+await click(handoff.getByRole("button", { name: "Подтвердить", exact: true }));
+await chat.getByRole("region", { name: "Вопрос передан" }).last().waitFor();
+await point(chat.getByRole("region", { name: "Вопрос передан" }).last());
+await caption("Вопрос ушёл наставнику со сроком ответа — личное общение Орби не заменяет", 3500);
+
+// 7. Rights: hidden resources are never disclosed.
 await caption("Права учитываются: закрытые ресурсы не раскрываются и не запрашиваются", 600);
 await ask(chat, "Нужен доступ к продовой базе");
 await pause(4500);
 
-// 7. The case's own example: a day off through the absence service.
+// 8. The case's own example: a day off through the absence service.
 await caption("Отгул: Орби проверяет остаток дней и календарь, предупреждает о встречах", 600);
 await ask(chat, "Хочу отгул в пятницу");
 const absence = chat.getByRole("region", { name: /Заявка: Отгул/ });
@@ -216,6 +231,23 @@ await click(chat.getByRole("button", { name: "Закрыть чат", exact: tru
 await page.getByRole("listitem").filter({ hasText: /Отгул/ }).first().waitFor();
 await point(page.getByRole("listitem").filter({ hasText: /Отгул/ }).first());
 await pause(3500);
+
+// 9. The mentor's side: progress, blockers, reviews and the question Anya just asked.
+await caption("Наставник видит то же со своей стороны", 600);
+await click(page.getByRole("button", { name: /^Аккаунт:/ }));
+await click(page.getByRole("menuitem", { name: "Сменить учётку" }));
+await click(page.getByRole("region", { name: "Войти как" }).getByRole("button", { name: /Иван Петров/ }));
+await page.getByRole("heading", { name: "Мои стажёры" }).waitFor();
+await page.getByRole("link", { name: /Кирилл Орлов/ }).first().waitFor();
+await caption("«Мои стажёры»: прогресс, блокеры, шаги на проверке — Орби присылает сводку каждое утро", 1500);
+await point(page.getByRole("link", { name: /Аня Смирнова/ }).first());
+await pause(1500);
+await point(page.getByRole("link", { name: /Кирилл Орлов/ }).first());
+await pause(1500);
+const question = page.getByText("Как оформить командировку?").first();
+await center(question);
+await point(question);
+await caption("Вопрос Ани ждёт ответа наставника; ответ можно добавить в FAQ команды", 4000);
 
 await caption("", 0);
 await card("Орби экономит время наставника",
