@@ -1,28 +1,40 @@
 # Снимок покрытия тестами
 
-Снят 15.11.2026 полным прогоном на ветке `chore/final-specs-ci` (база `5848699` = `main` с влитым PR №3,
-плюс изменения этой ветки). Windows 11, Python 3.13, Node 24, настоящие Postgres (pgvector) и Redis
+Снят 15.11.2026 полным прогоном `make coverage` на `main` после PR №4 и страницы интеграции
+(база `89ebe3b`: `711826f` + исправление гонки в тесте гардероба). Незакоммиченных изменений
+в коде нет. macOS 27 (arm64), Python 3.13, Node 24, настоящие Postgres (pgvector) и Redis
 из `docker-compose.test.yml`.
 
 | Часть | Тесты | Покрыто строк | Всего строк | Покрытие |
 |---|---|---|---|---|
 | Бэкенд (`backend/app`) | 417 (+1 с брокером, выключен по умолчанию) | 6297 | 6297 | 100% |
-| Фронтенд (`frontend/src`, все файлы) | 206 | 3588 | 3588 | 100% |
-| **Итого** | **623** | **9885** | **9885** | **100%** |
+| Фронтенд (`frontend/src`, все файлы) | 215 | 3716 | 3716 | 100% |
+| **Итого** | **632** | **10013** | **10013** | **100%** |
 
-Браузерные E2E полного стека (Playwright, офлайн-режим): 4 из 4 прошли против локального
-`docker compose` через nginx.
+Фронтенд дополнительно: операторы 98,19%, функции 99,07%, ветви 89,6%. Порог CI — 100% строк.
+
+Браузерные E2E полного стека (Playwright 1.64, офлайн-режим): 4 из 4 прошли против локального
+`docker compose` через nginx на этом же коммите.
 
 Без `pragma: no cover`, `v8 ignore` и сужения `include`/`omit` (D-030). Имитация корпоративных
 сервисов (`corp-mock/`) в расчёт не входит (№72 Q&A). Порог 100% строк проверяет CI на каждом
 pull request (D-033).
 
+## Известная нестабильность
+
+- **Фронтенд, исправлено.** Тест гардероба завершался раньше первого кадра анимации, и на быстрой
+  машине 10 строк `use-wardrobe-carousel.ts` оставались непокрытыми (99,73%, порог не проходил).
+  Тест теперь ждёт два кадра; три прогона подряд — 100%.
+- **Бэкенд, не исправлено.** Строка 42 `app/infra/bus.py` (`await pubsub.aclose()` при закрытии
+  подписки SSE) в одном из двух прогонов не покрылась: тест иногда завершается раньше, чем
+  закрывается генератор. Итог прогона — 6296 или 6297 строк. Нужен тест, явно закрывающий подписку.
+
 ## Файлы
 
 | Файл | Формат | SHA-256 |
 |---|---|---|
-| [coverage/backend-coverage.xml](coverage/backend-coverage.xml) | Cobertura (pytest-cov, `backend/app`) | `d75622ce9d1aadf62604ea33a2fe6611861bdc53114eb3c894dcdfb4158490ef` |
-| [coverage/frontend-coverage-summary.json](coverage/frontend-coverage-summary.json) | Istanbul json-summary (Vitest, `frontend/src`) | `718cb9da6dc08eb9a3f26a4ac9a5ca7076c227120bebd15af4f7f14a52500a87` |
+| [coverage/backend-coverage.xml](coverage/backend-coverage.xml) | Cobertura (pytest-cov, `backend/app`) | `924508abc08d1b8ccc7abb456078e6de02331c1f7e653a59d47d6b5951b92e84` |
+| [coverage/frontend-coverage-summary.json](coverage/frontend-coverage-summary.json) | Istanbul json-summary (Vitest, `frontend/src`) | `3918b972b20594d938d56e5f95adc8e65f49f96fa44f48b0d885b3048c954b13` |
 
 Пути исходников в копиях сделаны относительными от корня репозитория.
 
