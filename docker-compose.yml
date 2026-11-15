@@ -26,6 +26,8 @@ x-backend: &backend
     ACCESS_SLA_HOURS: ${ACCESS_SLA_HOURS:-24}
     ESCALATION_SLA_HOURS: ${ESCALATION_SLA_HOURS:-24}
     SCHEDULER_INTERVAL_SEC: ${SCHEDULER_INTERVAL_SEC:-15}
+    # Demo stand: the «Сбросить демо» button next to the mode switcher restores the company.
+    DEMO_PUBLIC_RESET: ${DEMO_PUBLIC_RESET:-true}
     CLICKSTREAM_ENABLED: ${CLICKSTREAM_ENABLED:-false}
     CLICKSTREAM_HMAC_KEY_PATH: /app/secrets/clickstream_hmac_key
     KAFKA_BOOTSTRAP_SERVERS: kafka:9092
