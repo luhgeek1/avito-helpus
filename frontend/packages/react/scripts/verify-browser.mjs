@@ -77,9 +77,9 @@ try {
   await page.getByRole('button', { name: 'Подтвердить', exact: true }).click();
   await expect(page.getByText('Подтверждено', { exact: true })).toBeVisible({ timeout: 15000 });
   await page.getByRole('button', { name: 'Чат', exact: true }).click();
-  await expect(page.locator('.pixel-dialogue')).toBeVisible({ timeout: 20000 });
+  await expect(page.locator('.pixel-dialogue')).toContainText(/одобрено/i, { timeout: 20000 });
   await page.screenshot({ path: `${output}/notification.png` });
-  results.push({ liveBackend: true, knowledgeImport: true, mcpConfirmation: true, sseNotification: true, tour: true });
+  results.push({ liveBackend: true, knowledgeImport: true, mcpConfirmation: true, terminalApproved: true, sseNotification: true, tour: true });
   await page.close();
 } finally {
   await browser.close();
