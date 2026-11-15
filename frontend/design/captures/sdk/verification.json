@@ -40,6 +40,7 @@
       "liveBackend": true,
       "knowledgeImport": true,
       "mcpConfirmation": true,
+      "terminalApproved": true,
       "sseNotification": true,
       "tour": true
     }

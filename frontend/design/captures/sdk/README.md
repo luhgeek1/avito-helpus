@@ -16,15 +16,15 @@
 - `integration-*.png`: обновлённый раздел установки на главной, без переполнения.
 
 Воспроизведение: `npm run sdk:verify` в frontend печатает временную папку с двумя приложениями.
-Запустите в её подпапках `npm start` (5184/5185). Для полного сценария нужны `make test-deps`,
-миграции тестовой БД и два процесса:
+Запустите в её подпапках `npm start` (5184/5185). Для полного сценария сначала выполните `make check`: он поднимет тестовые БД и
+применит миграции. Затем запустите два процесса:
 
 ```sh
 # Из corp-mock:
 MOCK_APPROVAL_DELAY_SEC=8 BUDDY_WEBHOOK_URL=http://127.0.0.1:8088/api/v1/integrations/corp/webhook \
-  uv run uvicorn corp_mock.server:app --host 127.0.0.1 --port 8099
+  uv run uvicorn corp_mock.server:app --host 127.0.0.1 --port 8099 --timeout-graceful-shutdown 2
 # Из backend: только тестовый стенд; fixture сбрасывает buddy_test.
-uv run uvicorn tests.sdk_server:app --host 127.0.0.1 --port 8088
+uv run uvicorn tests.sdk_server:app --host 127.0.0.1 --port 8088 --timeout-graceful-shutdown 2
 # Из корня:
 node frontend/packages/react/scripts/verify-browser.mjs
 ```
