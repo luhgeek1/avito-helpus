@@ -292,3 +292,16 @@ def test_answer_first_prefers_content_of_the_same_document() -> None:
     label_intro = hit("dev", "Принципы", f"{SYNTHETIC_LABEL}. Правила демо-компании.")
     playbook = hit("git", "Что описывает Playbook")
     assert answer_first([label_intro, playbook]) == [playbook, label_intro]
+
+
+def test_plan_step_names_the_exact_resource() -> None:
+    # The plan step button quotes the step title, which itself contains the access phrase.
+    intent = route(
+        "Нужен доступ для шага «Получи доступ к репозиторию listings-api» "
+        "(ресурс stash-listings-api)",
+        INTERN_TOOLS,
+        TODAY,
+    )
+
+    assert intent.tool == "request_access"
+    assert intent.args == {"resource": "stash-listings-api"}

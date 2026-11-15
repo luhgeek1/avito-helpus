@@ -7,7 +7,7 @@
 |---|---|---|---|---|
 | 001 | [План адаптации «Мой путь»](001-adaptation-plan/spec.md) | P1 | `backend/app/{domain,service}/plan.py` | `tests/**/test_plan*.py` |
 | 002 | [Заявка на доступ](002-access-request/spec.md) — флагман | P1 | `service/requests.py`, `service/assistant/tools.py` | `tests/**/test_access*.py` |
-| 003 | [Вопросы о команде и инструментах](003-knowledge-qa/spec.md) | P1 | `service/knowledge.py` | `tests/**/test_knowledge*.py`, `tests/eval/` |
+| 003 | [Вопросы о команде и инструментах](003-knowledge-qa/spec.md) | P1 | `service/knowledge.py` | `tests/integration/test_knowledge_eval.py`, `test_offline_regressions.py`, `test_untrusted_knowledge.py` |
 | 004 | [Отгул и отпуск](004-absence-request/spec.md) | P1 | `domain/absence.py` | `tests/**/test_absence*.py` |
 | 005 | [Ноутбук и техника](005-equipment/spec.md) | P2 | `service/requests.py` | `tests/**/test_equipment*.py` |
 | 006 | [Эскалации и экран наставника](006-mentor-escalations/spec.md) | P1 | `service/escalations.py`, `service/mentor.py` | `tests/**/test_escalation*.py` |

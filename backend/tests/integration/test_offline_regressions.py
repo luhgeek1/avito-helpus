@@ -36,6 +36,20 @@ async def test_balance_needs_no_dates(client: AsyncClient, anya: Account) -> Non
     assert parts(chunks, "action") == []
 
 
+async def test_long_policy_question_keeps_the_document_and_conflict(
+    client: AsyncClient, anya: Account
+) -> None:
+    chunks = await (await Chat(client, anya).start()).say(
+        "Где найти общий регламент код-ревью и что делать, если он расходится с командным?"
+    )
+
+    [found] = parts(chunks, "sources")
+    assert found["sources"][0]["document"] == "code-review-policy"
+    assert found["conflicts"], found
+    assert "расходятся" in text_of(chunks)
+    assert "Код от LLM" not in text_of(chunks)
+
+
 async def test_how_to_questions_are_not_the_plan(client: AsyncClient, anya: Account) -> None:
     chat = await Chat(client, anya).start()
 
@@ -146,3 +160,27 @@ async def test_concurrent_turns_keep_both_in_the_model_history(
     history = json.dumps(conversation.model_history, ensure_ascii=False)
     assert first in history
     assert second in history
+
+
+async def test_unrelated_team_question_does_not_show_the_review_conflict(
+    client: AsyncClient, anya: Account
+) -> None:
+    chunks = await (await Chat(client, anya).start()).say("Какой кодстайл у команды?")
+
+    [found] = parts(chunks, "sources")
+    assert found["sources"][0]["document"] == "team-listings-handbook"
+    assert found["conflicts"] == []
+    assert "расходятся" not in text_of(chunks)
+
+
+async def test_plan_step_button_prepares_the_card_for_its_resource(
+    client: AsyncClient, anya: Account
+) -> None:
+    chunks = await (await Chat(client, anya).start()).say(
+        "Нужен доступ для шага «Получи доступ к репозиторию listings-api» "
+        "(ресурс stash-listings-api)"
+    )
+
+    [card] = parts(chunks, "action")
+    assert "listings-api" in card["card"]["title"]
+    assert "Уточни, какой ресурс" not in text_of(chunks)

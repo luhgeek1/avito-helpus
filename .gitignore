@@ -46,3 +46,6 @@ lcov.info
 
 # Temporary pytest directories from sandboxed runs
 backend/test-artifacts/
+
+# The committed coverage snapshot for the jury (D-032)
+!docs/quality/coverage/
