@@ -1,0 +1,3804 @@
+{
+ "total": {
+  "lines": {
+   "total": 3588,
+   "covered": 3588,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 4322,
+   "covered": 4245,
+   "skipped": 0,
+   "pct": 98.21
+  },
+  "functions": {
+   "total": 1113,
+   "covered": 1103,
+   "skipped": 0,
+   "pct": 99.1
+  },
+  "branches": {
+   "total": 2849,
+   "covered": 2560,
+   "skipped": 0,
+   "pct": 89.85
+  },
+  "branchesTrue": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_app/app.tsx": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_app/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/_app/model/portal-provider.tsx": {
+  "lines": {
+   "total": 22,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 10,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 80
+  }
+ },
+ "frontend/src/_app/router/use-route.ts": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/orbi/index.ts": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/orbi/ui/LoginPage.tsx": {
+  "lines": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 18,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 88.88
+  },
+  "branches": {
+   "total": 17,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 88.23
+  }
+ },
+ "frontend/src/_pages/orbi/ui/MentorPage.tsx": {
+  "lines": {
+   "total": 46,
+   "covered": 46,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 58,
+   "covered": 58,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 102,
+   "covered": 91,
+   "skipped": 0,
+   "pct": 89.21
+  }
+ },
+ "frontend/src/_pages/orbi/ui/PlanPage.tsx": {
+  "lines": {
+   "total": 67,
+   "covered": 67,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 46,
+   "covered": 46,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 89,
+   "covered": 89,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 123,
+   "covered": 109,
+   "skipped": 0,
+   "pct": 88.61
+  }
+ },
+ "frontend/src/_pages/orbi/ui/RequestsPage.tsx": {
+  "lines": {
+   "total": 37,
+   "covered": 37,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 20,
+   "covered": 20,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 47,
+   "covered": 47,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 88,
+   "covered": 75,
+   "skipped": 0,
+   "pct": 85.22
+  }
+ },
+ "frontend/src/_pages/orbi/ui/common.tsx": {
+  "lines": {
+   "total": 35,
+   "covered": 35,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 16,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 46,
+   "covered": 46,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 43,
+   "covered": 39,
+   "skipped": 0,
+   "pct": 90.69
+  }
+ },
+ "frontend/src/_pages/pet-gallery/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/_pages/pet-gallery/ui/pet-gallery-page.tsx": {
+  "lines": {
+   "total": 10,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 8,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 62.5
+  }
+ },
+ "frontend/src/_pages/portal/index.ts": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/AiPage.tsx": {
+  "lines": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 4,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 75
+  }
+ },
+ "frontend/src/_pages/portal/ui/ArticlePage.tsx": {
+  "lines": {
+   "total": 15,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 23,
+   "covered": 23,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/BackButton.tsx": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/BenefitsPage.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 10,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 15,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/EventsPage.tsx": {
+  "lines": {
+   "total": 42,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 24,
+   "covered": 24,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 51,
+   "covered": 51,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 57,
+   "covered": 51,
+   "skipped": 0,
+   "pct": 89.47
+  }
+ },
+ "frontend/src/_pages/portal/ui/FeedPage.tsx": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/HomePage.tsx": {
+  "lines": {
+   "total": 67,
+   "covered": 67,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 41,
+   "covered": 41,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 81,
+   "covered": 80,
+   "skipped": 0,
+   "pct": 98.76
+  },
+  "branches": {
+   "total": 49,
+   "covered": 48,
+   "skipped": 0,
+   "pct": 97.95
+  }
+ },
+ "frontend/src/_pages/portal/ui/IllustrationsPage.tsx": {
+  "lines": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/NotFoundPage.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/ProfilePage.tsx": {
+  "lines": {
+   "total": 77,
+   "covered": 77,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 35,
+   "covered": 34,
+   "skipped": 0,
+   "pct": 97.14
+  },
+  "statements": {
+   "total": 89,
+   "covered": 87,
+   "skipped": 0,
+   "pct": 97.75
+  },
+  "branches": {
+   "total": 87,
+   "covered": 82,
+   "skipped": 0,
+   "pct": 94.25
+  }
+ },
+ "frontend/src/_pages/portal/ui/SearchPage.tsx": {
+  "lines": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/ServicePage.tsx": {
+  "lines": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/ServicesPage.tsx": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/_pages/portal/ui/classes.ts": {
+  "lines": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/entities/pet/config/mascots.ts": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/config/orbi-family.ts": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/config/pets.ts": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 50
+  }
+ },
+ "frontend/src/entities/pet/lib/mascot-sprites.ts": {
+  "lines": {
+   "total": 287,
+   "covered": 287,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 291,
+   "covered": 291,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 42,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/orbi-base.ts": {
+  "lines": {
+   "total": 129,
+   "covered": 129,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 147,
+   "covered": 147,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 68,
+   "covered": 68,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/orbi-detail-painter.ts": {
+  "lines": {
+   "total": 62,
+   "covered": 62,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 80,
+   "covered": 80,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 40,
+   "covered": 40,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/orbi-details.ts": {
+  "lines": {
+   "total": 195,
+   "covered": 195,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 196,
+   "covered": 196,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 31,
+   "covered": 31,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/orbi-sprites.ts": {
+  "lines": {
+   "total": 132,
+   "covered": 132,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 146,
+   "covered": 146,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 94,
+   "covered": 94,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/pet-storage.ts": {
+  "lines": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 20,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 95
+  },
+  "branches": {
+   "total": 8,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 75
+  }
+ },
+ "frontend/src/entities/pet/lib/pixel-painter.ts": {
+  "lines": {
+   "total": 19,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 18,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 94.44
+  }
+ },
+ "frontend/src/entities/pet/lib/sprite-frames.ts": {
+  "lines": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 15,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/lib/sprite.ts": {
+  "lines": {
+   "total": 230,
+   "covered": 230,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 235,
+   "covered": 235,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 36,
+   "covered": 36,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/model/context.ts": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/model/pet-preferences-provider.tsx": {
+  "lines": {
+   "total": 22,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 11,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 90.9
+  },
+  "statements": {
+   "total": 26,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 96.15
+  },
+  "branches": {
+   "total": 6,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 83.33
+  }
+ },
+ "frontend/src/entities/pet/model/types.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/entities/pet/model/use-pet-preferences.ts": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 4,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 75
+  },
+  "branches": {
+   "total": 2,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 50
+  }
+ },
+ "frontend/src/entities/pet/ui/ground-shadow.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/pet/ui/pet-card.tsx": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 18,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 83.33
+  }
+ },
+ "frontend/src/entities/pet/ui/pixel-pet.tsx": {
+  "lines": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/entities/portal/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/entities/portal/model/preferences.ts": {
+  "lines": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/orbi-auth/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/orbi-auth/ui/login-form.tsx": {
+  "lines": {
+   "total": 28,
+   "covered": 28,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 33,
+   "covered": 33,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 18,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 88.88
+  }
+ },
+ "frontend/src/features/orbi-chat/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/orbi-chat/model/message.ts": {
+  "lines": {
+   "total": 34,
+   "covered": 34,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 47,
+   "covered": 47,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 61,
+   "covered": 59,
+   "skipped": 0,
+   "pct": 96.72
+  }
+ },
+ "frontend/src/features/orbi-chat/model/store.ts": {
+  "lines": {
+   "total": 84,
+   "covered": 84,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 31,
+   "covered": 31,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 122,
+   "covered": 118,
+   "skipped": 0,
+   "pct": 96.72
+  },
+  "branches": {
+   "total": 105,
+   "covered": 97,
+   "skipped": 0,
+   "pct": 92.38
+  }
+ },
+ "frontend/src/features/orbi-chat/ui/cards.tsx": {
+  "lines": {
+   "total": 44,
+   "covered": 44,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 27,
+   "covered": 27,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 49,
+   "covered": 46,
+   "skipped": 0,
+   "pct": 93.87
+  },
+  "branches": {
+   "total": 92,
+   "covered": 81,
+   "skipped": 0,
+   "pct": 88.04
+  }
+ },
+ "frontend/src/features/orbi-chat/ui/message-list.tsx": {
+  "lines": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 24,
+   "covered": 24,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 42,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 56,
+   "covered": 56,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/orbi-chat/ui/rich-text.tsx": {
+  "lines": {
+   "total": 18,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 21,
+   "covered": 21,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 18,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 88.88
+  }
+ },
+ "frontend/src/features/orbi-chat/ui/suggestions.tsx": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/choose/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/choose/ui/choose-pet-button.tsx": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/download/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/download/lib/download-sprite.ts": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/download/ui/download-pet-button.tsx": {
+  "lines": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/favorite/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/favorite/ui/favorite-pet-button.tsx": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 16,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/greet/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/greet/model/use-pet-greeting.ts": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/greet/ui/greet-pet-button.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/onboarding/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/onboarding/model/onboarding.tsx": {
+  "lines": {
+   "total": 18,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 75
+  },
+  "statements": {
+   "total": 22,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/features/pet/toggle-animation/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/features/pet/toggle-animation/ui/toggle-pet-animation.tsx": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/api/orbi/http.ts": {
+  "lines": {
+   "total": 64,
+   "covered": 64,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 92.85
+  },
+  "statements": {
+   "total": 81,
+   "covered": 78,
+   "skipped": 0,
+   "pct": 96.29
+  },
+  "branches": {
+   "total": 52,
+   "covered": 49,
+   "skipped": 0,
+   "pct": 94.23
+  }
+ },
+ "frontend/src/shared/api/orbi/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/api/orbi/queries.ts": {
+  "lines": {
+   "total": 65,
+   "covered": 65,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 50,
+   "covered": 50,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 74,
+   "covered": 74,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 26,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 84.61
+  }
+ },
+ "frontend/src/shared/api/orbi/realtime.ts": {
+  "lines": {
+   "total": 44,
+   "covered": 44,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 65,
+   "covered": 61,
+   "skipped": 0,
+   "pct": 93.84
+  },
+  "branches": {
+   "total": 36,
+   "covered": 30,
+   "skipped": 0,
+   "pct": 83.33
+  }
+ },
+ "frontend/src/shared/api/orbi/schemas.ts": {
+  "lines": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/orbi/session.ts": {
+  "lines": {
+   "total": 28,
+   "covered": 28,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 35,
+   "covered": 34,
+   "skipped": 0,
+   "pct": 97.14
+  },
+  "branches": {
+   "total": 12,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 83.33
+  }
+ },
+ "frontend/src/shared/api/orbi/sse.ts": {
+  "lines": {
+   "total": 33,
+   "covered": 33,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 66.66
+  },
+  "statements": {
+   "total": 44,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 95.45
+  },
+  "branches": {
+   "total": 21,
+   "covered": 21,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/portal/client.ts": {
+  "lines": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 17,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/portal/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/api/portal/queries.ts": {
+  "lines": {
+   "total": 87,
+   "covered": 87,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 64,
+   "covered": 64,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 94,
+   "covered": 94,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/portal/schemas.ts": {
+  "lines": {
+   "total": 26,
+   "covered": 26,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 26,
+   "covered": 26,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/portal/start-mocks.ts": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 80
+  },
+  "branches": {
+   "total": 2,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 50
+  }
+ },
+ "frontend/src/shared/api/portal/testing.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/api/portal/mocks/browser.ts": {
+  "lines": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 6,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 83.33
+  }
+ },
+ "frontend/src/shared/api/portal/mocks/data.ts": {
+  "lines": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 34,
+   "covered": 34,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/portal/mocks/db.ts": {
+  "lines": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 19,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 94.73
+  },
+  "branches": {
+   "total": 4,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 75
+  }
+ },
+ "frontend/src/shared/api/portal/mocks/handlers.ts": {
+  "lines": {
+   "total": 127,
+   "covered": 127,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 56,
+   "covered": 56,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 149,
+   "covered": 149,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 78,
+   "covered": 70,
+   "skipped": 0,
+   "pct": 89.74
+  }
+ },
+ "frontend/src/shared/config/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/config/routes.ts": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/lib/cx/index.ts": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/lib/orbi-format/index.ts": {
+  "lines": {
+   "total": 18,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 26,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 96.15
+  },
+  "branches": {
+   "total": 27,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 92.59
+  }
+ },
+ "frontend/src/shared/lib/portal-format/index.ts": {
+  "lines": {
+   "total": 30,
+   "covered": 30,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 10,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 43,
+   "covered": 43,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 19,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/lib/portal-navigation/index.tsx": {
+  "lines": {
+   "total": 27,
+   "covered": 27,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 37,
+   "covered": 36,
+   "skipped": 0,
+   "pct": 97.29
+  },
+  "branches": {
+   "total": 27,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 92.59
+  }
+ },
+ "frontend/src/shared/ui/avito-mark/avito-mark.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/ui/avito-mark/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/shared/ui/portal/Illustration.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/ui/portal/ServiceIcon.tsx": {
+  "lines": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/ui/portal/classes.ts": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/ui/portal/index.tsx": {
+  "lines": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 19,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 48,
+   "covered": 48,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 48,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 87.5
+  }
+ },
+ "frontend/src/widgets/pet-collection/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/pet-collection/ui/pet-collection.tsx": {
+  "lines": {
+   "total": 18,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 21,
+   "covered": 21,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 16,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/chat-messages.ts": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-chat-placement.ts": {
+  "lines": {
+   "total": 68,
+   "covered": 68,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 86,
+   "covered": 83,
+   "skipped": 0,
+   "pct": 96.51
+  },
+  "branches": {
+   "total": 86,
+   "covered": 82,
+   "skipped": 0,
+   "pct": 95.34
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-companion-actions.ts": {
+  "lines": {
+   "total": 45,
+   "covered": 45,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 58,
+   "covered": 57,
+   "skipped": 0,
+   "pct": 98.27
+  },
+  "branches": {
+   "total": 21,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 90.47
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-companion-chat.ts": {
+  "lines": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 20,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 95
+  },
+  "branches": {
+   "total": 4,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 75
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-companion-position.ts": {
+  "lines": {
+   "total": 60,
+   "covered": 60,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 14,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 69,
+   "covered": 64,
+   "skipped": 0,
+   "pct": 92.75
+  },
+  "branches": {
+   "total": 52,
+   "covered": 42,
+   "skipped": 0,
+   "pct": 80.76
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-companion-tour.ts": {
+  "lines": {
+   "total": 64,
+   "covered": 64,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 15,
+   "covered": 15,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 101,
+   "covered": 101,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 93,
+   "covered": 82,
+   "skipped": 0,
+   "pct": 88.17
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-dialogue-placement.ts": {
+  "lines": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 34,
+   "covered": 33,
+   "skipped": 0,
+   "pct": 97.05
+  },
+  "branches": {
+   "total": 29,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 65.51
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-orbit-placement.ts": {
+  "lines": {
+   "total": 25,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 29,
+   "covered": 28,
+   "skipped": 0,
+   "pct": 96.55
+  },
+  "branches": {
+   "total": 14,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 50
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-radial-transition.ts": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 80
+  },
+  "statements": {
+   "total": 15,
+   "covered": 14,
+   "skipped": 0,
+   "pct": 93.33
+  },
+  "branches": {
+   "total": 9,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 88.88
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-spotlight-position.ts": {
+  "lines": {
+   "total": 63,
+   "covered": 63,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 81,
+   "covered": 74,
+   "skipped": 0,
+   "pct": 91.35
+  },
+  "branches": {
+   "total": 70,
+   "covered": 55,
+   "skipped": 0,
+   "pct": 78.57
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-spotlight-shortcut.ts": {
+  "lines": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 7,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 85.71
+  },
+  "statements": {
+   "total": 45,
+   "covered": 40,
+   "skipped": 0,
+   "pct": 88.88
+  },
+  "branches": {
+   "total": 28,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 89.28
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-tour-exit.ts": {
+  "lines": {
+   "total": 29,
+   "covered": 29,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 83.33
+  },
+  "statements": {
+   "total": 42,
+   "covered": 39,
+   "skipped": 0,
+   "pct": 92.85
+  },
+  "branches": {
+   "total": 23,
+   "covered": 21,
+   "skipped": 0,
+   "pct": 91.3
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-typewriter.ts": {
+  "lines": {
+   "total": 27,
+   "covered": 27,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 32,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 23,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 95.65
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-wardrobe-carousel.ts": {
+  "lines": {
+   "total": 52,
+   "covered": 52,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 63,
+   "covered": 59,
+   "skipped": 0,
+   "pct": 93.65
+  },
+  "branches": {
+   "total": 38,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 65.78
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-wardrobe-gesture.ts": {
+  "lines": {
+   "total": 19,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 24,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 91.66
+  },
+  "branches": {
+   "total": 20,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 85
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/use-wardrobe-placement.ts": {
+  "lines": {
+   "total": 28,
+   "covered": 28,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 33,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 96.96
+  },
+  "branches": {
+   "total": 27,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 62.96
+  }
+ },
+ "frontend/src/widgets/pet-companion/model/wardrobe-catalog.ts": {
+  "lines": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-chat.tsx": {
+  "lines": {
+   "total": 19,
+   "covered": 19,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 8,
+   "covered": 8,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 26,
+   "covered": 26,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 35,
+   "covered": 32,
+   "skipped": 0,
+   "pct": 91.42
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-orbit-menu.tsx": {
+  "lines": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 7,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-settings.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-spotlight.tsx": {
+  "lines": {
+   "total": 30,
+   "covered": 30,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 47,
+   "covered": 45,
+   "skipped": 0,
+   "pct": 95.74
+  },
+  "branches": {
+   "total": 27,
+   "covered": 24,
+   "skipped": 0,
+   "pct": 88.88
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-tour.tsx": {
+  "lines": {
+   "total": 36,
+   "covered": 36,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 51,
+   "covered": 50,
+   "skipped": 0,
+   "pct": 98.03
+  },
+  "branches": {
+   "total": 73,
+   "covered": 51,
+   "skipped": 0,
+   "pct": 69.86
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/companion-wardrobe.tsx": {
+  "lines": {
+   "total": 24,
+   "covered": 24,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 34,
+   "covered": 34,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 31,
+   "covered": 26,
+   "skipped": 0,
+   "pct": 83.87
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/pet-companion.tsx": {
+  "lines": {
+   "total": 59,
+   "covered": 59,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 25,
+   "covered": 25,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 99,
+   "covered": 89,
+   "skipped": 0,
+   "pct": 89.89
+  },
+  "branches": {
+   "total": 103,
+   "covered": 87,
+   "skipped": 0,
+   "pct": 84.46
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/pixel-action-icon.tsx": {
+  "lines": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/pet-companion/ui/wardrobe-pet-option.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 10,
+   "covered": 10,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 20,
+   "covered": 17,
+   "skipped": 0,
+   "pct": 85
+  }
+ },
+ "frontend/src/widgets/pet-inspector/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/pet-inspector/ui/pet-inspector.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 14,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 92.85
+  }
+ },
+ "frontend/src/widgets/portal-feed/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/portal-feed/ui/ChannelList.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/portal-feed/ui/PostCard.tsx": {
+  "lines": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 9,
+   "covered": 9,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/portal-shell/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/portal-shell/ui/FeedbackPopup.tsx": {
+  "lines": {
+   "total": 12,
+   "covered": 12,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 4,
+   "covered": 4,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 13,
+   "covered": 13,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/portal-shell/ui/Footer.tsx": {
+  "lines": {
+   "total": 18,
+   "covered": 18,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 6,
+   "covered": 6,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 22,
+   "covered": 22,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 16,
+   "covered": 16,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/portal-shell/ui/Header.tsx": {
+  "lines": {
+   "total": 79,
+   "covered": 79,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 41,
+   "covered": 41,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 102,
+   "covered": 102,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 78,
+   "covered": 71,
+   "skipped": 0,
+   "pct": 91.02
+  }
+ },
+ "frontend/src/widgets/portal-shell/ui/Layout.tsx": {
+  "lines": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/portal-shell/ui/Logo.tsx": {
+  "lines": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 3,
+   "covered": 3,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/widgets/workspace-shell/index.ts": {
+  "lines": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "statements": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 0
+  }
+ },
+ "frontend/src/widgets/workspace-shell/ui/sidebar.tsx": {
+  "lines": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 11,
+   "covered": 11,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 10,
+   "covered": 7,
+   "skipped": 0,
+   "pct": 70
+  }
+ },
+ "frontend/src/widgets/workspace-shell/ui/workspace-shell.tsx": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 50
+  }
+ }
+}
