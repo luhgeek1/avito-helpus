@@ -15,6 +15,22 @@ it('rejects invalid URLs and duplicate widgets before creating a client', () => 
   detach();
 });
 
+it('reports a rejected widget without breaking the host or the mounted instance', async () => {
+  const onError = vi.fn();
+  const logged = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const first = render(<OrbiCompanion mode="guide" />);
+  await waitFor(() => expect(document.querySelectorAll('[data-orbi-sdk]')).toHaveLength(1));
+  const duplicate = render(<OrbiCompanion mode="guide" onError={onError} />);
+  expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: expect.stringContaining('Only one') }));
+  duplicate.unmount();
+  expect(document.querySelectorAll('[data-orbi-sdk]')).toHaveLength(1);
+  expect(runtime().props.mode).toBe('guide');
+  first.unmount();
+  render(<OrbiCompanion apiUrl="ftp://example.test" />);
+  expect(logged).toHaveBeenCalledWith('[OrbiCompanion]', expect.objectContaining({ message: expect.stringContaining('apiUrl') }));
+  expect(document.querySelector('[data-orbi-sdk]')).toBeNull();
+});
+
 it('forgets the account when its refresh fails and unsubscribes token observers', async () => {
   const detach = attach({ getToken: () => null });
   const stop = watchSession();

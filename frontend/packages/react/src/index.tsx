@@ -20,7 +20,16 @@ function Instance(props: OrbiCompanionProps) {
   latest.current = props;
   useImperativeHandle(props.ref, () => controls, []);
   useEffect(() => {
-    const detach = attach(latest.current);
+    let detach: () => void;
+    try {
+      detach = attach(latest.current);
+    } catch (error) {
+      // A misconfigured or duplicate widget must not take the host application down with it.
+      const reason = error instanceof Error ? error : new Error(String(error));
+      if (latest.current.onError) latest.current.onError(reason);
+      else console.error("[OrbiCompanion]", reason);
+      return;
+    }
     const mounted = createSurface(latest.current.nonce, latest.current.zIndex ?? 1000);
     setSurface(mounted);
     return () => {
