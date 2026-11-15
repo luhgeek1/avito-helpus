@@ -127,7 +127,9 @@ function NotificationsPanel({ items, unread, pending, onReadAll, onOpen, empty }
   }, [open])
 
   return (
-    <div className="relative" ref={ref}>
+    // On phones the bell is not the rightmost control, so the panel anchors to the sticky header
+    // with page gutters: header padding 6px + bell 44px + gap 8px = top 58px.
+    <div className="relative hub-max-720:static" ref={ref}>
       <button
         type="button"
         className={iconAction}
@@ -141,7 +143,7 @@ function NotificationsPanel({ items, unread, pending, onReadAll, onOpen, empty }
       {(open || closing) && (
         <div
           className={cx(
-            'absolute top-[calc(100%+8px)] right-0 z-60 w-95 max-w-[calc(100vw-32px)] animate-hub-layout-drop rounded-3xl bg-white p-2 shadow-pop',
+            'absolute top-[calc(100%+8px)] right-0 z-60 w-95 max-w-[calc(100vw-32px)] animate-hub-layout-drop rounded-3xl bg-white p-2 shadow-pop hub-max-720:inset-x-4 hub-max-720:top-14.5 hub-max-720:w-auto hub-max-720:max-w-none',
             closing && 'pointer-events-none animate-hub-layout-lift',
           )}
           role="dialog"
