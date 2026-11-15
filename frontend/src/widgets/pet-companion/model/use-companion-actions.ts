@@ -28,7 +28,7 @@ export function useCompanionActions(
   }, [dragging, visible, dismiss, showDialogue]);
   useEffect(() => {
     const outside = (event: PointerEvent) => {
-      if (!anchor.current?.contains(event.target as Node)) dismiss();
+      if (!anchor.current?.contains((event.composedPath()[0] ?? event.target) as Node)) dismiss();
     };
     const escape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;

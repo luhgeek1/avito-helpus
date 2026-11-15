@@ -11,7 +11,8 @@ export function useSpotlightShortcut(enabled: boolean, onOpen: () => void) {
         reset(); return;
       }
       if (event.repeat) return;
-      const target = event.target instanceof Element ? event.target : null;
+      const origin = event.composedPath()[0] ?? event.target;
+      const target = origin instanceof Element ? origin : null;
       const insideSpotlight = open && target?.closest(".companion-spotlight");
       if (!insideSpotlight && (target?.closest("input, textarea, select, [contenteditable]:not([contenteditable=false])")
         || (target?.closest("button, a, [role=button]") && !target.closest(".widget-pet")))) {

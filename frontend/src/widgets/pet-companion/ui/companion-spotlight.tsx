@@ -27,7 +27,8 @@ export function CompanionSpotlight({ pet, chat, onClose, onReply, onOpenChat }: 
   close.current = onClose;
   useEffect(() => {
     if (movement.style.visibility === "hidden") return;
-    const previous = document.activeElement;
+    const root = input.current?.getRootNode() as Document | ShadowRoot;
+    const previous = root?.activeElement ?? document.activeElement;
     input.current?.focus({ preventScroll: true });
     const escape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;

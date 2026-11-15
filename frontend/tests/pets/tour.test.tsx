@@ -73,7 +73,7 @@ it("advances by background click or space, ignores input and held space, and han
   const tour = fakeTour();
   const { rerender, unmount } = render(<Wrapper><CompanionTourShell tour={tour} hideCopy={false}><input aria-label="Draft" /></CompanionTourShell></Wrapper>);
   const dialog = screen.getByRole("dialog", { name: "Знакомство с петом" });
-  expect(document.body).toHaveClass("overflow-hidden");
+  expect(document.body.style.overflow).toBe("hidden");
   act(() => vi.advanceTimersByTime(300));
   fireEvent.click(dialog);
   expect(tour.next).toHaveBeenCalledOnce();
@@ -89,5 +89,5 @@ it("advances by background click or space, ignores input and held space, and han
   fireEvent.click(dialog);
   expect(tour.next).toHaveBeenCalledTimes(2);
   unmount();
-  expect(document.body).not.toHaveClass("overflow-hidden");
+  expect(document.body.style.overflow).toBe("");
 });
