@@ -28,7 +28,8 @@ it("ignores Spotlight submits while busy and does not reopen a closed window aft
   const pending = new Promise<OrbiMessage>((resolve) => { finish = resolve; });
   const send = vi.fn(() => pending), onReply = vi.fn(), onOpenChat = vi.fn();
   const chat: CompanionChatModel = { messages: [], draft: "Question", setDraft: vi.fn(), send,
-    load: vi.fn(), busy: true, authenticated: true, status: "authenticated", ready: false };
+    load: vi.fn(), busy: true, authenticated: true, status: "authenticated", ready: false,
+    kind: "workspace", startOver: vi.fn(), openSignal: 0 };
   const view = (model: CompanionChatModel) => <CompanionSpotlight pet={defaultPet} chat={model} onClose={vi.fn()} onReply={onReply} onOpenChat={onOpenChat} />;
   const { rerender, unmount } = render(view(chat));
   fireEvent.submit(screen.getByRole("textbox").closest("form")!);

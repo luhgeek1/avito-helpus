@@ -7,6 +7,7 @@ import { resetDb } from '@/shared/api/portal/testing'
 import { usePreferences } from '@/entities/portal'
 import { resetSessionForTests, useOrbiNotice } from '@/shared/api'
 import { useOrbiChat } from '@/features/orbi-chat'
+import { useIntegrationAssistant } from '@/features/integration-assistant'
 import { orbiHandlers } from '../orbi/server'
 
 vi.mock('next/navigation', async () => {
@@ -62,6 +63,7 @@ afterEach(() => {
   usePreferences.setState(usePreferences.getInitialState(), true)
   resetSessionForTests()
   useOrbiChat.getState().clear()
+  useIntegrationAssistant.setState({ messages: [], draft: '', openSignal: 0 })
   useOrbiNotice.setState({ notice: null })
   document.cookie = 'csrf_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
 })

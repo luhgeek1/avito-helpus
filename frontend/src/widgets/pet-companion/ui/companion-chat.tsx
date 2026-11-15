@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ArrowLeft, ArrowUp, SquarePen, X } from "lucide-react";
-import { OrbiMessageList, OrbiSuggestions, useOrbiChat } from "@/features/orbi-chat";
+import { OrbiMessageList, OrbiSuggestions } from "@/features/orbi-chat";
+import { GuideMessages } from "@/features/integration-assistant";
 import { useOrbiMe } from "@/shared/api";
 import { cx } from "@/shared/lib/cx";
 import { firstName } from "@/shared/lib/orbi-format";
@@ -14,14 +15,17 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
 }) {
   const { style, handles, moving } = useChatPlacement(topInset);
   const { data: me } = useOrbiMe();
-  const startOver = useOrbiChat((state) => state.startOver);
+  const startOver = chat.startOver;
   const { authenticated, load } = chat;
   useEffect(() => { if (authenticated) void load(); }, [authenticated, load]);
   const history = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
   const close = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (history.current) history.current.scrollTop = history.current.scrollHeight;
+    const log = history.current;
+    if (!log) return;
+    const question = chat.kind === "guide" ? log.querySelectorAll<HTMLElement>('[data-role="user"]').item(chat.messages.filter((message) => message.role === "user").length - 1) : null;
+    log.scrollTop = question ? log.scrollTop + question.getBoundingClientRect().top - log.getBoundingClientRect().top : log.scrollHeight;
   }, [chat.messages, style.height, style.width]);
   useEffect(() => {
     if (style.visibility === "hidden") return;
@@ -51,7 +55,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
         </button>
         <div className="min-w-0 flex-1">
           <h2 id="companion-chat-title" className="truncate font-sans text-14 font-semibold leading-5 text-dark">{name}</h2>
-          <p className="text-11 text-[#687181]">{me ? `${me.full_name} · ${me.role_title}` : "Перетащи за шапку"}</p>
+          <p className="text-11 text-[#687181]">{chat.kind === "guide" ? "Помощь с интеграцией · по руководству" : me ? `${me.full_name} · ${me.role_title}` : "Перетащи за шапку"}</p>
         </div>
         {authenticated && chat.messages.length > 0 && (
           <button type="button" onClick={startOver} aria-label="Новый диалог" title="Новый диалог" disabled={chat.busy}
@@ -67,7 +71,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
       <div ref={history} role="log" aria-label="История сообщений" aria-live="polite" tabIndex={0}
         className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-5 [scrollbar-color:#cbd3df_#ffffff]
           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-dark">
-        {!authenticated ? (
+        {chat.kind === "guide" ? <GuideMessages name={name} /> : !authenticated ? (
           <div className="space-y-3">
             <article data-role="assistant" className="w-fit max-w-[92%] rounded-xl bg-control px-3.5 py-3">
               <p className="mb-1 text-10 font-semibold text-dark">{name}</p>
@@ -93,7 +97,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
       </div>
       <form className="shrink-0 rounded-b-2xl border-t border-dark/10 bg-white p-3" onSubmit={(event) => { event.preventDefault(); void chat.send(); }}>
         <div className="flex items-center gap-2 rounded-xl border border-dark bg-white p-1 focus-within:ring-1 focus-within:ring-dark">
-          <textarea ref={input} aria-label="Сообщение спутнику" placeholder={authenticated ? "Напиши сообщение…" : "Сначала войди"} disabled={!authenticated} rows={1} maxLength={2000}
+          <textarea ref={input} aria-label="Сообщение спутнику" placeholder={chat.kind === "guide" ? "Вопрос об установке…" : authenticated ? "Напиши сообщение…" : "Сначала войди"} disabled={!authenticated} rows={1} maxLength={2000}
             value={chat.draft} onChange={(event) => chat.setDraft(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
