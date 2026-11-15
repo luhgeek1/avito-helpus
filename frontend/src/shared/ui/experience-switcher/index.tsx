@@ -16,12 +16,9 @@ export function ExperienceSwitcher({ demo = false }: { demo?: boolean }) {
 }
 
 /** Top row of the guide and the demo: one height, width and gutter, so the switcher stays put. */
-export function ExperienceBar({ demo = false, actions, children }: { demo?: boolean; actions?: ReactNode; children: ReactNode }) {
+export function ExperienceBar({ demo = false, children }: { demo?: boolean; children: ReactNode }) {
   return <div className="mx-auto flex min-h-20 max-w-340 items-center justify-between gap-3 px-5 sm:px-9 lg:px-12">
     {children}
-    <div className="flex items-center gap-2">
-      {actions}
-      <ExperienceSwitcher demo={demo} />
-    </div>
+    <ExperienceSwitcher demo={demo} />
   </div>;
 }
