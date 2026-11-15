@@ -78,12 +78,23 @@ async def test_observability_cli_cleans_db_on_failure(monkeypatch: pytest.Monkey
 
 
 @pytest.mark.parametrize(
-    "command", ["keys", "seed", "telemetry-keys", "observability-init", "clickstream-consume"]
+    "command",
+    [
+        "keys",
+        "seed",
+        "telemetry-keys",
+        "observability-init",
+        "clickstream-consume",
+        "knowledge-import",
+    ],
 )
 def test_cli_dispatch(command: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     args = ["cli", command]
     if command in {"keys", "telemetry-keys", "observability-init"}:
         args += ["--dir", str(tmp_path)]
+    if command == "knowledge-import":
+        args += [str(tmp_path), "--check"]
+    monkeypatch.setattr(cli, "run_knowledge", AsyncMock(return_value="validated"))
     monkeypatch.setattr(sys, "argv", args)
     monkeypatch.setattr(cli, "run_seed", AsyncMock(return_value="already seeded"))
     monitoring = AsyncMock()
