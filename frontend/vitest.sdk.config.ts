@@ -11,7 +11,7 @@ export default defineConfig({
     'orbi:styles': path.join(root, 'tests/sdk/styles.ts'), '@': src,
   } },
   plugins: [{ name: 'sdk-runtime', enforce: 'pre', resolveId(id, importer) {
-    if (/^\.\/(http|session)$/.test(id) && importer && path.dirname(importer) === path.join(src, 'shared/api/orbi')) {
+    if (/^\.\/(http|session)$/.test(id) && importer && path.normalize(path.dirname(importer)) === path.join(src, 'shared/api/orbi')) {
       return path.join(sdk, `${id.slice(2)}.ts`);
     }
   } }],
