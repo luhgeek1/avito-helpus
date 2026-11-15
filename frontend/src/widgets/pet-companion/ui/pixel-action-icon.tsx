@@ -1,13 +1,17 @@
-export type CompanionAction = "chat" | "wardrobe" | "settings";
+export type CompanionAction = "hide" | "wardrobe" | "settings";
 
 const outline = "#383c62";
 
-export function PixelActionIcon({ action }: { action: CompanionAction }) {
+export function PixelActionIcon({ action }: { action: CompanionAction | "chat" }) {
   return <svg width="24" height="24" viewBox="0 0 24 24" shapeRendering="crispEdges" aria-hidden="true">
     {action === "chat" && <>
       <path fill={outline} d="M3 3h18v1h1v13h-1v1H10v2H8v2H5v-4H2V4h1z" />
       <path fill="#00aaff" d="M4 5h16v11H9v2H7v-2H4z" />
       <path fill="#ffffff" d="M6 9h3v3H6z M11 9h3v3h-3z M16 9h2v3h-2z" />
+    </>}
+    {action === "hide" && <>
+      <path fill={outline} d="M3 6h3V3h3v3h6V3h3v3h3v3h-3v6h3v3h-3v3h-3v-3H9v3H6v-3H3v-3h3V9H3z" />
+      <path fill="#ff8db6" d="M6 6h3v3h6V6h3v3h-3v6h3v3h-3v-3H9v3H6v-3h3V9H6z" />
     </>}
     {action === "wardrobe" && <>
       <path fill={outline} d="M7 3h3v2h4V3h3v1h3v2h2v6h-4v9H6v-9H2V6h2V4h3z" />

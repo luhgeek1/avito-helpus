@@ -127,14 +127,6 @@ export function PetCompanion() {
               </button>
             </div>
           )}
-          {!tour.active && <button
-            className={cx("absolute top-2 right-0 z-3 grid size-5.5 place-items-center rounded-full border border-[#eee8f3] bg-white",
-              "text-[#a093ac] max-sm:top-px max-sm:-right-px max-sm:size-7", actions.chatOpen && "z-42 max-sm:z-auto [@media(max-height:430px)]:z-auto")}
-            onClick={() => setWidgetVisible(false)}
-            aria-label="Скрыть спутника"
-          >
-            <X size={12} />
-          </button>}
           <button
             className={cx(
               "widget-pet flex w-full touch-none! flex-col items-center bg-transparent p-0 select-none [-webkit-user-select:none]",
@@ -169,9 +161,15 @@ export function PetCompanion() {
             />
           </button>
           <CompanionOrbitMenu anchor={movement.ref} position={movement.style} open={actions.menuOpen}
+            chatOpen={actions.chatOpen} onChat={() => { if (tour.active) tour.visit("chat"); else actions.chat(); }}
             onAction={(action) => {
+              if (action === "hide") {
+                actions.dismiss();
+                if (tour.active) void tour.finish().then(() => setWidgetVisible(false));
+                else setWidgetVisible(false);
+                return;
+              }
               if (tour.active) { tour.visit(action); return; }
-              if (action === "chat") actions.chat();
               if (action === "settings") actions.settings();
               if (action === "wardrobe") actions.wardrobe();
             }} />

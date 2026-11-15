@@ -4,27 +4,36 @@ import { useOrbitPlacement } from "../model/use-orbit-placement";
 import { useRadialTransition } from "../model/use-radial-transition";
 import { PixelActionIcon } from "./pixel-action-icon";
 import type { CompanionAction } from "./pixel-action-icon";
+import { CompanionChatBubble } from "./companion-chat-bubble";
 
-const actions: { id: CompanionAction; label: string }[] = [
+const actions: { id: CompanionAction | "chat"; label: string }[] = [
+  { id: "hide", label: "Скрыть спутника" },
   { id: "chat", label: "Чат" },
   { id: "wardrobe", label: "Гардероб" },
   { id: "settings", label: "Настройки" },
 ];
 const outline = "M16 0h24v4h8v4h4v8h4v24h-4v8h-4v4h-8v4H16v-4H8v-4H4v-8H0V16h4V8h4V4h8z";
 
-export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
+export function CompanionOrbitMenu({ anchor, position, open, chatOpen, onChat, onAction }: {
   anchor: RefObject<HTMLDivElement | null>;
   position: CSSProperties;
   open: boolean;
+  chatOpen: boolean;
+  onChat: () => void;
   onAction: (action: CompanionAction) => void;
 }) {
   const orbit = useOrbitPlacement(anchor, position.left, position.top);
   const { interactive, onTransitionEnd } = useRadialTransition(open);
   return (
-    <div id="companion-actions" role="group" aria-label="Действия спутника"
-      aria-hidden={!open} inert={!open || !interactive}>
-      {orbit && actions.map((action, index) => (
-        <button key={action.id} type="button" aria-label={action.label} onClick={() => onAction(action.id)}
+    <div id="companion-actions" role="group" aria-label="Действия спутника" data-open={open} data-interactive={open && interactive}>
+      {orbit && actions.map((action, index) => {
+        const actionId = action.id;
+        if (actionId === "chat") return <CompanionChatBubble key={actionId} placement={orbit.thought}
+          dock={{ x: orbit.origin.x + orbit.offsets[index].x + orbit.size / 2,
+            y: orbit.origin.y + orbit.offsets[index].y + orbit.size / 2, size: orbit.size }}
+          menuOpen={open} open={chatOpen} onOpen={onChat} />;
+        return <button key={actionId} type="button" aria-label={action.label} onClick={() => onAction(actionId)}
+          aria-hidden={!open} inert={!open || !interactive}
           onTransitionEnd={index === actions.length - 1 ? onTransitionEnd : undefined}
           className={cx(`fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]
             outline-none [will-change:transform,opacity] [transition:transform_240ms_cubic-bezier(.22,1,.36,1),opacity_160ms_ease-out]
@@ -44,7 +53,7 @@ export function CompanionOrbitMenu({ anchor, position, open, onAction }: {
             <span className="relative" style={{ transform: `scale(${orbit.scale})` }}><PixelActionIcon action={action.id} /></span>
           </span>
         </button>
-      ))}
+      })}
     </div>
   );
 }

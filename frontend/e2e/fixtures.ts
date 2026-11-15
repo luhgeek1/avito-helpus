@@ -44,7 +44,6 @@ export async function loginAsAnya(page: Page) {
 }
 
 export async function openChat(page: Page) {
-  await page.getByRole("button", { name: "Действия спутника Орби", exact: true }).click();
   await page.getByRole("button", { name: "Чат", exact: true }).click();
   const chat = page.getByRole("dialog", { name: "Орби", exact: true });
   await expect(chat).toBeVisible();

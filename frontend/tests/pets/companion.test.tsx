@@ -34,9 +34,14 @@ describe("companion", () => {
     signIn();
     const { user, pet } = renderApp();
     await screen.findByText("Страница");
+    expect(screen.queryByRole("button", { name: "Скрыть спутника" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Чат" })).toHaveAttribute("aria-expanded", "false");
     await user.click(pet());
     const menu = screen.getByRole("group", { name: "Действия спутника" });
-    await user.click(within(menu).getByRole("button", { name: "Чат" }));
+    expect(within(menu).getByRole("button", { name: "Скрыть спутника" })).toBeInTheDocument();
+    expect(within(menu).getAllByRole("button")).toHaveLength(4);
+    expect(within(menu).getByRole("button", { name: "Чат" })).toHaveAttribute("data-docked", "true");
+    await user.click(screen.getByRole("button", { name: "Чат" }));
     const chat = await screen.findByRole("dialog", { name: "Орби" });
     expect(await within(chat).findByRole("group", { name: "Готовые вопросы" })).toBeInTheDocument();
     await user.click(within(chat).getByRole("button", { name: "Назад к меню пета" }));
@@ -95,7 +100,8 @@ describe("companion", () => {
     expect(await screen.findByText(/Сначала войди в Хаб/, { selector: "span.absolute" })).toBeInTheDocument();
     await user.keyboard("{Escape}");
     await user.dblClick(pet());
-    await user.click(screen.getByRole("button", { name: "Скрыть спутника" }));
+    await user.click(pet());
+    await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Скрыть спутника" }));
     await user.click(await screen.findByRole("button", { name: /рядом/ }));
     expect(pet()).toBeInTheDocument();
   });
@@ -175,7 +181,7 @@ it("uses the pet keyboard controls, dismisses chat with Escape, and pauses or hi
   await screen.findByText("Страница");
   fireEvent.keyDown(pet(), { key: "ArrowLeft" });
   fireEvent.keyDown(pet(), { key: "Enter" });
-  await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Чат" }));
+  await user.click(screen.getByRole("button", { name: "Чат" }));
   expect(await screen.findByRole("dialog", { name: "Орби" })).toBeInTheDocument();
   fireEvent.submit(screen.getByRole("textbox", { name: "Сообщение спутнику" }).closest("form")!);
   fireEvent.keyDown(document.body, { key: "Escape" });

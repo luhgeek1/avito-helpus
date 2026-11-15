@@ -97,6 +97,10 @@ export default {
         portal: ["var(--font-portal)", "Arial", "Helvetica", "sans-serif"],
       },
       "keyframes": {
+        "thought-bubble": {
+          "from": { "opacity": "0", "transform": "scale(.65)" },
+          "to": { "opacity": "1", "transform": "scale(1)" }
+        },
 "hub-home-slideIn": {"from":{"opacity":"0"}},
 "hub-ui-shimmer": {"from":{"backgroundPosition":"200% 0"},"to":{"backgroundPosition":"-200% 0"}},
 "hub-ui-fade": {"from":{"opacity":"0"}},
@@ -139,6 +143,7 @@ export default {
         }
       },
       "animation": {
+        "thought-bubble": "thought-bubble 200ms cubic-bezier(.22,1,.36,1)",
 "hub-home-slideIn": "hub-home-slideIn 0.2s ease-out",
 "hub-ui-shimmer": "hub-ui-shimmer 1.2s ease-in-out infinite",
 "hub-ui-fade": "hub-ui-fade 0.15s ease-out",
