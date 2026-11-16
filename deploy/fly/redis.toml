@@ -1,0 +1,13 @@
+# Redis, private only (avito-orbi-redis.internal:6379). Cache and pub/sub, nothing durable.
+app = "avito-orbi-redis"
+primary_region = "fra"
+
+[build]
+  image = "redis:8-alpine"
+
+[processes]
+  app = "redis-server --bind 0.0.0.0 :: --protected-mode no --maxmemory 96mb --maxmemory-policy allkeys-lru --save ''"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

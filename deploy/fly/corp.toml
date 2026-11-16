@@ -1,0 +1,18 @@
+# Simulated corporate services (MCP), private only. CORP_WEBHOOK_SECRET is a secret.
+# State stays in memory: the image runs as a non-root user and cannot write to a fresh volume.
+app = "avito-orbi-corp"
+primary_region = "fra"
+
+[build]
+  image = "ghcr.io/luhgeek1/avito-corpmock:latest"
+
+[env]
+  MOCK_APPROVAL_DELAY_SEC = "20"
+  BUDDY_WEBHOOK_URL = "http://avito-orbi-api.internal:8080/api/v1/integrations/corp/webhook"
+
+[processes]
+  app = "uvicorn corp_mock.server:app --host :: --port 8090"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

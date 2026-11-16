@@ -150,3 +150,32 @@ jobs:
           done
           echo "Public health check failed"
           exit 1
+
+  # Fly.io stand (avito.prooood.ru since 16.11.2026): same images, see deploy/fly/.
+  deploy-fly:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    concurrency:
+      group: deploy-fly
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy ${{ github.sha }} to Fly
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: deploy/fly/deploy.sh "$GITHUB_SHA"
+      - name: Public smoke check
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS --connect-timeout 5 --max-time 10 https://avito-orbi.fly.dev/healthz | jq -e '.status == "ok"' >/dev/null \
+              && curl -fsS --connect-timeout 5 --max-time 10 https://avito-orbi.fly.dev/api/health | jq -e '.status == "ok"' >/dev/null; then
+              echo "Fly stand is up"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "Fly health check failed"
+          exit 1
