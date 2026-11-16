@@ -40,3 +40,23 @@ async def test_vacation_still_checks_balance_before_confirming(
     assert parts(proposed, "action")
     assert "absence_balance" in corp.calls
     assert "absence_create" not in corp.calls
+
+
+async def test_reminder_and_cancel_are_confirmed_and_scoped_to_owner(
+    client: AsyncClient,
+    anya: Account,
+    kirill: Account,
+) -> None:
+    chat = await Chat(client, anya).start()
+    [card] = parts(await chat.say("Нужен доступ к listings-api"), "action")
+    [request] = parts(parse((await chat.decide(card["id"])).text), "request")
+    ref = request["external_id"]
+    stranger = await Chat(client, kirill).start()
+    assert "Не нашёл" in text_of(await stranger.say(f"Отмени заявку {ref}"))
+    for verb in ("Напомни о", "Отмени"):
+        [control] = parts(await chat.say(f"{verb} заявку {ref}"), "action")
+        assert control["card"]["kind"] == "request_control"
+        answer = await chat.decide(control["id"])
+        assert "error" not in [chunk["type"] for chunk in parse(answer.text)]
+    result = (await client.get(f"/api/v1/requests/{request['id']}", headers=anya.headers)).json()
+    assert result["payload"]["cancel_requested"] is True

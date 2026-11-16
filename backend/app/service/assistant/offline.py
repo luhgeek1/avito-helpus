@@ -93,7 +93,14 @@ _AGREE_CORE = frozenset(
      "согласен", "согласна", "подтверждаю", "оформляй", "оформи", "оформляйте", "отправляй"}
 )  # fmt: skip
 CARD_TOOLS = frozenset(
-    {"request_access", "request_absence", "ask_mentor", "create_it_ticket", "post_team_message"}
+    {
+        "request_access",
+        "request_absence",
+        "ask_mentor",
+        "create_it_ticket",
+        "post_team_message",
+        "control_request",
+    }
 )
 # "Access to the system" names no resource: explain the procedure instead of a lookup miss.
 _GENERIC_RESOURCE = re.compile(
@@ -119,6 +126,22 @@ def _intent_bypass(text: str) -> Intent | None:
     ):
         return Intent(text=BYPASS_REFUSAL)
     return None
+
+
+def _intent_request_control(text: str, tools: set[str]) -> Intent | None:
+    if "control_request" not in tools or not _has(text, r"отмен", r"напомни"):
+        return None
+    if not _has(text, r"заявк", r"\b(acc|abs|it)-\d+"):
+        return None
+    ref = re.search(r"\b(?:acc|abs|it)-\d+\b|\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", text)
+    if ref is None:
+        return Intent(
+            text="Укажи номер заявки из «Моих заявок», например: «Отмени заявку ACC-1042»."
+        )
+    return Intent(
+        "control_request",
+        {"reference": ref[0].upper(), "action": "cancel" if "отмен" in text else "remind"},
+    )
 
 
 def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads best
@@ -263,6 +286,7 @@ def route(prompt: str, tools: set[str], today: date) -> Intent:
     detected = (
         _intent_sensitive(text, prompt, tools)
         or _intent_bypass(text)
+        or _intent_request_control(text, tools)
         or _intent_mentor(text, tools)
         or _intent_actions(text, prompt, tools, today)
         or _intent_plan(text, prompt, tools)
