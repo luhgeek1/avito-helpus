@@ -11,7 +11,7 @@
 | [../specs/](../specs/) | SDD-спецификации сценариев (SpecKit) и CJM первых недель |
 | [quality/coverage-summary.md](quality/coverage-summary.md) | снимок покрытия тестами и файлы отчётов |
 | [quality/performance.md](quality/performance.md) | нагрузочный тест и задержки |
-| [api/openapi.json](api/openapi.json) | контракт API; живой Swagger на `/api/docs` |
+| [api/openapi.json](api/openapi.json) | контракт API; живой Swagger на /api/docs |
 | [presentation/](presentation/) | презентация (PDF и PPTX) и её исходники |
 | [demo/orbi-demo.mp4](demo/orbi-demo.mp4) | видео от запроса до результата |
 
@@ -36,9 +36,9 @@
 | [frontend/COMPANION.md](frontend/COMPANION.md) | как ведёт себя спутник на фронтенде |
 | [frontend/API_INTEGRATION.md](frontend/API_INTEGRATION.md) | какие вызовы API нужны каждому экрану и как читать поток чата |
 | [integration/SDK_SERVER.md](integration/SDK_SERVER.md) | сервер для npm-пакета: импорт знаний, MCP, контекст |
-| [../frontend/packages/react/README.md](../frontend/packages/react/README.md) | установка и API пакета `@orbi-companion/react` |
+| [../frontend/packages/react/README.md](../frontend/packages/react/README.md) | установка и API пакета @orbi-companion/react |
 | [../corp-mock/README.md](../corp-mock/README.md) | имитация корпоративных сервисов и её админ-ручки |
-| [guides/windows.md](guides/windows.md) | тесты и покрытие без `make` |
+| [guides/windows.md](guides/windows.md) | тесты и покрытие без make |
 
 ## Эксплуатация
 
