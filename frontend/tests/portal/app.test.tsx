@@ -186,12 +186,25 @@ describe('Лента и статьи', () => {
     expect(await screen.findByText('В этом канале пока нет постов')).toBeInTheDocument()
   })
 
+  it('не предлагает «Ещё», когда саммари помещается целиком', async () => {
+    renderApp('/feed/post-1')
+    const summary = await screen.findByRole('complementary', { name: 'Главное из статьи' })
+    expect(within(summary).queryByRole('button', { name: 'Ещё' })).not.toBeInTheDocument()
+  })
+
   it('открывает статью, разворачивает саммари, лайкает и подписывается', async () => {
+    // jsdom has no layout: report a clamped paragraph taller than its two visible lines.
+    const scroll = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollHeight')
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      get(this: HTMLElement) { return this.classList.contains('line-clamp-2') ? 80 : 0 },
+    })
     const { user } = renderApp('/feed/post-1')
     expect(await screen.findByRole('heading', { level: 1, name: /Первая неделя стажёра/ })).toBeInTheDocument()
     const summary = screen.getByRole('complementary', { name: 'Главное из статьи' })
-    await user.click(within(summary).getByRole('button', { name: 'Ещё' }))
-    expect(within(summary).getByRole('button', { name: 'Свернуть' })).toBeInTheDocument()
+    await user.click(await within(summary).findByRole('button', { name: 'Ещё' }))
+    expect(within(summary).getByRole('button', { name: 'Свернуть' })).toHaveAttribute('aria-expanded', 'true')
+    if (scroll) Object.defineProperty(HTMLElement.prototype, 'scrollHeight', scroll)
 
     await user.click(screen.getByRole('button', { name: 'Поставить лайк' }))
     expect(await screen.findByRole('button', { name: 'Убрать лайк' })).toHaveTextContent('25')
