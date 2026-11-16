@@ -215,7 +215,7 @@ export const handlers = [
           id: p.id,
           title: `${p.firstName} ${p.lastName}`,
           subtitle: p.position,
-          href: people.some((item) => item.id === p.id) ? `/people/${p.id}` : '/',
+          href: people.some((item) => item.id === p.id) ? `/people/${p.id}` : '/demo',
         })),
       ...services
         .filter((s) => includes(s.title, q) || includes(s.description, q))

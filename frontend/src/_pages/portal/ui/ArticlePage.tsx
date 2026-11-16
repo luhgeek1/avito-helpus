@@ -1,6 +1,6 @@
 import { getRouteApi, Link } from '@/shared/lib/portal-navigation'
 import { ChevronRight, Clock, MessageCircle, Sparkles, Tag } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ApiError } from '@/shared/api'
 import { usePost, useToggleSubscription } from '@/shared/api'
 import type { Post } from '@/shared/api'
@@ -17,19 +17,37 @@ const badge = 'inline-flex h-7 items-center gap-1.5 rounded-lg bg-control px-2.5
 
 function Summary({ text }: { text: string }) {
   const [expanded, setExpanded] = useState(false)
+  const [overflows, setOverflows] = useState(false)
+  const paragraph = useRef<HTMLParagraphElement>(null)
+
+  // Offer "more" only when the two-line clamp actually hides text at the current width.
+  useEffect(() => {
+    if (expanded) return
+    const measure = () => {
+      const node = paragraph.current
+      if (node) setOverflows(node.scrollHeight > node.clientHeight + 1)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [expanded, text])
+
   return (
     <aside className="mb-6 rounded-2xl bg-purple-soft px-5 py-4" aria-label="Главное из статьи">
       <div className="mb-1.5 flex items-center gap-2 font-bold">
         <Sparkles size={16} className="text-purple" aria-hidden />
         Главное из статьи
       </div>
-      <p className={cx(!expanded && 'line-clamp-2')}>{text}</p>
-      <button
-        type="button"
-        className="mt-1 border-0 bg-transparent text-link transition-colors duration-150 ease-in-out hover:text-link-hover"
-        onClick={() => setExpanded((value) => !value)}>
-        {expanded ? 'Свернуть' : 'Ещё'}
-      </button>
+      <p ref={paragraph} className={cx(!expanded && 'line-clamp-2')}>{text}</p>
+      {(overflows || expanded) && (
+        <button
+          type="button"
+          aria-expanded={expanded}
+          className="mt-1 border-0 bg-transparent text-link transition-colors duration-150 ease-in-out hover:text-link-hover"
+          onClick={() => setExpanded((value) => !value)}>
+          {expanded ? 'Свернуть' : 'Ещё'}
+        </button>
+      )}
     </aside>
   )
 }

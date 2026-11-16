@@ -6,11 +6,10 @@ docker compose up -d --build`,
 cd frontend
 npm ci
 npm run dev`,
-  package: `cd frontend
-npm ci
-npm run sdk:pack
-# In your React application:
-npm install /path/to/frontend/packages/react/dist/orbi-companion-react-0.1.0.tgz`,
+  package: `npm install @orbi-companion/react
+# Or build the archive from this repository:
+# cd frontend && npm ci && npm run sdk:pack
+# npm install /path/to/frontend/packages/react/dist/orbi-companion-react-0.1.0.tgz`,
   component: `import { OrbiCompanion } from "@orbi-companion/react";
 
 export default function Platform() {
@@ -74,7 +73,7 @@ export const guideTopics: readonly GuideTopic[] = [
   {
     id: "react", title: "Встраивание в React / Next.js", section: "react",
     terms: ["библиотек", "установить библиотеку", "встро", "интегр", "react", "next", "компонент", "layout", "импорт", "исходник", "npm", "sdk", "пакет", "платформ", "перенес", "перенос", "alias", "алиас", "модул"],
-    answer: "Библиотека @orbi-companion/react готова к установке из архива; в публичном npm она ещё не опубликована. В frontend выполни npm ci и npm run sdk:pack, затем установи полученный packages/react/dist/orbi-companion-react-0.1.0.tgz в своё React-приложение через npm install /путь/к/архиву. Нужны React и React DOM 19. Добавь один OrbiCompanion рядом с приложением и передай apiUrl. Tailwind, стили, шрифты, Next.js и копирование исходников не нужны. Виджет сам изолирует оформление, содержит вход, персонажей, гардероб, чат, Spotlight и карточки. В Next.js можно импортировать его прямо в серверный layout; callback-функции передаются из клиентской оболочки. Подробности — frontend/packages/react/README.md.",
+    answer: "Библиотека @orbi-companion/react опубликована в npm: выполни npm install @orbi-companion/react в своём React-приложении. Можно и собрать архив из репозитория: в frontend выполни npm ci и npm run sdk:pack, затем npm install /путь/к/orbi-companion-react-0.1.0.tgz. Нужны React и React DOM 19. Добавь один OrbiCompanion рядом с приложением и передай apiUrl. Tailwind, стили, шрифты, Next.js и копирование исходников не нужны. Виджет сам изолирует оформление, содержит вход, персонажей, гардероб, чат, Spotlight и карточки. В Next.js можно импортировать его прямо в серверный layout; callback-функции передаются из клиентской оболочки. Подробности — frontend/packages/react/README.md.",
     code: { language: "tsx", title: "app/layout.tsx, внутри body", value: integrationSnippets.component },
   },
   {

@@ -82,7 +82,7 @@ describe('mock API', () => {
     const results = await api.get('/search?q=Белов', z.array(searchResultSchema))
     expect(results[0]).toMatchObject({ type: 'person', href: '/people/p-artem' })
     const birthday = await api.get('/search?q=Гришина', z.array(searchResultSchema))
-    expect(birthday[0].href).toBe('/')
+    expect(birthday[0].href).toBe('/demo')
     const mixed = await api.get('/search?q=отпуск', z.array(searchResultSchema))
     expect(mixed.some((r) => r.type === 'service')).toBe(true)
     const event = await api.get('/search?q=забег', z.array(searchResultSchema))

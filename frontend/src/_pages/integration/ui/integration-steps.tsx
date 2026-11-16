@@ -24,8 +24,8 @@ export function IntegrationSteps() {
         </Section>
 
         <Section id="react" step="02" title="Добавьте Орби в свой интерфейс" description="Один React-компонент со стилями, шрифтами и всем интерфейсом спутника.">
-          <p className={paragraph}>Библиотека <InlineCode>@orbi-companion/react</InlineCode> готова к установке из архива. В публичном npm она ещё не опубликована. Соберите пакет в репозитории и установите его в приложение с React 19.</p>
-          <CodeBlock code={integrationSnippets.package} language="bash" title="Сборка и установка npm-пакета" />
+          <p className={paragraph}>Библиотека <InlineCode>@orbi-companion/react</InlineCode> опубликована в npm. Установите её в приложение с React 19 или соберите архив из репозитория.</p>
+          <CodeBlock code={integrationSnippets.package} language="bash" title="Установка npm-пакета" />
           <p className={paragraph}>Добавьте один <InlineCode>OrbiCompanion</InlineCode> рядом с приложением. Стили и шрифты уже внутри; Tailwind и Next.js не нужны. В Next.js подключите компонент в постоянном layout.</p>
           <CodeBlock code={integrationSnippets.component} language="tsx" title="Компонент вашей платформы" />
           <p className={paragraph}>Виджет изолирует стили через Shadow DOM, содержит форму входа и сохраняет предпочтения. Для авторизации вашей платформы передайте <InlineCode>getToken</InlineCode> и меняйте <InlineCode>sessionKey</InlineCode> при смене пользователя. Переходы к плану и заявкам настраиваются через <InlineCode>onNavigate</InlineCode> или <InlineCode>portalUrl</InlineCode>.</p>
