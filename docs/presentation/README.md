@@ -3,6 +3,10 @@
 Готовый файл: [orbi-presentation.pdf](orbi-presentation.pdf). 16 страниц 16:9: 12 основных слайдов,
 разделитель «Приложения» и A1–A3. Первый слайд — порядок проверки и ссылки на код, интерфейс и видео.
 
+Редактируемая копия для PowerPoint и Google Slides: [orbi-presentation.pptx](orbi-presentation.pptx) —
+те же слайды, тексты и таблицы правятся, картинки только у скриншотов и Орби. Сдаётся PDF; если
+правили PPTX, экспортируйте его в PDF заново.
+
 ## Пересборка
 
 Из корня репозитория:
@@ -26,6 +30,7 @@ npm --prefix frontend exec -- playwright install chromium
 |---|---|
 | `slides.html` | Слайды 1920×1080: стили, схема, тексты |
 | `build.mjs` | Проверки макета и сборка PDF и превью |
+| `build_pptx.py` | Сборка PPTX из того же `slides.html` (python-pptx, Pillow, Playwright): `python docs/presentation/build_pptx.py` |
 | `assets/` | Скриншоты прототипа и кадр оригинального Орби |
 
 Шрифты — Golos Text и Press Start 2P из `frontend/public/fonts/` (WOFF2), внешних ресурсов нет.

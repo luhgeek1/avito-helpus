@@ -30,7 +30,7 @@
   Бэкенд — 432 теста, 6376/6376 строк; make check проходит. Покрытие SDK включено в общий отчёт,
   CI проверяет установку архива в независимые приложения. Итого 661 тест, 10253/10253 строк;
   снимок обновлён 16.11 — [docs/quality/coverage-summary.md](quality/coverage-summary.md).
-- **Презентация:** [docs/presentation/orbi-presentation.pdf](presentation/orbi-presentation.pdf) —
+- **Презентация:** [docs/presentation/orbi-presentation.pdf](presentation/orbi-presentation.pdf) (и редактируемая PPTX) —
   12 слайдов и 3 приложения, порядок проверки и ссылка на видео на титуле; сборка `node docs/presentation/build.mjs`.
 - **Главная и демо (D-038, D-039):** `/` объясняет установку библиотеки и сервера, блоки кода
   копируются; Орби помогает локально по руководству. `/demo` — прежний портал с настоящим
