@@ -79,6 +79,8 @@ const {chromium} = createRequire(path.join(root,'frontend/package.json'))('playw
  function visit(e){
   if(e.matches('script,style,defs'))return;
   const b=box(e),s=style(e);if(!b.w||!b.h)return;
+  // The donut chart becomes native ring + arc shapes instead of hundreds of segments.
+  if(e.classList.contains('donut')){items.push({kind:'donut',box:b,pct:parseFloat(e.textContent)});[...e.children].filter(c=>!c.matches('svg')).forEach(visit);return;}
   if(e.classList.contains('arrow')&&e.textContent.trim()==='?'){items.push({kind:'arrow',box:b,style:s});return;}
   if(e.tagName==='TABLE'){
     items.push({kind:'table',box:b,rows:[...e.rows].map(r=>({h:box(r).h,cells:[...r.cells].map(c=>({box:box(c),style:style(c),runs:textRuns(c)}))}))});return;
@@ -275,10 +277,7 @@ def add_table(slide, item):
         table.rows[r].height=px(row['h'])
         for c,source in enumerate(row['cells']):
             cell=table.cell(r,c); s=source['style']; pad=s['pad']
-            # Hard breaks tuned for the HTML widths make cells taller after re-wrapping
-            # in Google Slides; let cell text flow instead.
-            runs=[{**run,'text':re.sub(r'\s*\n\s*',' ',run['text'])} for run in source['runs']]
-            fill_text(cell.text_frame,runs,s,table=True)
+            fill_text(cell.text_frame,source['runs'],s,table=True)
             cell.margin_top,cell.margin_right,cell.margin_bottom,cell.margin_left=[px(v) for v in pad]
             cell.vertical_anchor=MSO_ANCHOR.MIDDLE if r and item['box']['w']<1100 else MSO_ANCHOR.TOP
             if visible(s['bg']): cell.fill.solid();cell.fill.fore_color.rgb=color(s['bg'])
@@ -305,6 +304,23 @@ def add_svg(slide, item):
                 add_line(slide,start,end,stroke,path['width']*sx if path['width'] else 1.8*sx,path['arrow'] and i==len(mapped)-2)
 
 
+def add_donut(slide, item):
+    """Track ring plus a clockwise arc from 12 o'clock covering pct of the circle."""
+    b = item['box']
+    thickness = 36 / 300  # stroke width relative to the 300px chart in slides.html
+    ring = slide.shapes.add_shape(MSO_SHAPE.DONUT, px(b['x']), px(b['y']), px(b['w']), px(b['h']))
+    ring.adjustments[0] = thickness
+    ring.fill.solid(); ring.fill.fore_color.rgb = color('#eee9f6'); ring.line.fill.background()
+    arc = slide.shapes.add_shape(MSO_SHAPE.BLOCK_ARC, px(b['x']), px(b['y']), px(b['w']), px(b['h']))
+    # python-pptx scales adjustments by 1/100000; DrawingML angles are in 1/60000 degree.
+    start, end = 270.0, (270.0 + 3.6 * item['pct']) % 360
+    arc.adjustments[0] = start * 0.6
+    arc.adjustments[1] = end * 0.6
+    arc.adjustments[2] = thickness
+    arc.fill.solid(); arc.fill.fore_color.rgb = color('#8067b6'); arc.line.fill.background()
+    arc.name = f"Donut {item['pct']:g}%"
+
+
 def add_image(slide,item,orbi):
     b,c=item['box'],item['clip']
     source=orbi if item['src'].endswith('.svg') else HERE/item['src']
@@ -321,11 +337,11 @@ def normalized(value):
 def verify(path, data):
     """Reopen the saved package and validate content, links and native objects."""
     deck=Presentation(path)
-    assert len(deck.slides)==16
+    assert len(deck.slides)==17
     readme=(HERE/'README.md').read_text(encoding='utf-8')
     heading_section=readme.split('## Заголовки по порядку')[1].split('## Откуда цифры')[0]
     readme_titles=re.findall(r'^\d+\. (.+)$',heading_section,re.M)
-    assert len(readme_titles)==16
+    assert len(readme_titles)==17
     for i,(slide,source,summary) in enumerate(zip(deck.slides,data,readme_titles),1):
         text=[]; links=[]; titles=[]
         for shape in slide.shapes:
@@ -345,7 +361,7 @@ def verify(path, data):
         # README adds cover metadata and appendix labels; punctuation differs on #5.
         # Match all heading words exactly after removing those known wrappers.
         summary = re.sub(r"\s*\([^)]*\)", "", summary)
-        summary = re.sub(r"^A[123]\.\s*", "", summary)
+        summary = re.sub(r"^A[1234]\.\s*", "", summary)
         canonical = lambda value: re.sub(r"[^\w]+", "", value.lower())
         assert canonical(title)==canonical(summary), (i,title,summary)
         # Compare every source text node in order, including native table cells.
@@ -359,7 +375,7 @@ def verify(path, data):
         assert 'Орби · Hack&Change 2026' in ' '.join(text)
         print(f'{i:02d}. {title}')
     assert any(s.has_table for s in deck.slides[8].shapes),'Slide 9 needs a native table'
-    print(f'PASS: 16 slides; editable text on every slide; {sum(s.has_table for sl in deck.slides for s in sl.shapes)} native tables; all {sum(len(s["links"]) for s in data)} hyperlink occurrences; no full-slide pictures; HTML titles and README order verified.')
+    print(f'PASS: 17 slides; editable text on every slide; {sum(s.has_table for sl in deck.slides for s in sl.shapes)} native tables; all {sum(len(s["links"]) for s in data)} hyperlink occurrences; no full-slide pictures; HTML titles and README order verified.')
 
 
 def main():
@@ -382,6 +398,7 @@ def main():
                 elif kind=='table':add_table(slide,item)
                 elif kind=='svg':add_svg(slide,item)
                 elif kind=='image':add_image(slide,item,orbi)
+                elif kind=='donut':add_donut(slide,item)
                 elif kind=='arrow':
                     b=item['box'];add_line(slide,(b['x'],b['y']+b['h']/2),(b['x']+b['w'],b['y']+b['h']/2),item['style']['color'],2,True)
                 elif kind=='chevron':
