@@ -17,10 +17,12 @@ it.each([
   ["/benefits/savings", "/api/benefits/savings"], ["/services", "/api/services"], ["/services/it", "/api/services/it"],
   ["/search?q=Авито", "/api/search"], ["/profile", "/api/me"], ["/profile", "/api/calendar"],
 ])("recovers %s after a failed request to %s", async (path, endpoint) => {
-  server.use(http.get(endpoint, () => new HttpResponse(null, { status: 500 }), { once: true }));
+  // Fail every request until the retry, so a second fetch of the same endpoint cannot hide the error.
+  let failing = true;
+  server.use(http.get(endpoint, () => (failing ? new HttpResponse(null, { status: 500 }) : undefined)));
   const { user } = renderApp(path);
-  // Slow CI runners need more than the default second before the failed query surfaces.
-  const alert = await screen.findByRole("alert", undefined, { timeout: 5000 });
+  const alert = await screen.findByRole("alert", undefined, { timeout: 3000 });
+  failing = false;
   await user.click(within(alert).getByRole("button", { name: "Повторить" }));
   await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
 });
