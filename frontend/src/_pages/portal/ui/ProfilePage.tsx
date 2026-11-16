@@ -33,22 +33,25 @@ const muted = 'text-13 text-secondary'
 /* ---------- Левая колонка ---------- */
 
 function CopyButton({ value, label }: { value: string; label: string }) {
-  const [copied, setCopied] = useState(false)
+  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const active = useRef(true)
   useEffect(() => {
     active.current = true
     return () => { active.current = false; clearTimeout(timer.current) }
   }, [])
+  const show = (next: 'copied' | 'failed') => {
+    if (!active.current) return
+    setState(next)
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => setState('idle'), 1500)
+  }
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(value)
-      if (!active.current) return
-      setCopied(true)
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => setCopied(false), 1500)
+      show('copied')
     } catch {
-      if (active.current) setCopied(false)
+      show('failed')
     }
   }
   return (
@@ -58,12 +61,15 @@ function CopyButton({ value, label }: { value: string; label: string }) {
       onClick={copy}
       aria-label={`Скопировать ${label}`}>
       <Copy size={13} />
-      {copied ? 'Скопировано' : value}
+      <span aria-live="polite">{state === 'copied' ? 'Скопировано' : state === 'failed' ? 'Не скопировалось' : value}</span>
     </button>
   )
 }
 
 function IdentityCard({ person, isMe }: { person: Person; isMe: boolean }) {
+  // Messenger and calls are not part of the demo; say so instead of ignoring the click.
+  const [notice, setNotice] = useState('')
+  const unavailable = (what: string) => setNotice(`${what} в демо-портале не подключены`)
   return (
     <div className={cx(box, 'flex flex-col items-center gap-1 text-center')}>
       <Avatar firstName={person.firstName} lastName={person.lastName} palette={person.palette} size={96} />
@@ -85,16 +91,17 @@ function IdentityCard({ person, isMe }: { person: Person; isMe: boolean }) {
         <a className={contact} href={`mailto:${person.email}`} aria-label="Написать письмо">
           <Mail size={16} />
         </a>
-        <button type="button" className={contact} aria-label="Написать в мессенджер">
+        <button type="button" className={contact} aria-label="Написать в мессенджер" onClick={() => unavailable('Мессенджер и звонки')}>
           <MessageCircle size={16} />
         </button>
-        <button type="button" className={contact} aria-label="Позвонить">
+        <button type="button" className={contact} aria-label="Позвонить" onClick={() => unavailable('Звонки')}>
           <Phone size={16} />
         </button>
-        <button type="button" className={contact} aria-label="Созвониться по видео">
+        <button type="button" className={contact} aria-label="Созвониться по видео" onClick={() => unavailable('Видеозвонки')}>
           <Video size={16} />
         </button>
       </div>
+      {notice && <p role="status" className="mt-2 text-13 text-secondary">{notice}</p>}
       {isMe && (
         <div className="mt-4 flex w-full items-center justify-between rounded-2xl bg-white px-4 py-3 font-bold">
           <span>В офис</span>

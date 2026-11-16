@@ -67,6 +67,17 @@ it("shows calendar day mode and handles unavailable clipboard", async () => {
   vi.spyOn(navigator.clipboard, "writeText").mockRejectedValue(new Error("denied"));
   await user.click(await screen.findByRole("button", { name: "Скопировать логин" }));
   expect(screen.queryByText("Скопировано")).not.toBeInTheDocument();
+  expect(await screen.findByText("Не скопировалось")).toBeInTheDocument();
+});
+
+it("explains that messenger and calls are not connected in the demo", async () => {
+  const { user } = renderApp("/profile");
+  await user.click(await screen.findByRole("button", { name: "Написать в мессенджер" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Мессенджер и звонки в демо-портале не подключены");
+  await user.click(screen.getByRole("button", { name: "Позвонить" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Звонки в демо-портале не подключены");
+  await user.click(screen.getByRole("button", { name: "Созвониться по видео" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Видеозвонки в демо-портале не подключены");
 });
 
 it("cancels the copied-label timer when leaving the profile", async () => {
