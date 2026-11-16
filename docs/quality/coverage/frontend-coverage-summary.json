@@ -1,28 +1,28 @@
 {
  "total": {
   "lines": {
-   "total": 3716,
-   "covered": 3716,
+   "total": 3739,
+   "covered": 3739,
    "skipped": 0,
    "pct": 100
   },
   "statements": {
-   "total": 4498,
-   "covered": 4417,
+   "total": 4527,
+   "covered": 4446,
    "skipped": 0,
-   "pct": 98.19
+   "pct": 98.21
   },
   "functions": {
-   "total": 1186,
-   "covered": 1175,
+   "total": 1190,
+   "covered": 1179,
    "skipped": 0,
    "pct": 99.07
   },
   "branches": {
-   "total": 2992,
-   "covered": 2681,
+   "total": 3027,
+   "covered": 2714,
    "skipped": 0,
-   "pct": 89.6
+   "pct": 89.65
   },
   "branchesTrue": {
    "total": 0,
@@ -467,10 +467,10 @@
    "pct": 100
   },
   "branches": {
-   "total": 43,
-   "covered": 39,
+   "total": 44,
+   "covered": 40,
    "skipped": 0,
-   "pct": 90.69
+   "pct": 90.9
   }
  },
  "frontend/src/_pages/pet-gallery/index.ts": {
@@ -676,9 +676,9 @@
   },
   "branches": {
    "total": 57,
-   "covered": 50,
+   "covered": 51,
    "skipped": 0,
-   "pct": 87.71
+   "pct": 89.47
   }
  },
  "frontend/src/_pages/portal/ui/FeedPage.tsx": {
@@ -2215,30 +2215,82 @@
    "pct": 0
   }
  },
- "frontend/src/shared/api/orbi/http.ts": {
+ "frontend/src/shared/api/orbi/client.ts": {
   "lines": {
-   "total": 64,
-   "covered": 64,
+   "total": 77,
+   "covered": 77,
    "skipped": 0,
    "pct": 100
   },
   "functions": {
-   "total": 14,
-   "covered": 13,
+   "total": 16,
+   "covered": 15,
    "skipped": 0,
-   "pct": 92.85
+   "pct": 93.75
   },
   "statements": {
-   "total": 81,
-   "covered": 78,
+   "total": 101,
+   "covered": 98,
    "skipped": 0,
-   "pct": 96.29
+   "pct": 97.02
   },
   "branches": {
-   "total": 52,
-   "covered": 49,
+   "total": 79,
+   "covered": 75,
    "skipped": 0,
-   "pct": 94.23
+   "pct": 94.93
+  }
+ },
+ "frontend/src/shared/api/orbi/error.ts": {
+  "lines": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 1,
+   "covered": 1,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 5,
+   "covered": 5,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  }
+ },
+ "frontend/src/shared/api/orbi/http.ts": {
+  "lines": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "functions": {
+   "total": 0,
+   "covered": 0,
+   "skipped": 0,
+   "pct": 100
+  },
+  "statements": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
+  },
+  "branches": {
+   "total": 2,
+   "covered": 2,
+   "skipped": 0,
+   "pct": 100
   }
  },
  "frontend/src/shared/api/orbi/index.ts": {
@@ -2919,26 +2971,26 @@
  },
  "frontend/src/shared/ui/experience-switcher/index.tsx": {
   "lines": {
-   "total": 2,
-   "covered": 2,
+   "total": 3,
+   "covered": 3,
    "skipped": 0,
    "pct": 100
   },
   "functions": {
-   "total": 2,
-   "covered": 2,
+   "total": 3,
+   "covered": 3,
    "skipped": 0,
    "pct": 100
   },
   "statements": {
-   "total": 2,
-   "covered": 2,
+   "total": 3,
+   "covered": 3,
    "skipped": 0,
    "pct": 100
   },
   "branches": {
-   "total": 5,
-   "covered": 5,
+   "total": 6,
+   "covered": 6,
    "skipped": 0,
    "pct": 100
   }
@@ -3197,10 +3249,10 @@
    "pct": 98.27
   },
   "branches": {
-   "total": 21,
-   "covered": 19,
+   "total": 23,
+   "covered": 20,
    "skipped": 0,
-   "pct": 90.47
+   "pct": 86.95
   }
  },
  "frontend/src/widgets/pet-companion/model/use-companion-chat.ts": {
@@ -3387,8 +3439,8 @@
  },
  "frontend/src/widgets/pet-companion/model/use-spotlight-shortcut.ts": {
   "lines": {
-   "total": 32,
-   "covered": 32,
+   "total": 33,
+   "covered": 33,
    "skipped": 0,
    "pct": 100
   },
@@ -3399,16 +3451,16 @@
    "pct": 85.71
   },
   "statements": {
-   "total": 45,
-   "covered": 40,
+   "total": 46,
+   "covered": 41,
    "skipped": 0,
-   "pct": 88.88
+   "pct": 89.13
   },
   "branches": {
-   "total": 28,
-   "covered": 25,
+   "total": 30,
+   "covered": 26,
    "skipped": 0,
-   "pct": 89.28
+   "pct": 86.66
   }
  },
  "frontend/src/widgets/pet-companion/model/use-tour-exit.ts": {
@@ -3673,8 +3725,8 @@
  },
  "frontend/src/widgets/pet-companion/ui/companion-spotlight.tsx": {
   "lines": {
-   "total": 30,
-   "covered": 30,
+   "total": 31,
+   "covered": 31,
    "skipped": 0,
    "pct": 100
   },
@@ -3685,16 +3737,16 @@
    "pct": 100
   },
   "statements": {
-   "total": 47,
-   "covered": 45,
+   "total": 48,
+   "covered": 46,
    "skipped": 0,
-   "pct": 95.74
+   "pct": 95.83
   },
   "branches": {
-   "total": 27,
-   "covered": 24,
+   "total": 29,
+   "covered": 25,
    "skipped": 0,
-   "pct": 88.88
+   "pct": 86.2
   }
  },
  "frontend/src/widgets/pet-companion/ui/companion-tour.tsx": {
@@ -3711,16 +3763,16 @@
    "pct": 100
   },
   "statements": {
-   "total": 51,
-   "covered": 50,
+   "total": 50,
+   "covered": 49,
    "skipped": 0,
-   "pct": 98.03
+   "pct": 98
   },
   "branches": {
-   "total": 73,
-   "covered": 51,
+   "total": 71,
+   "covered": 50,
    "skipped": 0,
-   "pct": 69.86
+   "pct": 70.42
   }
  },
  "frontend/src/widgets/pet-companion/ui/companion-wardrobe.tsx": {

@@ -1,20 +1,21 @@
 # Снимок покрытия тестами
 
-Снят 15.11.2026 полным прогоном `make coverage` на `main` после PR №4 и страницы интеграции
-(база `89ebe3b`: `711826f` + исправление гонки в тесте гардероба). Незакоммиченных изменений
-в коде нет. macOS 27 (arm64), Python 3.13, Node 24, настоящие Postgres (pgvector) и Redis
-из `docker-compose.test.yml`.
+Снят 16.11.2026 полным прогоном `main` (`19c48bd`: React SDK, видео, правки разделителей) плюс
+исправление пути в `frontend/vitest.sdk.config.ts` для Windows. Windows 11, Python 3.13, Node 24,
+настоящие Postgres (pgvector) и Redis из `docker-compose.test.yml`.
 
 | Часть | Тесты | Покрыто строк | Всего строк | Покрытие |
 |---|---|---|---|---|
-| Бэкенд (`backend/app`) | 417 (+1 с брокером, выключен по умолчанию) | 6297 | 6297 | 100% |
-| Фронтенд (`frontend/src`, все файлы) | 215 | 3716 | 3716 | 100% |
-| **Итого** | **632** | **10013** | **10013** | **100%** |
+| Бэкенд (`backend/app`) | 432 (+1 с брокером, выключен по умолчанию) | 6376 | 6376 | 100% |
+| Фронтенд (`frontend/src`, все файлы) | 220 | 3739 | 3739 | 100% |
+| React SDK (`frontend/packages/react/src`) | 9 | 138 | 138 | 100% |
+| **Итого** | **661** | **10253** | **10253** | **100%** |
 
-Фронтенд дополнительно: операторы 98,19%, функции 99,07%, ветви 89,6%. Порог CI — 100% строк.
+Фронтенд дополнительно: операторы 98,21%, функции 99,07%, ветви 89,65%. SDK: операторы 99,03%,
+функции 100%, ветви 93%. Порог CI — 100% строк.
 
-Браузерные E2E полного стека (Playwright 1.64, офлайн-режим): 4 из 4 прошли против локального
-`docker compose` через nginx на этом же коммите.
+Браузерные E2E полного стека (Playwright, офлайн-режим, 4 сценария) идут на каждом pull request
+(D-033).
 
 Без `pragma: no cover`, `v8 ignore` и сужения `include`/`omit` (D-030). Имитация корпоративных
 сервисов (`corp-mock/`) в расчёт не входит (№72 Q&A). Порог 100% строк проверяет CI на каждом
@@ -28,20 +29,23 @@ pull request (D-033).
 - **Бэкенд, исправлено.** Строка 42 `app/infra/bus.py` (`await pubsub.aclose()`) покрывалась не в
   каждом прогоне: тест выходил из `async for`, и генератор подписки закрывал сборщик мусора.
   Теперь тест закрывает его через `aclosing()` и проверяет, что в канале Redis не осталось
-  подписчиков; два полных прогона подряд — 6297/6297.
+  подписчиков.
+- **SDK на Windows, исправлено.** Подмена модуля сессии SDK в `vitest.sdk.config.ts` сравнивала
+  путь с прямыми слешами и на Windows не срабатывала; теперь путь нормализуется.
 
 ## Файлы
 
 | Файл | Формат | SHA-256 |
 |---|---|---|
-| [coverage/backend-coverage.xml](coverage/backend-coverage.xml) | Cobertura (pytest-cov, `backend/app`) | `924508abc08d1b8ccc7abb456078e6de02331c1f7e653a59d47d6b5951b92e84` |
-| [coverage/frontend-coverage-summary.json](coverage/frontend-coverage-summary.json) | Istanbul json-summary (Vitest, `frontend/src`) | `3918b972b20594d938d56e5f95adc8e65f49f96fa44f48b0d885b3048c954b13` |
+| [coverage/backend-coverage.xml](coverage/backend-coverage.xml) | Cobertura (pytest-cov, `backend/app`) | `9d3adbe7963f2f1f963389b642730d7f426a9c014cba3190e3192f0fc3e3d262` |
+| [coverage/frontend-coverage-summary.json](coverage/frontend-coverage-summary.json) | Istanbul json-summary (Vitest, `frontend/src`) | `8b95e0779b42e24310d7626f3990d3d6bacc8751f2f8552b477dc93a6a0ddd59` |
+| [coverage/sdk-coverage-summary.json](coverage/sdk-coverage-summary.json) | Istanbul json-summary (Vitest, `frontend/packages/react/src`) | `3aeb667fd10ab60f1cbb259924dd7e1689595fa0dad895c037e6f15698748d21` |
 
 Пути исходников в копиях сделаны относительными от корня репозитория.
 
 ## Воспроизвести
 
 `make coverage` или команды без make из README (раздел «Тесты и покрытие»): тестовые БД,
-`uv run pytest --cov=app …` в `backend/`, `npm --prefix frontend run coverage`,
+`uv run pytest --cov=app …` в `backend/`, `npm --prefix frontend run coverage` (портал и SDK),
 `python deploy/coverage_report.py` — итог в `reports/coverage-summary.md`. Снимок не заменяет
 новый прогон после изменений.
