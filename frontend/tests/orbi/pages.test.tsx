@@ -199,6 +199,9 @@ describe("my path", () => {
     expect(orbiPhrase({ ...base, action: { kind: "equipment" } })).toMatch(/ноутбук/);
     expect(orbiPhrase({ ...base, action: { kind: "ask_mentor" } })).toMatch(/наставнику/);
     expect(orbiPhrase({ ...base, action: { kind: "access_request" } })).not.toMatch(/ресурс/);
+    expect(orbiPhrase({ ...base, action: { kind: "learn", resource: "microservices" } })).toMatch(/курс microservices/);
+    expect(orbiPhrase({ ...base, action: { kind: "learn" } })).not.toMatch(/курс microservices/);
+    expect(orbiPhrase({ ...base, action: { kind: "code_review" } })).toBe("Отправь мой PR на ревью");
     expect(orbiPhrase({ ...base, action: null })).toBeNull();
   });
 });

@@ -15,6 +15,8 @@ export function orbiPhrase(item: PlanItem): string | null {
     case "absence_request": return "Хочу оформить отгул";
     case "equipment": return "Когда выдадут ноутбук и что делать, пока его нет?";
     case "ask_mentor": return `Хочу задать вопрос наставнику по шагу «${item.title}»`;
+    case "learn": return `Запиши меня на курс по шагу «${item.title}»${item.action.resource ? ` (курс ${item.action.resource})` : ""}`;
+    case "code_review": return "Отправь мой PR на ревью";
     default: return null;
   }
 }
