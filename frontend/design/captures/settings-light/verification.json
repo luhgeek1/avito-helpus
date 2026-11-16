@@ -1,0 +1,43 @@
+{
+  "checks": [
+    "light settings panel at desktop, tablet and phone sizes",
+    "keyboard toggle on/off",
+    "hide and restore the pet",
+    "restart onboarding",
+    "settings stay inside viewport and clear of narration",
+    "favorites preserved",
+    "no runtime errors"
+  ],
+  "reports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "bounds": true,
+      "captionOverlap": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "bounds": true,
+      "captionOverlap": false
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "bounds": true,
+      "captionOverlap": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "bounds": true,
+      "captionOverlap": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "bounds": true,
+      "captionOverlap": false
+    }
+  ]
+}

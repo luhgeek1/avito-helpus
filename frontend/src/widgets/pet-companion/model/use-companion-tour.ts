@@ -78,7 +78,9 @@ export function useCompanionTour(controls: Controls) {
     const width = (compact ? 144 : 160) * scale;
     const height = (compact ? 96 : 128) * scale;
     const x = Math.round(scene === "wardrobe" ? Math.max(8, viewport.width * .24 - width / 2) : scene === "intro" && !compact ? viewport.width * .34 - width / 2 : (viewport.width - width) / 2);
-    const y = Math.round(scene === "chat" ? viewport.height - height - 20 : viewport.height * (scene === "wardrobe" && viewport.width <= 1000 ? .60 : viewport.width <= 1000 ? .47 : .56) - height / 2);
+    const preferredY = Math.round(scene === "chat" ? viewport.height - height - 20 : viewport.height * (scene === "wardrobe" && viewport.width <= 1000 ? .60 : viewport.width <= 1000 ? .47 : .56) - height / 2);
+    // Reserve room above the pet for settings and the tour's skip button.
+    const y = scene === "settings" && compact && viewport.height >= 700 ? Math.max(304, preferredY) : preferredY;
     const before = c.movement.ref.current?.getBoundingClientRect();
     c.show(); c.actions.dismiss(); c.spotlight.close(); c.silence();
     c.movement.relocate({ x, y });
