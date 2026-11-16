@@ -42,7 +42,6 @@ lcov.info
 .vscode/
 *.swp
 .playwright-mcp/
-.claude/settings.local.json
 
 # Temporary pytest directories from sandboxed runs
 backend/test-artifacts/
