@@ -101,6 +101,11 @@ describe('Шапка и общие элементы', () => {
     expect(await screen.findByText('Белов Артём')).toBeInTheDocument()
   })
 
+  it('ведёт коллегу без профиля на главную портала, а не на руководство', async () => {
+    renderApp('/search?q=Юлия')
+    expect(await screen.findByRole('link', { name: /Сотрудник\s*Юлия/ })).toHaveAttribute('href', '/demo')
+  })
+
   it('сообщает, что ничего не нашлось', async () => {
     renderApp('/search?q=zzzz')
     expect(await screen.findByText(/Ничего не нашлось/)).toBeInTheDocument()
