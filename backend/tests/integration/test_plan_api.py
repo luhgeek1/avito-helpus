@@ -157,3 +157,21 @@ async def test_other_peoples_steps_are_invisible(
 
     assert response.status_code == 404
     assert transition.status_code == 404
+
+
+async def test_reopen_clears_completion_and_recalculates_progress(
+    client: AsyncClient, anya: Account, ivan: Account
+) -> None:
+    item = _item(await _plan(client, anya), "learning-platform")
+    url = f"/api/v1/plan/items/{item['id']}/transitions"
+    await client.post(url, json={"transition": "complete"}, headers=anya.headers)
+    completed = await _plan(client, anya)
+    foreign = await client.post(url, json={"transition": "reopen"}, headers=ivan.headers)
+    assert foreign.status_code == 403
+    reopened = await client.post(url, json={"transition": "reopen"}, headers=anya.headers)
+    assert reopened.status_code == 200
+    assert reopened.json()["status"] == "in_progress"
+    assert reopened.json()["completed_at"] is None
+    progress = await _plan(client, anya)
+    assert progress["done"] == completed["done"] - 1
+    assert progress["percent"] < completed["percent"]

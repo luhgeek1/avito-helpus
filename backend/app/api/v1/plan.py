@@ -20,7 +20,7 @@ async def get_item(item_id: UUID, user: PlanOwner, svc: PlanServiceDep) -> PlanI
 
 @router.post(
     path="/items/{item_id}/transitions",
-    summary="Change the status of my step (start, complete, submit_review, block, unblock)",
+    summary="Change the status of my step (start, complete, reopen, submit_review, block, unblock)",
     responses={409: {"description": "Transition not allowed or needs a quiz / mentor review"}},
 )
 async def transition(
