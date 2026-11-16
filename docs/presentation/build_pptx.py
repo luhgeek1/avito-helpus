@@ -103,13 +103,15 @@ const {chromium} = createRequire(path.join(root,'frontend/package.json'))('playw
   const children=[...e.children].filter(c=>!c.matches('svg,br,img'));
   const inline=c=>['inline','inline-block'].includes(getComputedStyle(c).display);
   // A paragraph or a leaf container is one editable text box with rich runs.
-  if(e.textContent.trim()&&(e.tagName==='H1'||children.every(inline))&&!e.querySelector('table')&&!e.querySelector('img')){
+  if(e.textContent.trim()&&(/^H[1-6]$|^P$/.test(e.tagName)||children.every(inline))&&!e.querySelector('table')&&!e.querySelector('img')){
     rectText(e);[...e.children].filter(c=>c.tagName.toLowerCase()==='svg').forEach(visit);
   }else [...e.children].forEach(visit);
   if(e.classList.contains('flow-step')&&e.nextElementSibling)items.push({kind:'chevron',box:{x:b.x+b.w+5,y:b.y+44,w:12,h:18}});
  }
  visit(slide);
- return {id:slide.id,bg:style(slide).bg,items,title:slide.querySelector('h1').innerText,links:[...slide.querySelectorAll('a[href]')].map(a=>a.getAttribute('href')),plain:[...slide.querySelectorAll('*')].filter(e=>!e.closest('svg,.arrow')).flatMap(e=>[...e.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent)).join('')};
+ const walker=document.createTreeWalker(slide,NodeFilter.SHOW_TEXT);const plain=[];
+ while(walker.nextNode()){if(!walker.currentNode.parentElement.closest('svg,.arrow'))plain.push(walker.currentNode.textContent);}
+ return {id:slide.id,bg:style(slide).bg,items,title:slide.querySelector('h1').innerText,links:[...slide.querySelectorAll('a[href]')].map(a=>a.getAttribute('href')),plain:plain.join('')};
  });
  });
  fs.writeFileSync(output,JSON.stringify(result));
@@ -219,6 +221,9 @@ def rect(slide, item):
     borders = s['borders']
     if len(borders)==4 and all(z['width']==borders[0]['width'] and z['color']==borders[0]['color'] for z in borders) and borders[0]['width']:
         shape.line.color.rgb = color(borders[0]['color']); shape.line.width = Pt(borders[0]['width']*.5)
+        if borders[0]['style']=='dashed':
+            dash = OxmlElement('a:prstDash'); dash.set('val', 'dash')
+            shape.line._get_or_add_ln().append(dash)
     else:
         edges=[((b['x'],b['y']),(b['x']+b['w'],b['y'])),((b['x']+b['w'],b['y']),(b['x']+b['w'],b['y']+b['h'])),((b['x'],b['y']+b['h']),(b['x']+b['w'],b['y']+b['h'])),((b['x'],b['y']),(b['x'],b['y']+b['h']))]
         for border,(start,end) in zip(borders,edges):
@@ -337,11 +342,11 @@ def normalized(value):
 def verify(path, data):
     """Reopen the saved package and validate content, links and native objects."""
     deck=Presentation(path)
-    assert len(deck.slides)==17
+    assert len(deck.slides)==18
     readme=(HERE/'README.md').read_text(encoding='utf-8')
     heading_section=readme.split('## Заголовки по порядку')[1].split('## Откуда цифры')[0]
     readme_titles=re.findall(r'^\d+\. (.+)$',heading_section,re.M)
-    assert len(readme_titles)==17
+    assert len(readme_titles)==18
     for i,(slide,source,summary) in enumerate(zip(deck.slides,data,readme_titles),1):
         text=[]; links=[]; titles=[]
         for shape in slide.shapes:
@@ -361,7 +366,7 @@ def verify(path, data):
         # README adds cover metadata and appendix labels; punctuation differs on #5.
         # Match all heading words exactly after removing those known wrappers.
         summary = re.sub(r"\s*\([^)]*\)", "", summary)
-        summary = re.sub(r"^A[1234]\.\s*", "", summary)
+        summary = re.sub(r"^A[12345]\.\s*", "", summary)
         canonical = lambda value: re.sub(r"[^\w]+", "", value.lower())
         assert canonical(title)==canonical(summary), (i,title,summary)
         # Compare every source text node in order, including native table cells.
@@ -372,10 +377,18 @@ def verify(path, data):
                 for row in item['rows']:
                     for cell in row['cells']:expected.extend(r['text'] for r in cell['runs'])
         assert normalized(''.join(expected))==normalized(''.join(text)),f'Text mismatch on slide {i}'
+        compact = lambda value: re.sub(r'\s+', '', value)
+        assert compact(''.join(text))==compact(source['plain']),f'HTML text missing from PPTX on slide {i}: {compact(source["plain"])!r} != {compact("".join(text))!r}'
         assert 'Орби · Hack&Change 2026' in ' '.join(text)
         print(f'{i:02d}. {title}')
     assert any(s.has_table for s in deck.slides[8].shapes),'Slide 9 needs a native table'
-    print(f'PASS: 17 slides; editable text on every slide; {sum(s.has_table for sl in deck.slides for s in sl.shapes)} native tables; all {sum(len(s["links"]) for s in data)} hyperlink occurrences; no full-slide pictures; HTML titles and README order verified.')
+    for number in (8, 18):
+        connectors = [s for s in deck.slides[number-1].shapes if s.shape_type == 9]
+        assert 7 <= len(connectors) <= 24, f'Unexpected diagram fragmentation on slide {number}'
+        assert all(s.width == 0 or s.height == 0 for s in connectors), f'Non-orthogonal diagram on slide {number}'
+        print(f'Diagram {number}: {len(connectors)} native orthogonal lines')
+    assert deck.slides[7]._element.xpath('.//a:prstDash[@val="dash"]'), 'Trust boundary needs a native dashed border'
+    print(f'PASS: 18 slides; editable text on every slide; {sum(s.has_table for sl in deck.slides for s in sl.shapes)} native tables; all {sum(len(s["links"]) for s in data)} hyperlink occurrences; no full-slide pictures; HTML titles and README order verified.')
 
 
 def main():
