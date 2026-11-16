@@ -35,7 +35,6 @@ export function WorkplaceActions({ onDone }: { onDone: () => void }) {
           </button>
         ))}
       </div>
-      <p className="text-10 leading-relaxed text-secondary">Демо на синтетических данных. Заявки поступают в имитацию корпоративных сервисов.</p>
     </section>
   );
 }

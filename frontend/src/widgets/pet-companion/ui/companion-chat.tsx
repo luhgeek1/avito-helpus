@@ -52,15 +52,18 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
         {...handles("move")}
         className={cx("flex shrink-0 touch-none! select-none rounded-t-2xl bg-white items-center gap-2 border-b border-dark/10 py-3 pl-5 pr-2 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-dark",
           moving ? "cursor-grabbing" : "cursor-grab")}>
-        <button type="button" onClick={onBack} aria-label="Назад к меню пета"
-          className="grid size-11 shrink-0 place-items-center rounded-xl bg-transparent text-dark hover:bg-control focus-visible:outline-2 focus-visible:outline-dark">
-          <ArrowLeft size={20} aria-hidden="true" />
+        <button type="button" onClick={showActions ? () => setActionsOpen(false) : onBack}
+          aria-label={showActions ? "Вернуться в чат" : "Назад к меню пета"}
+          className={cx("flex h-11 items-center rounded-xl bg-transparent text-dark hover:bg-control focus-visible:outline-2 focus-visible:outline-dark",
+            showActions ? "min-w-0 flex-1 gap-3 px-3" : "size-11 shrink-0 justify-center")}>
+          <ArrowLeft size={20} className="shrink-0" aria-hidden="true" />
+          {showActions && <span className="truncate text-14 font-semibold">Вернуться в чат</span>}
         </button>
-        <div className="min-w-0 flex-1">
+        <div className={cx("min-w-0 flex-1", showActions && "sr-only")}>
           <h2 id="companion-chat-title" className="truncate font-sans text-14 font-semibold leading-5 text-dark">{name}</h2>
           <p className="text-11 text-[#687181]">{chat.kind === "guide" ? "Помощь с интеграцией, по руководству" : me ? `${me.full_name}, ${me.role_title}` : "Перетащи за шапку"}</p>
         </div>
-        {authenticated && chat.messages.length > 0 && (
+        {!showActions && authenticated && chat.messages.length > 0 && (
           <button type="button" onClick={startOver} aria-label="Новый диалог" title="Новый диалог" disabled={chat.busy}
             className="grid size-11 shrink-0 place-items-center rounded-xl bg-transparent text-secondary hover:bg-control hover:text-dark disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-dark">
             <SquarePen size={17} aria-hidden="true" />
@@ -71,11 +74,11 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
           <X size={18} />
         </button>
       </header>
-      {chat.kind === "workspace" && authenticated && (
+      {chat.kind === "workspace" && authenticated && !showActions && (
         <div className="shrink-0 border-b border-line px-4 py-1">
-          <button type="button" aria-expanded={actionsOpen} onClick={() => setActionsOpen(!actionsOpen)} disabled={chat.busy}
+          <button type="button" onClick={() => setActionsOpen(true)} disabled={chat.busy}
             className="min-h-11 rounded-lg px-2 text-12 font-semibold text-blue-text hover:bg-control disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-dark">
-            {actionsOpen ? "← Вернуться в чат" : "Действия · оформить и отправить"}
+            Действия · оформить и отправить
           </button>
         </div>
       )}

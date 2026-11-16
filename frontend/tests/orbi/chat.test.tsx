@@ -11,14 +11,14 @@ import { useSession } from "@/shared/api";
 import { server } from "../portal/setup";
 import { fixture, problem, signIn, sse, sseResponse, streamFixture, url } from "./server";
 
-function Harness() {
+function Harness({ onBack }: { onBack: () => void }) {
   const chat = useCompanionChat();
-  return <CompanionChat name="Орби" chat={chat} onClose={vi.fn()} onBack={vi.fn()} />;
+  return <CompanionChat name="Орби" chat={chat} onClose={vi.fn()} onBack={onBack} />;
 }
 
-function renderChat() {
+function renderChat(onBack = vi.fn()) {
   const user = userEvent.setup();
-  render(<QueryClientProvider client={createPortalQueryClient()}><Harness /></QueryClientProvider>);
+  render(<QueryClientProvider client={createPortalQueryClient()}><Harness onBack={onBack} /></QueryClientProvider>);
   return { user, log: () => screen.getByRole("log", { name: "История сообщений" }) };
 }
 
@@ -100,16 +100,25 @@ describe("chat store", () => {
 describe("companion chat window", () => {
   it("opens actions during a conversation and preserves the message draft", async () => {
     signIn();
-    const { user } = renderChat();
+    const onBack = vi.fn();
+    const { user } = renderChat(onBack);
     await user.type(screen.getByRole("textbox", { name: "Сообщение спутнику" }), "Черновик");
     await user.click(screen.getByRole("button", { name: /Действия ·/ }));
     expect(screen.getByRole("region", { name: "Действия Орби" })).toBeInTheDocument();
+    const header = screen.getByRole("group", { name: "Переместить чат" });
+    expect(within(header).getByRole("button", { name: "Вернуться в чат" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Назад к меню пета" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Демо на синтетических данных/)).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Мои заявки" }));
     await waitFor(() => expect(useOrbiChat.getState().busy).toBe(false));
     expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Черновик");
     await user.click(screen.getByRole("button", { name: /Действия ·/ }));
     await user.click(screen.getByRole("button", { name: /Вернуться в чат/ }));
     expect(screen.getByRole("log")).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Черновик");
+    expect(onBack).not.toHaveBeenCalled();
+    await user.click(within(header).getByRole("button", { name: "Назад к меню пета" }));
+    expect(onBack).toHaveBeenCalledOnce();
   });
 
   it("asks an anonymous visitor to sign in", async () => {

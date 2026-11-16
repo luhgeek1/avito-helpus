@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "header back returns to chat from actions and forms",
+    "pet menu back returns after leaving actions",
+    "draft preserved",
+    "removed footer",
+    "no overflow or page errors"
+  ],
+  "reports": [
+    {
+      "width": 1440,
+      "result": "passed"
+    },
+    {
+      "width": 390,
+      "result": "passed"
+    },
+    {
+      "width": 320,
+      "result": "passed"
+    }
+  ]
+}
