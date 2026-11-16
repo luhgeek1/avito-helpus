@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronDown, CircleHelp, KeyRound, Laptop, Palmtree, Sparkles, X } from "lucide-react";
+import { Bell, CalendarCheck, ChevronDown, CircleHelp, GitPullRequest, GraduationCap, KeyRound, Laptop, Palmtree, Sparkles, X } from "lucide-react";
 import { StatusPill, useOrbiChat } from "@/features/orbi-chat";
 import { useAskMentor, useCloseEscalation, useEscalations, useRequestAction, useRequests } from "@/shared/api";
 import type { Escalation, ServiceRequest } from "@/shared/api";
@@ -14,7 +14,9 @@ const STATUS_NOTE: Record<string, string> = {
   submitting: "Отправляем в сервис", submitted: "На согласовании", approved: "Одобрено", rejected: "Отклонено",
   failed: "Не удалось отправить", cancelled: "Отменено",
 };
-const KIND_ICON: Record<string, typeof KeyRound> = { access: KeyRound, absence: Palmtree, equipment: Laptop };
+const KIND_ICON: Record<string, typeof KeyRound> = {
+  access: KeyRound, absence: Palmtree, equipment: Laptop, review: GitPullRequest, booking: CalendarCheck, learning: GraduationCap,
+};
 
 const QUICK = [
   { label: "Доступ", phrase: "Нужен доступ к сервису", icon: KeyRound },
