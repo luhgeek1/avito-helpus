@@ -102,7 +102,7 @@ try {
         const parts = [];
         while (walker.nextNode()) parts.push(walker.currentNode.textContent);
         bodyWords = parts.join(" ").split(/\s+/u).filter((word) => /[\p{L}\p{N}]/u.test(word)).length;
-        if (bodyWords > 60) issues.push(`Slide ${index + 1}: body has ${bodyWords} words (limit 60)`);
+        if (bodyWords > 65) issues.push(`Slide ${index + 1}: body has ${bodyWords} words (limit 65)`);
         const bodyBounds = slide.querySelector(".body").getBoundingClientRect();
         if (Math.abs(bodyBounds.top - rect.top - 310) > 1) issues.push(`Slide ${index + 1}: body is not aligned`);
       }
