@@ -420,6 +420,78 @@
     .test-legend strong::before { content:'';display:inline-block;width:18px;height:18px;border-radius:4px;background:var(--purple);margin-right:12px; }
     .test-legend strong:nth-child(2)::before { background:#bca8da; }
     .test-legend strong:nth-child(3)::before { background:#40334f; }
+
+    /* Second pass: one common title-to-body gap and readable supporting text. */
+    .footer { color:var(--muted); }
+    .page-no,.pixel,.check-order .pixel { font-size:18px; }
+    .appendix-mark { font-size:340px; }
+    .comparison .note,.arch-label { color:var(--muted); }
+    .problem-visuals { padding-top:0; }
+    .problem-visuals article { min-height:0; }
+    .time-visual { margin-top:40px; }
+    .day-scale { margin-top:72px; }
+    .problem-questions { top:450px; left:0; right:0; gap:28px; }
+    .problem-question { display:flex; gap:24px; padding:25px 30px; border:1px solid var(--line); }
+    .problem-question .ico { color:var(--purple); margin-top:3px; }
+    .problem-question h3 { font-size:30px; }
+    .problem-question p { font-size:25px; margin-top:8px; }
+    .problem-question-caption { position:absolute; top:627px; left:0; font-size:20px; color:var(--muted); }
+    .solution-proof { top:175px; }
+    .solution-proof .frame { height:450px; }
+    #s06 .knowledge-shot { width:520px; }
+    #s06 .knowledge-copy { left:635px; }
+    #s06 .comparison { margin-bottom:28px; }
+    #s06 .knowledge-point { min-height:90px; margin:24px 0 0; padding:18px 0; border-top:1px solid var(--line); gap:24px; }
+    #s06 .knowledge-point .ico { color:var(--purple); }
+    #s06 .knowledge-point p { font-size:28px; }
+    #s07 .mentor-ring { width:660px; height:620px; }
+    #s07 .ring-node { width:280px; font-size:26px; padding:23px 18px; }
+    #s07 .n1 { left:190px; top:0; }
+    #s07 .n2 { left:380px; top:235px; }
+    #s07 .n3 { left:190px; top:480px; }
+    #s07 .n4 { left:0; top:235px; }
+    #s07 .ring-orbi { left:280px; top:248px; width:100px; height:100px; }
+    #s07 .mentor-proof { left:710px; top:0; }
+    #s07 .mentor-proof .frame { width:1018px; height:425px; margin:0; position:relative; }
+    #s07 .mentor-proof .frame img { position:absolute; width:1785.6px; max-width:none; left:-575px; top:-428px; }
+    #s07 .caption { white-space:nowrap; font-size:20px; }
+    #s07 .mentor-theses { margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+    #s07 .mentor-theses p { font-size:25px; padding-top:22px; border-top:1px solid var(--line); }
+    .sequence { position:relative; height:548px; }
+    .seq-lane { position:absolute; left:0; right:0; height:112px; border-radius:20px; background:#fff; border:1px solid var(--line); }
+    .seq-lane.model { background:var(--lilac); border:2px dashed var(--purple); }
+    .seq-lane h3 { position:absolute; left:22px; top:26px; width:218px; font-size:25px; }
+    .seq-lane h3 small { display:block; font-size:22px; color:var(--muted); font-weight:400; margin-top:5px; }
+    .seq-lines { position:absolute; left:0; top:0; width:1728px; height:500px; }
+    .seq-step { position:absolute; display:flex; gap:10px; align-items:flex-start; width:190px; padding:8px 6px; background:#fff; border-radius:14px; }
+    .seq-step.model { background:var(--lilac); }
+    .seq-no { border-radius:50%; width:34px; height:34px; flex:0 0 34px; display:grid; place-items:center; background:var(--purple); color:#fff; font-size:22px; }
+    .seq-step p { font-size:22px; line-height:1.3; white-space:nowrap; }
+    .seq-step { width:max-content; min-width:190px; }
+    .seq-step small { display:block; font-size:18px; color:var(--muted); margin-top:6px; }
+    .trust-caption { position:absolute; left:270px; top:490px; font-size:22px; color:var(--purple-dark); }
+    .seq-outbox { position:absolute; left:1000px; top:382px; font-size:18px; color:var(--muted); }
+    #s08 .architecture-guards { position:static; margin-top:26px; display:flex; justify-content:space-between; gap:30px; border-top:1px solid var(--line); padding-top:24px; }
+    #s08 .architecture-guards p { font-size:22px; color:var(--ink); margin:0; white-space:nowrap; }
+    #s12 .adapter-layout { grid-template-columns:1060px 1fr; gap:60px; }
+    #s12 .adapter-layout aside { height:375px; background:var(--lilac); border-radius:24px; padding:24px 28px; display:grid; grid-template-rows:48px repeat(3,1fr); }
+    #s12 .adapter-layout aside h2 { font-size:30px; }
+    #s12 .adapter-layout aside p { font-size:24px; margin:0; padding-top:18px; border-top:1px solid #cbbddd; color:var(--muted); }
+    #s12 .adapter-layout aside strong { color:var(--ink); }
+    #s12 .rollout-roadmap { margin-top:42px; }
+    .component-map { position:relative; height:665px; }
+    .map-column { position:absolute; font-size:22px; color:var(--muted); top:0; }
+    .map-core { position:absolute; left:580px; top:45px; width:500px; height:600px; background:var(--lilac); border:1px solid #c9bbdf; border-radius:24px; }
+    .map-core h2 { position:absolute; left:28px; top:24px; font-size:30px; }
+    .component-map .arch-node { padding:20px 24px; border-radius:18px; }
+    .component-map .arch-node h3 { font-size:27px; }
+    .component-map .arch-node p { font-size:23px; line-height:1.35; }
+    .map-stores { position:absolute; left:1260px; top:245px; width:468px; height:190px; border:1px solid var(--line); border-radius:22px; background:#fff; padding:20px 24px; }
+    .map-stores h3 { font-size:27px; }
+    .map-stores p { font-size:23px; color:var(--muted); margin:5px 0 14px; }
+    .map-note { position:absolute; left:608px; top:548px; width:440px; font-size:22px; color:var(--purple-dark); }
+    .component-lines { position:absolute; inset:0; width:1728px; height:665px; }
+    .component-map .arch-label { font-size:20px; color:var(--purple-dark); }
     </style>
 </head>
 <body>
@@ -470,8 +542,8 @@
   <section class="slide" id="s02" aria-label="Проблема">
     <header class="header"><div class="eyebrow">Проблема</div><h1>До самостоятельной задачи — ≈ 2 недели;<br>наставник тратит ≈ 5 часов в неделю</h1></header><div class="body"><div class="problem-visuals">
 <article><div class="big">≈ 2 недели</div><h3>До самостоятельной задачи</h3><div class="day-scale"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div><div class="spread"><span>Старт</span><span>Первая задача</span></div></article>
-<article><div class="donut" style="position:relative;background:transparent"><svg viewBox="0 0 300 300" style="position:absolute;width:300px;height:300px" aria-label="68% ?????????????????"><path d="M150.00 18.00L158.29 18.26L166.54 19.04L174.73 20.34L182.83 22.15L190.79 24.46L198.59 27.27L206.20 30.56L213.59 34.33L220.73 38.55L227.59 43.21L234.14 48.29L240.36 53.78L246.22 59.64L251.71 65.86L256.79 72.41L261.45 79.27L265.67 86.41L269.44 93.80L272.73 101.41L275.54 109.21L277.85 117.17L279.66 125.27L280.96 133.46L281.74 141.71L282.00 150.00L281.74 158.29L280.96 166.54L279.66 174.73L277.85 182.83L275.54 190.79L272.73 198.59L269.44 206.20L265.67 213.59L261.45 220.73L256.79 227.59L251.71 234.14L246.22 240.36L240.36 246.22L234.14 251.71L227.59 256.79L220.73 261.45L213.59 265.67L206.20 269.44L198.59 272.73L190.79 275.54L182.83 277.85L174.73 279.66L166.54 280.96L158.29 281.74L150.00 282.00L141.71 281.74L133.46 280.96L125.27 279.66L117.17 277.85L109.21 275.54L101.41 272.73L93.80 269.44L86.41 265.67L79.27 261.45L72.41 256.79L65.86 251.71L59.64 246.22L53.78 240.36L48.29 234.14L43.21 227.59L38.55 220.73L34.33 213.59L30.56 206.20L27.27 198.59L24.46 190.79L22.15 182.83L20.34 174.73L19.04 166.54L18.26 158.29L18.00 150.00L18.26 141.71L19.04 133.46L20.34 125.27L22.15 117.17L24.46 109.21L27.27 101.41L30.56 93.80L34.33 86.41L38.55 79.27L43.21 72.41L48.29 65.86L53.78 59.64L59.64 53.78L65.86 48.29L72.41 43.21L79.27 38.55L86.41 34.33L93.80 30.56L101.41 27.27L109.21 24.46L117.17 22.15L125.27 20.34L133.46 19.04L141.71 18.26L150.00 18.00" fill="none" stroke="#eee9f6" stroke-width="36"/><path d="M150.00 18.00L155.64 18.12L161.27 18.48L166.87 19.08L172.45 19.92L177.98 21.00L183.47 22.31L188.89 23.86L194.24 25.64L199.52 27.64L204.70 29.87L209.78 32.31L214.75 34.97L219.61 37.84L224.33 40.92L228.92 44.19L233.37 47.66L237.67 51.32L241.80 55.15L245.77 59.16L249.56 63.33L253.17 67.66L256.59 72.14L259.82 76.77L262.85 81.53L265.67 86.41L268.28 91.41L270.68 96.51L272.85 101.72L274.80 107.01L276.52 112.38L278.02 117.82L279.27 123.31L280.30 128.86L281.08 134.44L281.62 140.06L281.93 145.69L281.99 151.33L281.82 156.96L281.40 162.59L280.74 168.19L279.84 173.76L278.71 179.28L277.34 184.75L275.74 190.16L273.91 195.49L271.86 200.74L269.58 205.90L267.08 210.96L264.37 215.90L261.45 220.73L258.33 225.42L255.01 229.98L251.50 234.40L247.80 238.65L243.92 242.75L239.88 246.68L235.66 250.43L231.30 253.99L226.78 257.37L222.12 260.55L217.34 263.53L212.43 266.31L207.40 268.87L202.27 271.21L197.05 273.33L191.74 275.23L186.35 276.90L180.90 278.33L175.39 279.54L169.83 280.50L164.24 281.23L158.62 281.72L152.99 281.97L147.35 281.97L141.71 281.74L136.09 281.27L130.50 280.55L124.94 279.60L119.43 278.41L113.97 276.99L108.58 275.33L103.26 273.45L98.03 271.34L92.90 269.01L87.87 266.46L82.95 263.70L78.15 260.73L73.49 257.56L68.97 254.20L64.59 250.64L60.37 246.90L56.31 242.99L52.42 238.90L48.72 234.65L45.19 230.25L41.86 225.70L38.73 221.01L35.80 216.19L33.07 211.25L30.56 206.20" fill="none" stroke="#8067b6" stroke-width="36"/></svg><div class="donut-center"><strong>68%</strong></div></div><h3>Удовлетворенность<br>чек-листом новичка</h3></article>
-<article><div class="big">≈ 5 ч</div><h3>В неделю наставника</h3><div class="time-visual"><svg class="ico"><use href="#i-clock"/></svg></div><p>В первые 2–3 месяца</p></article></div></div><div class="source">Базовые метрики и оценки нагрузки — по данным кейса Авито. <a href="https://github.com/luhgeek1/avito-helpus/blob/main/docs/case/CASE_BRIEF.md">Источник: материалы кейса</a>. Эффект Орби пока не измерен.</div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">02</span></footer>
+<article><div class="donut" style="position:relative;background:transparent"><svg viewBox="0 0 300 300" style="position:absolute;width:300px;height:300px" aria-label="68% ????????????????? ???-??????"><path d="M150.00 18.00L158.29 18.26L166.54 19.04L174.73 20.34L182.83 22.15L190.79 24.46L198.59 27.27L206.20 30.56L213.59 34.33L220.73 38.55L227.59 43.21L234.14 48.29L240.36 53.78L246.22 59.64L251.71 65.86L256.79 72.41L261.45 79.27L265.67 86.41L269.44 93.80L272.73 101.41L275.54 109.21L277.85 117.17L279.66 125.27L280.96 133.46L281.74 141.71L282.00 150.00L281.74 158.29L280.96 166.54L279.66 174.73L277.85 182.83L275.54 190.79L272.73 198.59L269.44 206.20L265.67 213.59L261.45 220.73L256.79 227.59L251.71 234.14L246.22 240.36L240.36 246.22L234.14 251.71L227.59 256.79L220.73 261.45L213.59 265.67L206.20 269.44L198.59 272.73L190.79 275.54L182.83 277.85L174.73 279.66L166.54 280.96L158.29 281.74L150.00 282.00L141.71 281.74L133.46 280.96L125.27 279.66L117.17 277.85L109.21 275.54L101.41 272.73L93.80 269.44L86.41 265.67L79.27 261.45L72.41 256.79L65.86 251.71L59.64 246.22L53.78 240.36L48.29 234.14L43.21 227.59L38.55 220.73L34.33 213.59L30.56 206.20L27.27 198.59L24.46 190.79L22.15 182.83L20.34 174.73L19.04 166.54L18.26 158.29L18.00 150.00L18.26 141.71L19.04 133.46L20.34 125.27L22.15 117.17L24.46 109.21L27.27 101.41L30.56 93.80L34.33 86.41L38.55 79.27L43.21 72.41L48.29 65.86L53.78 59.64L59.64 53.78L65.86 48.29L72.41 43.21L79.27 38.55L86.41 34.33L93.80 30.56L101.41 27.27L109.21 24.46L117.17 22.15L125.27 20.34L133.46 19.04L141.71 18.26L150.00 18.00" fill="none" stroke="#eee9f6" stroke-width="36"/><path d="M150.00 18.00L155.64 18.12L161.27 18.48L166.87 19.08L172.45 19.92L177.98 21.00L183.47 22.31L188.89 23.86L194.24 25.64L199.52 27.64L204.70 29.87L209.78 32.31L214.75 34.97L219.61 37.84L224.33 40.92L228.92 44.19L233.37 47.66L237.67 51.32L241.80 55.15L245.77 59.16L249.56 63.33L253.17 67.66L256.59 72.14L259.82 76.77L262.85 81.53L265.67 86.41L268.28 91.41L270.68 96.51L272.85 101.72L274.80 107.01L276.52 112.38L278.02 117.82L279.27 123.31L280.30 128.86L281.08 134.44L281.62 140.06L281.93 145.69L281.99 151.33L281.82 156.96L281.40 162.59L280.74 168.19L279.84 173.76L278.71 179.28L277.34 184.75L275.74 190.16L273.91 195.49L271.86 200.74L269.58 205.90L267.08 210.96L264.37 215.90L261.45 220.73L258.33 225.42L255.01 229.98L251.50 234.40L247.80 238.65L243.92 242.75L239.88 246.68L235.66 250.43L231.30 253.99L226.78 257.37L222.12 260.55L217.34 263.53L212.43 266.31L207.40 268.87L202.27 271.21L197.05 273.33L191.74 275.23L186.35 276.90L180.90 278.33L175.39 279.54L169.83 280.50L164.24 281.23L158.62 281.72L152.99 281.97L147.35 281.97L141.71 281.74L136.09 281.27L130.50 280.55L124.94 279.60L119.43 278.41L113.97 276.99L108.58 275.33L103.26 273.45L98.03 271.34L92.90 269.01L87.87 266.46L82.95 263.70L78.15 260.73L73.49 257.56L68.97 254.20L64.59 250.64L60.37 246.90L56.31 242.99L52.42 238.90L48.72 234.65L45.19 230.25L41.86 225.70L38.73 221.01L35.80 216.19L33.07 211.25L30.56 206.20" fill="none" stroke="#8067b6" stroke-width="36"/></svg><div class="donut-center"><strong>68%</strong></div></div><h3>Удовлетворенность<br>чек-листом новичка</h3></article>
+<article><div class="big">≈ 5 ч</div><h3>В неделю наставника</h3><div class="time-visual"><svg class="ico"><use href="#i-clock"/></svg></div><p>В первые 2–3 месяца</p></article></div><div class="problem-questions"><div class="problem-question"><svg class="ico"><use href="#i-plan"/></svg><div><h3>Что делать?</h3><p>Где задачи, какой шаг следующий</p></div></div><div class="problem-question"><svg class="ico"><use href="#i-chat"/></svg><div><h3>Как сделать?</h3><p>Как получить доступ и технику,<br>кого позвать на ревью</p></div></div></div><p class="problem-question-caption">Эти вопросы сейчас уходят наставнику</p></div><div class="source">Базовые метрики и оценки нагрузки — по данным кейса Авито. <a href="https://github.com/luhgeek1/avito-helpus/blob/main/docs/case/CASE_BRIEF.md">Источник: материалы кейса</a>. Эффект Орби пока не измерен.</div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">02</span></footer>
   </section>
 
   <section class="slide white" id="s03" aria-label="Решение">
@@ -498,43 +570,36 @@
 
 <div class="pill" style="margin-top:2px;max-width:100%;font-size:21px">Тестовая инструкция, не регламент Авито</div>
 <p class="note" style="margin-top:14px">Так помечен синтетический корпус, включая пример с PR на этом слайде.</p>
-<div class="knowledge-point"><span class="pixel">01</span><p>Права до поиска: ACL в SQL, чужое — 404.</p></div><div class="knowledge-point"><span class="pixel">02</span><p>Ссылки и даты позволяют проверить ответ.</p></div><div class="knowledge-point"><span class="pixel">03</span><p>Расхождения: обе цитаты и вопрос наставнику.</p></div></div>
+<div class="knowledge-point"><svg class="ico"><use href="#i-shield"/></svg><p>Права до поиска: ACL в SQL, чужое — 404.</p></div><div class="knowledge-point"><svg class="ico"><use href="#i-doc"/></svg><p>Ссылки и даты позволяют проверить ответ.</p></div><div class="knowledge-point"><svg class="ico"><use href="#i-chat"/></svg><p>Расхождения: обе цитаты и вопрос наставнику.</p></div></div>
 </div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">06</span></footer>
   </section>
 
   <section class="slide white" id="s07" aria-label="Наставник и руководитель">
-    <header class="header"><div class="eyebrow">Человек в контуре</div><h1>Ответ наставника пополняет FAQ —<br>следующий стажер получает его от Орби</h1></header><div class="body"><div class="mentor-ring"><svg viewBox="0 0 850 620" aria-label="Цикл пополнения FAQ"><g fill="none" stroke="#8067b6" stroke-width="3"><path d="M425 100H690V310M680 205L690 220L700 205M690 310V520H425M635 510L620 520L635 530M425 520H160V310M150 445L160 430L170 445M160 310V100H425M205 90L220 100L205 110"/></g></svg>
+    <header class="header"><div class="eyebrow">Человек в контуре</div><h1>Ответ наставника пополняет FAQ —<br>следующий стажер получает его от Орби</h1></header><div class="body"><div class="mentor-ring"><svg viewBox="0 0 660 620" aria-label="Цикл пополнения FAQ"><g fill="none" stroke="#8067b6" stroke-width="3"><path d="M330 45H520V275M510 185L520 200L530 185M520 275V520H330M465 510L450 520L465 530M330 520H140V275M130 425L140 410L150 425M140 275V45H330M170 35L185 45L170 55"/></g></svg>
 <div class="ring-node n1">Вопрос стажера</div><div class="ring-node n2">Ответ наставника</div><div class="ring-node n3">FAQ команды</div><div class="ring-node n4">Следующий стажер:<br>ответ от Орби</div><img class="orbi ring-orbi" src="assets/orbi.svg" alt="Орби"></div>
-<div class="mentor-proof"><figure><div class="frame"><img src="assets/mentor.png" alt="Экран наставника с вопросами и добавлением в FAQ"></div><figcaption class="caption">Прогресс, блокеры и вопросы с контекстом. Ответ добавляется в FAQ с согласия наставника.</figcaption></figure><div class="mentor-theses"><p>Нет ответа к сроку:<br><strong>наставник → руководитель → HRBP</strong></p><p>Деликатные обращения<br><strong>не попадают в сводки наставника.</strong></p></div></div></div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">07</span></footer>
+<div class="mentor-proof"><figure><div class="frame"><img src="assets/mentor.png" alt="Экран наставника с вопросами и добавлением в FAQ"></div><figcaption class="caption">Ответ попадает в FAQ с согласия наставника.</figcaption></figure><div class="mentor-theses"><p>Нет ответа к сроку:<br><strong>наставник → руководитель → HRBP</strong></p><p>Деликатные обращения<br><strong>не попадают в сводки наставника.</strong></p></div></div></div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">07</span></footer>
   </section>
 
   <section class="slide" id="s08" aria-label="Архитектура и серверные границы">
 <header class="header"><div class="eyebrow">Техническая реализация</div><h1>Модель предлагает карточку — бэкенд<br>проверяет права и исполняет через MCP</h1></header><div class="body">
-<div class="architecture-v2">
-<svg aria-label="Связи компонентов" class="architecture-lines" viewbox="0 0 1728 520">
-<defs><marker id="arrow-v2" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M1 1L9 5L1 9" fill="none" stroke="#a99abb" stroke-width="1.5"></path></marker></defs>
-<g fill="none" marker-end="url(#arrow-v2)" stroke="#a99abb" stroke-width="2">
-<path d="M190 225H230"></path><path d="M400 225H450"></path><path d="M420 225V60H450"></path>
-<path d="M780 195H825V60H890"></path><path d="M780 235H890"></path><path d="M780 275H825V420H890"></path>
-<path d="M700 160V140H1549V160"></path><path d="M1370 290H1315V335H740V310"></path>
-<path d="M780 390H855V95H890"></path><path d="M780 450H870V270H890"></path>
-<path d="M615 480V510H1680V320"></path>
-</g>
-</svg>
-<div class="arch-node" data-fit="" style="left:0;top:160px;width:190px;height:130px"><h3>Браузер</h3><p>Стажер и наставник</p></div>
-<div class="arch-node" data-fit="" style="left:230px;top:160px;width:170px;height:130px"><h3>nginx</h3><p>Один origin</p></div>
-<div class="arch-node" data-fit="" style="left:450px;top:0;width:330px;height:120px"><h3>web · Next.js</h3><p>Хаб + Орби</p></div>
-<div class="arch-node api" data-fit="" style="left:450px;top:160px;width:330px;height:150px"><h3>api · FastAPI</h3><p>Pydantic AI · REST / SSE</p></div>
-<div class="arch-node" data-fit="" style="left:450px;top:360px;width:330px;height:120px"><h3>worker</h3><p>Outbox, AI-крон</p></div>
-<div class="arch-node" data-fit="" style="left:890px;top:0;width:360px;height:120px"><h3>PostgreSQL 17</h3><p>pgvector, знания</p></div>
-<div class="arch-node" data-fit="" style="left:890px;top:160px;width:360px;height:130px"><h3>Redis</h3><p>SSE pub/sub</p></div>
-<div class="arch-node" data-fit="" style="left:890px;top:360px;width:360px;height:120px"><h3>LLM · gpt-5.4-mini</h3><p>Офлайн при сбое</p></div>
-<div class="arch-node" data-fit="" style="left:1370px;top:160px;width:358px;height:160px"><h3>corp-mock · MCP</h3><p>Доступы, отсутствия, IT</p></div>
-
-
-
-</div>
-<span class="arch-label" style="left:1030px;top:315px">Веб-хук: HMAC</span><div class="architecture-guards"><p>RBAC / ABAC: чужое — 404</p><p>Права: до, после согласия, перед отправкой</p><p>Документ не дает прав модели</p></div>
+<div class="sequence" aria-label="Одно действие: просьба, карточка, согласие, права, MCP, веб-хук и результат">
+<div class="seq-lane" style="top:0"><h3>Стажер</h3></div>
+<div class="seq-lane model" style="top:120px"><h3>Модель<small>(Pydantic AI)</small></h3></div>
+<div class="seq-lane" style="top:240px"><h3>Бэкенд<small>(FastAPI)</small></h3></div>
+<div class="seq-lane" style="top:360px"><h3>Сервис через MCP</h3></div>
+<svg class="seq-lines" viewBox="0 0 1728 500" aria-hidden="true"><defs><marker id="seq-arrow" markerWidth="8" markerHeight="8" refX="9" refY="5" orient="auto" viewBox="0 0 10 10"><path d="M1 1L9 5L1 9" fill="none" stroke="#8067b6" stroke-width="1.8"/></marker></defs><g fill="none" stroke="#8067b6" stroke-width="1.8" marker-end="url(#seq-arrow)">
+<path d="M350 98V176H470"/><path d="M560 136V56H675"/><path d="M765 98V296H880"/><path d="M970 338V416H1085"/><path d="M1175 376V296H1290"/><path d="M1470 296H1500"/><path d="M1678 296H1706V56H1570"/>
+</g></svg>
+<div class="seq-step" style="left:265px;top:14px"><span class="seq-no">1</span><p>Нужен доступ<br>к listings-api</p></div>
+<div class="seq-step model" style="left:470px;top:130px"><span class="seq-no">2</span><p>Карточка:<br><strong>не исполняет</strong><small>ApprovalRequired</small></p></div>
+<div class="seq-step" style="left:675px;top:30px"><span class="seq-no">3</span><p>Подтвердить</p></div>
+<div class="seq-step" style="left:880px;top:247px"><span class="seq-no">4</span><p>Повторная<br>проверка прав<small>RBAC/ABAC</small></p></div>
+<span class="seq-outbox">outbox</span>
+<div class="seq-step" style="left:1085px;top:376px"><span class="seq-no">5</span><p>MCP · ACC-1042</p></div>
+<div class="seq-step" style="left:1290px;top:247px"><span class="seq-no">6</span><p>Веб-хук<br>HMAC<small>Одобрено</small></p></div>
+<div class="seq-step" style="left:1500px;top:253px"><span class="seq-no">7</span><p>Шаг закрыт,<br>уведомление</p></div>
+<p class="trust-caption">Модель не имеет доступа к сервису</p>
+</div><div class="architecture-guards"><p>Чужое — 404</p><p>Права: до, после согласия, перед отправкой</p><p>Текст документа не дает прав модели</p></div>
 </div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">08</span></footer></section>
 
   <section class="slide white" id="s09" aria-label="Сравнение технических альтернатив">
@@ -548,15 +613,15 @@
   </section>
 
   <section class="slide" id="s11" aria-label="Метрики пользы и эксперимент">
-    <header class="header"><div class="eyebrow">Проверка продуктовой пользы</div><h1>Эффект проверим запуском по командам —<br>цели пока остаются гипотезами</h1></header><div class="body"><div class="metric-hero"><div class="pill">Гипотеза пилота</div><h2 style="margin-top:25px">Время до первой<br>самостоятельной задачи</h2><div class="baseline">≈ 2 недели</div><p class="small muted">База кейса → цель: быстрее</p><div class="guard">≥ 90%</div><p>Удовлетворенность наставником</p><p class="small muted" style="margin-top:15px">Сохраняем качество общения</p></div><div class="ab-experiment"><h2>A/B по командам</h2><div class="ab-head"><span></span><strong>До</strong><strong>После</strong></div><div class="ab-row"><strong>С Орби</strong><div class="card">Срок до задачи</div><span>→</span><div class="card">Срок с Орби</div></div><div class="ab-row"><strong>Без Орби</strong><div class="card">Срок до задачи</div><span>→</span><div class="card">Срок как обычно</div></div><div class="ab-result">↓<div class="card"><strong>Разница в разнице</strong></div></div><p class="small muted">Feature flags · события и статусы · детали в A4</p></div></div><div class="source">* По данным кейса. Нагрузка ≈ 5 ч/нед относится к первым 2–3 месяцам. Цели — гипотезы для пилота, не измеренный эффект. Демо-события синтетические.</div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">11</span></footer>
+    <header class="header"><div class="eyebrow">Проверка продуктовой пользы</div><h1>Эффект проверим запуском по командам —<br>цели пока остаются гипотезами</h1></header><div class="body"><div class="metric-hero"><div class="pill">Гипотеза пилота</div><h2 style="margin-top:25px">Время до первой<br>самостоятельной задачи</h2><div class="baseline">≈ 2 недели</div><p class="small muted">База кейса → цель: быстрее</p><div class="guard">≥ 90%</div><p>Удовлетворенность наставником</p><p class="small muted" style="margin-top:15px">Сохраняем качество общения</p></div><div class="ab-experiment"><h2>A/B по командам</h2><div class="ab-head"><span></span><strong>До</strong><strong>После</strong></div><div class="ab-row"><strong>С Орби</strong><div class="card">Срок до задачи</div><span>→</span><div class="card">Срок с Орби</div></div><div class="ab-row"><strong>Без Орби</strong><div class="card">Срок до задачи</div><span>→</span><div class="card">Срок как обычно</div></div><div class="ab-result"><span>↓</span><div class="card"><strong>Разница в разнице</strong></div></div><p class="small muted">Feature flags · события и статусы · детали в A4</p></div></div><div class="source">* По данным кейса. Нагрузка ≈ 5 ч/нед относится к первым 2–3 месяцам. Цели — гипотезы для пилота, не измеренный эффект. Демо-события синтетические.</div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">11</span></footer>
   </section>
 
   <section class="slide white" id="s12" aria-label="Внедрение, ограничения и развитие">
-<header class="header"><div class="eyebrow">Внедрение и развитие</div><h1>Орби встраивается одним React-компонентом,<br>а сервисы Авито подключаются адаптерами</h1></header><div class="body"><div class="adapter-layout"><div><div class="adapter-head"><span>Сейчас</span><span></span><span>В Авито</span></div><div class="adapter-row"><div>@orbi-companion/react (.tgz)</div><span class="adapter">→</span><div>OrbiCompanion в React</div></div><div class="adapter-row"><div>Демо-учетки</div><span class="adapter">→</span><div>SSO, оргструктура</div></div><div class="adapter-row"><div>corp-mock / MCP</div><span class="adapter">→</span><div>Адаптеры сервисов</div></div><div class="adapter-row"><div>Совместимый API</div><span class="adapter">→</span><div>A-Vibe / LLM_BASE_URL</div></div></div><aside><h2>Ограничения</h2><p>Данные и инструкции тестовые.</p><p>Офлайн: ответы по правилам.</p><p>Лента, события, «Плюсы»: моки.</p></aside></div><div class="rollout-roadmap"><h2>Дальше</h2><div class="roadmap-three"><div class="card"><span class="pixel purple">01</span><h3>Пилот: 1–2 команды, A/B</h3></div><div class="card"><span class="pixel purple">02</span><h3>SSO и адаптеры</h3></div><div class="card"><span class="pixel purple">03</span><h3>A-Vibe, внутренний npm</h3></div></div></div></div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">12</span></footer></section>
+<header class="header"><div class="eyebrow">Внедрение и развитие</div><h1>Орби встраивается одним React-компонентом,<br>а сервисы Авито подключаются адаптерами</h1></header><div class="body"><div class="adapter-layout"><div><div class="adapter-head"><span>Сейчас</span><span></span><span>В Авито</span></div><div class="adapter-row"><div>@orbi-companion/react (.tgz)</div><span class="adapter">→</span><div>OrbiCompanion в React</div></div><div class="adapter-row"><div>Демо-учетки</div><span class="adapter">→</span><div>SSO, оргструктура</div></div><div class="adapter-row"><div>corp-mock / MCP</div><span class="adapter">→</span><div>Адаптеры сервисов</div></div><div class="adapter-row"><div>Совместимый API</div><span class="adapter">→</span><div>A-Vibe / LLM_BASE_URL</div></div></div><aside><h2>Ограничения</h2><p><strong>Данные и инструкции</strong><br>Тестовые.</p><p><strong>Офлайн</strong><br>Ответы по правилам.</p><p><strong>Лента, события, «Плюсы»</strong><br>Моки.</p></aside></div><div class="rollout-roadmap"><h2>Дальше</h2><div class="roadmap-three"><div class="card"><span class="pixel purple">01</span><h3>Пилот: 1–2 команды, A/B</h3></div><div class="card"><span class="pixel purple">02</span><h3>SSO и адаптеры</h3></div><div class="card"><span class="pixel purple">03</span><h3>A-Vibe, внутренний npm</h3></div></div></div></div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">12</span></footer></section>
 
   <section class="slide appendix-divider" id="appendix" aria-label="Приложения">
   <div class="header"><div class="eyebrow">Технические детали и дополнительные сценарии</div></div>
-  <h1>Приложения</h1><div class="appendix-index"><p><span class="pixel">A1</span> Еще сценарии</p><p><span class="pixel">A2</span> Права и безопасность подробно</p><p><span class="pixel">A3</span> Инфраструктура и воспроизведение</p><p><span class="pixel">A4</span> Метрики и источники данных</p></div>
+  <h1>Приложения</h1><div class="appendix-index"><p><span class="pixel">A1</span> Еще сценарии</p><p><span class="pixel">A2</span> Права и безопасность подробно</p><p><span class="pixel">A3</span> Инфраструктура и воспроизведение</p><p><span class="pixel">A4</span> Метрики и источники данных</p><p><span class="pixel">A5</span> Компоненты и связи</p></div>
   <div class="appendix-mark pixel">A</div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">A</span></footer></section>
 
   <section class="slide" id="a1" aria-label="Другие сценарии">
@@ -614,5 +679,26 @@
 <tr><td>Удовлетворенность чек-листом</td><td>База 68%*</td></tr>
 <tr><td>CSAT ответов Орби</td><td>Оценки «полезно / нет»</td></tr>
 </tbody>
-</table></div><p style="margin-top:35px" class="small purple">Дашборд «Орби — польза» собирает события. Демо-события синтетические.</p></div><p class="source">Базы из кейса: ≈ 5 ч/нед в первые 2–3 месяца; 68% удовлетворенности чек-листом.<br>Цели — гипотезы. Эффект: когорты с Орби / без, до / после, разница в разнице.</p><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">A4</span></footer></section></body>
+</table></div><p style="margin-top:35px" class="small purple">Дашборд «Орби — польза» собирает события. Демо-события синтетические.</p></div><p class="source">Базы из кейса: ≈ 5 ч/нед в первые 2–3 месяца; 68% удовлетворенности чек-листом.<br>Цели — гипотезы. Эффект: когорты с Орби / без, до / после, разница в разнице.</p><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">A4</span></footer></section>
+<section class="slide" id="a5" aria-label="Компоненты и связи">
+<header class="header"><div class="eyebrow">A5 · Компоненты и связи</div><h1>Монолит API и воркер: PostgreSQL для данных,<br>Redis для pub/sub, сервисы — через MCP</h1></header>
+<div class="body"><div class="component-map">
+<p class="map-column" style="left:0">Вход</p><p class="map-column" style="left:580px">Ядро</p><p class="map-column" style="left:1260px">Хранилища и внешние сервисы</p>
+<div class="map-core"><h2>Один монолит</h2></div>
+<svg class="component-lines" viewBox="0 0 1728 665" aria-label="Вход через nginx, серверные связи и возврат результата"><defs><marker id="map-arrow" markerWidth="8" markerHeight="8" refX="9" refY="5" orient="auto" viewBox="0 0 10 10"><path d="M1 1L9 5L1 9" fill="none" stroke="#8067b6" stroke-width="1.8"/></marker></defs><g fill="none" stroke="#8067b6" stroke-width="1.8" marker-end="url(#map-arrow)">
+<path d="M195 145V200"/><path d="M390 230H620"/><path d="M620 275H390"/><path d="M195 300V430"/>
+<path d="M1080 150H1260"/><path d="M1080 335H1260"/><path d="M1080 525H1260"/><path d="M1260 610H1080"/>
+</g></svg>
+<div class="arch-node" data-fit style="left:0;top:45px;width:390px;height:100px"><h3>Браузер</h3><p>Стажер и наставник</p></div>
+<div class="arch-node" data-fit style="left:0;top:200px;width:390px;height:100px"><h3>nginx</h3><p>Один origin</p></div>
+<div class="arch-node" data-fit style="left:0;top:430px;width:390px;height:115px"><h3>web · Next.js</h3><p>Хаб + Орби</p></div>
+<div class="arch-node api" data-fit style="left:620px;top:185px;width:420px;height:130px"><h3>api · FastAPI</h3><p>Pydantic AI · REST / SSE</p></div>
+<div class="arch-node" data-fit style="left:620px;top:370px;width:420px;height:130px"><h3>worker</h3><p>Outbox, AI-крон, сверка</p></div>
+<div class="arch-node" data-fit style="left:1260px;top:90px;width:468px;height:120px"><h3>LLM · gpt-5.4-mini</h3><p>Офлайн при сбое</p></div>
+<div class="map-stores"><h3>PostgreSQL 17</h3><p>pgvector, знания, outbox</p><h3>Redis</h3><p>Pub/sub, лимиты</p></div>
+<div class="arch-node" data-fit style="left:1260px;top:495px;width:468px;height:150px"><h3>corp-mock · MCP</h3><p>Доступы, отсутствия, IT</p></div>
+<span class="arch-label" style="left:455px;top:263px">SSE</span><span class="arch-label" style="left:1140px;top:490px">MCP</span><span class="arch-label" style="left:1085px;top:576px">Веб-хук HMAC</span>
+<p class="map-note">API и worker работают<br>с PostgreSQL, Redis и MCP.</p>
+</div></div><footer class="footer"><span>Орби · Hack&amp;Change 2026</span><span class="page-no">A5</span></footer></section>
+</body>
 </html>

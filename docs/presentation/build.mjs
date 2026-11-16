@@ -67,6 +67,10 @@ try {
       while (walker.nextNode()) {
         const node = walker.currentNode;
         if (!node.textContent.trim() || node.parentElement.closest("svg")) continue;
+        if (parseFloat(getComputedStyle(node.parentElement).fontSize) < 18) {
+          issues.push(`Slide ${index + 1}: text smaller than 18px: ${node.textContent.trim().slice(0, 50)}`);
+        }
+        if (/[ёЁ]/u.test(node.textContent)) issues.push(`Slide ${index + 1}: forbidden letter in authored text`);
         const range = document.createRange();
         range.selectNodeContents(node);
         for (const box of range.getClientRects()) {
@@ -90,15 +94,28 @@ try {
       }
       const heading = slide.querySelector("h1");
       const headingBounds = bounds(heading);
+      let bodyWords = null;
+      if (index >= 1 && index <= 11) {
+        const body = slide.querySelector(".body").cloneNode(true);
+        body.querySelectorAll("svg, figcaption").forEach((element) => element.remove());
+        const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT);
+        const parts = [];
+        while (walker.nextNode()) parts.push(walker.currentNode.textContent);
+        bodyWords = parts.join(" ").split(/\s+/u).filter((word) => /[\p{L}\p{N}]/u.test(word)).length;
+        if (bodyWords > 60) issues.push(`Slide ${index + 1}: body has ${bodyWords} words (limit 60)`);
+        const bodyBounds = slide.querySelector(".body").getBoundingClientRect();
+        if (Math.abs(bodyBounds.top - rect.top - 310) > 1) issues.push(`Slide ${index + 1}: body is not aligned`);
+      }
       return {
         number: index + 1,
+        bodyWords,
         title: heading.innerText.trim().replace(/\s+/gu, " "),
         width: rect.width,
         height: rect.height,
         heading: { x: headingBounds.x - rect.x, y: headingBounds.y - rect.y },
       };
     });
-    if (slides.length !== 17) issues.push("Expected 12 main slides, an appendix divider and A1–A4");
+    if (slides.length !== 18) issues.push("Expected 12 main slides, an appendix divider and A1–A5");
     const contentHeadings = pages.filter((_, index) => index !== 0 && index !== 12).map((item) => JSON.stringify(item.heading));
     if (new Set(contentHeadings).size !== 1) issues.push("Content headings are not aligned");
     if (!document.fonts.check('700 60px "Golos Text"', "Орби")) issues.push("Golos Text did not load");
