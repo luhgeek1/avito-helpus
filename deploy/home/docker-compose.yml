@@ -29,6 +29,8 @@ x-backend: &backend
     ACCESS_SLA_HOURS: ${ACCESS_SLA_HOURS:-24}
     ESCALATION_SLA_HOURS: ${ESCALATION_SLA_HOURS:-24}
     SCHEDULER_INTERVAL_SEC: ${SCHEDULER_INTERVAL_SEC:-15}
+    # Demo stand: the «Сбросить демо» button next to the mode switcher restores the company.
+    DEMO_PUBLIC_RESET: ${DEMO_PUBLIC_RESET:-true}
   volumes:
     - jwt_keys:/app/secrets
 
