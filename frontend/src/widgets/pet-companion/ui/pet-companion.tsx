@@ -8,7 +8,7 @@ import { CompanionSpotlight } from "./companion-spotlight";
 import { useSpotlightShortcut } from "../model/use-spotlight-shortcut";
 import { useCompanionChat } from "../model/use-companion-chat";
 import { useCompanionActions } from "../model/use-companion-actions";
-import { Volume2, X } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { PixelPet, usePetPreferences } from "@/entities/pet";
 import { useTypewriter } from "../model/use-typewriter";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
@@ -188,12 +188,21 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
       )}
       {chosenPet && !widgetVisible && (
         <button
-          className="fixed right-5 bottom-4.5 z-40 flex items-center gap-2 rounded-[7px] border border-[#e4d9ee] bg-white px-3.25
-            py-2.5 text-10 text-[#8a769a] max-sm:text-9"
+          type="button" aria-label={`Вернуть спутника ${chosenPet.name}`}
+          className="fixed right-5 bottom-4.5 z-40 flex min-h-14 max-w-[calc(100vw-32px)] items-center gap-3 rounded-2xl
+            border border-[#383c6226] bg-white py-2 pl-2 pr-3 text-left shadow-[3px_3px_0_#383c6214]
+            transition-colors duration-150 hover:border-[#383c6280] hover:bg-[#f8f9fc]
+            focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#383c62] motion-reduce:transition-none max-sm:right-4"
           onClick={() => setWidgetVisible(true)}
         >
-          <Volume2 size={15} />
-          {chosenPet.name} рядом
+          <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-xl" style={{ backgroundColor: chosenPet.bg }}>
+            <PixelPet pet={chosenPet} size={32} paused />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-13 font-semibold leading-5 text-[#383c62]">{chosenPet.name}</span>
+            <span className="block text-11 leading-4 text-[#687181]">Вернуть на экран</span>
+          </span>
+          <ArrowUpRight size={17} className="shrink-0 text-[#687181]" aria-hidden="true" />
         </button>
       )}
     </CompanionTourShell>

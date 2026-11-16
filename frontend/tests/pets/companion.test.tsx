@@ -111,7 +111,7 @@ describe("companion", () => {
     await user.dblClick(pet());
     await user.click(pet());
     await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Скрыть спутника" }));
-    await user.click(await screen.findByRole("button", { name: /рядом/ }));
+    await user.click(await screen.findByRole("button", { name: /Вернуть спутника/ }));
     expect(pet()).toBeInTheDocument();
   });
 });
@@ -201,8 +201,8 @@ it("uses the pet keyboard controls, dismisses chat with Escape, and pauses or hi
   await user.click(screen.getByRole("switch"));
   expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");
   await user.click(within(screen.getByRole("dialog", { name: "Настройки спутника" })).getByRole("button", { name: "Скрыть спутника" }));
-  expect(await screen.findByRole("button", { name: "Орби рядом" })).toBeInTheDocument();
-  await user.click(screen.getByRole("button", { name: "Орби рядом" }));
+  expect(await screen.findByRole("button", { name: "Вернуть спутника Орби" })).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Вернуть спутника Орби" }));
   await user.click(pet());
   await user.click(within(screen.getByRole("group", { name: "Действия спутника" })).getByRole("button", { name: "Настройки" }));
   await user.click(screen.getByRole("button", { name: "Знакомство с петом" }));

@@ -9,10 +9,8 @@ export function PixelActionIcon({ action }: { action: CompanionAction | "chat" }
       <path fill="#00aaff" d="M4 5h16v11H9v2H7v-2H4z" />
       <path fill="#ffffff" d="M6 9h3v3H6z M11 9h3v3h-3z M16 9h2v3h-2z" />
     </>}
-    {action === "hide" && <>
-      <path fill={outline} d="M3 6h3V3h3v3h6V3h3v3h3v3h-3v6h3v3h-3v3h-3v-3H9v3H6v-3H3v-3h3V9H3z" />
-      <path fill="#ff8db6" d="M6 6h3v3h6V6h3v3h-3v6h3v3h-3v-3H9v3H6v-3h3V9H6z" />
-    </>}
+    {action === "hide" && <path fill="#d93246"
+      d="M3 3h4v2h2v2h2v2h2V7h2V5h2V3h4v4h-2v2h-2v2h-2v2h2v2h2v2h2v4h-4v-2h-2v-2h-2v-2h-2v2H9v2H7v2H3v-4h2v-2h2v-2h2v-2H7V9H5V7H3z" />}
     {action === "wardrobe" && <>
       <path fill={outline} d="M7 3h3v2h4V3h3v1h3v2h2v6h-4v9H6v-9H2V6h2V4h3z" />
       <path fill="#02d15c" d="M7 5h1v2h8V5h1v1h3v4h-4v9H8v-9H4V8h2V6h1z" />

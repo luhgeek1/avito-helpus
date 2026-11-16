@@ -32,7 +32,7 @@ export function CompanionOrbitMenu({ anchor, position, open, chatOpen, onChat, o
           dock={{ x: orbit.origin.x + orbit.offsets[index].x + orbit.size / 2,
             y: orbit.origin.y + orbit.offsets[index].y + orbit.size / 2, size: orbit.size }}
           menuOpen={open} open={chatOpen} onOpen={onChat} />;
-        return <button key={actionId} type="button" aria-label={action.label} onClick={() => onAction(actionId)}
+        return <button key={actionId} type="button" aria-label={action.label} title={action.label} onClick={() => onAction(actionId)}
           aria-hidden={!open} inert={!open || !interactive}
           onTransitionEnd={index === actions.length - 1 ? onTransitionEnd : undefined}
           className={cx(`fixed z-38 flex items-center justify-center bg-transparent p-0 text-[#383c62]

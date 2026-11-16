@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-16",
+  "results": [
+    {
+      "viewport": "1440x900",
+      "result": "passed",
+      "checks": [
+        "red close icon",
+        "hide and restore with Enter",
+        "touch target and viewport bounds",
+        "favorites preserved",
+        "no horizontal overflow or runtime errors"
+      ]
+    },
+    {
+      "viewport": "1366x768",
+      "result": "passed",
+      "checks": [
+        "red close icon",
+        "hide and restore with Enter",
+        "touch target and viewport bounds",
+        "favorites preserved",
+        "no horizontal overflow or runtime errors"
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "result": "passed",
+      "checks": [
+        "red close icon",
+        "hide and restore with Enter",
+        "touch target and viewport bounds",
+        "favorites preserved",
+        "no horizontal overflow or runtime errors"
+      ]
+    },
+    {
+      "viewport": "320x900",
+      "result": "passed",
+      "checks": [
+        "red close icon",
+        "hide and restore with Enter",
+        "touch target and viewport bounds",
+        "favorites preserved",
+        "no horizontal overflow or runtime errors"
+      ]
+    }
+  ]
+}
