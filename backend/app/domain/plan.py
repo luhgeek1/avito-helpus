@@ -73,6 +73,7 @@ class ActionKind(StrEnum):
     EQUIPMENT = "equipment"
     ASK_MENTOR = "ask_mentor"
     LEARN = "learn"
+    CODE_REVIEW = "code_review"
 
 
 class Transition(StrEnum):

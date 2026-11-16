@@ -52,6 +52,12 @@ def _greeting(tools: set[str]) -> str:
         can.append("оформить доступ")
     if "request_absence" in tools:
         can.append("взять отгул")
+    if "my_tasks" in tools:
+        can.append("показать задачи и позвать на ревью")
+    if "book_workspace" in tools:
+        can.append("забронировать переговорку")
+    if "my_learning" in tools:
+        can.append("записать на курс")
     if "search_knowledge" in tools:
         can.append("найти ответ в инструкциях")
     if "list_mentees" in tools:
@@ -100,6 +106,10 @@ CARD_TOOLS = frozenset(
         "create_it_ticket",
         "post_team_message",
         "control_request",
+        "start_task",
+        "request_review",
+        "book_workspace",
+        "enroll_course",
     }
 )
 # "Access to the system" names no resource: explain the procedure instead of a lookup miss.
@@ -141,9 +151,11 @@ def _intent_calendar(text: str, tools: set[str], today: date) -> Intent | None:
 def _intent_request_control(text: str, tools: set[str]) -> Intent | None:
     if "control_request" not in tools or not _has(text, r"отмен", r"напомни"):
         return None
-    if not _has(text, r"заявк", r"\b(acc|abs|it)-\d+"):
+    if not _has(text, r"заявк", r"\b(acc|abs|it|rev|bkg|edu)-\d+"):
         return None
-    ref = re.search(r"\b(?:acc|abs|it)-\d+\b|\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", text)
+    ref = re.search(
+        r"\b(?:acc|abs|it|rev|bkg|edu)-\d+\b|\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", text
+    )
     if ref is None:
         return Intent(
             text="Укажи номер заявки из «Моих заявок», например: «Отмени заявку ACC-1042»."
@@ -152,6 +164,107 @@ def _intent_request_control(text: str, tools: set[str]) -> Intent | None:
         "control_request",
         {"reference": ref[0].upper(), "action": "cancel" if "отмен" in text else "remind"},
     )
+
+
+_ISSUE_KEY = re.compile(r"\b(lst|pay|plt)-(\d{2,5})\b")
+# Only "15:30": "18.11" is a date for parse_dates_ru.
+_TIME = re.compile(r"\b(?:в|на|с|к)\s*(\d{1,2}):(\d{2})\b")
+_REPOSITORY = re.compile(r"\b(listings-api|listings-worker|payments-core)\b")
+
+
+def _intent_dev(text: str, tools: set[str]) -> Intent | None:
+    key = _ISSUE_KEY.search(text)
+    if (
+        "start_task" in tools
+        and key
+        and _has(text, r"возьм", r"беру", r"взять", r"начинаю", r"переведи", r"в работу")
+    ):
+        return Intent("start_task", {"issue_key": key.group(0).upper()})
+    if "request_review" in tools and _has(
+        text,
+        r"(отправь|позови|попроси|запроси|назначь|добавь|подбери)\w*.{0,40}ревью",
+        r"ревьюер\w* (для|на|в|к) (мо|pr|пр)",
+        r"на ревью мо",
+    ):
+        return Intent("request_review", {})
+    if "my_tasks" in tools and _has(
+        text,
+        r"мо[иьяю]\w* задач",
+        r"(какие|что за)\w* (у меня )?задач",
+        r"у меня\W+(\w+\W+)?задач",
+        r"перв\w* задач",
+        r"задач\w* (в|из) jira",
+        r"мо[ийе]\w* (pr|пр|пулл?-?реквест)",
+        r"статус\w* (моего )?(pr|пр|пулл?-?реквест)",
+    ):
+        return Intent("my_tasks")
+    if "repository_guide" in tools and _has(
+        text,
+        r"склонир",
+        r"клонир",
+        r"ссылк\w*.{0,30}репозитор",
+        r"как запустить (сервис|listings|payments|репозитор|проект)",
+    ):
+        repo = _REPOSITORY.search(text)
+        return Intent("repository_guide", {"repository": repo.group(1)} if repo else {})
+    return None
+
+
+def _intent_office(text: str, tools: set[str], today: date) -> Intent | None:
+    if "book_workspace" not in tools or not _has(
+        text,
+        r"заброниру",
+        r"забукай",
+        r"\bбронь",
+        r"бронир",
+        r"переговорк",
+        r"рабоч\w* мест",
+        r"(назначь|запланируй|организуй|поставь)\w*.{0,30}(встреч|1:1|созвон)",
+    ):
+        return None
+    mentor = _has(text, r"наставник", r"ментор", r"1:1", r"one.?on.?one")
+    room = mentor or _has(text, r"переговор", r"встреч", r"созвон")
+    args: dict[str, Any] = {"kind": "room" if room else "desk", "with_mentor": mentor}
+    dates = parse_dates_ru(_TIME.sub(" ", text), today)
+    if dates:
+        args["day"] = dates[0].isoformat()
+    if room and (at := _TIME.search(text)):
+        args["start_time"] = f"{int(at.group(1)):02d}:{at.group(2)}"
+    browse = _has(text, r"свободн", r"какие", r"есть ли", r"найди") and not _has(
+        text, r"заброниру", r"забукай", r"назначь", r"запланируй"
+    )
+    return Intent("find_workspace" if browse else "book_workspace", args)
+
+
+def _intent_learning(text: str, prompt: str, tools: set[str]) -> Intent | None:
+    topic = _after(prompt, r"(?i)курс\w*\s+(по|про)\s+", r"(?i)курс\w*")
+    if "enroll_course" in tools and _has(
+        text, r"запиши\w* (меня )?на курс", r"хочу (пройти|на) курс", r"записаться на курс"
+    ):
+        return Intent("enroll_course", {"course": topic})
+    if "my_learning" in tools and _has(
+        text,
+        r"мо[иея]\w* курс",
+        r"у меня\W+(\w+\W+)?курс",
+        r"назначен\w* курс",
+        r"мо[её]\w* обучени",
+        r"дедлайн\w*.{0,20}курс",
+    ):
+        return Intent("my_learning")
+    if "find_courses" in tools and _has(
+        text, r"(какие|найди|подбери|посоветуй)\w*.{0,20}курс", r"курс\w* (по|про) "
+    ):
+        return Intent("find_courses", {"query": topic})
+    if "my_development_plan" in tools and _has(
+        text,
+        r"мо[йие]\w* ипр",
+        r"покажи\w* ипр",
+        r"мо[иея]\w* цел\w* развит",
+        r"план\w* развития",
+        r"матриц\w* компетенц",
+    ):
+        return Intent("my_development_plan")
+    return None
 
 
 def _intent_explicit(text: str, prompt: str, tools: set[str]) -> Intent | None:
@@ -304,8 +417,11 @@ def route(prompt: str, tools: set[str], today: date) -> Intent:
     detected = (
         _intent_sensitive(text, prompt, tools)
         or _intent_bypass(text)
-        or _intent_calendar(text, tools, today)
         or _intent_request_control(text, tools)
+        or _intent_dev(text, tools)
+        or _intent_office(text, tools, today)
+        or _intent_learning(text, prompt, tools)
+        or _intent_calendar(text, tools, today)
         or _intent_mentor(text, tools)
         or _intent_explicit(text, prompt, tools)
         or _intent_actions(text, prompt, tools, today)

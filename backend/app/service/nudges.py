@@ -19,6 +19,7 @@ from app.domain.requests import RequestKind, RequestSource
 from app.domain.users import CurrentUser, Role
 from app.infra.metrics import WORKER_JOB_DURATION, WORKER_JOB_ITEMS, WORKER_JOBS, metric_job
 from app.service.escalations import EscalationService
+from app.service.learning import LearningService
 from app.service.mentor import MentorService
 from app.service.notify import notify
 from app.service.ops import FlagService
@@ -74,6 +75,7 @@ class Nudges:
             ScheduledJob("overdue", tick * 10, self.overdue_steps),
             ScheduledJob("sla", tick * 10, self.requests_past_sla),
             ScheduledJob("equipment", tick * 20, self.equipment_ready),
+            ScheduledJob("learning", tick * 20, self.learning_follow_up),
             ScheduledJob("digest", timedelta(hours=6), self.mentor_digests),
         ]
 
@@ -202,6 +204,24 @@ class Nudges:
                         dedupe_key=f"equipment-ready:{intern.id}:{item.kind}",
                     )
             return sent
+
+    async def learning_follow_up(self) -> int:
+        """Course deadlines in the next days, and plan steps of courses finished on the platform."""
+        async with self._db.unit_of_work() as uow:
+            if not await _locked(uow, "learning"):
+                return 0
+            service = LearningService(
+                uow, self._corp, access_sla_hours=self._settings.access_sla_hours
+            )
+            done = 0
+            for intern in await uow.people.interns():
+                if not await self._nudges_on(uow, intern.id):
+                    continue
+                try:
+                    done += await service.follow_up(intern, today=today())
+                except CorpUnavailableError:
+                    return done
+            return done
 
     async def mentor_digests(self) -> int:
         async with self._db.unit_of_work() as uow:

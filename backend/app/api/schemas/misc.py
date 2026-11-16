@@ -311,7 +311,7 @@ class CorpWebhookIn(RequestModel):
     """Decision pushed by a corporate service (signed with HMAC, see X-Corp-Signature)."""
 
     event: Literal["request.status_changed"]
-    service: Literal["access", "absence", "itsupport"]
+    service: Literal["access", "absence", "itsupport", "review", "booking", "learning"]
     request_id: str = Field(..., max_length=64)
     status: Literal["approved", "rejected", "cancelled", "pending_approval"]
     comment: str | None = Field(None, max_length=2000)

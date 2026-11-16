@@ -34,6 +34,7 @@ from app.domain.plan import STAGE_TITLES, ActionKind, ItemStatus, PlanItemView, 
 from app.domain.requests import (
     LEVEL_TITLES,
     OPEN_STATUSES,
+    REQUEST_SERVICES,
     STATUS_TITLES,
     AccessLevel,
     AccessResource,
@@ -66,7 +67,14 @@ ABSENCE_SERVICE = "Сервис отсутствий"
 IT_SERVICE = "IT-поддержка"
 REMIND_COOLDOWN = timedelta(hours=20)
 MAX_ABSENCE_SPAN_DAYS = 366
-_SLA_HOURS = {RequestKind.ACCESS: 24.0, RequestKind.ABSENCE: 24.0, RequestKind.EQUIPMENT: 8.0}
+_SLA_HOURS = {
+    RequestKind.ACCESS: 24.0,
+    RequestKind.ABSENCE: 24.0,
+    RequestKind.EQUIPMENT: 8.0,
+    RequestKind.REVIEW: 4.0,
+    RequestKind.BOOKING: 4.0,
+    RequestKind.LEARNING: 24.0,
+}
 _CORP_TO_STATUS = {
     CorpTicketStatus.APPROVED: RequestStatus.APPROVED,
     CorpTicketStatus.REJECTED: RequestStatus.REJECTED,
@@ -497,11 +505,7 @@ class RequestService:
         if request is None:
             logger.warning("decision for unknown request %s", external_id)
             return None
-        expected_service = {
-            RequestKind.ACCESS: "access",
-            RequestKind.ABSENCE: "absence",
-            RequestKind.EQUIPMENT: "itsupport",
-        }[request.kind]
+        expected_service = REQUEST_SERVICES[request.kind]
         if (service is not None and service != expected_service) or (
             idempotency_key is not None and idempotency_key != request.idempotency_key
         ):
@@ -539,6 +543,35 @@ class RequestService:
             return
         request.decision_comment = reason
         await self._set_status(request, RequestStatus.FAILED, RequestSource.WORKER, reason)
+
+    async def create_tracked(
+        self,
+        actor: CurrentUser,
+        *,
+        kind: RequestKind,
+        title: str,
+        payload: dict[str, Any],
+        approver: str | None,
+        plan_item_id: UUID | None,
+        idempotency_key: str,
+        source: RequestSource,
+    ) -> RequestView:
+        """A request to any corporate service, sent through the outbox like the built-in ones.
+
+        A repeated key returns the request it already created.
+        """
+        if (existing := await self._existing(actor, idempotency_key, kind)) is not None:
+            return to_request(existing)
+        return await self._create(
+            actor,
+            kind=kind,
+            title=title,
+            payload=payload,
+            approver=approver,
+            plan_item_id=plan_item_id,
+            idempotency_key=idempotency_key,
+            source=source,
+        )
 
     # ---- internals ---------------------------------------------------------------------------
 
@@ -640,6 +673,8 @@ class RequestService:
                 request.plan_item_id,
                 approved=new_status is RequestStatus.APPROVED,
                 request_id=request.id,
+                # Enrolling starts a course; the platform reports when it is finished.
+                completes=request.kind is not RequestKind.LEARNING,
             )
             overview = await PlanService(self._uow).overview(request.user_id)
             next_step = overview.next_steps[0] if overview.next_steps else None
@@ -803,6 +838,31 @@ async def _send(corp: CorpServices, request: ServiceRequest, user: User) -> Corp
                 description=payload["description"],
                 idempotency_key=request.idempotency_key,
             )
+        case RequestKind.REVIEW:
+            return await corp.review_create(
+                employee=user.email,
+                pull_request=payload["pull_request"],
+                reviewers=[r["email"] for r in payload["reviewers"]],
+                message=payload.get("message", ""),
+                idempotency_key=request.idempotency_key,
+            )
+        case RequestKind.BOOKING:
+            return await corp.booking_create(
+                employee=user.email,
+                resource=payload["resource"],
+                day=date.fromisoformat(payload["date"]),
+                start=payload["start"],
+                end=payload["end"],
+                title=payload["title"],
+                attendees=[a["email"] for a in payload.get("attendees", [])],
+                idempotency_key=request.idempotency_key,
+            )
+        case RequestKind.LEARNING:
+            return await corp.course_enroll(
+                employee=user.email,
+                course=payload["course"],
+                idempotency_key=request.idempotency_key,
+            )
 
 
 async def fail_request(
@@ -899,6 +959,8 @@ async def reconcile_ticket(corp: CorpServices, request: ServiceRequest) -> CorpT
             ticket = await corp.absence_get(request.external_id)
         case RequestKind.EQUIPMENT:
             ticket = await corp.it_ticket_get(request.external_id)
+        case RequestKind.REVIEW | RequestKind.BOOKING | RequestKind.LEARNING:
+            ticket = await corp.request_get(request.external_id)
     if ticket.idempotency_key is not None and ticket.idempotency_key != request.idempotency_key:
         raise CorpRequestError(
             "Сервис вернул другую заявку после сброса демо. Обратись в IT-поддержку."

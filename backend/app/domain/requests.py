@@ -14,6 +14,20 @@ class RequestKind(StrEnum):
     ACCESS = "access"
     ABSENCE = "absence"
     EQUIPMENT = "equipment"
+    REVIEW = "review"
+    BOOKING = "booking"
+    LEARNING = "learning"
+
+
+# The corporate service that owns each kind of request (its name in webhooks).
+REQUEST_SERVICES: Mapping[RequestKind, str] = {
+    RequestKind.ACCESS: "access",
+    RequestKind.ABSENCE: "absence",
+    RequestKind.EQUIPMENT: "itsupport",
+    RequestKind.REVIEW: "review",
+    RequestKind.BOOKING: "booking",
+    RequestKind.LEARNING: "learning",
+}
 
 
 class RequestStatus(StrEnum):
