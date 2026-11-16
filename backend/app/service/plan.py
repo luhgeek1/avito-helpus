@@ -80,6 +80,7 @@ class PlanService:
             audience=template.audience,
             waiting_reason=item.waiting_reason,
             by_reviewer=reviewer,
+            has_request=item.request_id is not None,
         )
         self._apply(item, template, new_status, transition, actor=actor, comment=comment)
         await self._uow.flush()
@@ -209,6 +210,9 @@ class PlanService:
             item.started_at = item.started_at or now
             item.waiting_reason = None
             item.blocked_reason = None
+        if transition is Transition.REOPEN:
+            item.completed_at = None
+            item.confirmed_by_id = None
         if transition is Transition.SUBMIT_REVIEW:
             item.waiting_reason = WaitingReason.MENTOR_REVIEW
             item.started_at = item.started_at or now

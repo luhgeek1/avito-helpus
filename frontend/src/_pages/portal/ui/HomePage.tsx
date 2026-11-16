@@ -5,7 +5,8 @@ import {
   useBanners,
   useBenefitCategories,
   useBirthdays,
-  useMe,
+  useOrbiMe,
+  useSession,
   usePosts,
   usePromos,
   useQuickActions,
@@ -352,14 +353,15 @@ function Feed() {
 }
 
 export function HomePage() {
-  const { data: me } = useMe()
+  const { data: me } = useOrbiMe()
+  const authenticated = useSession((state) => state.status === "authenticated")
 
   return (
     <div className={cx(container, 'flex flex-col gap-12 hub-max-720:gap-9')}>
       <HeroCarousel />
       <section>
         <div className="mb-4">
-          <h1 className={heading.h1}>{me ? `Привет, ${me.firstName}! Хорошего дня в Авито` : 'Привет! Хорошего дня в Авито'}</h1>
+          <h1 className={heading.h1}>{authenticated && me ? `Привет, ${me.full_name.split(" ")[0]}! Хорошего дня в Авито` : 'Привет! Хорошего дня в Авито'}</h1>
           <p className="mt-1 text-secondary">Всё для работы, развития и заботы о себе — в одном месте</p>
         </div>
         <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-4 hub-max-900:grid-cols-1">

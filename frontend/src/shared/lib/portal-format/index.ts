@@ -27,7 +27,9 @@ export function formatRelative(iso: string, now = new Date()): string {
   if (diffMinutes < 60) return `${diffMinutes} ${plural(diffMinutes, ['минуту', 'минуты', 'минут'])} назад`
   const diffHours = Math.round(diffMinutes / 60)
   if (diffHours < 24) return `${diffHours} ${plural(diffHours, ['час', 'часа', 'часов'])} назад`
-  if (diffHours < 48) return `вчера в ${formatTime(iso)}`
+  const yesterday = new Date(now)
+  yesterday.setDate(yesterday.getDate() - 1)
+  if (toDateKey(new Date(iso)) === toDateKey(yesterday)) return `вчера в ${formatTime(iso)}`
   return formatDayMonth(iso)
 }
 

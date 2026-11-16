@@ -78,6 +78,7 @@ class ActionKind(StrEnum):
 class Transition(StrEnum):
     START = "start"
     COMPLETE = "complete"
+    REOPEN = "reopen"
     SUBMIT_REVIEW = "submit_review"
     BLOCK = "block"
     UNBLOCK = "unblock"
@@ -196,6 +197,7 @@ def current_stage(start: date, today: date) -> Stage:
 # (status, transition) -> new status. Transitions that need a specific confirmation kind are
 # checked separately in `next_status`, so the table stays a plain state machine.
 _TRANSITIONS: Mapping[tuple[ItemStatus, Transition], ItemStatus] = {
+    (ItemStatus.DONE, Transition.REOPEN): ItemStatus.IN_PROGRESS,
     (ItemStatus.TODO, Transition.START): ItemStatus.IN_PROGRESS,
     (ItemStatus.TODO, Transition.COMPLETE): ItemStatus.DONE,
     (ItemStatus.IN_PROGRESS, Transition.COMPLETE): ItemStatus.DONE,
@@ -217,8 +219,14 @@ def next_status(
     audience: Audience,
     waiting_reason: WaitingReason | None,
     by_reviewer: bool,
+    has_request: bool = False,
 ) -> ItemStatus:
     """Validate one plan transition and return the new status (raises on anything illegal)."""
+    if transition is Transition.REOPEN:
+        if by_reviewer or audience is not Audience.INTERN:
+            raise ForbiddenError("Вернуть шаг в работу может только сам стажёр")
+        if confirmation is Confirmation.MENTOR or has_request:
+            raise PlanTransitionError("Подтверждённый наставником или заявкой шаг нельзя вернуть")
     if transition in REVIEWER_TRANSITIONS:
         if not by_reviewer:
             raise ForbiddenError("Этот шаг подтверждает только наставник")

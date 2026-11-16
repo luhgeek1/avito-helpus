@@ -107,7 +107,9 @@ class PlanOut(ResponseModel):
 
 
 class TransitionIn(RequestModel):
-    transition: Transition = Field(description="start, complete, submit_review, block, unblock")
+    transition: Transition = Field(
+        description="start, complete, reopen, submit_review, block, unblock"
+    )
     comment: str | None = Field(None, max_length=500)
 
 

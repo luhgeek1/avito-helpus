@@ -103,7 +103,7 @@ describe("companion chat window", () => {
     const onBack = vi.fn();
     const { user } = renderChat(onBack);
     await user.type(screen.getByRole("textbox", { name: "Сообщение спутнику" }), "Черновик");
-    await user.click(screen.getByRole("button", { name: /Действия ·/ }));
+    await user.click(screen.getByRole("button", { name: /Действия:/ }));
     expect(screen.getByRole("region", { name: "Действия Орби" })).toBeInTheDocument();
     const header = screen.getByRole("group", { name: "Переместить чат" });
     expect(within(header).getByRole("button", { name: "Вернуться в чат" })).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe("companion chat window", () => {
     await user.click(screen.getByRole("button", { name: "Мои заявки" }));
     await waitFor(() => expect(useOrbiChat.getState().busy).toBe(false));
     expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Черновик");
-    await user.click(screen.getByRole("button", { name: /Действия ·/ }));
+    await user.click(screen.getByRole("button", { name: /Действия:/ }));
     await user.click(screen.getByRole("button", { name: /Вернуться в чат/ }));
     expect(screen.getByRole("log")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Черновик");

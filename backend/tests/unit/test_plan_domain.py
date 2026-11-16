@@ -190,3 +190,37 @@ def test_overview_counts_progress_per_stage() -> None:
     assert (plan.done, plan.total, plan.overdue, plan.percent) == (1, 3, 1, 33)
     assert plan.stages[0].percent == 50
     assert plan.stages[-1].percent == 100
+
+
+@pytest.mark.parametrize("confirmation", [Confirmation.SELF, Confirmation.QUIZ])
+def test_intern_can_reopen_own_done_step(confirmation: Confirmation) -> None:
+    assert (
+        move(ItemStatus.DONE, Transition.REOPEN, confirmation=confirmation)
+        is ItemStatus.IN_PROGRESS
+    )
+
+
+@pytest.mark.parametrize(
+    ("reviewer", "audience"), [(True, Audience.INTERN), (False, Audience.MENTOR)]
+)
+def test_only_intern_owner_can_reopen(reviewer: bool, audience: Audience) -> None:
+    with pytest.raises(ForbiddenError):
+        move(ItemStatus.DONE, Transition.REOPEN, reviewer=reviewer, audience=audience)
+
+
+def test_mentor_confirmed_step_cannot_reopen() -> None:
+    with pytest.raises(PlanTransitionError):
+        move(ItemStatus.DONE, Transition.REOPEN, confirmation=Confirmation.MENTOR)
+
+
+def test_request_step_cannot_reopen() -> None:
+    with pytest.raises(PlanTransitionError):
+        next_status(
+            status=ItemStatus.DONE,
+            transition=Transition.REOPEN,
+            confirmation=Confirmation.SELF,
+            audience=Audience.INTERN,
+            waiting_reason=None,
+            by_reviewer=False,
+            has_request=True,
+        )

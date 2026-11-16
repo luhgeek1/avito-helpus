@@ -487,7 +487,7 @@ export const events: CompanyEvent[] = [
 /* ---------- Уведомления и календарь ---------- */
 
 export const notifications: Notification[] = [
-  { id: 'n-1', title: 'Доступ выдан', text: 'Вам открыт доступ к репозиторию «listings-api»', createdAt: hoursAgo(1), read: false, href: '/services/access' },
+  { id: 'n-1', title: 'Знакомство с командой', text: 'Тестовая встреча знакомства с командой — в календаре событий', createdAt: hoursAgo(1), read: false, href: '/events' },
   { id: 'n-2', title: 'Встреча 1:1', text: 'Артём Белов пригласил вас на встречу завтра в 11:00', createdAt: hoursAgo(4), read: false, href: '/profile' },
   { id: 'n-3', title: 'Новый курс', text: 'Вам назначен курс «Go: продвинутые практики»', createdAt: hoursAgo(26), read: false, href: '/services/learning' },
   { id: 'n-4', title: 'Документ на подпись', text: 'Заявление на отгул ожидает подписи', createdAt: hoursAgo(30), read: true, href: '/profile' },
