@@ -14,11 +14,14 @@ function Narration({ tour, hidden }: { tour: CompanionTour; hidden: boolean }) {
   const compact = w <= 650;
   const stacked = w <= 1000;
   const below = compact && (tour.scene === "spotlight" || (tour.scene === "settings" && h >= 700));
-  const width = Math.min(stacked ? 480 : 500, w - 32);
   const centerX = tour.scene === "intro" && !compact ? w * .34 : w / 2;
-  const left = tour.scene === "wardrobe" && !stacked ? Math.min(w - width - 24, w * .24 + Math.min(330, h * .44 - 72) + 104) : stacked ? (w - width) / 2 : Math.min(w - width - 24, centerX + 128 * tour.scale / 2 + 32);
-  const top = tour.scene === "wardrobe" && stacked ? 72 : below ? undefined : stacked ? Math.max(64, h * .47 - (compact ? 96 : 128) * tour.scale / 2 - 138) : h * .56 - 80;
-  const style: CSSProperties = { width, left, top, bottom: below ? 16 : undefined };
+  const sideLeft = tour.scene === "wardrobe" ? w * .24 + Math.min(330, h * .44 - 72) + 104 : centerX + 64 * tour.scale + 32;
+  const width = Math.min(stacked ? 480 : 500, w - 32, stacked ? Infinity : w - sideLeft - 24);
+  const left = stacked ? (w - width) / 2 : sideLeft;
+  const above = stacked && !below && tour.scene !== "wardrobe";
+  const bottom = above ? h * .53 + (compact ? 96 : 128) * tour.scale / 2 + 24 : below ? 16 : undefined;
+  const top = tour.scene === "wardrobe" && stacked ? 72 : above || below ? undefined : h * .56 - 80;
+  const style: CSSProperties = { width, left, top, bottom };
   if (hidden) return null;
   return <div ref={ref} tabIndex={-1} style={style} aria-label="Подсказка пета"
     className={cx(`transition-opacity group-data-[tour-closing=true]/tour:opacity-0 duration-200 pointer-events-auto cursor-pointer fixed z-60 rounded-none border-4 border-[#eef4fa] bg-white px-5 py-4 font-pixel text-18 leading-[1.75] text-[#33333d] shadow-[0_0_0_3px_#383c62,6px_6px_0_3px_#383c6226] outline-none max-sm:px-3 max-sm:py-3 max-sm:text-12

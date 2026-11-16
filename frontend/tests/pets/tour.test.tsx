@@ -32,16 +32,20 @@ it("visits every tour scene, opens its real control, preserves manual dragging a
   expect(result.current.scene).toBe("menu");
   act(() => vi.advanceTimersByTime(1000));
   expect(controls.actions.menu).toHaveBeenCalled();
+  expect(result.current.chatVisible).toBe(true);
   for (const scene of ["chat", "wardrobe", "settings"] as const) {
     act(() => result.current.visit(scene));
+    expect(result.current.chatVisible).toBe(false);
     act(() => vi.advanceTimersByTime(1000));
     expect(controls.actions[scene]).toHaveBeenCalled();
+    expect(result.current.chatVisible).toBe(scene === "chat");
   }
   vi.stubGlobal("innerWidth", 375);
   act(() => window.dispatchEvent(new Event("resize")));
   act(() => result.current.visit("spotlight"));
   act(() => vi.advanceTimersByTime(1000));
   expect(controls.spotlight.show).toHaveBeenCalled();
+  expect(result.current.chatVisible).toBe(false);
   act(() => result.current.next());
   expect(result.current.scene).toBe("move");
   controls.movement.dragging = true;
@@ -50,6 +54,7 @@ it("visits every tour scene, opens its real control, preserves manual dragging a
   act(() => result.current.next());
   await act(async () => { await Promise.resolve(); });
   expect(result.current.active).toBe(false);
+  expect(result.current.chatVisible).toBe(true);
   expect(localStorage.getItem("buddy-onboarding-v1")).toBe("done");
 });
 
@@ -65,7 +70,7 @@ it("uses the right-hand semicircle for the wardrobe tour and fits it in the view
 
 function fakeTour(overrides: Partial<CompanionTour> = {}): CompanionTour {
   return { active: true, scene: "intro", text: "Tour text", viewport: { width: 1440, height: 900 }, scale: 3,
-    closing: false, next: vi.fn(), finish: vi.fn(), visit: vi.fn(), dragged: vi.fn(), ...overrides };
+    closing: false, chatVisible: true, next: vi.fn(), finish: vi.fn(), visit: vi.fn(), dragged: vi.fn(), ...overrides };
 }
 
 it("advances by background click or space, ignores input and held space, and handles native cancel", () => {

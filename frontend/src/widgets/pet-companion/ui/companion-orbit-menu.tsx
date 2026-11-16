@@ -14,10 +14,11 @@ const actions: { id: CompanionAction | "chat"; label: string }[] = [
 ];
 const outline = "M16 0h24v4h8v4h4v8h4v24h-4v8h-4v4h-8v4H16v-4H8v-4H4v-8H0V16h4V8h4V4h8z";
 
-export function CompanionOrbitMenu({ anchor, position, open, chatOpen, onChat, onAction }: {
+export function CompanionOrbitMenu({ anchor, position, open, chatVisible = true, chatOpen, onChat, onAction }: {
   anchor: RefObject<HTMLDivElement | null>;
   position: CSSProperties;
   open: boolean;
+  chatVisible?: boolean;
   chatOpen: boolean;
   onChat: () => void;
   onAction: (action: CompanionAction) => void;
@@ -31,7 +32,7 @@ export function CompanionOrbitMenu({ anchor, position, open, chatOpen, onChat, o
         if (actionId === "chat") return <CompanionChatBubble key={actionId} placement={orbit.thought}
           dock={{ x: orbit.origin.x + orbit.offsets[index].x + orbit.size / 2,
             y: orbit.origin.y + orbit.offsets[index].y + orbit.size / 2, size: orbit.size }}
-          menuOpen={open} open={chatOpen} onOpen={onChat} />;
+          visible={chatVisible} menuOpen={open} open={chatOpen} onOpen={onChat} />;
         return <button key={actionId} type="button" aria-label={action.label} title={action.label} onClick={() => onAction(actionId)}
           aria-hidden={!open} inert={!open || !interactive}
           onTransitionEnd={index === actions.length - 1 ? onTransitionEnd : undefined}

@@ -10,13 +10,13 @@ import { useTourExit } from "./use-tour-exit";
 type Scene = "intro" | "menu" | "chat" | "wardrobe" | "settings" | "spotlight" | "move";
 const order: Scene[] = ["intro", "menu", "wardrobe", "settings", "spotlight", "move"];
 const copy: Record<Scene, string> = {
-  intro: "Привет! Я {name}, твой напарник. Покажу, что умею. Продолжить — клик или пробел.",
-  menu: "Пузырь мысли рядом со мной открывает чат. В меню — гардероб, настройки и скрытие. Открой гардероб — примерим новый образ.",
+  intro: "Привет! Я {name}! Кликни или нажми пробел — познакомимся.",
+  menu: "Пузырь открывает чат. Нажми на гардероб — выберем новый образ.",
   chat: "Здесь наша переписка. Напиши вопрос своими словами — например, как получить доступ к сервису.",
   wardrobe: "Покрути колесо или свайпни. Нажми на образ, чтобы выбрать его.",
   settings: "Здесь можно остановить анимацию или скрыть меня. Знакомство тоже можно повторить отсюда.",
   spotlight: "Два быстрых Enter — и можно задать вопрос. Ещё один Enter отправит его. Отвечу рядом с собой.",
-  move: "Теперь попробуй меня перетащить. Гардероб останется рядом, а чат можно двигать отдельно за шапку. Вот и всё — давай осваиваться!",
+  move: "Перетащи меня в удобное место. Всё готово!",
 };
 type Controls = { movement: ReturnType<typeof useCompanionPosition>; actions: ReturnType<typeof useCompanionActions>;
   spotlight: ReturnType<typeof useSpotlightShortcut>; show: () => void; silence: () => void; draft: string };
@@ -26,6 +26,7 @@ export function useCompanionTour(controls: Controls) {
   const { chosenPet } = usePetPreferences();
   const active = onboarding.active && onboarding.ready;
   const [scene, setScene] = useState<Scene>("intro");
+  const [settledScene, setSettledScene] = useState<Scene | null>(null);
   const [viewport, setViewport] = useState({ width: 1440, height: 900 });
   const live = useRef(controls); live.current = controls;
   const original = useRef<{ x: number; y: number } | null>(null);
@@ -72,11 +73,12 @@ export function useCompanionTour(controls: Controls) {
   }, [active]);
   useEffect(() => {
     if (!active || exit.closing) return;
+    setSettledScene(null);
     const c = live.current, compact = viewport.width <= 650;
     const width = (compact ? 144 : 160) * scale;
     const height = (compact ? 96 : 128) * scale;
     const x = Math.round(scene === "wardrobe" ? Math.max(8, viewport.width * .24 - width / 2) : scene === "intro" && !compact ? viewport.width * .34 - width / 2 : (viewport.width - width) / 2);
-    const y = Math.round(scene === "chat" ? viewport.height - height - 20 : viewport.height * (scene === "wardrobe" && compact ? .60 : viewport.width <= 1000 ? .47 : .56) - height / 2);
+    const y = Math.round(scene === "chat" ? viewport.height - height - 20 : viewport.height * (scene === "wardrobe" && viewport.width <= 1000 ? .60 : viewport.width <= 1000 ? .47 : .56) - height / 2);
     const before = c.movement.ref.current?.getBoundingClientRect();
     c.show(); c.actions.dismiss(); c.spotlight.close(); c.silence();
     c.movement.relocate({ x, y });
@@ -90,6 +92,7 @@ export function useCompanionTour(controls: Controls) {
     });
     const timer = setTimeout(() => {
       const current = live.current;
+      setSettledScene(scene);
       if (scene === "menu") current.actions.menu();
       if (scene === "chat") current.actions.chat();
       if (scene === "wardrobe") current.actions.wardrobe();
@@ -102,6 +105,8 @@ export function useCompanionTour(controls: Controls) {
     if (active && scene === "move" && controls.movement.dragging) dragged.current = true;
   }, [active, scene, controls.movement.dragging]);
   return { active, scene, text: copy[scene].replace("{name}", chosenPet?.name ?? "Орби"), viewport, scale, closing: exit.closing, next: advance,
+    chatVisible: !active || (!exit.closing && settledScene === scene
+      && (controls.actions.menuOpen || !["wardrobe", "settings", "spotlight"].includes(scene))),
     finish: exit.finish, visit: setScene,
     dragged: () => { if (active && scene === "move") dragged.current = true; },
   };

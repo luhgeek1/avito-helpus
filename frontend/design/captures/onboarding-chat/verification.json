@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-16",
+  "checks": ["contextual bubble visibility and inert state", "caption and wardrobe bounds", "no caption/pet or caption/wardrobe overlap", "all wardrobe option centers clickable", "chat and back navigation", "keyboard carousel selection", "exit restores chat bubble", "favorites preserved", "no page errors"],
+  "reports": [
+    {"viewport": "1440x900", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "1366x768", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "1161x774", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "1024x768", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "768x1024", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "390x844", "motion": "no-preference", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"},
+    {"viewport": "320x700", "motion": "reduce", "scenes": ["intro", "menu", "chat", "wardrobe", "settings", "spotlight", "move"], "result": "passed"}
+  ]
+}

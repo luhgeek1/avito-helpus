@@ -18,9 +18,10 @@ export function useWardrobePlacement(
       const scale = Math.max(1, box.width / (compact ? 144 : 160));
       const baseSize = (compact ? 56 : 64) * scale;
       if (semicircle) {
-        const size = compact ? 48 : 112;
+        const stacked = innerWidth <= 1000;
+        const size = compact ? 48 : stacked ? 80 : 112;
         const radius = Math.max(64, Math.min(compact ? 210 : 330,
-          innerWidth - cx - size / 2 - 16, cy - size / 2 - 68, innerHeight - cy - size / 2 - 16));
+          innerWidth - cx - size / 2 - 16, cy - size / 2 - (stacked ? 240 : 68), innerHeight - cy - size / 2 - 16));
         setLayout({ cx, cy, size, radius, horizontal: 1, vertical: 1, semicircle: true });
         return;
       }
