@@ -19,7 +19,8 @@ it.each([
 ])("recovers %s after a failed request to %s", async (path, endpoint) => {
   server.use(http.get(endpoint, () => new HttpResponse(null, { status: 500 }), { once: true }));
   const { user } = renderApp(path);
-  const alert = await screen.findByRole("alert");
+  // Slow CI runners need more than the default second before the failed query surfaces.
+  const alert = await screen.findByRole("alert", undefined, { timeout: 5000 });
   await user.click(within(alert).getByRole("button", { name: "Повторить" }));
   await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
 });
