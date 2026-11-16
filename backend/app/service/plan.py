@@ -146,8 +146,13 @@ class PlanService:
         *,
         approved: bool,
         request_id: UUID | None = None,
+        completes: bool = True,
     ) -> PlanItemView | None:
-        """A linked request finished: approval closes the step, anything else reopens it."""
+        """A linked request finished: approval closes the step, anything else reopens it.
+
+        `completes=False` is for requests that only start the work (a course enrollment):
+        approval moves the step to "in progress" instead.
+        """
         row = await self._uow.plan.get(item_id, for_update=True)
         if row is None:
             return None
@@ -160,7 +165,7 @@ class PlanService:
         ):
             return to_plan_item(item, template)
         item.waiting_reason = None
-        if approved:
+        if approved and completes:
             item.status = ItemStatus.DONE
             item.completed_at = utcnow()
             self._uow.ops.track(

@@ -1,6 +1,6 @@
 # Adaptation plan template built from the public Avito intern checklist (test data, see
 # docs/case/intern-checklist.md). Wording is ours; items addressed to the mentor have audience: mentor.
-# action.kind: access_request | absence_request | equipment | ask_mentor | learn
+# action.kind: access_request | absence_request | equipment | ask_mentor | learn | code_review
 items:
   # ---- week 1 ---------------------------------------------------------------------------------
   - slug: meet-team
@@ -117,10 +117,11 @@ items:
   - slug: first-pr
     stage: week_2
     title: "Сделай первый PR и пройди ревью"
-    description: "Небольшая задача от наставника: ветка, PR, ревью, мерж. Подтверждает наставник."
+    description: "Небольшая задача от наставника: ветка, PR, ревью, мерж. Орби подберёт ревьюеров по CODEOWNERS."
     category: tasks
     confirmation: mentor
     needs_laptop: true
+    action: {kind: code_review}
     doc_slugs: [code-review-policy, team-listings-handbook, git-workflow]
   # ---- month 1 --------------------------------------------------------------------------------
   - slug: data-protection
@@ -140,8 +141,9 @@ items:
   - slug: microservices-course
     stage: month_1
     title: "Пройди курс «Микросервисная архитектура»"
-    description: "И курс про Agile-инструменты, если ещё не проходил."
+    description: "И курс про Agile-инструменты, если ещё не проходил. Шаг закроется сам, когда учебная платформа отметит курс пройденным."
     category: learning
+    action: {kind: learn, resource: microservices}
   - slug: staging-access
     stage: month_1
     title: "Получи доступ к стейджингу и проверь фичу на dev"

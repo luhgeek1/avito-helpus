@@ -68,6 +68,7 @@ class CorpEvent:
     title: str
     starts_at: datetime
     important: bool
+    minutes: int = 30
 
 
 class CorpUnavailableError(ServiceUnavailableError):
