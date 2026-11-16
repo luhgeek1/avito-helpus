@@ -9,6 +9,7 @@ import { useSpotlightShortcut } from "../model/use-spotlight-shortcut";
 import { useCompanionChat } from "../model/use-companion-chat";
 import { useCompanionActions } from "../model/use-companion-actions";
 import { ArrowUpRight, X } from "lucide-react";
+import { plainText } from "@/shared/lib/orbi-format";
 import { PixelPet, usePetPreferences } from "@/entities/pet";
 import { useTypewriter } from "../model/use-typewriter";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
@@ -69,7 +70,7 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
     setWidgetVisible(true);
     setWidgetSpeaking(true);
   }, [notice]); // Speak once per new notification.
-  const dialogueText = widgetReply?.text ?? chosenPet?.greeting ?? "";
+  const dialogueText = widgetReply ? plainText(widgetReply.text) : chosenPet?.greeting ?? "";
   const dialogue = useTypewriter(dialogueText, widgetSpeaking && widgetVisible, paused, widgetReply?.id);
   const placement = useDialoguePlacement(movement.ref, widgetSpeaking && widgetVisible,
     movement.style.left, movement.style.top);
