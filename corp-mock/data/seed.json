@@ -15,10 +15,78 @@
   },
   "calendar": {
     "intern": [
-      {"title": "Стендап команды", "weekday": "daily", "time": "11:00", "important": false},
-      {"title": "Планирование спринта", "weekday": 0, "time": "12:00", "important": false},
-      {"title": "Демо команды", "weekday": 3, "time": "16:00", "important": true},
-      {"title": "1:1 с наставником", "weekday": 4, "time": "15:00", "important": true}
+      {
+        "title": "Стендап команды",
+        "weekday": "daily",
+        "time": "11:00",
+        "important": false,
+        "minutes": 15
+      },
+      {
+        "title": "Планирование спринта",
+        "weekday": 0,
+        "time": "12:00",
+        "important": false,
+        "minutes": 60
+      },
+      {
+        "title": "Демо команды",
+        "weekday": 3,
+        "time": "16:00",
+        "important": true,
+        "minutes": 60
+      },
+      {
+        "title": "1:1 с наставником",
+        "weekday": 4,
+        "time": "15:00",
+        "important": true,
+        "minutes": 30
+      }
+    ],
+    "mentor": [
+      {
+        "title": "Стендап команды",
+        "weekday": "daily",
+        "time": "11:00",
+        "important": false,
+        "minutes": 15
+      },
+      {
+        "title": "Планирование спринта",
+        "weekday": 0,
+        "time": "12:00",
+        "important": false,
+        "minutes": 60
+      },
+      {
+        "title": "Архитектурный комитет",
+        "weekday": 1,
+        "time": "14:00",
+        "important": true,
+        "minutes": 90
+      },
+      {
+        "title": "1:1 с Кириллом",
+        "weekday": 2,
+        "time": "15:00",
+        "important": true,
+        "minutes": 30
+      },
+      {
+        "title": "Демо команды",
+        "weekday": 3,
+        "time": "16:00",
+        "important": true,
+        "minutes": 60
+      },
+      {
+        "title": "1:1 с Аней",
+        "weekday": 4,
+        "time": "15:00",
+        "important": true,
+        "minutes": 30
+      }
     ]
   },
   "employees": {
@@ -26,34 +94,528 @@
       "absence_days": 5,
       "calendar": "intern",
       "equipment": [
-        {"kind": "laptop", "model": "MacBook Pro 14", "status": "in_transit", "eta_days": 1,
-         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"},
-        {"kind": "monitor", "model": "Монитор 27\"", "status": "ready_for_pickup", "eta_days": 0,
-         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+        {
+          "kind": "laptop",
+          "model": "MacBook Pro 14",
+          "status": "in_transit",
+          "eta_days": 1,
+          "pickup_location": "IT-стойка, 5 этаж",
+          "pickup_hours": "будни 10:00–18:00"
+        },
+        {
+          "kind": "monitor",
+          "model": "Монитор 27\"",
+          "status": "ready_for_pickup",
+          "eta_days": 0,
+          "pickup_location": "IT-стойка, 5 этаж",
+          "pickup_hours": "будни 10:00–18:00"
+        }
       ],
-      "grants": [{"resource": "jira-listings", "level": "write", "granted_days_ago": 1}]
+      "grants": [
+        {
+          "resource": "jira-listings",
+          "level": "write",
+          "granted_days_ago": 1
+        }
+      ],
+      "learning": [
+        {
+          "course": "data-protection",
+          "mandatory": true,
+          "due_days": 3,
+          "progress": 40
+        },
+        {
+          "course": "agile-tools",
+          "mandatory": true,
+          "due_days": 12,
+          "progress": 0
+        }
+      ],
+      "development": [
+        {
+          "goal": "Сделать первый PR и пройти ревью",
+          "competency": "Инженерные практики",
+          "level": "Junior",
+          "due_days": 12,
+          "progress": 10,
+          "status": "in_progress"
+        },
+        {
+          "goal": "Разобраться в архитектуре listings-api",
+          "competency": "Архитектура",
+          "level": "Junior",
+          "due_days": 28,
+          "progress": 0,
+          "status": "not_started"
+        },
+        {
+          "goal": "Выступить на демо команды",
+          "competency": "Коммуникация",
+          "level": "Junior",
+          "due_days": 45,
+          "progress": 0,
+          "status": "not_started"
+        }
+      ]
     },
     "kirill.intern@buddy.test": {
       "absence_days": 4,
       "calendar": "intern",
       "equipment": [
-        {"kind": "laptop", "model": "MacBook Pro 14", "status": "issued", "eta_days": -14,
-         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+        {
+          "kind": "laptop",
+          "model": "MacBook Pro 14",
+          "status": "issued",
+          "eta_days": -14,
+          "pickup_location": "IT-стойка, 5 этаж",
+          "pickup_hours": "будни 10:00–18:00"
+        }
       ],
       "grants": [
-        {"resource": "jira-listings", "level": "write", "granted_days_ago": 15},
-        {"resource": "confluence-listings", "level": "read", "granted_days_ago": 15},
-        {"resource": "stash-listings-api", "level": "write", "granted_days_ago": 14}
+        {
+          "resource": "jira-listings",
+          "level": "write",
+          "granted_days_ago": 15
+        },
+        {
+          "resource": "confluence-listings",
+          "level": "read",
+          "granted_days_ago": 15
+        },
+        {
+          "resource": "stash-listings-api",
+          "level": "write",
+          "granted_days_ago": 14
+        }
+      ],
+      "learning": [
+        {
+          "course": "data-protection",
+          "mandatory": true,
+          "due_days": -3,
+          "progress": 100
+        },
+        {
+          "course": "microservices",
+          "mandatory": true,
+          "due_days": 2,
+          "progress": 70
+        }
+      ],
+      "development": [
+        {
+          "goal": "Закрыть 3 задачи спринта самостоятельно",
+          "competency": "Инженерные практики",
+          "level": "Junior",
+          "due_days": 20,
+          "progress": 33,
+          "status": "in_progress"
+        },
+        {
+          "goal": "Пройти курс «Микросервисная архитектура»",
+          "competency": "Архитектура",
+          "level": "Junior",
+          "due_days": 2,
+          "progress": 70,
+          "status": "in_progress"
+        },
+        {
+          "goal": "Провести ревью PR коллеги",
+          "competency": "Командная работа",
+          "level": "Junior+",
+          "due_days": 30,
+          "progress": 0,
+          "status": "not_started"
+        }
       ]
     },
     "dana.intern@buddy.test": {
       "absence_days": 3,
       "calendar": "intern",
       "equipment": [
-        {"kind": "laptop", "model": "ThinkPad X1", "status": "issued", "eta_days": -38,
-         "pickup_location": "IT-стойка, 5 этаж", "pickup_hours": "будни 10:00–18:00"}
+        {
+          "kind": "laptop",
+          "model": "ThinkPad X1",
+          "status": "issued",
+          "eta_days": -38,
+          "pickup_location": "IT-стойка, 5 этаж",
+          "pickup_hours": "будни 10:00–18:00"
+        }
       ],
-      "grants": [{"resource": "stash-payments-core", "level": "write", "granted_days_ago": 35}]
+      "grants": [
+        {
+          "resource": "stash-payments-core",
+          "level": "write",
+          "granted_days_ago": 35
+        }
+      ],
+      "learning": [
+        {
+          "course": "data-protection",
+          "mandatory": true,
+          "due_days": -20,
+          "progress": 100
+        }
+      ]
+    },
+    "ivan.mentor@buddy.test": {
+      "calendar": "mentor"
     }
-  }
+  },
+  "directory": {
+    "ivan.mentor@buddy.test": "Иван Петров",
+    "maria.lead@buddy.test": "Мария Ким",
+    "dmitry.backend@buddy.test": "Дмитрий Лебедев",
+    "elena.backend@buddy.test": "Елена Захарова",
+    "anya.intern@buddy.test": "Аня Смирнова",
+    "kirill.intern@buddy.test": "Кирилл Орлов",
+    "pavel.mentor@buddy.test": "Павел Иванов",
+    "sergey.lead@buddy.test": "Сергей Волков",
+    "dana.intern@buddy.test": "Дана Ли"
+  },
+  "repositories": {
+    "listings-api": {
+      "project": "LST",
+      "team_channel": "#listings-backend",
+      "clone_url": "ssh://git@stash.buddy.test:7999/lst/listings-api.git",
+      "web_url": "https://stash.buddy.test/projects/LST/repos/listings-api",
+      "default_branch": "develop",
+      "dev_url": "https://listings.dev.buddy.test",
+      "run": "avito-cli service run listings-api",
+      "checks": "make lint test",
+      "review_group": "@listings-reviewers",
+      "required_approvers": [
+        "ivan.mentor@buddy.test"
+      ],
+      "codeowners": [
+        {
+          "path": "internal/moderation/",
+          "owners": [
+            "dmitry.backend@buddy.test"
+          ]
+        },
+        {
+          "path": "internal/publish/",
+          "owners": [
+            "elena.backend@buddy.test"
+          ]
+        },
+        {
+          "path": "api/",
+          "owners": [
+            "maria.lead@buddy.test",
+            "ivan.mentor@buddy.test"
+          ]
+        },
+        {
+          "path": "*",
+          "owners": [
+            "ivan.mentor@buddy.test"
+          ]
+        }
+      ]
+    },
+    "listings-worker": {
+      "project": "LST",
+      "team_channel": "#listings-backend",
+      "clone_url": "ssh://git@stash.buddy.test:7999/lst/listings-worker.git",
+      "web_url": "https://stash.buddy.test/projects/LST/repos/listings-worker",
+      "default_branch": "develop",
+      "dev_url": "https://listings.dev.buddy.test",
+      "run": "avito-cli service run listings-worker",
+      "checks": "make lint test",
+      "review_group": "@listings-reviewers",
+      "required_approvers": [
+        "ivan.mentor@buddy.test"
+      ],
+      "codeowners": [
+        {
+          "path": "*",
+          "owners": [
+            "elena.backend@buddy.test",
+            "ivan.mentor@buddy.test"
+          ]
+        }
+      ]
+    },
+    "payments-core": {
+      "project": "PAY",
+      "team_channel": "#payments-dev",
+      "clone_url": "ssh://git@stash.buddy.test:7999/pay/payments-core.git",
+      "web_url": "https://stash.buddy.test/projects/PAY/repos/payments-core",
+      "default_branch": "main",
+      "dev_url": "https://payments.dev.buddy.test",
+      "run": "avito-cli service run payments-core",
+      "checks": "make check",
+      "review_group": "@payments-reviewers",
+      "required_approvers": [
+        "pavel.mentor@buddy.test"
+      ],
+      "codeowners": [
+        {
+          "path": "*",
+          "owners": [
+            "pavel.mentor@buddy.test",
+            "sergey.lead@buddy.test"
+          ]
+        }
+      ]
+    }
+  },
+  "issues": [
+    {
+      "key": "LST-1432",
+      "assignee": "anya.intern@buddy.test",
+      "title": "Валидация цены в черновике объявления",
+      "type": "task",
+      "status": "todo",
+      "points": 2,
+      "due_days": 9,
+      "repository": "listings-api",
+      "slug": "fix-price-validation",
+      "description": "Цена в черновике может быть отрицательной. Добавь проверку в internal/publish и тест на граничные значения.",
+      "first_task": true
+    },
+    {
+      "key": "LST-1440",
+      "assignee": "anya.intern@buddy.test",
+      "title": "Метрика отклонённых модерацией объявлений",
+      "type": "task",
+      "status": "todo",
+      "points": 3,
+      "due_days": 16,
+      "repository": "listings-api",
+      "slug": "rejected-ads-metric",
+      "description": "Счётчик Prometheus по причинам отклонения; панель в Grafana команды."
+    },
+    {
+      "key": "LST-1405",
+      "assignee": "kirill.intern@buddy.test",
+      "title": "Ограничить длину заголовка объявления",
+      "type": "task",
+      "status": "in_progress",
+      "points": 2,
+      "due_days": 2,
+      "repository": "listings-api",
+      "slug": "title-length-limit",
+      "description": "Заголовок длиннее 120 символов должен отклоняться правилом модерации с понятной причиной."
+    },
+    {
+      "key": "LST-1398",
+      "assignee": "kirill.intern@buddy.test",
+      "title": "Логи запросов публикации без персональных данных",
+      "type": "bug",
+      "status": "done",
+      "points": 1,
+      "due_days": -5,
+      "repository": "listings-api",
+      "slug": "publish-logs-pii",
+      "description": "Убрать телефон продавца из логов publish."
+    },
+    {
+      "key": "PAY-310",
+      "assignee": "dana.intern@buddy.test",
+      "title": "Ретраи вебхуков платёжного шлюза",
+      "type": "task",
+      "status": "in_progress",
+      "points": 3,
+      "due_days": 4,
+      "repository": "payments-core",
+      "slug": "gateway-webhook-retries",
+      "description": "Экспоненциальная задержка и идемпотентность."
+    }
+  ],
+  "pull_requests": [
+    {
+      "id": "PR-87",
+      "repository": "listings-api",
+      "author": "kirill.intern@buddy.test",
+      "issue": "LST-1405",
+      "title": "LST-1405: ограничить длину заголовка",
+      "branch": "LST-1405-title-length-limit",
+      "target": "develop",
+      "status": "open",
+      "checks": "passed",
+      "changed": [
+        "internal/moderation/rules.go",
+        "internal/moderation/rules_test.go"
+      ],
+      "review": {
+        "status": "approved",
+        "comment": "Аппрув получен. Замечание по кодстайлу: вынеси лимит 120 в именованную константу, как требует гайд команды."
+      }
+    },
+    {
+      "id": "PR-64",
+      "repository": "payments-core",
+      "author": "dana.intern@buddy.test",
+      "issue": "PAY-310",
+      "title": "PAY-310: ретраи вебхуков",
+      "branch": "feature/gateway-webhook-retries",
+      "target": "main",
+      "status": "open",
+      "checks": "failed",
+      "changed": [
+        "gateway/webhooks.go"
+      ],
+      "review": {
+        "status": "rejected",
+        "comment": "Сборка не прошла: упал линтер (errcheck в gateway/webhooks.go). Исправь и запроси ревью снова."
+      }
+    }
+  ],
+  "office": {
+    "address": "Демо-офис, 5–6 этаж",
+    "hours": [
+      "09:00",
+      "20:00"
+    ],
+    "max_room_minutes": 120,
+    "rooms": [
+      {
+        "id": "room-baikal",
+        "name": "Переговорка «Байкал»",
+        "floor": 5,
+        "capacity": 4,
+        "equipment": "экран, ВКС"
+      },
+      {
+        "id": "room-onega",
+        "name": "Переговорка «Онега»",
+        "floor": 5,
+        "capacity": 2,
+        "equipment": "тихая, для 1:1"
+      },
+      {
+        "id": "room-ladoga",
+        "name": "Переговорка «Ладога»",
+        "floor": 6,
+        "capacity": 10,
+        "equipment": "проектор, ВКС"
+      }
+    ],
+    "desks": [
+      {
+        "id": "desk-5-12",
+        "name": "Место 5.12",
+        "floor": 5,
+        "zone": "зона команды «Объявления»"
+      },
+      {
+        "id": "desk-5-14",
+        "name": "Место 5.14",
+        "floor": 5,
+        "zone": "зона команды «Объявления»"
+      },
+      {
+        "id": "desk-6-03",
+        "name": "Место 6.03",
+        "floor": 6,
+        "zone": "тихая зона"
+      }
+    ],
+    "busy": [
+      {
+        "resource": "room-onega",
+        "weekday": 4,
+        "time": "15:00",
+        "minutes": 30
+      },
+      {
+        "resource": "room-onega",
+        "weekday": "daily",
+        "time": "13:00",
+        "minutes": 60
+      },
+      {
+        "resource": "room-baikal",
+        "weekday": "daily",
+        "time": "11:00",
+        "minutes": 30
+      },
+      {
+        "resource": "desk-5-12",
+        "weekday": 0,
+        "time": "09:00",
+        "minutes": 660
+      }
+    ]
+  },
+  "courses": [
+    {
+      "id": "microservices",
+      "title": "Микросервисная архитектура",
+      "provider": "Учебная платформа",
+      "hours": 6,
+      "external": false,
+      "topics": [
+        "микросервис",
+        "архитектур",
+        "grpc",
+        "kafka"
+      ]
+    },
+    {
+      "id": "agile-tools",
+      "title": "Agile-инструменты: Jira и ритуалы",
+      "provider": "Учебная платформа",
+      "hours": 2,
+      "external": false,
+      "topics": [
+        "agile",
+        "jira",
+        "scrum",
+        "ритуал"
+      ]
+    },
+    {
+      "id": "go-basics",
+      "title": "Go для бэкендеров",
+      "provider": "Учебная платформа",
+      "hours": 12,
+      "external": false,
+      "topics": [
+        "go",
+        "golang"
+      ]
+    },
+    {
+      "id": "data-protection",
+      "title": "Защита персональных данных",
+      "provider": "Учебная платформа",
+      "hours": 1,
+      "external": false,
+      "topics": [
+        "персональн",
+        "данн",
+        "безопасн"
+      ]
+    },
+    {
+      "id": "k8s-practice",
+      "title": "Kubernetes на практике",
+      "provider": "Внешний провайдер (демо)",
+      "hours": 16,
+      "external": true,
+      "topics": [
+        "kubernetes",
+        "k8s",
+        "кубер",
+        "devops"
+      ]
+    },
+    {
+      "id": "system-design",
+      "title": "System Design для начинающих",
+      "provider": "Внешний провайдер (демо)",
+      "hours": 20,
+      "external": true,
+      "topics": [
+        "system design",
+        "проектирован",
+        "архитектур"
+      ]
+    }
+  ]
 }

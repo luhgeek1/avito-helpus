@@ -24,7 +24,7 @@ export const tokenSchema = z.object({ access_token: z.string(), expires_in: z.nu
 
 export const itemStatusSchema = z.enum(["todo", "in_progress", "waiting", "blocked", "done"]);
 export const planActionSchema = z.object({
-  kind: z.enum(["access_request", "absence_request", "equipment", "ask_mentor"]),
+  kind: z.enum(["access_request", "absence_request", "equipment", "ask_mentor", "learn", "code_review"]),
   resource: z.string().optional(),
 });
 

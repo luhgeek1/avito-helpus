@@ -4,6 +4,9 @@ from typing import Any, Protocol
 
 from app.domain.clickstream import AnalyticsEnvelope
 from app.domain.corp import AccessGrant, CorpEvent, CorpTicket, EquipmentItem
+from app.domain.devflow import Issue, IssueStatus, PullRequest, Repository
+from app.domain.learning import CatalogCourse, Course, DevelopmentGoal
+from app.domain.office import Desk, Room
 
 
 class AnalyticsPublisher(Protocol):
@@ -72,6 +75,63 @@ class CorpServices(Protocol):
     async def post_message(
         self, *, channel: str, text: str, author: str, idempotency_key: str
     ) -> str: ...
+
+    async def request_get(self, external_id: str) -> CorpTicket:
+        """Status of a review, booking or course enrollment request."""
+        ...
+
+    # ---- tracker and code hosting (Jira, Stash) ----
+
+    async def issues(self, *, employee: str) -> list[Issue]: ...
+
+    async def transition_issue(
+        self, *, employee: str, key: str, status: IssueStatus, idempotency_key: str
+    ) -> Issue: ...
+
+    async def repository(self, slug: str) -> Repository: ...
+
+    async def pull_requests(self, *, employee: str) -> list[PullRequest]: ...
+
+    async def review_create(
+        self,
+        *,
+        employee: str,
+        pull_request: str,
+        reviewers: Sequence[str],
+        message: str,
+        idempotency_key: str,
+    ) -> CorpTicket: ...
+
+    # ---- office booking ----
+
+    async def free_rooms(self, *, day: date, start: str, end: str, capacity: int) -> list[Room]: ...
+
+    async def free_desks(self, *, day: date) -> list[Desk]: ...
+
+    async def booking_create(
+        self,
+        *,
+        employee: str,
+        resource: str,
+        day: date,
+        start: str,
+        end: str,
+        title: str,
+        attendees: Sequence[str],
+        idempotency_key: str,
+    ) -> CorpTicket: ...
+
+    # ---- learning platform and IDP ----
+
+    async def courses(self, *, employee: str) -> list[Course]: ...
+
+    async def course_catalog(self, *, employee: str, query: str) -> list[CatalogCourse]: ...
+
+    async def course_enroll(
+        self, *, employee: str, course: str, idempotency_key: str
+    ) -> CorpTicket: ...
+
+    async def development_plan(self, *, employee: str) -> list[DevelopmentGoal]: ...
 
     async def reset_demo(self) -> None:
         """Demo control: return the services to their seed state (tickets, grants, balances)."""

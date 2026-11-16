@@ -59,6 +59,7 @@ def metric_job(job: str) -> str:
         "overdue",
         "sla",
         "equipment",
+        "learning",
         "digest",
         "sessions-cleanup",
         "embed-backfill",
