@@ -37,3 +37,13 @@ export function firstName(fullName: string): string {
 export function initialsOf(fullName: string): string {
   return fullName.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
+
+/** Plain text for the pixel speech bubble: models answer in Markdown, the bubble has no formatting. */
+export function plainText(markdown: string): string {
+  return markdown
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/(\*\*|__)(.+?)\1/g, "$2")
+    .replace(/(^|[^*\w])\*(?!\s)([^*\n]+?)\*(?!\w)/g, "$1$2")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "");
+}
