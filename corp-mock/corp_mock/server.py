@@ -96,6 +96,7 @@ def decide(ticket: Ticket, status: str, comment: str | None) -> None:
     if (
         status == "approved"
         and ticket.service == "absence"
+        and ticket.payload["type"] != "sick_leave"
         and ticket.payload["days"] > state.balances.get(ticket.employee, 0)
     ):
         status, comment = "rejected", "Недостаточно дней на момент согласования"
@@ -106,7 +107,7 @@ def decide(ticket: Ticket, status: str, comment: str | None) -> None:
             "level": ticket.payload["level"],
             "granted_at": datetime.now(LOCAL_TZ).date().isoformat(),
         }
-    if status == "approved" and ticket.service == "absence":
+    if status == "approved" and ticket.service == "absence" and ticket.payload["type"] != "sick_leave":
         state.balances[ticket.employee] -= ticket.payload["days"]
     state.save()
 

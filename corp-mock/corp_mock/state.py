@@ -261,7 +261,7 @@ class CorpState:
     def absence_create(
         self, *, employee: str, type_: str, start: date, end: date, comment: str, key: str
     ) -> Ticket:
-        if end < start or (end - start).days > 366 or type_ not in {"day_off", "vacation"}:
+        if end < start or (end - start).days > 366 or type_ not in {"day_off", "vacation", "sick_leave"}:
             raise Refused("invalid absence dates or type")
         if employee not in self.balances:
             raise Refused("unknown employee")
@@ -283,7 +283,10 @@ class CorpState:
                 "days": days,
             },
         )
-        ticket.approver = "Руководитель"
+        ticket.approver = "HR · сервис отсутствий" if type_ == "sick_leave" else "Руководитель"
+        if type_ == "sick_leave":
+            ticket.decision = ("approved", "Уведомление об отсутствии зарегистрировано")
+            return ticket
         if days > self.balances.get(employee, 0):
             ticket.decision = ("rejected", "Недостаточно дней")
         else:

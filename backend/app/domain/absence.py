@@ -10,11 +10,13 @@ from app.core.errors import ConflictError, DomainError, ErrorCode
 class AbsenceType(StrEnum):
     DAY_OFF = "day_off"
     VACATION = "vacation"
+    SICK_LEAVE = "sick_leave"
 
 
 ABSENCE_TITLES: Mapping[AbsenceType, str] = {
     AbsenceType.DAY_OFF: "Отгул",
     AbsenceType.VACATION: "Отпуск",
+    AbsenceType.SICK_LEAVE: "Больничный · уведомление",
 }
 
 # Synthetic "test instruction" rules (not Avito policy): notice period in working days,
@@ -82,6 +84,19 @@ def evaluate_absence(
     if start < today or end < start:
         raise AbsenceDatesError()
     days = working_days(start, end)
+    if type_ is AbsenceType.SICK_LEAVE:
+        return AbsenceCheck(
+            type=type_,
+            start=start,
+            end=end,
+            working_days=days,
+            balance=balance,
+            balance_after=balance,
+            warnings=[
+                "Это уведомление об отсутствии. Медицинский документ оформляется отдельно; "
+                "диагноз и медицинские файлы сюда отправлять не нужно."
+            ],
+        )
     if days == 0:
         raise AbsenceDatesError("Это выходные: заявка на отсутствие не нужна")
     if days > balance:

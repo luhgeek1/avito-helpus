@@ -279,8 +279,13 @@ class RequestService:
         if start < today() or end < start or (end - start).days > MAX_ABSENCE_SPAN_DAYS:
             raise AbsenceDatesError()
         user = await self._user(actor.id)
-        balance = await self._corp.absence_balance(employee=user.email)
-        events = await self._corp.calendar_events(employee=user.email, start=start, end=end)
+        sick = type_ is AbsenceType.SICK_LEAVE
+        balance = 0 if sick else await self._corp.absence_balance(employee=user.email)
+        events = (
+            []
+            if sick
+            else await self._corp.calendar_events(employee=user.email, start=start, end=end)
+        )
         return evaluate_absence(
             type_=type_,
             start=start,
@@ -304,9 +309,19 @@ class RequestService:
                 CardField("type", "Тип", ABSENCE_TITLES[check.type]),
                 CardField("dates", "Даты", _dates(check.start, check.end)),
                 CardField("days", "Рабочих дней", str(check.working_days)),
-                CardField("balance", "Останется дней", f"{check.balance_after} из {check.balance}"),
-                CardField("approver", "Согласует", lead.full_name if lead else "Руководитель"),
-                CardField("comment", "Комментарий", comment, editable=True),
+                CardField("balance", "Дни отпуска", "Не списываются")
+                if check.type is AbsenceType.SICK_LEAVE
+                else CardField(
+                    "balance", "Останется дней", f"{check.balance_after} из {check.balance}"
+                ),
+                CardField("approver", "Получатель", "HR · сервис отсутствий")
+                if check.type is AbsenceType.SICK_LEAVE
+                else CardField("approver", "Согласует", lead.full_name if lead else "Руководитель"),
+                *(
+                    []
+                    if check.type is AbsenceType.SICK_LEAVE
+                    else [CardField("comment", "Комментарий", comment, editable=True)]
+                ),
             ],
             warnings=list(check.warnings),
             note="После подтверждения заявка уйдёт в сервис отсутствий.",
@@ -340,11 +355,19 @@ class RequestService:
                 "start_date": start.isoformat(),
                 "end_date": end.isoformat(),
                 "working_days": check.working_days,
-                "comment": comment,
+                "comment": "Уведомление об отсутствии по болезни"
+                if type_ is AbsenceType.SICK_LEAVE
+                else comment,
                 "warnings": check.warnings,
             },
-            approver=lead.full_name if lead else "Руководитель",
-            plan_item_id=plan_item.id if plan_item else None,
+            approver="HR · сервис отсутствий"
+            if type_ is AbsenceType.SICK_LEAVE
+            else lead.full_name
+            if lead
+            else "Руководитель",
+            plan_item_id=plan_item.id
+            if plan_item and type_ is not AbsenceType.SICK_LEAVE
+            else None,
             idempotency_key=idempotency_key,
             source=source,
         )

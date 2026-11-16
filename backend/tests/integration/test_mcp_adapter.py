@@ -348,3 +348,21 @@ async def test_mock_reminders_dedupe_and_cancel_is_final(corp_mock: Any) -> None
     assert corp_mock.state.ticket(ticket.external_id).reminders == 1
     assert (await corp.cancel_request(ticket.external_id)).status is CorpTicketStatus.CANCELLED
     assert (await corp.cancel_request(ticket.external_id)).status is CorpTicketStatus.CANCELLED
+
+
+async def test_sick_leave_never_spends_vacation_balance(corp_mock: Any) -> None:
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+    corp_mock.state.balances[ANYA] = 0
+    ticket = await corp.absence_create(
+        employee=ANYA,
+        type_="sick_leave",
+        start=date(2026, 11, 16),
+        end=date(2026, 11, 22),
+        comment="Уведомление",
+        idempotency_key="sick-mcp-1",
+    )
+    corp_mock.decide(corp_mock.state.ticket(ticket.external_id), "approved", "Зарегистрировано")
+    result = await corp.absence_get(ticket.external_id)
+    assert result.status is CorpTicketStatus.APPROVED
+    assert result.approver == "HR · сервис отсутствий"
+    assert await corp.absence_balance(employee=ANYA) == 0

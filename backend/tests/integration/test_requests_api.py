@@ -365,3 +365,29 @@ async def test_requests_are_private(client: AsyncClient, anya: Account, kirill: 
     assert response.status_code == 404
     assert cancel.status_code == 404
     assert json.loads(response.text)["error_code"] == "REQUEST_NOT_FOUND"
+
+
+async def test_sick_notice_skips_balance_and_drops_medical_comment(
+    client: AsyncClient,
+    anya: Account,
+    corp: FakeCorpServices,
+) -> None:
+    day = today().isoformat()
+    corp.balances[ANYA] = 0
+    response = await client.post(
+        "/api/v1/requests/absence",
+        json={
+            "type": "sick_leave",
+            "start_date": day,
+            "end_date": day,
+            "comment": "Private medical details",
+            "idempotency_key": "sick-notice-1",
+        },
+        headers=anya.headers,
+    )
+    assert response.status_code == 201, response.text
+    assert response.json()["payload"]["comment"] == "Уведомление об отсутствии по болезни"
+    assert response.json()["approver"] == "HR · сервис отсутствий"
+    assert response.json()["plan_item_id"] is None
+    assert "absence_balance" not in corp.calls
+    assert "calendar_events" not in corp.calls
