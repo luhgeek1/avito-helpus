@@ -26,7 +26,7 @@ export function WorkplaceActionForm({ id, busy, onBack, onPrepare }: {
         <ArrowLeft size={14} aria-hidden /> Все действия
       </button>
       <div><h3 className="text-18 font-semibold text-dark">{action.title}</h3><p className="mt-1 text-12 leading-relaxed text-secondary">{action.hint}</p></div>
-      <div className={id === "vacation" || id === "day-off" || id === "sick" ? "grid grid-cols-2 gap-3" : "space-y-3"}>
+      <div className={id === "vacation" || id === "day-off" || id === "sick" ? "grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3" : "space-y-3"}>
         {action.fields.map((field) => (
           <label key={field.key} className="block min-w-0 text-12 font-semibold text-ink">
             {field.label}

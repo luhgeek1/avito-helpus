@@ -98,6 +98,20 @@ describe("chat store", () => {
 });
 
 describe("companion chat window", () => {
+  it("opens actions during a conversation and preserves the message draft", async () => {
+    signIn();
+    const { user } = renderChat();
+    await user.type(screen.getByRole("textbox", { name: "Сообщение спутнику" }), "Черновик");
+    await user.click(screen.getByRole("button", { name: /Действия ·/ }));
+    expect(screen.getByRole("region", { name: "Действия Орби" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Мои заявки" }));
+    await waitFor(() => expect(useOrbiChat.getState().busy).toBe(false));
+    expect(screen.getByRole("textbox", { name: "Сообщение спутнику" })).toHaveValue("Черновик");
+    await user.click(screen.getByRole("button", { name: /Действия ·/ }));
+    await user.click(screen.getByRole("button", { name: /Вернуться в чат/ }));
+    expect(screen.getByRole("log")).toBeInTheDocument();
+  });
+
   it("asks an anonymous visitor to sign in", async () => {
     useSession.setState({ status: "anonymous" });
     renderChat();

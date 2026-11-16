@@ -6,6 +6,8 @@ import { cx } from "@/shared/lib/cx";
 import { formatDay, formatMoment } from "@/shared/lib/orbi-format";
 import type { ActionData, ConflictRef, EquipmentData, EscalationData, PlanData, RequestData, SourcesData } from "../model/message";
 
+import { useOrbiChat } from "../model/store";
+
 const card = "rounded-xl border border-[#cbd3df] bg-white p-3 text-12 leading-[1.5] text-ink";
 const smallButton = "inline-flex h-9 items-center justify-center gap-1.5 rounded-lg px-3 text-12 font-semibold transition-colors duration-150 disabled:cursor-default disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-dark";
 
@@ -169,6 +171,8 @@ export function StatusPill({ status, children }: { status: string; children: str
 }
 
 export function RequestCardView({ data }: { data: RequestData }) {
+  const { ask, busy } = useOrbiChat();
+  const reference = data.external_id ?? data.id;
   return (
     <section className={card} aria-label={`Заявка ${data.external_id ?? data.title}`}>
       <div className="mb-1 flex flex-wrap items-center gap-2">
@@ -179,6 +183,14 @@ export function RequestCardView({ data }: { data: RequestData }) {
       {data.approver && <p className="text-[#687181]">Согласует: {data.approver}</p>}
       {data.sla_due_at && data.status === "submitted" && <p className="text-[#687181]">Ответ ожидается до {formatMoment(data.sla_due_at)}</p>}
       {data.decision_comment && <p className="mt-1 rounded-lg bg-control px-2 py-1">{data.decision_comment}</p>}
+      {(data.status === "submitting" || data.status === "submitted") && <div className="mt-2 flex flex-wrap gap-1.5">
+        <button type="button" disabled={busy} onClick={() => ask(`Отмени заявку ${reference}`)} className={cx(smallButton, "bg-control hover:bg-control-hover")}>
+          Отменить заявку
+        </button>
+        {data.kind === "access" && data.status === "submitted" && <button type="button" disabled={busy} onClick={() => ask(`Напомни о заявке ${reference}`)} className={cx(smallButton, "bg-control hover:bg-control-hover")}>
+          Напомнить
+        </button>}
+      </div>}
       <Link to="/requests" className="mt-1.5 inline-block font-semibold text-blue-text hover:underline">Мои заявки →</Link>
     </section>
   );

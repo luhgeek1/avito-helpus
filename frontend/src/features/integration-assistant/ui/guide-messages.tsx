@@ -13,6 +13,9 @@ export function GuideMessages({ name }: { name: string }) {
       <p className="text-14 font-semibold">Помогу установить себя</p>
       <p className="mt-2 text-13 leading-5 text-[#687181]">Спроси про запуск, код встраивания или ошибку. Отвечаю по этому руководству, без входа и внешней LLM.</p>
     </div>
+    <Link to="/demo" className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-lilac-soft px-3 text-12 font-semibold text-dark">
+      Попробовать рабочие действия в демо <ArrowUpRight size={14} aria-hidden />
+    </Link>
     {["С чего начать установку?", "Как встроить в Next.js?", "API возвращает 502 — что проверить?"].map((question) => <button key={question} onClick={() => ask(question)}
       className="flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border border-line px-3 py-2 text-left text-12 hover:bg-canvas">
       {question}<ArrowUpRight size={15} aria-hidden />
