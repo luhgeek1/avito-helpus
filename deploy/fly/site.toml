@@ -1,0 +1,15 @@
+# Next.js portal, private only (avito-orbi-site.internal:3000).
+app = "avito-orbi-site"
+primary_region = "fra"
+
+[build]
+  image = "ghcr.io/luhgeek1/avito-web:latest"
+
+[env]
+  # Next.js standalone binds HOSTNAME; "::" accepts the private IPv6 network.
+  HOSTNAME = "::"
+  PORT = "3000"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

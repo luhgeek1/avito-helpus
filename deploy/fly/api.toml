@@ -1,0 +1,35 @@
+# Orbi API and worker, private only (the edge reaches avito-orbi-api.internal:8080).
+# Secrets: DATABASE_URL, CSRF_HMAC_KEY, CORP_WEBHOOK_SECRET, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, LLM_API_KEY.
+app = "avito-orbi-api"
+primary_region = "fra"
+
+[build]
+  image = "ghcr.io/luhgeek1/avito-api:latest"
+
+[deploy]
+  # Schema, then the demo company (idempotent). JWT keys come from secrets, not files.
+  release_command = "sh -c 'alembic upgrade head && python -m app.cli seed'"
+
+[env]
+  APP_STAGE = "prod"
+  LOG_LEVEL = "INFO"
+  REDIS_URL = "redis://avito-orbi-redis.internal:6379/0"
+  COOKIE_SECURE = "true"
+  CORP_MCP_URL = "http://avito-orbi-corp.internal:8090/mcp"
+  LLM_MODE = "auto"
+  LLM_MODEL = "gpt-5.4-mini"
+  LLM_HEAVY_MODEL = "gpt-5.4"
+  LLM_REASONING_EFFORT = "none"
+  EMBEDDINGS_MODEL = "text-embedding-3-large"
+  ACCESS_SLA_HOURS = "24"
+  ESCALATION_SLA_HOURS = "24"
+  SCHEDULER_INTERVAL_SEC = "15"
+  DEMO_PUBLIC_RESET = "true"
+
+[processes]
+  app = "uvicorn app.main:create_app --factory --host :: --port 8080 --proxy-headers --forwarded-allow-ips * --no-access-log"
+  worker = "python -m app.worker"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

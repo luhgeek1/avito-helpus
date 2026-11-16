@@ -9,6 +9,7 @@ import { PortalShell } from "@/widgets/portal-shell";
 import { PortalProvider } from "./model/portal-provider";
 import { OrbiCompanion } from "./companion";
 import { ExperienceBar } from "@/shared/ui/experience-switcher";
+import { DemoResetButton } from "@/features/demo-reset";
 
 function AppContent({ children }: { children: ReactNode }) {
   const { page, navigate } = useRoute();
@@ -17,7 +18,7 @@ function AppContent({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="border-b border-line bg-canvas">
-        <ExperienceBar demo>
+        <ExperienceBar demo actions={<DemoResetButton />}>
           <span className="text-12 font-medium text-[#646777]">Орби <span className="hidden font-normal sm:inline">/ демо на портале «Хаб»</span></span>
         </ExperienceBar>
       </div>
