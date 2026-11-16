@@ -128,6 +128,16 @@ def _intent_bypass(text: str) -> Intent | None:
     return None
 
 
+def _intent_calendar(text: str, tools: set[str], today: date) -> Intent | None:
+    if "my_calendar" not in tools or not _has(
+        text, r"мои встречи", r"мой календар", r"какие.{0,20}встреч", r"встречи на"
+    ):
+        return None
+    dates = parse_dates_ru(text, today)
+    args = {"start_date": dates[0].isoformat(), "end_date": dates[1].isoformat()} if dates else {}
+    return Intent("my_calendar", args)
+
+
 def _intent_request_control(text: str, tools: set[str]) -> Intent | None:
     if "control_request" not in tools or not _has(text, r"отмен", r"напомни"):
         return None
@@ -286,6 +296,7 @@ def route(prompt: str, tools: set[str], today: date) -> Intent:
     detected = (
         _intent_sensitive(text, prompt, tools)
         or _intent_bypass(text)
+        or _intent_calendar(text, tools, today)
         or _intent_request_control(text, tools)
         or _intent_mentor(text, tools)
         or _intent_actions(text, prompt, tools, today)

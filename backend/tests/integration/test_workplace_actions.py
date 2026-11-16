@@ -3,7 +3,7 @@ from datetime import timedelta
 from httpx import AsyncClient
 
 from app.core.clock import today
-from tests.fakes import FakeCorpServices
+from tests.fakes import FakeCorpServices, meeting
 from tests.integration.conftest import ANYA, Account
 from tests.integration.test_chat_api import Chat, parse, parts, text_of
 
@@ -60,3 +60,23 @@ async def test_reminder_and_cancel_are_confirmed_and_scoped_to_owner(
         assert "error" not in [chunk["type"] for chunk in parse(answer.text)]
     result = (await client.get(f"/api/v1/requests/{request['id']}", headers=anya.headers)).json()
     assert result["payload"]["cancel_requested"] is True
+
+
+async def test_calendar_reads_only_the_requested_period_and_handles_outages(
+    client: AsyncClient,
+    anya: Account,
+    corp: FakeCorpServices,
+) -> None:
+    chat = await Chat(client, anya).start()
+    assert "встреч нет" in text_of(await chat.say("Покажи мои встречи"))
+    corp.events = [
+        meeting("Встреча с наставником", today()),
+        meeting("Позже", today() + timedelta(days=10)),
+    ]
+    answer = text_of(await chat.say("Какие встречи на неделе?"))
+    assert "Встреча с наставником" in answer
+    assert "15:00" in answer
+    assert "МСК" in answer
+    assert "Позже" not in answer
+    corp.unavailable = True
+    assert "недоступен" in text_of(await chat.say("Мой календарь"))

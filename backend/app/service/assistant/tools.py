@@ -32,7 +32,7 @@ from app.domain.requests import (
 )
 from app.service.assistant.deps import TOOL_PERMISSIONS, AgentDeps
 from app.service.assistant.offline import PRIVATE_REFUSAL
-from app.service.assistant.workplace import control_request
+from app.service.assistant.workplace import control_request, my_calendar
 from app.service.escalations import KIND_TITLES, EscalationService
 from app.service.knowledge import CANDIDATES, KnowledgeService, viewer_of
 from app.service.mappers import to_request
@@ -913,6 +913,7 @@ TOOL_FUNCTIONS = (
     request_access,
     my_requests,
     control_request,
+    my_calendar,
     absence_balance,
     check_absence,
     request_absence,

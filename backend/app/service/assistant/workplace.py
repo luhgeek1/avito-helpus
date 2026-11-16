@@ -1,12 +1,16 @@
+from datetime import date, timedelta
 from typing import Any, Literal
 
 from pydantic_ai import ApprovalRequired, RunContext
 
+from app.core.clock import LOCAL_TZ
 from app.core.errors import DomainError
 from app.domain.assistant import ActionCard, CardField
 from app.domain.requests import OPEN_STATUSES, RequestKind, RequestStatus
 from app.service.assistant.deps import AgentDeps
 from app.service.requests import RequestService
+
+MAX_CALENDAR_DAYS = 31
 
 
 async def control_request(
@@ -70,3 +74,47 @@ async def control_request(
             else "Отмена запрошена. Ждём ответ сервиса — он может успеть принять решение раньше."
         )
     return {"message": message, "status": result.status.value}
+
+
+async def my_calendar(
+    ctx: RunContext[AgentDeps],
+    start_date: date | None = None,
+    end_date: date | None = None,
+) -> dict[str, Any]:
+    """Read the user's meetings, defaulting to the next seven days. Does not create meetings."""
+    start = start_date or ctx.deps.today
+    end = end_date or start + timedelta(days=6)
+    if end < start or (end - start).days >= MAX_CALENDAR_DAYS:
+        return {"message": "Выбери период до 31 дня, конец не раньше начала."}
+    try:
+        events = await ctx.deps.corp.calendar_events(
+            employee=ctx.deps.person.email, start=start, end=end
+        )
+    except DomainError as exc:
+        return {
+            "message": "Календарь сейчас недоступен. Попробуй позже.",
+            "error": exc.error_code.value,
+        }
+    local = [
+        (
+            e,
+            e.starts_at.replace(tzinfo=LOCAL_TZ)
+            if e.starts_at.tzinfo is None
+            else e.starts_at.astimezone(LOCAL_TZ),
+        )
+        for e in events
+    ]
+    local = sorted(
+        ((e, at) for e, at in local if start <= at.date() <= end), key=lambda pair: pair[1]
+    )
+    lines = [
+        f"• {at:%d.%m %H:%M} — {e.title}" + (" · важная" if e.important else "")
+        for e, at in local[:20]
+    ]
+    heading = f"Твои встречи {start:%d.%m}–{end:%d.%m} (МСК):"
+    return {
+        "message": heading + "\n" + "\n".join(lines)
+        if lines
+        else "В выбранном периоде встреч нет.",
+        "count": len(local),
+    }
