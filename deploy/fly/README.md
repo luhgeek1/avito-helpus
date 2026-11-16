@@ -8,7 +8,7 @@
 | `avito-orbi` | nginx: `/` → портал, `/api` → Орби ([nginx.conf](nginx.conf)) | публичный, TLS у Fly |
 | `avito-orbi-api` | API (`app`) и воркер (`worker`); миграции и сид в `release_command` | `avito-orbi-api.internal:8080` |
 | `avito-orbi-site` | портал Next.js | `avito-orbi-site.internal:3000` |
-| `avito-orbi-corp` | corp-mock (MCP), состояние в памяти | `avito-orbi-corp.internal:8090` |
+| `avito-orbi-corp` | corp-mock (MCP), заявки на томе `corp_state` | `avito-orbi-corp.internal:8090` |
 | `avito-orbi-db` | Postgres 17 + pgvector, том `pgdata` 3 ГБ | `avito-orbi-db.internal:5432` |
 | `avito-orbi-redis` | Redis без сохранения на диск | `avito-orbi-redis.internal:6379` |
 
