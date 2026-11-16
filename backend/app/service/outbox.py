@@ -10,9 +10,10 @@ from app.db.database import Database
 from app.db.models import OutboxEvent
 from app.domain.clickstream import AnalyticsEnvelope
 from app.domain.corp import CorpRequestError
-from app.domain.events import OutboxStatus, Topic
+from app.domain.events import NotificationKind, OutboxStatus, Topic
 from app.infra.metrics import OUTBOX_DURATION, OUTBOX_EVENTS, metric_topic
 from app.service.knowledge import KnowledgeService
+from app.service.notify import notify
 from app.service.ports import AnalyticsPublisher, CorpServices, Embeddings, Publisher
 from app.service.requests import deliver_control, fail_control, fail_request, submit_request
 
@@ -70,12 +71,36 @@ def build_handlers(
             await KnowledgeService(uow, embeddings).embed_pending()
 
     async def messenger_post(payload: dict[str, Any]) -> None:
-        await corp.post_message(
+        receipt = await corp.post_message(
             channel=payload["channel"],
             text=payload["text"],
             author=payload["author"],
             idempotency_key=payload["idempotency_key"],
         )
+
+        if payload.get("user_id"):
+            async with db.unit_of_work() as uow:
+                await notify(
+                    uow,
+                    user_id=UUID(payload["user_id"]),
+                    kind=NotificationKind.REQUEST_UPDATED,
+                    title=f"Сообщение доставлено в {payload['channel']}",
+                    body=f"Сервис подтвердил доставку. Номер сообщения: {receipt}.",
+                    payload={"message_id": receipt},
+                    dedupe_key=f"message:{payload['idempotency_key']}",
+                )
+
+    async def messenger_dead(payload: dict[str, Any]) -> None:
+        if payload.get("user_id"):
+            async with db.unit_of_work() as uow:
+                await notify(
+                    uow,
+                    user_id=UUID(payload["user_id"]),
+                    kind=NotificationKind.REQUEST_UPDATED,
+                    title="Сообщение команде не доставлено",
+                    body="Сервис недоступен. Попробуй отправить снова из чата.",
+                    dedupe_key=f"message-failed:{payload['idempotency_key']}",
+                )
 
     handlers: dict[str, Handler] = {
         Topic.REQUEST_SUBMIT: request_submit,
@@ -96,6 +121,7 @@ def build_handlers(
         Topic.REQUEST_SUBMIT: request_dead,
         Topic.REQUEST_CANCEL: control_dead,
         Topic.REQUEST_REMIND: control_dead,
+        Topic.MESSENGER_POST: messenger_dead,
     }
 
 

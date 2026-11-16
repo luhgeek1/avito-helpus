@@ -248,7 +248,7 @@ async def test_team_message_and_it_ticket(
     await chat.decide(ticket_card["id"])
 
     assert message_card["card"]["fields"][0]["value"] == "#listings-backend"
-    assert "Отправил сообщение" in text_of(sent)
+    assert "поставлено в очередь" in text_of(sent)
     assert corp.messages == [
         {"channel": "#listings-backend", "text": "завтра работаю из офиса", "author": ANYA}
     ]

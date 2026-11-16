@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import Any
 
 from httpx import AsyncClient
 
@@ -80,3 +81,23 @@ async def test_calendar_reads_only_the_requested_period_and_handles_outages(
     assert "Позже" not in answer
     corp.unavailable = True
     assert "недоступен" in text_of(await chat.say("Мой календарь"))
+
+
+async def test_explicit_forms_preserve_intent_and_report_delivered_message(
+    client: AsyncClient,
+    anya: Account,
+    corp: FakeCorpServices,
+    run_outbox: Any,
+) -> None:
+    chat = await Chat(client, anya).start()
+    [it] = parts(await chat.say("Создай обращение в IT: нет доступа к VPN"), "action")
+    assert it["card"]["kind"] == "it_ticket"
+    [message] = parts(await chat.say("Напиши команде: завтра у меня отпуск"), "action")
+    assert message["card"]["kind"] == "team_message"
+    assert corp.messages == []
+    await chat.decide(message["id"])
+    await run_outbox()
+    notes = (await client.get("/api/v1/notifications", headers=anya.headers)).json()["items"]
+    assert any(
+        "Сообщение доставлено" in note["title"] and note["payload"]["message_id"] for note in notes
+    )

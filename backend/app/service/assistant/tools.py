@@ -707,10 +707,14 @@ async def post_team_message(ctx: Ctx, text: str) -> dict[str, Any]:
                 "channel": team.channel,
                 "text": text,
                 "author": deps.person.email,
+                "user_id": str(deps.actor.id),
                 "idempotency_key": ctx.tool_call_id or "",
             },
         )
-    return {"message": f"Отправил сообщение в {team.channel}."}
+    return {
+        "message": f"Сообщение в {team.channel} поставлено в очередь. "
+        "Подтверждение доставки придёт уведомлением."
+    }
 
 
 async def ask_mentor(

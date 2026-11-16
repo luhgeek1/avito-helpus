@@ -154,6 +154,20 @@ def _intent_request_control(text: str, tools: set[str]) -> Intent | None:
     )
 
 
+def _intent_explicit(text: str, prompt: str, tools: set[str]) -> Intent | None:
+    if "post_team_message" in tools and _has(
+        text, r"напиши в канал", r"сообщи команде", r"напиши команде"
+    ):
+        return Intent(
+            "post_team_message", {"text": _after(prompt, r":", r"(?i)команде", r"(?i)канал")}
+        )
+    if "create_it_ticket" in tools and re.match(r"^(создай|оформи) обращение в it:", text):
+        return Intent(
+            "create_it_ticket", {"category": "IT-поддержка", "description": _after(prompt, r":")}
+        )
+    return None
+
+
 def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads best
     text: str, prompt: str, tools: set[str], today: date
 ) -> Intent | None:
@@ -225,12 +239,6 @@ def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads b
         text, r"ноут", r"макбук", r"техник", r"laptop", r"монитор"
     ):
         return Intent("equipment_status")
-    if "post_team_message" in tools and _has(
-        text, r"напиши в канал", r"сообщи команде", r"напиши команде"
-    ):
-        return Intent(
-            "post_team_message", {"text": _after(prompt, r":", r"(?i)команде", r"(?i)канал")}
-        )
     return None
 
 
@@ -299,6 +307,7 @@ def route(prompt: str, tools: set[str], today: date) -> Intent:
         or _intent_calendar(text, tools, today)
         or _intent_request_control(text, tools)
         or _intent_mentor(text, tools)
+        or _intent_explicit(text, prompt, tools)
         or _intent_actions(text, prompt, tools, today)
         or _intent_plan(text, prompt, tools)
     )
