@@ -115,6 +115,8 @@ EDITABLE_ARGS: Mapping[str, frozenset[str]] = {
     "ask_mentor": frozenset({"question"}),
     "post_team_message": frozenset({"text"}),
     "answer_question": frozenset({"answer", "publish_to_faq"}),
+    "request_review": frozenset({"message"}),
+    "book_workspace": frozenset({"title"}),
 }
 
 

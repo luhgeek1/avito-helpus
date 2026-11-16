@@ -41,7 +41,7 @@ def test_pure_boundary_contracts() -> None:
     now = datetime.now(UTC)
     view = SimpleNamespace(status=EscalationStatus.OPEN, due_at=now - timedelta(seconds=1))
     assert EscalationView.is_overdue(view, now)
-    assert len(Nudges(Mock(), Mock(), build_settings()).jobs()) == 6
+    assert len(Nudges(Mock(), Mock(), build_settings()).jobs()) == 7
 
 
 def test_offline_retry_mentor_greeting_and_sensitive_handoff() -> None:

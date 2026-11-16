@@ -16,11 +16,25 @@ from app.core.config import Settings
 from app.db.base import Base
 from app.db.database import Database
 from app.domain.corp import AccessGrant, EquipmentStatus
+from app.domain.devflow import IssueStatus
 from app.main import create_app
 from app.seed.loader import seed
 from app.service.outbox import OutboxDispatcher, build_handlers
 from tests.conftest import TEST_DATABASE_URL, build_settings
-from tests.fakes import FakeCorpServices, FakeEmbeddings, RecordingPublisher, laptop
+from tests.fakes import (
+    CATALOG,
+    DESKS,
+    GOAL,
+    ROOMS,
+    FakeCorpServices,
+    FakeEmbeddings,
+    RecordingPublisher,
+    course,
+    issue,
+    laptop,
+    listings_repository,
+    pull,
+)
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 PASSWORD = "orbi-demo-2026"
@@ -69,6 +83,17 @@ def demo_corp() -> FakeCorpServices:
         grants={(ANYA, "jira-listings"): AccessGrant(has_access=True, level="write")},
         balances={ANYA: 5, KIRILL: 4, DANA: 3},
         equipment_items={ANYA: [laptop(EquipmentStatus.IN_TRANSIT)]},
+        issues_by={
+            ANYA: [issue("LST-1432", first=True), issue("LST-1440")],
+            KIRILL: [issue("LST-1405", status=IssueStatus.IN_PROGRESS)],
+        },
+        repositories={"listings-api": listings_repository()},
+        pulls_by={KIRILL: [pull()]},
+        rooms=list(ROOMS),
+        desks=list(DESKS),
+        courses_by={ANYA: [course("data-protection")], KIRILL: [course("microservices")]},
+        catalog=list(CATALOG),
+        goals_by={ANYA: [GOAL]},
     )
 
 

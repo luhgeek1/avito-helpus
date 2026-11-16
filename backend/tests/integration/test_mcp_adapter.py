@@ -18,6 +18,8 @@ from app.domain.corp import (
     CorpUnavailableError,
     EquipmentStatus,
 )
+from app.domain.devflow import IssueStatus, PullStatus
+from app.domain.learning import CourseStatus
 from app.infra.corp_mcp import McpCorpServices
 from app.seed.loader import seed
 from app.service.requests import submit_request
@@ -366,3 +368,88 @@ async def test_sick_leave_never_spends_vacation_balance(corp_mock: Any) -> None:
     assert result.status is CorpTicketStatus.APPROVED
     assert result.approver == "HR · сервис отсутствий"
     assert await corp.absence_balance(employee=ANYA) == 0
+
+
+def _workday(days_ahead: int = 1) -> date:
+    day = date.today() + timedelta(days=days_ahead)
+    while day.weekday() >= 5:
+        day += timedelta(days=1)
+    return day
+
+
+async def test_tracker_and_code_hosting_through_mcp(corp_mock: Any) -> None:
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+
+    issues = await corp.issues(employee=ANYA)
+    started = await corp.transition_issue(
+        employee=ANYA, key="LST-1432", status=IssueStatus.IN_PROGRESS, idempotency_key="t-1"
+    )
+    repo = await corp.repository("listings-api")
+    [pr] = await corp.pull_requests(employee="kirill.intern@buddy.test")
+    ticket = await corp.review_create(
+        employee="kirill.intern@buddy.test",
+        pull_request=pr.id,
+        reviewers=["ivan.mentor@buddy.test", "dmitry.backend@buddy.test"],
+        message="Посмотрите, пожалуйста",
+        idempotency_key="r-1",
+    )
+    current = await corp.request_get(ticket.external_id)
+
+    assert [i.key for i in issues] == ["LST-1432", "LST-1440"]
+    assert issues[0].first_task is True
+    assert started.status is IssueStatus.IN_PROGRESS
+    assert repo.default_branch == "develop"
+    assert repo.required_approvers[0].name == "Иван Петров"
+    assert [rule.path for rule in repo.codeowners][-1] == "*"
+    assert pr.id == "PR-87"
+    assert pr.status is PullStatus.OPEN
+    assert ticket.external_id == "REV-4101"
+    assert current.status is CorpTicketStatus.PENDING_APPROVAL
+    assert {m["channel"] for m in corp_mock.state.messages} == {"@ivan.mentor", "@dmitry.backend"}
+    with pytest.raises(CorpRequestError):
+        await corp.repository("unknown-repo")
+
+
+async def test_booking_and_learning_through_mcp(corp_mock: Any) -> None:
+    corp = McpCorpServices(corp_mock.mcp, timeout_sec=5)
+    day = _workday()
+
+    rooms = await corp.free_rooms(day=day, start="16:00", end="16:30", capacity=2)
+    desks = await corp.free_desks(day=day)
+    meeting = await corp.booking_create(
+        employee=ANYA,
+        resource="room-onega",
+        day=day,
+        start="16:00",
+        end="16:30",
+        title="1:1 с наставником",
+        attendees=["ivan.mentor@buddy.test"],
+        idempotency_key="b-1",
+    )
+    desk = await corp.booking_create(
+        employee=ANYA,
+        resource="desk-5-14",
+        day=day,
+        start="09:00",
+        end="20:00",
+        title="Место",
+        attendees=[],
+        idempotency_key="b-2",
+    )
+    events = await corp.calendar_events(employee="ivan.mentor@buddy.test", start=day, end=day)
+    courses = await corp.courses(employee=ANYA)
+    catalog = await corp.course_catalog(employee=ANYA, query="курс по Go")
+    enrolled = await corp.course_enroll(employee=ANYA, course="go-basics", idempotency_key="e-1")
+    goals = await corp.development_plan(employee=ANYA)
+
+    assert {r.id for r in rooms} >= {"room-onega", "room-baikal"}
+    assert desks
+    assert meeting.status is CorpTicketStatus.PENDING_APPROVAL
+    assert meeting.approver == "Иван Петров"
+    assert desk.status is CorpTicketStatus.APPROVED
+    assert any("1:1 с наставником" in e.title and e.minutes == 30 for e in events)
+    assert courses[0].status is CourseStatus.IN_PROGRESS
+    assert [c.id for c in catalog] == ["go-basics"]
+    assert enrolled.status is CorpTicketStatus.APPROVED
+    assert goals[0].competency == "Инженерные практики"
+    assert goals[0].due is not None

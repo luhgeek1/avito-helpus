@@ -29,7 +29,18 @@ _ENUMS: dict[str, frozenset[str]] = {
     "rating": frozenset({"up", "down"}),
     "decision": frozenset({"approve", "reject"}),
     "kind": frozenset(
-        {"access", "absence", "equipment", "question", "conflict", "blocker", "sensitive"}
+        {
+            "access",
+            "absence",
+            "equipment",
+            "review",
+            "booking",
+            "learning",
+            "question",
+            "conflict",
+            "blocker",
+            "sensitive",
+        }
     ),
     "source": frozenset({"user", "agent", "worker", "webhook"}),
     "status": frozenset({"approved", "rejected", "failed", "cancelled"}),
@@ -55,6 +66,16 @@ _ENUMS: dict[str, frozenset[str]] = {
             "list_mentees",
             "open_questions",
             "answer_question",
+            "my_tasks",
+            "repository_guide",
+            "start_task",
+            "request_review",
+            "find_workspace",
+            "book_workspace",
+            "my_learning",
+            "find_courses",
+            "enroll_course",
+            "my_development_plan",
         }
     ),
     "name": frozenset(
