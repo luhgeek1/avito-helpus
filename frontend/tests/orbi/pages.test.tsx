@@ -103,10 +103,41 @@ describe("my path", () => {
     await user.click(within(jira).getByRole("button", { name: "Готово" }));
     expect(await within(jira).findByRole("alert")).toHaveTextContent("Статус шага уже изменился");
     await user.click(within(jira).getByRole("button", { name: "Есть блокер" }));
-    await user.type(within(jira).getByRole("textbox", { name: "Что мешает" }), "Нет ответа от Jira");
+    const report = within(jira).getByRole("button", { name: "Сообщить" });
+    const reason = within(jira).getByRole("textbox", { name: "Что мешает" });
+    expect(report).toBeDisabled();
+    await user.type(reason, "   ");
+    expect(report).toBeDisabled();
+    fireEvent.submit(reason.closest("form")!);
+    expect(calls).toHaveLength(2);
+    await user.type(reason, "Нет ответа от Jira");
+    expect(report).toBeEnabled();
     await user.click(within(jira).getByRole("button", { name: "Сообщить" }));
     await waitFor(() => expect(calls.at(-1)).toMatchObject({ transition: "block", comment: "Нет ответа от Jira" }));
     expect(calls.map((call) => (call as { transition: string }).transition)).toEqual(["start", "complete", "block"]);
+  });
+
+  it("reopens a completed step and refreshes progress", async () => {
+    signIn();
+    const data = fixture<import("@/shared/api").Plan>("plan.json");
+    const done = { ...data.next_steps[0], status: "done" as const, confirmation: "self" as const, request_id: null };
+    let reopened = false;
+    server.use(
+      http.get(url("/plan"), () => HttpResponse.json({ ...data, done: reopened ? 0 : 1, total: 1, percent: reopened ? 0 : 100,
+        next_steps: [], stages: [{ ...data.stages[0], items: [{ ...done, status: reopened ? "in_progress" : "done" },
+          { ...done, id: "reviewed", confirmation: "mentor" }, { ...done, id: "requested", request_id: "request" }] }] })),
+      http.post(url("/plan/items/:id/transitions"), async ({ request }) => {
+        expect(await request.json()).toMatchObject({ transition: "reopen" });
+        reopened = true;
+        return HttpResponse.json({ ...done, status: "in_progress" });
+      }),
+    );
+    const { user } = renderAt("/plan");
+    const button = await screen.findByRole("button", { name: "Вернуть в работу" });
+    expect(screen.getByRole("progressbar", { name: "Прогресс плана адаптации" })).toHaveAttribute("aria-valuenow", "100");
+    await user.click(button);
+    await waitFor(() => expect(screen.getByRole("progressbar", { name: "Прогресс плана адаптации" })).toHaveAttribute("aria-valuenow", "0"));
+    expect(screen.queryByRole("button", { name: "Вернуть в работу" })).not.toBeInTheDocument();
   });
 
   it("does a step with Orbi and opens an instruction", async () => {

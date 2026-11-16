@@ -86,6 +86,11 @@ function StepCard({ item, highlight, onDoc, anchor = false }: { item: PlanItem; 
       {item.status === "waiting" && item.waiting_reason === "mentor_review" && <p className={cx(muted, "mt-2")}>Отправлено наставнику. Он подтвердит шаг или вернёт с комментарием.</p>}
       {item.status === "waiting" && item.waiting_reason === "request" && <p className={cx(muted, "mt-2")}>Ждём решения по заявке — шаг закроется сам, когда её одобрят.</p>}
       {!mine && <p className={cx(muted, "mt-2")}>Этот шаг выполняет наставник.</p>}
+      {mine && item.status === "done" && item.confirmation !== "mentor" && !item.request_id && (
+        <button type="button" className={cx(action, actionTone.secondary, "mt-3")} disabled={transition.isPending} onClick={() => move("reopen")}>
+          Вернуть в работу
+        </button>
+      )}
       {mine && item.status !== "done" && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {phrase && open && (
@@ -123,10 +128,10 @@ function StepCard({ item, highlight, onDoc, anchor = false }: { item: PlanItem; 
         </div>
       )}
       {blocking && (
-        <form className="mt-3 flex flex-wrap gap-2" onSubmit={(event) => { event.preventDefault(); move("block", reason.trim() || undefined); }}>
+        <form className="mt-3 flex flex-wrap gap-2" onSubmit={(event) => { event.preventDefault(); if (reason.trim()) move("block", reason.trim()); }}>
           <input aria-label="Что мешает" placeholder="Что мешает? Наставник увидит это" value={reason} onChange={(event) => setReason(event.target.value)}
             className="h-9 min-w-0 flex-1 basis-60 rounded-xl border border-[#d5d6dc] bg-white px-3 text-15 outline-none focus:border-blue" />
-          <button type="submit" className={cx(action, actionTone.primary)} disabled={transition.isPending}>Сообщить</button>
+          <button type="submit" className={cx(action, actionTone.primary)} disabled={transition.isPending || !reason.trim()}>Сообщить</button>
           <button type="button" className={cx(action, actionTone.ghost)} onClick={() => setBlocking(false)}>Отмена</button>
         </form>
       )}
