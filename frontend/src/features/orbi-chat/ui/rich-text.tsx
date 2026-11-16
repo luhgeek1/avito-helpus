@@ -17,7 +17,7 @@ function inline(text: string, key: string): ReactNode[] {
 const LIST_ITEM = /^\s*(?:\d+[.)]|[-•*])\s+/;
 
 /** Paragraphs and simple lists; anything else stays plain text (no HTML from the model). */
-export function RichText({ text }: { text: string }) {
+export function RichText({ text, trailing }: { text: string; trailing?: ReactNode }) {
   const blocks = text.trim().split(/\n{2,}/);
   return (
     <div className="space-y-2">
@@ -29,11 +29,12 @@ export function RichText({ text }: { text: string }) {
           const List = ordered ? "ol" : "ul";
           return (
             <List key={key} className={ordered ? "list-decimal space-y-1 pl-5" : "list-disc space-y-1 pl-5"}>
-              {lines.map((line, i) => <li key={`${key}-${i}`}>{inline(line.replace(LIST_ITEM, ""), `${key}-${i}`)}</li>)}
+              {lines.map((line, i) => <li key={`${key}-${i}`}>{inline(line.replace(LIST_ITEM, ""), `${key}-${i}`)}
+                {index === blocks.length - 1 && i === lines.length - 1 && trailing}</li>)}
             </List>
           );
         }
-        return <p key={key} className="whitespace-pre-wrap">{inline(block, key)}</p>;
+        return <p key={key} className="whitespace-pre-wrap">{inline(block, key)}{index === blocks.length - 1 && trailing}</p>;
       })}
     </div>
   );

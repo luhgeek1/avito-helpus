@@ -1,0 +1,17 @@
+{
+  "checks": ["timestamps never overlap text glyphs", "short message stays on one line", "paragraphs, lists, long URLs, approval cards and errors", "resizing chat down to 280px and back", "feedback still works", "no page overflow or runtime errors", "integration guide remains readable without horizontal overflow"],
+  "reports": [
+    {"width": 1440, "scenario": "short", "characters": 105, "result": "passed"},
+    {"width": 1440, "scenario": "long", "characters": 1437, "result": "passed"},
+    {"width": 1440, "scenario": "cards", "characters": 1254, "result": "passed"},
+    {"width": 390, "scenario": "short", "characters": 70, "result": "passed"},
+    {"width": 390, "scenario": "long", "characters": 958, "result": "passed"},
+    {"width": 390, "scenario": "cards", "characters": 836, "result": "passed"},
+    {"width": 320, "scenario": "short", "characters": 70, "result": "passed"},
+    {"width": 320, "scenario": "long", "characters": 958, "result": "passed"},
+    {"width": 320, "scenario": "cards", "characters": 836, "result": "passed"},
+    {"width": 1440, "scenario": "guide", "result": "passed"},
+    {"width": 390, "scenario": "guide", "result": "passed"},
+    {"width": 320, "scenario": "guide", "result": "passed"}
+  ]
+}

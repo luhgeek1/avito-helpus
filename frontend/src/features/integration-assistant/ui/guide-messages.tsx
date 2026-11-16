@@ -22,9 +22,9 @@ export function GuideMessages({ name }: { name: string }) {
     </button>)}
   </div>;
   return <div className="space-y-4">{messages.map((message) => <article key={message.id} data-role={message.role}
-    className={cx("min-w-0 rounded-xl p-3 text-13 leading-[1.65]", message.role === "user" ? "ml-7 bg-[#e6f5fd]" : "bg-[#f3f5f8]")}>
-    <p className="mb-1 text-10 font-semibold text-[#687181]">{message.role === "user" ? "Ты" : name}</p>
-    <p className="whitespace-pre-wrap break-words">{message.text}</p>
+    aria-label={message.role === "user" ? "Твоё сообщение" : `Сообщение ${name}`}
+    className={cx("min-w-0 w-fit max-w-[92%] rounded-xl px-3 py-2 text-14 leading-5", message.role === "user" ? "ml-auto bg-[#e6f5fd]" : "bg-[#f3f5f8]")}>
+    <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">{message.text}</p>
     {message.topics.map((id) => {
       const topic = guideTopics.find((item) => item.id === id)!;
       return <div key={id} className="mt-3 space-y-2">
