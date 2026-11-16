@@ -61,7 +61,7 @@ npm --prefix frontend exec -- playwright install chromium
 - Базовые метрики и ограничения — [кейс](../case/TASK.md), [выжимка](../case/CASE_BRIEF.md), [Q&A](../case/QA.md).
 - 661 тест и 10253/10253 строк — [снимок покрытия 16.11.2026](../quality/coverage-summary.md);
   corp-mock не входит в расчет (№72 Q&A).
-- p95 116–190 мс — [приемка через nginx](../BACKEND_REVIEW.md): 20 пользователей, 60 с, офлайн-модель.
+- p95 116–190 мс — [приемка через nginx](../archive/BACKEND_REVIEW.md): 20 пользователей, 60 с, офлайн-модель.
 - 2–7 с — проверка живой `gpt-5.4-mini` на `avito.prooood.ru` 15.11.2026 ([статус](../STATUS.md)).
 - Альтернативы на слайде 9 — решения команды ([DECISIONS](../DECISIONS.md)); там, где отдельный
   результат пробы не зафиксирован, стоит «—».

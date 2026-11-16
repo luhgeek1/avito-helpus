@@ -85,7 +85,7 @@ LF закреплён для Python, shell, Dockerfile, Makefile и YAML. Оба
 Новый проверочный прогон: Windows, Python 3.13.7, один Uvicorn, настоящий Postgres/Redis,
 офлайн-модель и FakeCorpServices, 20 пользователей / 60 с, три активных стажёра; вход всеми
 10 учётками и прогрев до начала отсчёта. Постоянные HTTP-соединения отдельно на поток.
-Полный JSON с условиями: [quality/backend-polish-load.json](quality/backend-polish-load.json).
+Полный JSON с условиями: [quality/backend-polish-load.json](../quality/backend-polish-load.json).
 
 | Операция | n всех кодов | Успешных | p50 успешных, мс | p95 | p99 | max |
 |---|---:|---:|---:|---:|---:|---:|
