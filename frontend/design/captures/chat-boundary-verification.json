@@ -1,0 +1,57 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "input": "mouse",
+      "fastDrag": true,
+      "keyboard": true,
+      "slide": true,
+      "closeReleasesBoundary": true,
+      "openingResolvesOverlap": true,
+      "chatMovement": true,
+      "chatResize": true,
+      "viewportResize": true,
+      "fullMobileChatHidesPet": false
+    },
+    {
+      "width": 1366,
+      "input": "mouse",
+      "fastDrag": true,
+      "keyboard": true,
+      "slide": true,
+      "closeReleasesBoundary": true,
+      "openingResolvesOverlap": true,
+      "chatMovement": true,
+      "chatResize": true,
+      "viewportResize": true,
+      "fullMobileChatHidesPet": false
+    },
+    {
+      "width": 390,
+      "input": "touch",
+      "fastDrag": true,
+      "keyboard": true,
+      "slide": true,
+      "closeReleasesBoundary": true,
+      "openingResolvesOverlap": true,
+      "chatMovement": true,
+      "chatResize": true,
+      "viewportResize": true,
+      "fullMobileChatHidesPet": true
+    },
+    {
+      "width": 320,
+      "input": "touch",
+      "fastDrag": true,
+      "keyboard": true,
+      "slide": true,
+      "closeReleasesBoundary": true,
+      "openingResolvesOverlap": true,
+      "chatMovement": true,
+      "chatResize": true,
+      "viewportResize": true,
+      "fullMobileChatHidesPet": true
+    }
+  ],
+  "errors": []
+}
