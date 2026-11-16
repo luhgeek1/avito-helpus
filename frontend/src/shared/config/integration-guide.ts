@@ -41,7 +41,7 @@ LLM_MODEL=gpt-5.4-mini
 # LLM_BASE_URL=https://your-gateway.example/v1`,
   diagnostics: `docker compose ps
 docker compose logs --tail=100 api worker
-curl http://localhost/api/v1/assistant/status`,
+curl http://localhost/api/health`,
 } as const;
 
 export const integrationSections = [
@@ -91,7 +91,7 @@ export const guideTopics: readonly GuideTopic[] = [
   {
     id: "llm", title: "Подключение языковой модели", section: "api",
     terms: ["llm", "модел", "ключ", "openai", "провайдер", "офлайн", "offline", "нейросет", "env", "ии", "интеллект"],
-    answer: "Без LLM_API_KEY основной Орби работает в офлайн-режиме: инструменты и сценарии доступны, ответы строятся правилами. Для языковой модели укажи LLM_API_KEY в корневом .env; LLM_MODEL задаёт модель диалога, LLM_BASE_URL — совместимый шлюз. После изменения выполни docker compose up -d api worker. Ключ остаётся на сервере; не используй NEXT_PUBLIC_ для секретов. При ошибке провайдера агент переключается на офлайн-режим. Текущий режим покажет GET /api/v1/assistant/status. Здесь, в руководстве, я отвечаю локально по разделам установки, без внешней LLM.",
+    answer: "Без LLM_API_KEY основной Орби работает в офлайн-режиме: инструменты и сценарии доступны, ответы строятся правилами. Для языковой модели укажи LLM_API_KEY в корневом .env; LLM_MODEL задаёт модель диалога, LLM_BASE_URL — совместимый шлюз. После изменения выполни docker compose up -d api worker. Ключ остаётся на сервере; не используй NEXT_PUBLIC_ для секретов. При ошибке провайдера агент переключается на офлайн-режим. После входа текущий режим покажет GET /api/v1/assistant/status; публичный /api/health проверяет доступность сервера. Здесь, в руководстве, я отвечаю локально по разделам установки, без внешней LLM.",
     code: { language: "dotenv", title: ".env, только на сервере", value: integrationSnippets.environment },
   },
   {

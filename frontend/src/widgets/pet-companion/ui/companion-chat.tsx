@@ -78,7 +78,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
         <div className="shrink-0 border-b border-line px-4 py-1">
           <button type="button" onClick={() => setActionsOpen(true)} disabled={chat.busy}
             className="min-h-11 rounded-lg px-2 text-12 font-semibold text-blue-text hover:bg-control disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-dark">
-            Действия · оформить и отправить
+            Действия: оформить и отправить
           </button>
         </div>
       )}
