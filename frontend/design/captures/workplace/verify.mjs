@@ -1,0 +1,87 @@
+import { chromium, expect } from 'playwright/test';
+import { writeFile } from 'node:fs/promises';
+const base = process.env.BASE_URL ?? 'http://127.0.0.1:5186';
+const browser = await chromium.launch();
+const results = [], errors = [];
+const output = name => new URL(name, import.meta.url).pathname;
+try {
+  for (const width of [1440, 390, 320]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+    await context.addInitScript(() => {
+      localStorage.setItem('buddy-onboarding-v1', 'done');
+      localStorage.setItem('buddy-pet', 'orbit');
+    });
+    const page = await context.newPage();
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto(`${base}/login`);
+    await page.getByRole('button', { name: /Аня Смирнова/ }).click();
+    await page.waitForURL('**/plan');
+    const toggle = page.getByRole('button', { name: 'Чат', exact: true });
+    await toggle.click();
+    const chat = page.getByRole('dialog', { name: 'Орби', exact: true });
+    await expect(chat).toBeVisible();
+    const fresh = chat.getByRole('button', { name: 'Новый диалог' });
+    if (await fresh.isVisible()) await fresh.click();
+    const actions = () => chat.getByRole('button', { name: /Действия ·/ });
+    await actions().click();
+    await page.screenshot({ path: output(`menu-${width}.png`) });
+    await chat.getByRole('button', { name: /^Больничный/ }).click();
+    const form = chat.getByRole('form', { name: 'Больничный' });
+    const day = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Moscow' });
+    await form.getByLabel('С', { exact: true }).fill(day);
+    await form.getByLabel('По', { exact: true }).fill(day);
+    await page.screenshot({ path: output(`sick-${width}.png`) });
+    await form.getByRole('button', { name: /Подготовить карточку/ }).click();
+    await expect(chat.getByText('Не списываются', { exact: true }).last()).toBeVisible();
+    await chat.getByRole('button', { name: 'Подтвердить', exact: true }).click();
+    await expect(chat.getByText(/заявка ABS-.*отправлена/).last()).toBeVisible({ timeout: 20000 });
+    await chat.getByRole('textbox', { name: 'Сообщение спутнику' }).fill('Черновик');
+    await toggle.click();
+    await expect(chat).toBeHidden();
+    await expect(page.locator('.pixel-dialogue')).toContainText(/одобрен/i, { timeout: 20000 });
+    await toggle.click();
+    await expect(chat.getByRole('textbox')).toHaveValue('Черновик');
+    await actions().click();
+    await chat.getByRole('button', { name: 'Покажи мои встречи на неделю' }).click();
+    await expect(chat.getByRole('log')).toContainText(/Твои встречи|встреч нет/);
+    if (width === 1440) {
+      await actions().click();
+      await chat.getByRole('button', { name: /^Получить доступ/ }).click();
+      await chat.getByLabel('Система или ресурс').fill('listings-api');
+      await chat.getByRole('button', { name: /Подготовить карточку/ }).click();
+      await chat.getByRole('button', { name: 'Подтвердить', exact: true }).click();
+      await expect(actions()).toBeEnabled();
+      const request = chat.getByRole('region', { name: /^Заявка ACC-/ }).last();
+      await expect(request).toBeVisible();
+      await request.getByRole('button', { name: 'Напомнить', exact: true }).click();
+      await chat.getByRole('button', { name: 'Подтвердить', exact: true }).click();
+      await expect(chat.getByRole('log')).toContainText('Напоминание поставлено в очередь');
+      await request.getByRole('button', { name: 'Отменить заявку', exact: true }).click();
+      await chat.getByRole('button', { name: 'Подтвердить', exact: true }).click();
+      await expect(chat.getByRole('log')).toContainText('Отмена запрошена');
+      await actions().click();
+      await chat.getByRole('button', { name: /^Сообщить команде/ }).click();
+      await chat.getByLabel('Текст сообщения').fill('Тестовое сообщение: завтра отпуск');
+      await chat.getByRole('button', { name: /Подготовить карточку/ }).click();
+      await chat.getByRole('button', { name: 'Подтвердить', exact: true }).click();
+      await expect(chat.getByRole('log')).toContainText('поставлено в очередь');
+      await toggle.click();
+      await page.getByRole('button', { name: /^Уведомления/ }).click();
+      await expect(page.getByRole('dialog', { name: 'Уведомления', exact: true })).toContainText('Сообщение доставлено', { timeout: 20000 });
+      await expect(page.getByRole('dialog', { name: 'Уведомления', exact: true })).toContainText('Отмена подтверждена', { timeout: 20000 });
+      await expect(page.getByRole('dialog', { name: 'Уведомления', exact: true })).toContainText('Напоминание по');
+      await page.keyboard.press('Escape');
+      await toggle.click();
+    }
+    const bounds = await chat.boundingBox();
+    expect(bounds.x).toBeGreaterThanOrEqual(0);
+    expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: output(`result-${width}.png`) });
+    results.push({ width, sickNotice: true, webhookResult: true, calendar: true, requestControlsAndDelivery: width === 1440, toggleAndDraft: true, overflow: false });
+    await context.close();
+  }
+  expect(errors).toEqual([]);
+  await writeFile(output('verification.json'), JSON.stringify({ base, results, errors }, null, 2));
+  console.log(JSON.stringify(results));
+} finally { await browser.close(); }

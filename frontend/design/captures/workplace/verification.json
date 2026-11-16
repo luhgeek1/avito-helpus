@@ -1,0 +1,33 @@
+{
+  "base": "http://127.0.0.1:5186",
+  "results": [
+    {
+      "width": 1440,
+      "sickNotice": true,
+      "webhookResult": true,
+      "calendar": true,
+      "requestControlsAndDelivery": true,
+      "toggleAndDraft": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "sickNotice": true,
+      "webhookResult": true,
+      "calendar": true,
+      "requestControlsAndDelivery": false,
+      "toggleAndDraft": true,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "sickNotice": true,
+      "webhookResult": true,
+      "calendar": true,
+      "requestControlsAndDelivery": false,
+      "toggleAndDraft": true,
+      "overflow": false
+    }
+  ],
+  "errors": []
+}
