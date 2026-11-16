@@ -516,7 +516,7 @@ async def absence_balance(ctx: Ctx) -> dict[str, Any]:
 async def check_absence(
     ctx: Ctx, absence_type: AbsenceType, start_date: date, end_date: date
 ) -> dict[str, Any]:
-    """Check a day off or vacation: days left, test-instruction rules and meeting conflicts."""
+    """Check leave dates; vacation/day off balance and meetings; sick notices spend no days."""
     async with ctx.deps.db.unit_of_work() as uow:
         service = RequestService(
             uow, ctx.deps.corp, access_sla_hours=ctx.deps.settings.access_sla_hours
@@ -531,6 +531,8 @@ async def check_absence(
         f"{check.title}: {check.working_days} раб. дн., "
         f"останется {check.balance_after} из {check.balance}."
     )
+    if absence_type is AbsenceType.SICK_LEAVE:
+        message = f"{check.title}. Дни отпуска не списываются."
     if check.warnings:
         message += "\n" + "\n".join(f"⚠ {w}" for w in check.warnings)
     return {
@@ -548,8 +550,10 @@ async def request_absence(
     end_date: date,
     comment: str = "",
 ) -> dict[str, Any]:
-    """File a day off or vacation request (after a confirmation card with warnings)."""
+    """File vacation/day off or a sick leave notice. Ask for dates, never medical details."""
     deps = ctx.deps
+    if absence_type is AbsenceType.SICK_LEAVE:
+        comment = "Уведомление об отсутствии по болезни"
     async with deps.db.unit_of_work() as uow:
         service = RequestService(uow, deps.corp, access_sla_hours=deps.settings.access_sla_hours)
         try:
@@ -585,7 +589,7 @@ async def request_absence(
     view = await _submit_now(ctx, view)
     deps.emit("request", request_part(view))
     message = _request_message(view)
-    if view.status is RequestStatus.SUBMITTED:
+    if view.status is RequestStatus.SUBMITTED and absence_type is not AbsenceType.SICK_LEAVE:
         message += " Когда одобрят, могу написать команде в канал."
     return {"message": message, "request": request_part(view)}
 

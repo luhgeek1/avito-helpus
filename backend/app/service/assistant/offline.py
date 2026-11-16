@@ -159,15 +159,22 @@ def _intent_actions(  # noqa: PLR0911 - one return per recognised intent reads b
         r"остал\w*.{0,20}(отгул|отпуск|дн[еяи])",
     ):
         return Intent("absence_balance")
-    if "request_absence" in tools and _has(
-        text, r"отгул", r"отпуск", r"выходн\w* за свой", r"day ?off"
+    sick = "больнич" in text and _has(text, r"оформ", r"уведом", r"сообщи")
+    if "request_absence" in tools and (
+        sick or _has(text, r"отгул", r"отпуск", r"выходн\w* за свой", r"day ?off")
     ):
         dates = parse_dates_ru(text, today)
         if dates is None:
             return Intent(
                 text="На какие даты? Например: «отгул 20.11» или «отпуск с 1 по 5 декабря»."
             )
-        kind = AbsenceType.VACATION if "отпуск" in text else AbsenceType.DAY_OFF
+        kind = (
+            AbsenceType.SICK_LEAVE
+            if sick
+            else AbsenceType.VACATION
+            if "отпуск" in text
+            else AbsenceType.DAY_OFF
+        )
         return Intent(
             "request_absence",
             {
