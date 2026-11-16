@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowUp, SquarePen, X } from "lucide-react";
-import { OrbiMessageList, OrbiSuggestions } from "@/features/orbi-chat";
+import { OrbiMessageList, OrbiSuggestions, WorkplaceActions } from "@/features/orbi-chat";
 import { GuideMessages } from "@/features/integration-assistant";
 import { useOrbiMe } from "@/shared/api";
 import { cx } from "@/shared/lib/cx";
@@ -13,20 +13,23 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
   name: string;
   chat: CompanionChatModel; onClose: () => void; onBack: () => void; topInset?: number;
 }) {
+  const [actionsOpen, setActionsOpen] = useState(false);
   const { style, handles, moving } = useChatPlacement(topInset);
   const { data: me } = useOrbiMe();
   const startOver = chat.startOver;
   const { authenticated, load } = chat;
   useEffect(() => { if (authenticated) void load(); }, [authenticated, load]);
+  const showActions = actionsOpen && authenticated && chat.kind === "workspace";
   const history = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
   const close = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const log = history.current;
     if (!log) return;
+    if (showActions) { log.scrollTop = 0; return; }
     const question = chat.kind === "guide" ? log.querySelectorAll<HTMLElement>('[data-role="user"]').item(chat.messages.filter((message) => message.role === "user").length - 1) : null;
     log.scrollTop = question ? log.scrollTop + question.getBoundingClientRect().top - log.getBoundingClientRect().top : log.scrollHeight;
-  }, [chat.messages, style.height, style.width]);
+  }, [chat.messages, style.height, style.width, showActions]);
   useEffect(() => {
     if (style.visibility === "hidden") return;
     const target = matchMedia("(pointer: fine)").matches ? input.current : close.current;
@@ -68,10 +71,18 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
           <X size={18} />
         </button>
       </header>
-      <div ref={history} role="log" aria-label="История сообщений" aria-live="polite" tabIndex={0}
+      {chat.kind === "workspace" && authenticated && (
+        <div className="shrink-0 border-b border-line px-4 py-1">
+          <button type="button" aria-expanded={actionsOpen} onClick={() => setActionsOpen(!actionsOpen)} disabled={chat.busy}
+            className="min-h-11 rounded-lg px-2 text-12 font-semibold text-blue-text hover:bg-control disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-dark">
+            {actionsOpen ? "← Вернуться в чат" : "Действия · оформить и отправить"}
+          </button>
+        </div>
+      )}
+      <div ref={history} role={showActions ? "region" : "log"} aria-label={showActions ? "Оформление с Орби" : "История сообщений"} aria-live={showActions ? "off" : "polite"} tabIndex={0}
         className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-5 [scrollbar-color:#cbd3df_#ffffff]
           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-dark">
-        {chat.kind === "guide" ? <GuideMessages name={name} /> : !authenticated ? (
+        {showActions ? <WorkplaceActions onDone={() => setActionsOpen(false)} /> : chat.kind === "guide" ? <GuideMessages name={name} /> : !authenticated ? (
           <div className="space-y-3">
             <article data-role="assistant" className="w-fit max-w-[92%] rounded-xl bg-control px-3.5 py-3">
               <p className="mb-1 text-10 font-semibold text-dark">{name}</p>
@@ -95,7 +106,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
           </>
         )}
       </div>
-      <form className="shrink-0 rounded-b-2xl border-t border-dark/10 bg-white p-3" onSubmit={(event) => { event.preventDefault(); void chat.send(); }}>
+      {!showActions && <form className="shrink-0 rounded-b-2xl border-t border-dark/10 bg-white p-3" onSubmit={(event) => { event.preventDefault(); void chat.send(); }}>
         <div className="flex items-center gap-2 rounded-xl border border-dark bg-white p-1 focus-within:ring-1 focus-within:ring-dark">
           <textarea ref={input} aria-label="Сообщение спутнику" placeholder={chat.kind === "guide" ? "Вопрос об установке…" : authenticated ? "Напиши сообщение…" : "Сначала войди"} disabled={!authenticated} rows={1} maxLength={2000}
             value={chat.draft} onChange={(event) => chat.setDraft(event.target.value)}
@@ -112,7 +123,7 @@ export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
             <ArrowUp size={18} aria-hidden="true" />
           </button>
         </div>
-      </form>
+      </form>}
     </section>
   );
 }

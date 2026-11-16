@@ -4,3 +4,4 @@ export type { ActionData, MessagePart, OrbiMessage, SourcesData } from "./model/
 export { OrbiMessageList } from "./ui/message-list";
 export { OrbiSuggestions, SUGGESTIONS } from "./ui/suggestions";
 export { StatusPill } from "./ui/cards";
+export { WorkplaceActions } from "./ui/workplace-actions";
