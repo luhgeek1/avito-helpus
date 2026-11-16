@@ -98,7 +98,7 @@ try {
         heading: { x: headingBounds.x - rect.x, y: headingBounds.y - rect.y },
       };
     });
-    if (slides.length !== 16) issues.push("Expected 12 main slides, an appendix divider and A1–A3");
+    if (slides.length !== 17) issues.push("Expected 12 main slides, an appendix divider and A1–A4");
     const contentHeadings = pages.filter((_, index) => index !== 0 && index !== 12).map((item) => JSON.stringify(item.heading));
     if (new Set(contentHeadings).size !== 1) issues.push("Content headings are not aligned");
     if (!document.fonts.check('700 60px "Golos Text"', "Орби")) issues.push("Golos Text did not load");
