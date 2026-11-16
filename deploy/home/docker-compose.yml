@@ -24,6 +24,8 @@ x-backend: &backend
     LLM_REASONING_EFFORT: ${LLM_REASONING_EFFORT:-none}
     LLM_HEAVY_MODEL: ${LLM_HEAVY_MODEL:-gpt-5.4}
     EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-text-embedding-3-large}
+    # Optional egress proxy for HTTPS (OpenAI) when the router's VPN route is down; empty = direct.
+    HTTPS_PROXY: ${LLM_HTTPS_PROXY:-}
     ACCESS_SLA_HOURS: ${ACCESS_SLA_HOURS:-24}
     ESCALATION_SLA_HOURS: ${ESCALATION_SLA_HOURS:-24}
     SCHEDULER_INTERVAL_SEC: ${SCHEDULER_INTERVAL_SEC:-15}
