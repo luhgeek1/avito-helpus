@@ -3,12 +3,19 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
 import { renderApp, screen } from './render'
 import { server } from './setup'
+import { signIn } from '../orbi/server'
 import { usePreferences } from '@/entities/portal'
 
 describe('Главная', () => {
+  it('greets the signed-in person', async () => {
+    signIn()
+    renderApp('/demo')
+    expect(await screen.findByRole('heading', { name: /Привет, Аня!/ })).toBeInTheDocument()
+  })
+
   it('показывает приветствие и все блоки', async () => {
     renderApp('/demo')
-    expect(await screen.findByRole('heading', { name: /Привет, Даниил/ })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /Привет! Хорошего дня в Авито/ })).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: 'Добро пожаловать в Авито' })).toBeInTheDocument()
     expect(await screen.findByText('Юлия')).toBeInTheDocument()
     expect(await screen.findByRole('link', { name: /Букинг мест/ })).toBeInTheDocument()
@@ -75,7 +82,7 @@ describe('Шапка и общие элементы', () => {
     const bell = await screen.findByRole('button', { name: 'Уведомления: 3 новых' })
     await user.click(bell)
     const panel = screen.getByRole('dialog', { name: 'Уведомления' })
-    expect(within(panel).getByText('Доступ выдан')).toBeInTheDocument()
+    expect(within(panel).getByText('Знакомство с командой')).toBeInTheDocument()
     await user.click(within(panel).getByRole('button', { name: 'Прочитать все' }))
     expect(await screen.findByRole('button', { name: 'Уведомления' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
