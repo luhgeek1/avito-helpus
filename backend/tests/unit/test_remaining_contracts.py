@@ -35,7 +35,8 @@ def test_pure_boundary_contracts() -> None:
     assert can_view_member(actor, SimpleNamespace(id=uuid4(), lead_id=actor.id, mentor_id=None))
     assert can_view_member(actor, SimpleNamespace(id=actor.id))
     assert _score(SimpleNamespace(slug="", name="", system="", aliases=[]), {"test"}) == 0
-    assert _status_body(SimpleNamespace(status=RequestStatus.CANCELLED)) == ""
+    assert "Отмена подтверждена" in _status_body(SimpleNamespace(status=RequestStatus.CANCELLED))
+    assert _status_body(SimpleNamespace(status=RequestStatus.SUBMITTING)) == ""
     assert not AnalyticsService(Mock()).track_ui(actor, "unknown", {})
     now = datetime.now(UTC)
     view = SimpleNamespace(status=EscalationStatus.OPEN, due_at=now - timedelta(seconds=1))

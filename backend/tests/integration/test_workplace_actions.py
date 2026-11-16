@@ -47,6 +47,7 @@ async def test_reminder_and_cancel_are_confirmed_and_scoped_to_owner(
     client: AsyncClient,
     anya: Account,
     kirill: Account,
+    run_outbox: Any,
 ) -> None:
     chat = await Chat(client, anya).start()
     [card] = parts(await chat.say("Нужен доступ к listings-api"), "action")
@@ -59,8 +60,12 @@ async def test_reminder_and_cancel_are_confirmed_and_scoped_to_owner(
         assert control["card"]["kind"] == "request_control"
         answer = await chat.decide(control["id"])
         assert "error" not in [chunk["type"] for chunk in parse(answer.text)]
+        await run_outbox()
     result = (await client.get(f"/api/v1/requests/{request['id']}", headers=anya.headers)).json()
-    assert result["payload"]["cancel_requested"] is True
+    assert result["status"] == "cancelled"
+    notes = (await client.get("/api/v1/notifications", headers=anya.headers)).json()["items"]
+    assert any("Напоминание" in note["title"] and "доставлено" in note["title"] for note in notes)
+    assert any("Отмена подтверждена" in note["body"] for note in notes)
 
 
 async def test_calendar_reads_only_the_requested_period_and_handles_outages(

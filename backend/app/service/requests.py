@@ -643,7 +643,7 @@ class RequestService:
             )
             overview = await PlanService(self._uow).overview(request.user_id)
             next_step = overview.next_steps[0] if overview.next_steps else None
-        if new_status is not RequestStatus.CANCELLED:
+        if new_status is not RequestStatus.CANCELLED or request.external_id is not None:
             body = _status_body(request)
             if next_step is not None and new_status is RequestStatus.APPROVED:
                 body += f" Следующий шаг: «{next_step.title}»."
@@ -698,6 +698,8 @@ def _status_body(request: ServiceRequest) -> str:
         case RequestStatus.REJECTED:
             reason = request.decision_comment or "причина не указана"
             return f"Причина: {reason}. Орби поможет переписать обоснование и подать снова."
+        case RequestStatus.CANCELLED:
+            return "Отмена подтверждена корпоративным сервисом."
         case RequestStatus.FAILED:
             return (request.decision_comment or "Сервис не ответил после нескольких попыток.") + (
                 " Попробуй позже или напиши в IT-поддержку."
@@ -844,6 +846,15 @@ async def deliver_control(
             return
         if not cancel:
             await corp.access_remind(request.external_id, idempotency_key=idempotency_key)
+            await notify(
+                uow,
+                user_id=request.user_id,
+                kind=NotificationKind.REQUEST_UPDATED,
+                title=f"Напоминание по {request.external_id} доставлено",
+                body="Сервис подтвердил напоминание. Заявка остаётся на согласовании.",
+                link=f"/requests/{request.id}",
+                dedupe_key=idempotency_key,
+            )
             return
         ticket = await corp.cancel_request(request.external_id)
         await service.apply_decision(
