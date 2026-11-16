@@ -19,6 +19,7 @@ from typing import Any
 
 import httpx
 from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -38,7 +39,10 @@ STATE_FILE = os.environ.get("CORP_STATE_FILE")
 state = CorpState(store=Path(STATE_FILE) if STATE_FILE else None)
 mcp = MCPServer(
     "corp-mock",
-    instructions="Имитация корпоративных сервисов: доступы, отсутствия, календарь, IT, мессенджер.",
+    instructions=(
+        "Имитация корпоративных сервисов: доступы, отсутствия, календарь, IT, мессенджер, "
+        "трекер задач, код-хостинг, бронирование офиса и учебная платформа."
+    ),
 )
 _tasks: set[asyncio.Task[None]] = set()
 
@@ -107,8 +111,13 @@ def decide(ticket: Ticket, status: str, comment: str | None) -> None:
             "level": ticket.payload["level"],
             "granted_at": datetime.now(LOCAL_TZ).date().isoformat(),
         }
-    if status == "approved" and ticket.service == "absence" and ticket.payload["type"] != "sick_leave":
+    if (
+        status == "approved"
+        and ticket.service == "absence"
+        and ticket.payload["type"] != "sick_leave"
+    ):
         state.balances[ticket.employee] -= ticket.payload["days"]
+    state.workspace_decided(ticket)
     state.save()
 
 
@@ -268,6 +277,149 @@ def messenger_post(channel: str, text: str, author: str, idempotency_key: str) -
 
 
 @mcp.tool()
+def request_get(request_id: str) -> dict[str, Any]:
+    """Current status of any request (review, booking, learning and the older services)."""
+    state.check_available()
+    return state.ticket(request_id).as_dict()
+
+
+# ---- tracker (Jira) and code hosting (Stash) ------------------------------------------------------
+
+
+@mcp.tool()
+def tracker_issues(employee: str) -> dict[str, Any]:
+    """Issues assigned to the employee: key, status, due date, repository, branch name, PR."""
+    state.check_available()
+    return {"issues": state.tracker_issues(employee)}
+
+
+@mcp.tool()
+def tracker_transition(
+    employee: str, issue_key: str, status: str, idempotency_key: str
+) -> dict[str, Any]:
+    """Move one's own issue to todo / in_progress / in_review / done (idempotent by key)."""
+    state.check_available()
+    with state._lock:
+        issue = state.tracker_transition(employee, issue_key, status, idempotency_key)
+        state.save()
+    return issue
+
+
+@mcp.tool()
+def code_repository(repository: str) -> dict[str, Any]:
+    """Repository card: clone URL, default branch, dev stand, run and check commands, CODEOWNERS."""
+    state.check_available()
+    return state.code_repository(repository)
+
+
+@mcp.tool()
+def code_pull_requests(employee: str) -> dict[str, Any]:
+    """Pull requests authored by the employee with checks, changed paths and reviewers."""
+    state.check_available()
+    return {"pull_requests": state.code_pull_requests(employee)}
+
+
+@mcp.tool()
+async def code_request_review(
+    employee: str, pull_request: str, reviewers: list[str], message: str, idempotency_key: str
+) -> dict[str, Any]:
+    """Add reviewers to one's own PR and notify them (idempotent). The verdict comes by webhook."""
+    state.check_available()
+    with state._lock:
+        ticket = state.code_request_review(
+            employee=employee,
+            pull_request=pull_request,
+            reviewers=reviewers,
+            message=message,
+            key=idempotency_key,
+        )
+        state.save()
+    _schedule(ticket)
+    return ticket.as_dict()
+
+
+# ---- office booking ----------------------------------------------------------------------------
+
+
+@mcp.tool()
+def booking_rooms(day: str, start_time: str, end_time: str, capacity: int) -> dict[str, Any]:
+    """Meeting rooms free for the whole slot and big enough. Times are HH:MM, Moscow time."""
+    state.check_available()
+    return {"rooms": state.booking_rooms(date.fromisoformat(day), start_time, end_time, capacity)}
+
+
+@mcp.tool()
+def booking_desks(day: str) -> dict[str, Any]:
+    """Desks free for the whole working day."""
+    state.check_available()
+    return {"desks": state.booking_desks(date.fromisoformat(day))}
+
+
+@mcp.tool()
+async def booking_create(
+    employee: str,
+    resource: str,
+    day: str,
+    start_time: str,
+    end_time: str,
+    title: str,
+    attendees: list[str],
+    idempotency_key: str,
+) -> dict[str, Any]:
+    """Book a desk (whole day) or a room; invited attendees accept later via webhook."""
+    state.check_available()
+    with state._lock:
+        ticket = state.booking_create(
+            employee=employee,
+            resource=resource,
+            day=date.fromisoformat(day),
+            start=start_time,
+            end=end_time,
+            title=title,
+            attendees=attendees,
+            key=idempotency_key,
+        )
+        state.save()
+    _schedule(ticket)
+    return ticket.as_dict()
+
+
+# ---- learning platform and development plan ----------------------------------------------------
+
+
+@mcp.tool()
+def learning_courses(employee: str) -> dict[str, Any]:
+    """Courses assigned to or taken by the employee: deadline, progress, status."""
+    state.check_available()
+    return {"courses": state.learning_courses(employee)}
+
+
+@mcp.tool()
+def learning_catalog(employee: str, query: str = "") -> dict[str, Any]:
+    """Course catalog filtered by topic words; marks courses the employee already has."""
+    state.check_available()
+    return {"courses": state.learning_catalog(employee, query)}
+
+
+@mcp.tool()
+async def learning_enroll(employee: str, course: str, idempotency_key: str) -> dict[str, Any]:
+    """Enroll in a course: internal ones open at once, external ones need the lead's approval."""
+    state.check_available()
+    with state._lock:
+        ticket = state.learning_enroll(employee=employee, course=course, key=idempotency_key)
+        state.save()
+    _schedule(ticket)
+    return ticket.as_dict()
+
+
+@mcp.tool()
+def development_plan(employee: str) -> dict[str, Any]:
+    """Individual development plan: goals, competencies from the matrix, due dates, progress."""
+    state.check_available()
+    return {"goals": state.development_plan(employee)}
+
+
+@mcp.tool()
 def demo_reset(reset_sequence: bool = False) -> dict[str, Any]:
     """Clear business state; reset_sequence is only for a coordinated reset of both systems."""
     for task in list(_tasks):
@@ -296,6 +448,7 @@ async def dump(_: Request) -> JSONResponse:
             ],
             "messages": state.messages,
             "grants": [{"employee": e, "resource": r, **g} for (e, r), g in state.grants.items()],
+            **state.workspace_snapshot(),
         }
     )
 
@@ -322,6 +475,18 @@ async def decide_now(request: Request) -> JSONResponse:
         return JSONResponse({"detail": "invalid or conflicting decision"}, status_code=409)
     await _deliver(ticket)
     return JSONResponse(ticket.as_dict())
+
+
+@mcp.custom_route("/admin/learning", methods=["POST"])
+async def learning_progress(request: Request) -> JSONResponse:
+    """Demo: move a course's progress, e.g. to 100 to show the plan step closing by itself."""
+    payload = await request.json()
+    try:
+        state.set_progress(payload["employee"], payload["course"], int(payload["progress"]))
+    except (KeyError, ValueError, ToolError) as exc:
+        return JSONResponse({"detail": str(exc)}, status_code=400)
+    state.save()
+    return JSONResponse({"courses": state.learning_courses(payload["employee"])})
 
 
 @mcp.custom_route("/admin/reset", methods=["POST"])

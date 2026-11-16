@@ -1,4 +1,5 @@
-"""Corporate services: access, absence, calendar, IT support, messenger.
+"""Corporate services: access, absence, calendar, IT support, messenger, and (see
+`workspace.py`) tracker, code hosting, office booking and learning.
 
 Deterministic on purpose: the same request always gets the same decision, so demos and tests
 are reproducible. Decisions arrive after `approval_delay_sec`, like a real approver.
@@ -18,6 +19,8 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from mcp.server.mcpserver.exceptions import ToolError
+
+from corp_mock.workspace import WorkspaceMixin
 
 DATA = Path(__file__).resolve().parents[1] / "data" / "seed.json"
 MIN_JUSTIFICATION = 15
@@ -62,10 +65,17 @@ class Ticket:
         }
 
 
-FIRST_IDS = {"access": 1042, "absence": 2101, "itsupport": 3301}
+FIRST_IDS = {
+    "access": 1042,
+    "absence": 2101,
+    "itsupport": 3301,
+    "review": 4101,
+    "booking": 5201,
+    "learning": 6301,
+}
 
 
-class CorpState:
+class CorpState(WorkspaceMixin):
     def __init__(self, seed_path: Path = DATA, store: Path | None = None) -> None:
         self._seed = json.loads(seed_path.read_text(encoding="utf-8"))
         self._store = store
@@ -76,10 +86,12 @@ class CorpState:
             saved = json.loads(self._sequence_file.read_text(encoding="utf-8"))
             if (
                 not isinstance(saved, dict)
-                or set(saved) != set(FIRST_IDS)
+                # Services added later start from their first number; older services must be there.
+                or not set(saved) <= set(FIRST_IDS)
+                or not {"access", "absence", "itsupport"} <= set(saved)
                 or any(
-                    not isinstance(saved[service], int) or saved[service] < first
-                    for service, first in FIRST_IDS.items()
+                    not isinstance(saved[service], int) or saved[service] < FIRST_IDS[service]
+                    for service in saved
                 )
             ):
                 raise ValueError("Invalid ticket sequence checkpoint; restore it before starting")
@@ -113,6 +125,7 @@ class CorpState:
             self.balances = {
                 e: d.get("absence_days", 0) for e, d in self._seed["employees"].items()
             }
+            self.reset_workspace()
             self.save()
 
     # ---- persistence -----------------------------------------------------------------------
@@ -137,6 +150,7 @@ class CorpState:
             "next_ids": self._next_ids,
             "grants": [{"employee": e, "resource": r, **g} for (e, r), g in self.grants.items()],
             "balances": self.balances,
+            **self.workspace_snapshot(),
         }
         _write_json(self._store, snapshot)
 
@@ -170,6 +184,7 @@ class CorpState:
             self._advance_sequences({ticket.service: int(number) + 1})
         self.grants = {(g.pop("employee"), g.pop("resource")): g for g in data["grants"]}
         self.balances = data["balances"]
+        self.restore_workspace(data)
 
     def pending(self) -> list[Ticket]:
         """Tickets still waiting for a decision (to reschedule after a restart)."""
@@ -261,7 +276,11 @@ class CorpState:
     def absence_create(
         self, *, employee: str, type_: str, start: date, end: date, comment: str, key: str
     ) -> Ticket:
-        if end < start or (end - start).days > 366 or type_ not in {"day_off", "vacation", "sick_leave"}:
+        if (
+            end < start
+            or (end - start).days > 366
+            or type_ not in {"day_off", "vacation", "sick_leave"}
+        ):
             raise Refused("invalid absence dates or type")
         if employee not in self.balances:
             raise Refused("unknown employee")
@@ -309,9 +328,11 @@ class CorpState:
                             "title": event["title"],
                             "starts_at": starts.isoformat(),
                             "important": event["important"],
+                            "minutes": event.get("minutes", 30),
                         }
                     )
-        return events
+        events.extend(self.booked_events(employee, start, end))
+        return sorted(events, key=lambda e: e["starts_at"])
 
     # ---- IT --------------------------------------------------------------------------------
 
