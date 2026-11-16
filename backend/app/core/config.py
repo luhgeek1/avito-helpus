@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     rate_limit_enabled: bool = True
     auth_rate_limit_per_minute: int = 10
     chat_rate_limit_per_minute: int = 20
+    # Demo stand only: anyone may restore the synthetic company from the portal button.
+    demo_public_reset: bool = False
 
     # Postgres and Redis
     database_url: str

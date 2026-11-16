@@ -1,0 +1,28 @@
+# Public edge: nginx routes / to the portal and /api to Orbi. Domain: avito.prooood.ru.
+app = "avito-orbi"
+primary_region = "fra"
+
+[build]
+  image = "nginx:1.29-alpine"
+
+[[files]]
+  guest_path = "/etc/nginx/conf.d/default.conf"
+  local_path = "nginx.conf"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "15s"
+    method = "GET"
+    path = "/edge-health"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

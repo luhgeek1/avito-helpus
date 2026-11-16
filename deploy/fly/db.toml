@@ -1,0 +1,20 @@
+# Postgres with pgvector, private only (avito-orbi-db.internal:5432). POSTGRES_PASSWORD is a secret.
+app = "avito-orbi-db"
+primary_region = "fra"
+
+[build]
+  image = "pgvector/pgvector:0.8.1-pg17"
+
+[env]
+  POSTGRES_USER = "postgres"
+  POSTGRES_DB = "buddy"
+  # The volume root holds lost+found, so the cluster lives one level down.
+  PGDATA = "/var/lib/postgresql/data/pgdata"
+
+[mounts]
+  source = "pgdata"
+  destination = "/var/lib/postgresql/data"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
