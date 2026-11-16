@@ -305,3 +305,8 @@ def test_plan_step_names_the_exact_resource() -> None:
 
     assert intent.tool == "request_access"
     assert intent.args == {"resource": "stash-listings-api"}
+
+
+def test_unrelated_reminder_never_controls_a_request() -> None:
+    intent = route("Напомни, где инструкции по ревью", INTERN_TOOLS, TODAY)
+    assert intent.tool == "search_knowledge"
