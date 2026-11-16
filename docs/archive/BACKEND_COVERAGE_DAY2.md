@@ -26,14 +26,14 @@
 
 Артефакты:
 
-- [Исходный отчёт покрытия](../backend/test-artifacts/day2/coverage-before.json) и
-  [исходный прогон](../backend/test-artifacts/day2/pytest-before.log).
-- [Итоговый отчёт покрытия](../backend/test-artifacts/day2/coverage-after.json),
-  [Cobertura XML](../backend/test-artifacts/day2/coverage.xml) и
-  [итоговый прогон](../backend/test-artifacts/day2/pytest-after.log).
-- [Воспроизведённые падения до исправлений](../backend/test-artifacts/day2/regressions-red.txt),
-  [сравнение метрик поиска](../backend/test-artifacts/day2/eval-comparison.json) и
-  [отдельный eval](../backend/test-artifacts/day2/knowledge-eval.log).
+- [Исходный отчёт покрытия](../../backend/test-artifacts/day2/coverage-before.json) и
+  [исходный прогон](../../backend/test-artifacts/day2/pytest-before.log).
+- [Итоговый отчёт покрытия](../../backend/test-artifacts/day2/coverage-after.json),
+  [Cobertura XML](../../backend/test-artifacts/day2/coverage.xml) и
+  [итоговый прогон](../../backend/test-artifacts/day2/pytest-after.log).
+- [Воспроизведённые падения до исправлений](../../backend/test-artifacts/day2/regressions-red.txt),
+  [сравнение метрик поиска](../../backend/test-artifacts/day2/eval-comparison.json) и
+  [отдельный eval](../../backend/test-artifacts/day2/knowledge-eval.log).
 
 ## Подтверждённые дефекты
 

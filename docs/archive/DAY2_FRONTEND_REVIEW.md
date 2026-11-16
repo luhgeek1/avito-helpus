@@ -95,10 +95,10 @@ Chromium 149, production-сборка, записанные синтетичес
 
 Артефакты:
 
-- [Результаты по размерам](captures/chat-overlap-results.json).
-- [Чат на телефоне](captures/chat-overlap-375x812.png), [чат на десктопе](captures/chat-overlap-1440x900.png).
-- [Инструкция на телефоне](captures/document-modal-375x812.png), [инструкция на десктопе](captures/document-modal-1440x900.png).
-- [Повторяемый браузерный сценарий](captures/verify-chat-overlap.py). Нужны Python Playwright,
+- [Результаты по размерам](../../frontend/design/captures/chat-overlap-results.json).
+- [Чат на телефоне](../../frontend/design/captures/chat-overlap-375x812.png), [чат на десктопе](../../frontend/design/captures/chat-overlap-1440x900.png).
+- [Инструкция на телефоне](../../frontend/design/captures/document-modal-375x812.png), [инструкция на десктопе](../../frontend/design/captures/document-modal-1440x900.png).
+- [Повторяемый браузерный сценарий](../../frontend/design/captures/verify-chat-overlap.py). Нужны Python Playwright,
   установленный Chromium и запущенный фронтенд на `127.0.0.1:5173`; другой адрес — `PET_TEST_URL`.
 
 ## Решения для переноса в DECISIONS
