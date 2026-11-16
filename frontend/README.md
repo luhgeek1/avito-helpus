@@ -116,7 +116,7 @@ Dev и production-сервер по умолчанию доступны на htt
 
 UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-dialogue.mjs`, `verify-companion-drag.mjs`, `verify-orbit-menu.mjs`, `verify-wardrobe-carousel.mjs`. Используют Playwright из локальной установки design-studio; при другом окружении укажи установленный Playwright в import.
 
-Общие требования — `../AGENTS.md`, дизайн — `../DESIGN.md`, статус и решения — `../docs/STATUS.md`, `../docs/DECISIONS.md`.
+Карта документации — `../docs/README.md`, дизайн — `../DESIGN.md`, статус и решения — `../docs/STATUS.md`, `../docs/DECISIONS.md`.
 
 Гардероб спутника — локальная круговая карусель всех 40 персонажей с пятью видимыми миниатюрами и бесконечным зацикливанием. Колёсико, свайп и стрелки клавиатуры листают без изменения выбора. Клик выбирает пета через общий choosePet и сохраняет buddy-pet; избранное не меняется. Логика и UI находятся внутри widgets/pet-companion, каталог берётся из публичного entities/pet API.
 
@@ -137,7 +137,7 @@ UI-проверки: `design/captures/verify-next-migration.mjs`, `verify-pixel-
 
 `shared/lib/portal-navigation` адаптирует ссылки, параметры и фильтры к Next navigation. `shared/ui/portal` содержит общий UI портала и наборы классов: `buttonClass`, `chipClass`, `container`, `heading`, `paletteClass`, `focusRing`. Общие паттерны страниц (колонка, подзаголовок, липкая колонка) лежат в `_pages/portal/ui/classes.ts`. Inter 400/700 хранится с OFL-лицензией в `public/portal/fonts` и не заменяет шрифты пета.
 
-`npm test` запускает 55 перенесённых тестов портала на Vitest/jsdom с mock Next navigation и MSW. Проверка интеграции в браузере: `node frontend/design/merge/verify-landing-merge.mjs` из корня, пока доступен `.git/codex-landing-merge/pet-manifest.json`. Проверка охватывает маршруты, фильтры, поиск, сохранение спутника при переходах, Spotlight, гардероб и галерею на 1440/390/320 px. Отчёт — `design/captures/landing-main-merge-verification.json`.
+`npm test` запускает 55 перенесённых тестов портала на Vitest/jsdom с mock Next navigation и MSW. Отчёт браузерной проверки маршрутов, фильтров, поиска, Spotlight, гардероба и галереи на 1440/390/320 px — `design/captures/landing-main-merge-verification.json`.
 
 `design/merge/port-landing.mjs` сохранён как одноразовый инструмент переноса, а не команда обновления: он читает исходный checkout и перезаписывает файлы до ручных адаптаций Next.js. Повторно запускать его поверх приложения не следует.
 
