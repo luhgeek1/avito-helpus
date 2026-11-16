@@ -11,6 +11,7 @@
 | 004 | [Отгул и отпуск](004-absence-request/spec.md) | P1 | `domain/absence.py` | `tests/**/test_absence*.py` |
 | 005 | [Ноутбук и техника](005-equipment/spec.md) | P2 | `service/requests.py` | `tests/**/test_equipment*.py` |
 | 006 | [Эскалации и экран наставника](006-mentor-escalations/spec.md) | P1 | `service/escalations.py`, `service/mentor.py` | `tests/**/test_escalation*.py` |
+| 008 | [Действия в рабочем чате](008-workplace-actions/spec.md) | P1 | `service/assistant/workplace.py`, `features/orbi-chat` | `test_workplace_actions.py`, `actions.test.tsx` |
 | 007 | [Проактивный Орби и рантайм агента](007-proactive-assistant/spec.md) | P1 | `service/assistant/`, `service/nudges.py` | `tests/**/test_chat*.py` |
 
 Общий технический план: [000-platform/plan.md](000-platform/plan.md), модель данных:
