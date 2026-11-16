@@ -1,5 +1,5 @@
 # Simulated corporate services (MCP), private only. CORP_WEBHOOK_SECRET is a secret.
-# State stays in memory: the image runs as a non-root user and cannot write to a fresh volume.
+# Tickets and grants live on a volume, so ticket numbers survive deploys like Orbi's database does.
 app = "avito-orbi-corp"
 primary_region = "fra"
 
@@ -9,9 +9,14 @@ primary_region = "fra"
 [env]
   MOCK_APPROVAL_DELAY_SEC = "20"
   BUDDY_WEBHOOK_URL = "http://avito-orbi-api.internal:8080/api/v1/integrations/corp/webhook"
+  CORP_STATE_FILE = "/data/state.json"
+
+[mounts]
+  source = "corp_state"
+  destination = "/data"
 
 [processes]
-  app = "uvicorn corp_mock.server:app --host :: --port 8090"
+  app = "sh -c 'chown app:app /data 2>/dev/null; exec uvicorn corp_mock.server:app --host :: --port 8090'"
 
 [[vm]]
   size = "shared-cpu-1x"
