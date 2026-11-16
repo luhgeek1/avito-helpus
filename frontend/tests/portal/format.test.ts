@@ -22,6 +22,17 @@ describe('formatRelative', () => {
   const now = new Date('2026-11-10T12:00:00')
   const ago = (ms: number) => new Date(now.getTime() - ms).toISOString()
 
+  it.each([
+    ['2026-11-14T21:22:00', '2026-11-16T12:37:00', '14 ноября'],
+    ['2026-11-15T08:00:00', '2026-11-16T12:37:00', 'вчера в 08:00'],
+    ['2026-11-16T09:37:00', '2026-11-16T12:37:00', '3 часа назад'],
+    ['2026-11-15T23:50:00', '2026-11-16T00:10:00', '20 минут назад'],
+    ['2026-11-15T00:00:00', '2026-11-16T00:00:00', 'вчера в 00:00'],
+    ['2026-10-31T00:00:00', '2026-11-01T12:00:00', 'вчера в 00:00'],
+  ])('formats calendar boundaries %s', (event, current, expected) => {
+    expect(formatRelative(event, new Date(current))).toBe(expected)
+  })
+
   it('formats recent moments', () => {
     expect(formatRelative(ago(10_000), now)).toBe('только что')
     expect(formatRelative(ago(5 * 60_000), now)).toBe('5 минут назад')
