@@ -103,5 +103,5 @@ export function useChatPlacement(topInset = 0) {
     };
   }
   const style: CSSProperties = rect ?? { visibility: "hidden" };
-  return { style, handles, moving };
+  return { style, handles, moving, rect };
 }

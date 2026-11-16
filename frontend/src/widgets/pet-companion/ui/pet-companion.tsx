@@ -13,6 +13,7 @@ import { PixelPet, usePetPreferences } from "@/entities/pet";
 import { useTypewriter } from "../model/use-typewriter";
 import { useDialoguePlacement } from "../model/use-dialogue-placement";
 import { useCompanionPosition } from "../model/use-companion-position";
+import type { ChatBoundary } from "../model/companion-boundary";
 import type { ChatMessage } from "../model/chat-messages";
 import { useCompanionTour } from "../model/use-companion-tour";
 import { CompanionTourShell } from "./companion-tour";
@@ -24,7 +25,8 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
   const [widgetSpeaking, setWidgetSpeaking] = useState(false);
   const [widgetReply, setWidgetReply] = useState<ChatMessage | null>(null);
   const showGreeting = useCallback((open: boolean) => { setWidgetReply(null); setWidgetSpeaking(open); }, []);
-  const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible);
+  const [chatBoundary, setChatBoundary] = useState<ChatBoundary | null>(null);
+  const movement = useCompanionPosition(Boolean(chosenPet) && widgetVisible, chatBoundary);
   const actions = useCompanionActions(movement.ref, showGreeting, movement.dragging, widgetVisible);
   const chat = useCompanionChat(guideMode);
   const openSpotlight = useCallback(() => { actions.dismiss(); setWidgetSpeaking(false); }, [actions.dismiss]);
@@ -90,7 +92,7 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
             } as CSSProperties
           }
         >
-          {actions.chatOpen && <CompanionChat name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0}
+          {actions.chatOpen && <CompanionChat name={chosenPet.name} chat={chat} topInset={tour.active ? 56 : 0} onBoundaryChange={setChatBoundary}
             onBack={() => { if (tour.active) tour.visit("menu"); else actions.menu(); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }}
             onClose={() => { actions.dismiss(); if (tour.active) tour.visit("wardrobe"); movement.ref.current?.querySelector<HTMLButtonElement>(".widget-pet")?.focus(); }} />}
           {actions.settingsOpen && <CompanionSettings anchor={movement.ref} position={movement.style}
@@ -137,7 +139,7 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
             className={cx(
               "widget-pet flex w-full touch-none! flex-col items-center bg-transparent p-0 select-none [-webkit-user-select:none]",
               movement.dragging ? "cursor-grabbing" : "cursor-grab",
-              actions.chatOpen && "relative z-41 max-sm:z-auto [@media(max-height:430px)]:z-auto",
+              movement.obstructed && "invisible",
             )}
             onClick={(event) => {
               if (movement.consumeDragClick()) { tour.dragged(); return; }
@@ -167,7 +169,7 @@ export function PetCompanion({ guideMode = false }: { guideMode?: boolean }) {
             />
           </button>
           <CompanionOrbitMenu anchor={movement.ref} position={movement.style} open={actions.menuOpen}
-            chatVisible={tour.chatVisible} chatOpen={actions.chatOpen} onChat={() => {
+            chatVisible={tour.chatVisible && !movement.obstructed} chatOpen={actions.chatOpen} onChat={() => {
               if (actions.chatOpen) actions.dismiss();
               else if (tour.active && tour.scene !== "chat") tour.visit("chat");
               else actions.chat();

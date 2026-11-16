@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowUp, SquarePen, X } from "lucide-react";
 import { OrbiMessageList, OrbiSuggestions, WorkplaceActions } from "@/features/orbi-chat";
 import { GuideMessages } from "@/features/integration-assistant";
@@ -8,13 +8,17 @@ import { firstName } from "@/shared/lib/orbi-format";
 import { Link } from "@/shared/lib/portal-navigation";
 import { useChatPlacement } from "../model/use-chat-placement";
 import type { CompanionChatModel } from "../model/use-companion-chat";
+import type { ChatBoundary } from "../model/companion-boundary";
 
-export function CompanionChat({ name, chat, onClose, onBack, topInset = 0 }: {
+export function CompanionChat({ name, chat, onClose, onBack, onBoundaryChange, topInset = 0 }: {
   name: string;
   chat: CompanionChatModel; onClose: () => void; onBack: () => void; topInset?: number;
+  onBoundaryChange?: (boundary: ChatBoundary | null) => void;
 }) {
   const [actionsOpen, setActionsOpen] = useState(false);
-  const { style, handles, moving } = useChatPlacement(topInset);
+  const { style, handles, moving, rect } = useChatPlacement(topInset);
+  useLayoutEffect(() => { onBoundaryChange?.(rect); }, [rect, onBoundaryChange]);
+  useLayoutEffect(() => () => onBoundaryChange?.(null), [onBoundaryChange]);
   const { data: me } = useOrbiMe();
   const startOver = chat.startOver;
   const { authenticated, load } = chat;

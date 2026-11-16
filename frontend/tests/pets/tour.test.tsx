@@ -21,7 +21,7 @@ it("visits every tour scene, opens its real control, preserves manual dragging a
   const rect = { left: 20, top: 30, width: 160, height: 128, right: 180, bottom: 158, x: 20, y: 30, toJSON() {} };
   vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(rect);
   const controls = {
-    movement: { ref: { current: anchor }, style: {}, dragging: false, relocate: vi.fn() },
+    movement: { ref: { current: anchor }, style: {}, dragging: false, obstructed: false, relocate: vi.fn() },
     actions: { dismiss: vi.fn(), menu: vi.fn(), chat: vi.fn(), wardrobe: vi.fn(), settings: vi.fn() },
     spotlight: { close: vi.fn(), show: vi.fn() }, show: vi.fn(), silence: vi.fn(), draft: "",
   };

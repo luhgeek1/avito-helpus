@@ -22,8 +22,7 @@ export function CompanionChatBubble({ placement, dock, visible = true, menuOpen,
     style={{ left, top, width: size, height: size, transform, transformOrigin: `${centerX}px ${centerY}px` }}
     className={cx("companion-chat-bubble fixed z-38 cursor-pointer bg-transparent p-0 outline-none group",
       "[transition:transform_280ms_cubic-bezier(.22,1,.36,1),opacity_160ms_ease-out] motion-reduce:transition-none",
-      visible ? "visible opacity-100" : "invisible pointer-events-none opacity-0",
-      open && "z-42 max-sm:z-39 [@media(max-height:430px)]:z-39")}>
+      visible ? "visible opacity-100" : "invisible pointer-events-none opacity-0")}>
     <svg viewBox="0 0 72 72" shapeRendering="crispEdges" aria-hidden="true"
       className={cx("size-full overflow-visible animate-thought-bubble motion-reduce:animate-none group-focus-visible:drop-shadow-[0_0_3px_#00aaff]",
         flipY ? (flipX ? "origin-top-left" : "origin-top-right") : (flipX ? "origin-bottom-left" : "origin-bottom-right"))}>
